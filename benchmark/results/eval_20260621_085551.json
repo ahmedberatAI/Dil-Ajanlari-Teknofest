@@ -1,0 +1,192 @@
+{
+  "summary": {
+    "n_anomaly": 12,
+    "n_normal": 0,
+    "recall": 1.0,
+    "risk_cal_anom": 0.08333333333333333,
+    "cat_match": 0.0,
+    "normal_fp": 0.0,
+    "risk_cal_norm": 0.0,
+    "latency_median": 16.75
+  },
+  "rows": [
+    {
+      "path": "data/eval/Abuse/Abuse005_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 32,
+      "latency_s": 20.3,
+      "summary": "Videonun ilk 30 saniyesinde iki kişi kapı yakınında görüldü. Olaylar genellikle rutin hareketlerden oluşuyor."
+    },
+    {
+      "path": "data/eval/Abuse/Abuse021_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 6,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 64,
+      "latency_s": 26.6,
+      "summary": "Video analizi sonucunda, odada rutin hareketler ve iki kişinin ortaya çıkması tespit edildi. Ortam aydınlatması yeterli görünmüyor ancak bu durum ciddi bir tehlike oluşturmadı."
+    },
+    {
+      "path": "data/eval/Abuse/Abuse029_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 10,
+      "latency_s": 10.5,
+      "summary": "Videonun ilk dakikasında bir evin önündeki park alanında bir otomobilin yanına yürüyen bir kişi tespit edildi."
+    },
+    {
+      "path": "data/eval/Burglary/Burglary059_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 15,
+      "latency_s": 14.9,
+      "summary": "Videonun ilk 5 dakikasında normal bir rutin hareket tespit edildi. Operatör, bu normal hareketleri göz ardı edebilir."
+    },
+    {
+      "path": "data/eval/Burglary/Burglary078_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 13.0,
+      "summary": "Videonun ilk 10 saniyesinde koridordeki normal hareket tespit edildi. Operatör, bu normal durumu gözden geçirmek için gerekli önlemleri almalıdır."
+    },
+    {
+      "path": "data/eval/Burglary/Burglary081_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 14,
+      "latency_s": 15.7,
+      "summary": "Video analizi sonucunda, videonun ilk 14 saniyesindeki olaylar rutin hareketler olarak tespit edildi. Herhangi bir ciddi olay veya tehlike tespit edilmedi."
+    },
+    {
+      "path": "data/eval/Shooting/Shooting001_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 8,
+      "latency_s": 12.6,
+      "summary": "Videonun 00:02'den 00:08'e kadar tespit edilen olaylar rutin hareketlerden oluşmaktadır."
+    },
+    {
+      "path": "data/eval/Shooting/Shooting023_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir"
+      ],
+      "duration_s": 14,
+      "latency_s": 21.5,
+      "summary": "Video 00:00-00:10 arasında normal hareket gözlemlendi. 00:10'ta bir kişi yere düşmüştü ve çevresindeki kişiler ona yardım etti."
+    },
+    {
+      "path": "data/eval/Shooting/Shooting037_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 10,
+      "latency_s": 20.4,
+      "summary": "Video analizi sonucunda, 00:10 süren video boyunca rutin hareket ve ön camı kırık gibi düşük önemde olaylar tespit edildi."
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism006_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 27,
+      "latency_s": 16.3,
+      "summary": "Videonun 00:00'da ve 00:10'da normal hareket tespit edildi. 00:20'te bir kişi oturakta duruyor. Her olayın önem düzeyi düşük."
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism026_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 32,
+      "latency_s": 23.0,
+      "summary": "Video analizi sonucunda, videonun 20. saniyesinden 30. saniyeye kadar görülen rutin hareketler tespit edildi. Bu olaylar riskli değildir."
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism032_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 22,
+      "latency_s": 17.2,
+      "summary": "Video analizi sonucunda, gece sokakta normal hareketler ve rutin durumlar tespit edildi. Herhangi bir ciddi olay veya tehlike kaydedilmemiştir."
+    }
+  ]
+}

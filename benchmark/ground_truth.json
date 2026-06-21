@@ -1,0 +1,10 @@
+{
+  "data/test_clip.mp4": {
+    "risk": "Kritik",
+    "events": [
+      {"window": ["00:05", "00:07"], "keywords": ["forklift", "devril"], "severity": "Kritik", "critical": true},
+      {"window": ["00:06", "00:09"], "keywords": ["yerde", "hareketsiz", "yat", "kişi"], "severity": "Kritik", "critical": true},
+      {"window": ["00:09", "00:12"], "keywords": ["topla", "personel"], "severity": "Orta", "critical": false}
+    ]
+  }
+}

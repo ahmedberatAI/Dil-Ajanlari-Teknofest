@@ -1,0 +1,128 @@
+{
+  "summary": {
+    "n_anomaly": 0,
+    "n_normal": 8,
+    "recall": 0.0,
+    "risk_cal_anom": 0.0,
+    "cat_match": 0.0,
+    "normal_fp": 0.0,
+    "risk_cal_norm": 1.0,
+    "latency_median": 44.95
+  },
+  "rows": [
+    {
+      "path": "data/eval/Normal/Normal_Videos_926_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 60,
+      "latency_s": 49.8,
+      "summary": "Videonun ilk 30 saniyesinde görüntü kalitesi düşük olup detaylı analiz yapılamamaktadır. Son 30 saniyede ise bir kişi kutu taşıyarak kontrol ediyor."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_928_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 40.1,
+      "summary": "Video analizi sonucunda, mağazada normal sohbet ve davranışlar gözlemlendi. Çocuklar ve yetişkinler arasında doğal interaksiyonlar gerçekleşti."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_929_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 7,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 73.0,
+      "summary": "Ofiste iki kişi ve bir çocuk var. Bilgisayar ekranı blacked out. Diğer nesneler normale göre yerleştirilmiş. Ortalık genel olarak düzenli durumdadır."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_932_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 5,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 59,
+      "latency_s": 78.4,
+      "summary": "Gözlemlediğimiz video, mağazanın girişindeki normal durumları ve düşük çözünürlüklü görüntüleri içeriyor. Olayların ciddiyeti düşük seviyede."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_936_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 38,
+      "latency_s": 31.1,
+      "summary": "Video boyunca sokakta normal bir aktivite saptandı. Grup insanlar sokakta hareket ediyor."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_937_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 38,
+      "latency_s": 32.4,
+      "summary": "Video analizi sonucunda belirgin bir olay tespit edilmedi. Tüm kamera görüntüleri incelendi."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_939_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 27,
+      "latency_s": 32.6,
+      "summary": "Videonun 27 saniye boyunca mağazada normal aktiviteler gözlemlendi. Operatör, güvenlik ve müşteri hizmetleri konusunda dikkatli olmalı."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_943_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 34,
+      "latency_s": 50.8,
+      "summary": "Video analizi sonucunda önemli bir olay tespit edilmedi. Tüm kamera görüntüleri incelendi."
+    }
+  ]
+}

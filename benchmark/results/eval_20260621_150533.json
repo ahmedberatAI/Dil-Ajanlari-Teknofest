@@ -1,0 +1,145 @@
+{
+  "summary": {
+    "n_anomaly": 0,
+    "n_normal": 9,
+    "recall": 0.0,
+    "risk_cal_anom": 0.0,
+    "cat_match": 0.0,
+    "normal_fp": 0.0,
+    "risk_cal_norm": 0.7777777777777778,
+    "latency_median": 21.1
+  },
+  "rows": [
+    {
+      "path": "data/eval_stress/Normal/testneg01.807.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 15.4,
+      "summary": "Videonun ilk 10 saniyesinde ağaçların üzerindeki çiçekler hafifçe hareket ediyor. Bu durum normale denk gelmektedir."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg02.808.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 45,
+      "latency_s": 30.8,
+      "summary": "Videonun ilk 10 saniyesinde bir kişi soğuk hava koşullarında dışarıda hareket ediyor. Ardından, 40 saniye sonra iki kişi bir açık alanda konuşurken ilerliyor."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg03.809.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 25,
+      "latency_s": 19.8,
+      "summary": "Video genel olarak ofiste normal bir çalışma ortamını yansıtmaktadır. Çalışanlar işe uygun bir şekilde hareket ediyor ve görevlerini yerine getiriyor."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg04.810.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 8,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 114,
+      "latency_s": 55.7,
+      "summary": "Video analizi sonucunda, herhangi bir riskli durum veya ciddi olay gözlemlenmemiştir. Çit ötesindeki alan ve çevresinde herhangi bir hareket veya riskli durum tespit edilememiştir."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg05.811.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 14.3,
+      "summary": "Video analizi sonucunda herhangi bir nesne, kişi veya hareket gözlemlenmemiştir. Tüm kamerada normal bir durum tespit edildi."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg06.812.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 15.9,
+      "summary": "Videonun ilk 10 dakikasında yol üzerindeki trafik durumu normal. Herhangi bir tehlike veya ciddi olay tespit edilmemiştir."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg07.813.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 22.9,
+      "summary": "Video analizi sonucunda, her karede ağaç dalları ve açık havada bulunan bir gökyüzü ile karşılaşıyoruz. Bu süre zarfında herhangi bir ciddi olay gözlemlenmemektedir."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg08.814.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 30,
+      "latency_s": 21.1,
+      "summary": "Video analizi sonucunda, rüzgar etkisiyle bayrakların hafifçe hareket ettiği ve herhangi bir anormalite gözlenmediği görüldü."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg09.815.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 2,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 29,
+      "latency_s": 40.1,
+      "summary": "Videonun ilk 10 saniyesinde trafik durumu normal ve yolun sağında ilerleyen bir araç hızlanıyor. Sonraki 19 saniye boyunca herhangi bir ciddi olay tespit edilmemiştir."
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "summary": {
+    "n_anomaly": 0,
+    "n_normal": 9,
+    "recall": 0.0,
+    "risk_cal_anom": 0.0,
+    "cat_match": 0.0,
+    "normal_fp": 0.0,
+    "risk_cal_norm": 1.0,
+    "latency_median": 20.2
+  },
+  "rows": [
+    {
+      "path": "data/eval_stress/Normal/testneg01.807.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 18.5,
+      "summary": "Videonun ilk 10 saniyesinde ev bahçesindeki ağaç ve çevresindeki binalar gözlemlendi. Herhangi bir ciddi olay veya tehlike tespit edilmedi."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg02.808.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 5,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 45,
+      "latency_s": 27.1,
+      "summary": "Videonun ilk 40 saniyesinde iki kişi arasında normal konuşmalar devam ediyor. Son 5 saniyede üçüncü kişi de ortaya çıkar, ancak herhangi bir tehlike tespit edilmemiştir."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg03.809.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 7,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 25,
+      "latency_s": 30.2,
+      "summary": "Video genel olarak ofiste çalışanların normal faaliyetlerini gösteriyor. Herkesin çevresinde ekipmanlar ve malzemeler var, herkesin bilgisayar kullanmak için oturmuş veya durmuş durumda."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg04.810.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 12,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 114,
+      "latency_s": 50.9,
+      "summary": "Video analizi sonucunda, görüntüdeki alan相对静止している ve herhangi bir riskli durum tespit edilmediği görülmektedir."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg05.811.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 14.3,
+      "summary": "Video analizi sonucunda herhangi bir kişi, araç, hareket veya riskli durum gözlemlenmemiş. Video genel olarak normale ve güvenli bir ortamda geçti."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg06.812.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 16.2,
+      "summary": "Videonun ilk 10 saniyesinde yol üzerindeki trafik durumu gözlemlendi. Herhangi bir ciddi olay tespit edilmedi."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg07.813.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 20.2,
+      "summary": "Video analizi sonucunda herhangi bir hareket veya riskli durum tespit edilmedi. Tüm kameraviewları normal ve rutin seviyede."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg08.814.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 30,
+      "latency_s": 20.2,
+      "summary": "Video boyunca rüzgar etkisi altındaki bayrakların hareketi gözlemlendi. Bu durum riskli değildir."
+    },
+    {
+      "path": "data/eval_stress/Normal/testneg09.815.avi",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 29,
+      "latency_s": 39.2,
+      "summary": "Video analizi sonucunda yol üzerindeki durum normal ve yol kenarında bir motosiklet sürücüsü duruyor. Her iki olay da düşük öneme sahip."
+    }
+  ]
+}

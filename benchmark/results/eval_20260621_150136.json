@@ -1,0 +1,486 @@
+{
+  "summary": {
+    "n_anomaly": 18,
+    "n_normal": 12,
+    "recall": 1.0,
+    "risk_cal_anom": 0.8333333333333334,
+    "cat_match": 0.7777777777777778,
+    "normal_fp": 0.08333333333333333,
+    "risk_cal_norm": 0.9166666666666666,
+    "latency_median": 22.299999999999997
+  },
+  "rows": [
+    {
+      "path": "data/eval_scenario/Fall/lying01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 3,
+      "latency_s": 15.9,
+      "summary": "Videonun ilk 3 saniyesinde koridorun ortasında bir kişi yatıyor. Bu durum güvenlik açısından önemli bir olaydır."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying15.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 3,
+      "latency_s": 18.8,
+      "summary": "Videonun ilk saniyesinde yatmış bir kişi izleniyor. Çevresinde tehlike olabilir."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying30.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 14.5,
+      "summary": "Videonun ilk 3 saniyesinde bir kişi sokakta yatmış ve hareketsiz. Bu durum normal bir olaydır."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying45.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 13.6,
+      "summary": "Videonun ilk saniyesinde koridorun ortasında bir kişinin yatmış olduğu tespit edildi."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying60.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 13.5,
+      "summary": "Videonun ilk saniyesinde bir kadın yatıyor ve gözlerini kapalı. Kendisi hafifçe hareket ediyor gibi görünüyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying75.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 16.5,
+      "summary": "Görevli, sokakta yatmış durumda ve gözlerini kapalı tutuyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying90.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 15.2,
+      "summary": "Mağazada bir yaşlı kadın yatmış durumda tespit edildi."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying99.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 3,
+      "latency_s": 19.8,
+      "summary": "Videonun ilk saniyesinde bir adam yerde yatmış, bastonu tutuyor. Bu durum güvenlik açısından kritik bir olaydır."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo1.868.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 29,
+      "latency_s": 26.6,
+      "summary": "Videonun ilk 2 dakikasında yangın devam ediyor ve duman量增加. Bu durum güvenlik açısından kritik bir olaydır."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo10.869.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 8,
+      "latency_s": 22.7,
+      "summary": "Ormanlık alanda büyük bir yangın meydana geldi. Operatör, yangını kontrol etmek için hızlı bir şekilde hareket etmelidir."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo11.870.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "acil_durdurma_tetikle",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 12,
+      "latency_s": 43.5,
+      "summary": "Video 00:00'da iki kişi ormanda yangın kontrolü yapıyor. 00:10'ta yangın yayılırken, çevredeki ağaçlar ve çimler yanmaya başlar. 00:12'de yangın daha geniş bir alan kaplıyor ve çevredeki insanları tehlikeye atıyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo2.871.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 17,
+      "latency_s": 26.2,
+      "summary": "Mutfakta büyük yangın meydana geldi. Operatör, acil durumu yönetmek için hızlı bir şekilde hareket etmelidir."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo3.872.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "acil_durdurma_tetikle"
+      ],
+      "duration_s": 13,
+      "latency_s": 33.8,
+      "summary": "Video analizi sonucunda, 00:00'da yangın meydana geldi ve hızla yayılmaya başladı. 00:11'de yangın devam ederken duman arttı. Bu olaylar güvenlik açısından kritik seviyedir."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo4.873.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [],
+      "duration_s": 55,
+      "latency_s": 49.1,
+      "summary": "Video analizi sonucunda, 00:00'da kritik bir yangın meydana geldi ve hızla yayılıyor. 00:20'de odada yoğun duman产生 ediyor ve yangın kontrol edilemez hale geliyor. 00:40'da ve 00:50'de de yangın devam ediyor ve alevin yoğunluğu artıyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo5.874.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 6,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "acil_durdurma_tetikle",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 80,
+      "latency_s": 52.1,
+      "summary": "Videonun ilk 10 saniyesinde odada yüksek sıcaklık ve parlaklık tespit edildi. 10-50 saniyede kaminede hızla büyüyen alevler ve 50-120 saniyede odanın ortasında ve duvarlarında yangın meydana geldi. Yangın, kütüklerden ve kömürlerden kaynaklanıyor ve yayılabilir riski bulunmaktadır."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo6.875.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 26,
+      "latency_s": 34.8,
+      "summary": "Yangın hızla yayılıyor. Operatör, acil durumları tanımlayarak ve müdahaleye hazır olmalı."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo7.876.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 6,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "acil_durdurma_tetikle",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 55,
+      "latency_s": 43.0,
+      "summary": "Video analizi sonucunda, 00:10'ta yangın meydana geldi ve çevredeki nöbetçi birimler hareket etti. Yangın 00:20'de daha belirgin hale geldi ve çevredeki malzemeleri tehlikeye atabilir. Yangın 00:30'da hızla büyüyen bir eğilim gösterdi ve 00:40'da devam ediyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo8.877.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "acil_durdurma_tetikle"
+      ],
+      "duration_s": 17,
+      "latency_s": 27.1,
+      "summary": "Videonun ilk saniyesinde yangın meydana geldi. Operatör hızlı bir şekilde müdahale etmesi gerekmektedir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/0_tr128.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "acil_durdurma_tetikle"
+      ],
+      "duration_s": 10,
+      "latency_s": 29.4,
+      "summary": "Fabrika çevresinde normal durumlar gözlemlendi. Ancak, lastik kumandalı araç ve yol ortasında ilerleyen kişi potansiyel tehlike oluşturabilir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/1_tr61.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 12.9,
+      "summary": "Video analizi sonucunda herhangi bir önemli olay tespit edilmemiştir. Güvenlik sistemi normal çalışıyor."
+    },
+    {
+      "path": "data/eval_scenario/Normal/2_te12.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 14.9,
+      "summary": "Videonun ilk 10 saniyesinde fabrika veya üretim alanında normal bir çalışma sahnesi tespit edildi."
+    },
+    {
+      "path": "data/eval_scenario/Normal/3_tr45.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 3,
+      "latency_s": 11.9,
+      "summary": "Videonun ilk 30 saniyesinde, fabrikada bir forklift otomobilinin yükünü taşımakta olduğu ve bir kutu taşıyıcı olduğu tespit edildi."
+    },
+    {
+      "path": "data/eval_scenario/Normal/4_tr13.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 21.8,
+      "summary": "Video genel olarak işçilerin çalışma alanındaki rutin hareketlerini gösteriyor. Herhangi bir ciddi olay veya tehlike tespit edilemedi."
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_tr19.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 23.1,
+      "summary": "Videonun ilk 10 dakikasında, fabrikada iki kişi gözlemleniyor ve fabrika içindeki ekipmanlar ve malzemelerin yerleştirildiği alanın genel görünümü değişmemiştir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/6_te12.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 10,
+      "latency_s": 17.8,
+      "summary": "Fabrikada çalışan bir kişi makinelerde duruyor ve sağ tarafta iki kişi yerlerini değiştiriyor. Her iki olay da düşük öneme sahip."
+    },
+    {
+      "path": "data/eval_scenario/Normal/7_tr15.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 2,
+      "latency_s": 19.9,
+      "summary": "Forklift操作cinin sağa doğru hareket ettiği saptandı. Bu durum normale ve tehlikeli değildir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_926_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 5,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 60,
+      "latency_s": 27.0,
+      "summary": "Videonun ilk 10 saniyesinde bir kişi kutuyu kaldırdıktan sonra kamera önüne doğru ilerledi. Sonraki 50 saniye boyunca laboratuvar veya üretim tesisinde normal durum tespit edildi."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_928_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 31,
+      "latency_s": 26.1,
+      "summary": "Video analizi sonucunda, mağazada bir çocuk erkeğin çantasını çaldığı ve iki kişi arasındaki konuşmalar gözlemlendiği belirlendi."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_929_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 21.9,
+      "summary": "Video genel olarak normal bir ofis ortamında iki kişinin görev yaptığına dair. Herhangi bir dikkat çekici veya riskli durum gözlemlenmedi."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_932_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 59,
+      "latency_s": 41.9,
+      "summary": "Video analizi sonucunda mağazanın girişinde iki kişi gözlemlendi ve mağazada bir erkek alışveriş yaparken diğerlerinde herhangi bir hareket veya riskli durum tespit edilmedi."
+    }
+  ]
+}

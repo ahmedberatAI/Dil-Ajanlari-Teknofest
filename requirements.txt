@@ -1,0 +1,35 @@
+# =============================================================================
+# TEKNOFEST TYDA 3. Senaryo - Bagimliliklar
+# =============================================================================
+# ADIM 1 (Blackwell / RTX 50xx GPU'lar icin CUDA 13.0 tekerlekleri):
+#   pip install torch==2.11.0 torchvision==0.26.0 torchaudio==2.11.0 \
+#       --index-url https://download.pytorch.org/whl/cu130
+#
+# ADIM 2:
+#   pip install -r requirements.txt
+#
+# Tam, birebir tekrar uretilebilir surum kilidi icin: requirements-lock.txt
+# (kurulum sonrasi `pip freeze > requirements-lock.txt` ile uretildi).
+# =============================================================================
+
+# Model servisleme (yerel, OpenAI uyumlu API)
+vllm==0.23.0
+
+# Ajan cercevesi
+langgraph>=1.2,<2
+langchain>=1.3,<2
+langchain-openai>=1.3,<2
+
+# Multimodal / video
+qwen-vl-utils>=0.0.14
+av>=14
+opencv-python-headless>=4.10
+pillow>=10
+
+# API istemcisi & sema
+openai>=2.0
+pydantic>=2.7
+pydantic-settings>=2.4
+
+# Arayuz
+gradio>=6.0

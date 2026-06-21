@@ -1,0 +1,512 @@
+{
+  "summary": {
+    "n_anomaly": 24,
+    "n_normal": 8,
+    "recall": 0.9166666666666666,
+    "risk_cal_anom": 0.3333333333333333,
+    "cat_match": 0.125,
+    "normal_fp": 0.0,
+    "risk_cal_norm": 1.0,
+    "latency_median": 24.549999999999997
+  },
+  "rows": [
+    {
+      "path": "data/eval/Abuse/Abuse005_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 32,
+      "latency_s": 25.8,
+      "summary": "00:10'da iki kişinin konuşması ve masanın üzerindeki bir nesnenin yer değiştirmesi olayı başlamıştır."
+    },
+    {
+      "path": "data/eval/Abuse/Abuse021_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 6,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir"
+      ],
+      "duration_s": 64,
+      "latency_s": 40.3,
+      "summary": "Video analizi sonucunda, 00:40'ta bir çocuk yere düşmesi ve yaralanması tespit edildi. Bu olayın başlangıcı çocuk odasında yere düşmesi, gelişimi yaralanma, sonuç olarak ise video analiz operatörü tarafından çocukun durumunun kontrol altına alınması."
+    },
+    {
+      "path": "data/eval/Abuse/Abuse029_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 14.2,
+      "summary": "Video analizi sonucunda, olay 00:06'da forkliftin devrilmesiyle başlamış ve 00:10'da personel olay yerinde toplanmıştır."
+    },
+    {
+      "path": "data/eval/Assault/Assault018_x264.mp4",
+      "category": "Assault",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 12,
+      "latency_s": 16.8,
+      "summary": "Video analizi sonucunda, olaylar 00:00'te başlamış ve 00:12'de sona ermiştir. İlk belirtiler, video içeriğindeki rutin hareketlerle ilgili düşük öneme sahip normallerdir."
+    },
+    {
+      "path": "data/eval/Assault/Assault038_x264.mp4",
+      "category": "Assault",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 5,
+      "latency_s": 23.9,
+      "summary": "00:00'da güvenlik kamerası tarafından normal bir rutin hareket tespit edildi. Olay 00:06'da forkliftin devrilmesiyle başlamıştır. Ardından 00:08'de bir kişi yaralandı ve 00:10'da personel olay yerinde toplandı."
+    },
+    {
+      "path": "data/eval/Assault/Assault039_x264.mp4",
+      "category": "Assault",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 13.1,
+      "summary": "Video analizi sonucunda, olayın 00:06'da forkliftin devrilmesiyle başladığını, ardından bir kişi yaralandığını ve 00:10'da personel olay yerinde toplandığını belirtiyor."
+    },
+    {
+      "path": "data/eval/Burglary/Burglary059_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 15,
+      "latency_s": 19.6,
+      "summary": "Video, 00:00'da bir rutin hareketiyle başlamıştır. 00:10'da bir kişi kapıda durmuş ve kapı açmıştır."
+    },
+    {
+      "path": "data/eval/Burglary/Burglary078_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla"
+      ],
+      "duration_s": 10,
+      "latency_s": 21.3,
+      "summary": "Video 00:00'da rutin hareket ile başlamıştır. Olay 00:06'da forkliftin devrilmesiyle başlamış ve bu nedenle bir kişi yaralandı. Sonra 00:10'da personel olay yerinde toplanmıştır."
+    },
+    {
+      "path": "data/eval/Burglary/Burglary081_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 14,
+      "latency_s": 17.9,
+      "summary": "Video analizi sonucunda, 00:00'da bir rutin hareket tespit edildi. Bu olay, 00:10'da tekrarlanmıştır. Her iki olay da düşük önem derecesine sahip ve normal türde sınıflandırılmıştır."
+    },
+    {
+      "path": "data/eval/Explosion/Explosion001_x264.mp4",
+      "category": "Explosion",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 21,
+      "latency_s": 26.8,
+      "summary": "Duman 00:00'da ortaya çıktı ve güvenlik operatörü tarafından tespit edildi. Sonra, 00:10'da bir rutin hareket gözlemlendi."
+    },
+    {
+      "path": "data/eval/Explosion/Explosion034_x264.mp4",
+      "category": "Explosion",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 14,
+      "latency_s": 17.8,
+      "summary": "Duman tespiti 00:10'da yapıldı ve güvenlik operatörü tarafından müdahale edilmelidir."
+    },
+    {
+      "path": "data/eval/Explosion/Explosion050_x264.mp4",
+      "category": "Explosion",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir"
+      ],
+      "duration_s": 9,
+      "latency_s": 16.7,
+      "summary": "Olay 00:06'da forkliftin devrilmesiyle başladi, ardından bir kişi yaralandı ve 00:10'da personel olay yerinde toplandı."
+    },
+    {
+      "path": "data/eval/Fighting/Fighting018_x264.mp4",
+      "category": "Fighting",
+      "is_anomaly": true,
+      "n_events": 6,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "saglik_ekibi_yonlendir",
+        "guvenlik_ekibi_uyar",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 46,
+      "latency_s": 40.7,
+      "summary": "00:00'te bir erkek genç kadına darp etti, ardından 00:08'de kapıda duran kişi koridorun sonuna doğru ilerledi. 00:15'te koridor ortasında hareketsiz bir kişi tespit edildi, ancak 00:20'te yere düşen kişi ve 00:30'ta hareketsiz bir kişi daha tespit edildi."
+    },
+    {
+      "path": "data/eval/Fighting/Fighting023_x264.mp4",
+      "category": "Fighting",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 34,
+      "latency_s": 27.2,
+      "summary": "Video analizi sonucunda, 00:00'da bir rutin hareket tespit edildi. Ardından 00:10'da koridor normal durumda kalırken, 00:20'de tekrar koridor normal durumda bulundu. Son olarak 00:30'da bir rutin hareket tespit edildi."
+    },
+    {
+      "path": "data/eval/Fighting/Fighting038_x264.mp4",
+      "category": "Fighting",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir"
+      ],
+      "duration_s": 27,
+      "latency_s": 28.9,
+      "summary": "[00:00] Video normal hareketle başlıyor. [00:10] Bir yere düşen kişi yardım almak için kalkmaya çalışırken, yardım eden kişi ona doğru ilerliyor."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_926_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 6,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 60,
+      "latency_s": 31.4,
+      "summary": "Video analizi sonucunda, 00:00'te bir rutin hareket tespiti yapıldı. Bu, Video analizi sonucunda, 00:00'te bir rutin hareket tespiti yapıldı. Bu, Video analizi sonucunda, 00:10'ta normal ortam tespiti yapıldı. 00:20'te ve 00:30'ta da rutin hareket tespitleri gerçekleşti. Son olarak, 00:40'ta ve 00:50'te rutin hareket tespitleri yapıldı."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_928_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 32.6,
+      "summary": "Video 00:00'da mağazada normal aktivite ile başlıyor. 00:10'da müşteri ve çalışan arasındaki tartışmaya rastlanır. 00:20'de rutin hareketler devam ederken, 00:30'da tartışmanın devam ettiği gözleniyor."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_929_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 25.2,
+      "summary": "Video analizi sonucunda, 00:10'ta bir rutin hareket tespiti yapıldı. Olay, 00:20'de tekrarlanarak normal bir sahne olarak sınıflandırıldı."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_932_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 59,
+      "latency_s": 36.1,
+      "summary": "Video analizi, 00:10'da bir araç park eden ve giriş yapan bir olayla başlamıştır. Ardından, 00:20'de ve 00:30'da rutin hareketler gözlemlenmiştir. Son olarak, 00:50'de bir daha rutin hareket tespit edilmiştir."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_936_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 38,
+      "latency_s": 21.1,
+      "summary": "Video analizi sonucunda, 00:00'da bir rutin hareket tespit edildi. Bu olay, 00:10'da devam etti ve 00:20'de sona erdi. 00:30'da da bir rutin hareket tespit edildi."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_937_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 38,
+      "latency_s": 12.3,
+      "summary": "Video analizi sonucunda, 00:00'da bir rutin hareket tespit edildi. Olayın gelişimi ve sonuçları mevcut durumda sona erdi."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_939_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 27,
+      "latency_s": 24.7,
+      "summary": "Video analizi sonucunda, 00:00'da rutin alışveriş olayı tespit edildi. Ardından, 00:10'da rutin hareket olayları devam etti."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_943_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 34,
+      "latency_s": 26.2,
+      "summary": "Video analizi sonucunda, 00:00'ten itibaren her saniye rutin hareketler gözlemlendi. Olaylar, video süresi boyunca sürekli olarak düşük önem ve normal türde gerçekleşti."
+    },
+    {
+      "path": "data/eval/RoadAccidents/RoadAccidents021_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir"
+      ],
+      "duration_s": 5,
+      "latency_s": 18.7,
+      "summary": "Video 00:00'da rutin hareket ile başlamıştır. Olay 00:06'da forkliftin devrilmesiyle başlamış ve 00:10'da bir kişi yaralandı. Sonra 00:15'te personel olay yerinde toplanmıştır."
+    },
+    {
+      "path": "data/eval/RoadAccidents/RoadAccidents027_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 3,
+      "latency_s": 12.9,
+      "summary": "Olay 00:00'da rutin hareketlerle başlamıştır. 00:03'te ise olay sona ermiştir."
+    },
+    {
+      "path": "data/eval/RoadAccidents/RoadAccidents065_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla"
+      ],
+      "duration_s": 4,
+      "latency_s": 31.7,
+      "summary": "00:02'de motosiklet otomobille çarpıştı, sürücü yere düştü ve patlama oldu."
+    },
+    {
+      "path": "data/eval/Shooting/Shooting001_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 8,
+      "latency_s": 21.1,
+      "summary": "Olay 00:06'da forkliftin devrilmesiyle başlamıştır, ardından bir kişi yaralandı ve 00:10'da personel olay yerinde toplandı."
+    },
+    {
+      "path": "data/eval/Shooting/Shooting023_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 14,
+      "latency_s": 26.4,
+      "summary": "Kalabalık 00:00'da parkta toplanmıştır. 00:10'da bir kişi diğerine çanta verirken hızlı hareket gözlemlendi."
+    },
+    {
+      "path": "data/eval/Shooting/Shooting037_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 10,
+      "latency_s": 23.1,
+      "summary": "Video analizi sonucunda, ilk belirti olan rutin hareket (00:00) ve yol kenarındaki duran otomobil (00:10) tespit edildi. Bu olaylar, güvenlik açısından normale karşılık gelen durumları ifade eder."
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism006_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 27,
+      "latency_s": 24.4,
+      "summary": "Video analizi, 00:00'da bir rutin hareketiyle başlamıştır. 00:10'da bir kişi kamera önüne doğru yürüdü. Olaylar, güvenlik açısından ciddi bir risk oluşturmadı."
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism026_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 32,
+      "latency_s": 38.4,
+      "summary": "Video analizi, 00:10'ta görülen kavganın başlangıcı olarak belirlendi. Bu olay, güvenlik riskini yüksek seviyede etkiledi."
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism032_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 22,
+      "latency_s": 25.3,
+      "summary": "Sahne normal durumda başlamıştır. 00:10'da iki kişi otomobilin ön kapısına doğru ilerliyordu. Ardından 00:20'de otomobil yolun üstünden geçti."
+    }
+  ]
+}

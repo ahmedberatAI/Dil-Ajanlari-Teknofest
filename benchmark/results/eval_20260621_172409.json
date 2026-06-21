@@ -1,0 +1,512 @@
+{
+  "summary": {
+    "n_anomaly": 18,
+    "n_normal": 12,
+    "recall": 1.0,
+    "risk_cal_anom": 1.0,
+    "cat_match": 1.0,
+    "normal_fp": 0.16666666666666666,
+    "risk_cal_norm": 0.75,
+    "latency_median": 20.8
+  },
+  "rows": [
+    {
+      "path": "data/eval_scenario/Fall/lying01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 3,
+      "latency_s": 23.0,
+      "summary": "Güvenlik görevlisi yerde hareketsiz yatmaktadır. Bu durum acil sağlık müdahale gerektiren ciddi bir olaydır. Operatör, hemen sağlık ekiplerini çağırmalı ve görevlisinin durumunu kontrol etmelidir."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying15.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 21.1,
+      "summary": "Videonun başlangıcında yerde hareketsiz bir kişi tespit edilmiştir. Bu durum sağlık açısından ciddi bir tehdit oluşturabilir. Hemen müdahale edilmesi gereken bir durumdur."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying30.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 20.2,
+      "summary": "00:00'da yere yatmış hareketsiz bir erkek kişi tespit edildi. Sağlık durumu ciddi olabilir; acil müdahale gerekmektedir. Operatör, durumu sağlık ekibine bildirmeli ve çevreyi güvenli tutmalı."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying45.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 19.1,
+      "summary": "Koridorda yerde hareketsiz bir kişi tespit edildi. Bilinçli olup olmadığı belirsiz; sağlık riski var. Hemen müdahale edilmesi gereken bir durum."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying60.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 20.1,
+      "summary": "Zeminde hareketsiz yatmış bir kadın tespit edilmiştir. Bu durum sağlık açısından ciddi bir tehdit oluşturabilir. Hemen müdahale edilmesi gereken bir durumdur."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying75.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 22.3,
+      "summary": "Video, yatış pozisyonunda hareketsiz bir kişiyi göstermektedir. Bu durum sağlık açısından kritik olabilir; hemen müdahale edilmesi gereken bir durum olarak değerlendirilmelidir."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying90.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 23.1,
+      "summary": "Yerde hareketsiz yatmış bir yaşlı kadın tespit edilmiştir. Bu durum acil sağlık müdahale gerektiren kritik bir olaydır. Operatör, hemen sağlık ekiplerini çağırarak müdahaleyi desteklemelidir."
+    },
+    {
+      "path": "data/eval_scenario/Fall/lying99.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 21.2,
+      "summary": "Videonun başlangıcında yere yatmış ve hareketsiz bir kişi tespit edilmiştir. Bu durum sağlık açısından ciddi bir tehdit oluşturmakta olup, acil müdahale gerektirmektedir. Operatör, hemen sağlık ekibini çağırarak durumu kontrol etmesini sağlamalıdır."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo1.868.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 29,
+      "latency_s": 31.8,
+      "summary": "Aracın altından başlayan yangın hızla yayılıyor ve yoğun duman oluşturuyor. Operatör, acil müdahale ve yangın söndürme ekiplerinin hemen çağrılması gerekmektedir."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo10.869.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 8,
+      "latency_s": 18.3,
+      "summary": "Şiddetli orman yangını devam ediyor; çevredeki alanlar tehlike altında. Operasyon alanına müdahale edilmemiş olup, yangının yayılma riski yüksek. Hemen müdahale ekipleri ve yangın söndürme birimlerine haber verilmelidir."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo11.870.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 12,
+      "latency_s": 22.6,
+      "summary": "Yangın bölgesinde bir kişi tespit edildi. Bu durum hemen müdahale gerektiren kritik bir güvenlik olayıdır. Operatör, hemen müdahale ekiplerini yönlendirmeli ve bölgeye müdahaleyi sağlayacak tüm kaynakları aktifleştirmelidir."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo2.871.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 17,
+      "latency_s": 27.9,
+      "summary": "Lavaboda başlayan yangın, kısa sürede mutfakta büyük bir yangına dönüşmüştür. Kişi yangına müdahale ederken gülümsemesi, anormal davranış olarak değerlendirilmelidir. Operatör, yangının yayılmasını önlemek için acil müdahale gerekmektedir."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo3.872.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 13,
+      "latency_s": 20.1,
+      "summary": "Toprakta yoğun bir yangın başladı ve kısa süre sonra çöp yığınında da yangın tespit edildi. Her iki olay da güvenlik açısından ciddi tehdit oluşturuyor ve acil müdahale gerektiriyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo4.873.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 55,
+      "latency_s": 26.5,
+      "summary": "Kameralarda kontrol altındaki bir yangın tespit edilmiştir. Operatör, yangının yayılmasını önlemek için hemen müdahaleyi planlamalıdır. Saha ekipleri ve yangın söndürme birimlerine acil bildirim yapılmalıdır."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo5.874.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "acil_durdurma_tetikle",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 80,
+      "latency_s": 36.6,
+      "summary": "Sobada ve kaminde kontrolsüz yoğun alevler gözlemleniyor. Yangın durumu hızla kötüleşiyor ve anında müdahale gerektiriyor. Operatör, acil müdahale ekiplerini çağırmalı ve yangınla ilgili tüm güvenlik protokollerini uygulamalıdır."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo6.875.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 6,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur",
+        "alan_guvenligini_sagla"
+      ],
+      "duration_s": 26,
+      "latency_s": 34.2,
+      "summary": "Yangın başladığında görevli müdahale etti, ancak kısa sürede duman yoğunluğu arttı ve görevli sahada kayboldu. Yangın hızla yayılıyor ve suyun yakınında riskli bir durum oluştu. Operatör hemen müdahale ekiplerini ve acil müdahale planını tetiklemelidir."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo7.876.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 5,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 55,
+      "latency_s": 32.4,
+      "summary": "Çit önünde başlayan küçük bir yangın, yetkisiz bir kişi tarafından izlenerek kontrolsüz şekilde yayılmaya devam ediyor. Yangın, açık alanda hızla büyüyerek ciddi bir güvenlik tehdidi oluşturuyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo8.877.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 17,
+      "latency_s": 22.6,
+      "summary": "Kontrolsüz bir yangın devam ediyor ve arka planda belirsiz silüetli kişiler var. Durum hem yangın hem de potansiyel tehdit içerdiğinden hemen müdahale gerekiyor."
+    },
+    {
+      "path": "data/eval_scenario/Normal/0_tr128.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": null,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 10,
+      "latency_s": 20.5,
+      "summary": "Üretim yolu üzerinde yerde kalmış büyük bir nesne, operasyonel akışı kesiyor ve kazaya neden olma potansiyeli taşıyor. Hemen müdahale edilmeden üretim veya personel güvenliği tehlike altında."
+    },
+    {
+      "path": "data/eval_scenario/Normal/1_tr61.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 15.3,
+      "summary": "Videonun tüm süresi boyunca herhangi bir tehlike, kaza veya şüpheli aktivite tespit edilmedi. Saha durumu normal ve güvenli görünmektedir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/2_te12.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 14.1,
+      "summary": "Videonun tüm süresi boyunca herhangi bir tehlike, kaza veya şüpheli aktivite tespit edilmedi. Sahada normal ve beklenen faaliyetler gözlemlenmiştir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/3_tr45.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 3,
+      "latency_s": 11.4,
+      "summary": "Video süresince herhangi bir tehlike, anomali veya kritik olay tespit edilmedi. Sahada normal faaliyetler devam etmektedir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/4_tr13.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 10,
+      "latency_s": 15.7,
+      "summary": "İşçi makineye yakın oturarak çevreye dikkat etmiyor; bu, potansiyel bir kaza riski oluşturuyor. Operatör, hemen durumu kontrol etmeli ve işçiye uyarı yapmalı."
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_tr19.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 14.0,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, anomali veya kritik olay tespit edilmedi. Sahada normal faaliyetler devam etmektedir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/6_te12.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": null,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 10,
+      "latency_s": 21.4,
+      "summary": "Videonun başında yere düşmüş bir nesne tespit edildi. Bu durum, potansiyel bir tehlike oluşturabilecek bir anomali olarak değerlendirilmelidir. Operatör, nesnenin doğruluğunu ve etrafındaki durumu hemen incelemelidir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/7_tr15.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 2,
+      "latency_s": 12.6,
+      "summary": "Video süresince herhangi bir tehlike, olay veya anormal durum tespit edilmedi. Saha durumu normal ve güvenli görünmektedir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_926_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 60,
+      "latency_s": 19.4,
+      "summary": "Video süresince herhangi bir tehlikeli olay veya anormal durum tespit edilmedi. Saha aktiviteleri normal seyr ediyor ve herhangi bir müdahale gereği bulunmuyor."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_928_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 17.1,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, kaza veya güvenlik ihlali tespit edilmedi. Sahada normal faaliyetler devam etmektedir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_929_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 17.2,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, kaza veya şüpheli aktivite tespit edilmedi. Sahada normal ve beklenen faaliyetler gözlemlendi."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_932_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 59,
+      "latency_s": 22.0,
+      "summary": "Videonun tümü normal ve rutin faaliyetler içermekte; herhangi bir tehlike, kaza veya şüpheli durum tespit edilmemiştir. Saha operasyonları düzgün ilerlemekte ve güvenlik protokolleri uygulanmaktadır."
+    }
+  ]
+}

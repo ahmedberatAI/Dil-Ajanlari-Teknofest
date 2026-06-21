@@ -1,0 +1,516 @@
+{
+  "summary": {
+    "n_anomaly": 24,
+    "n_normal": 8,
+    "recall": 0.9583333333333334,
+    "risk_cal_anom": 0.4583333333333333,
+    "cat_match": 0.25,
+    "normal_fp": 0.0,
+    "risk_cal_norm": 0.625,
+    "latency_median": 25.35
+  },
+  "rows": [
+    {
+      "path": "data/eval/Abuse/Abuse005_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 9,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 32,
+      "latency_s": 35.7,
+      "summary": "Video analizi sonucunda, ofiste iki kişinin normal bir etkinlik sergilediği ve biriken belge kontrolü yapıldığı gözlemlendi. İki güvenlik görevlisi de ofiste çalışan kişinin masasının yanında konuşuyor ve biri kağıt üzerinde çalışırken diğerine yardımcı oluyordu. Sonra iki kişi bir araya geldi ve biri oturmuş diğerinin omzuna dayanmış durumda kaldı. Oturan kişi daha sonra kapıya doğru ilerlemeye başladı ve diğer kişi onun arkasından gidiyor gibi görünmektedir."
+    },
+    {
+      "path": "data/eval/Abuse/Abuse021_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 7,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 64,
+      "latency_s": 35.7,
+      "summary": "Videonun 2-4 kişilik grupların odada normal bir şekilde oyun oynarken, iki kişi birbirine yakın duruyor ve biri telefon kullanıyor. Olaylar genellikle düşük önemde."
+    },
+    {
+      "path": "data/eval/Abuse/Abuse029_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 10,
+      "latency_s": 16.8,
+      "summary": "Videonun ilk saniyesinde bir kişi beyaz bir SUV'ye doğru ilerliyor. Bu durum normale göre düşüktür."
+    },
+    {
+      "path": "data/eval/Assault/Assault018_x264.mp4",
+      "category": "Assault",
+      "is_anomaly": true,
+      "n_events": 5,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 12,
+      "latency_s": 34.3,
+      "summary": "Video analizi sonucunda, 00:02'de bir kişi, diğerinin üstüne atıldıktan sonra düşürüldüğü ve 00:03'te düşürülen kişi hareketsiz kalmaya başladı. Ayrıca, 00:10'da sokakta bir kişi yatmış ve hareketsiz durumda olduğunu tespit ettim."
+    },
+    {
+      "path": "data/eval/Assault/Assault038_x264.mp4",
+      "category": "Assault",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 5,
+      "latency_s": 20.1,
+      "summary": "Video 00:00'da bir grup insanın odada olduğu ve kavga meydana geldiğini gösteriyor."
+    },
+    {
+      "path": "data/eval/Assault/Assault039_x264.mp4",
+      "category": "Assault",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 18.8,
+      "summary": "Videonun ilk 10 dakikasında bir erkek ve çocuk sokakta ve mağazada normal hareket ediyor. Herhangi bir ciddi olay veya tehlike tespit edilmedi."
+    },
+    {
+      "path": "data/eval/Burglary/Burglary059_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 15,
+      "latency_s": 21.2,
+      "summary": "Videonun ilk 10 saniyesinde güvenlik görevlisi kapı açmak için cihazı kullanırken, kapı açılırken figür kapıya doğru eğilerek hareket ediyor. Son 5 saniyede bir kişi kapının önündeki duvarda durup telefon kontrol ediyor."
+    },
+    {
+      "path": "data/eval/Burglary/Burglary078_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 10,
+      "latency_s": 15.4,
+      "summary": "Videonun ilk 10 saniyesinde bir kişi kapı önünden geçip içeri girmeye başlamıştır. Bu durum normale düşer."
+    },
+    {
+      "path": "data/eval/Burglary/Burglary081_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 14,
+      "latency_s": 17.6,
+      "summary": "Video, ev bahçesi ve yolun genel görünümünü içeriyor. 00:10'ta bir evin bahçesinde bir kişi, evin ön penceresinden dışarıya baktığını ve ellerini pencereye dayadığını gözlemledik."
+    },
+    {
+      "path": "data/eval/Explosion/Explosion001_x264.mp4",
+      "category": "Explosion",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 21,
+      "latency_s": 25.0,
+      "summary": "Videonun ilk 10 saniyesinde patlama izlenimi tespit edildi. Daha sonra görüntü kalitesi düşüktür. Operatör, bu olayları incelemeli ve gerekli önlemleri almalıdır."
+    },
+    {
+      "path": "data/eval/Explosion/Explosion034_x264.mp4",
+      "category": "Explosion",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 14,
+      "latency_s": 38.1,
+      "summary": "[00:10] Hava dumanı ve toz parçacıkları gözleniyor. Bu, güvenlik açısından kritik bir durum olabilir."
+    },
+    {
+      "path": "data/eval/Explosion/Explosion050_x264.mp4",
+      "category": "Explosion",
+      "is_anomaly": true,
+      "n_events": 6,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "guvenlik_ekibi_uyar",
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 9,
+      "latency_s": 45.9,
+      "summary": "Sokakta yoğun duman, hızlı hareket eden insanlar ve duran araçlar gözlemleniyor. Polis ve otobüs de patlamadan kaçmak için harekete geçebilir."
+    },
+    {
+      "path": "data/eval/Fighting/Fighting018_x264.mp4",
+      "category": "Fighting",
+      "is_anomaly": true,
+      "n_events": 6,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "guvenlik_ekibi_uyar",
+        "acil_durdurma_tetikle"
+      ],
+      "duration_s": 46,
+      "latency_s": 44.3,
+      "summary": "Video analizi sonucunda koridorun ortasında iki kişi gözleniyor. Koridor sonunda biri yere düşmüş gibi görünüyor ve yolun ortasında hareketsiz bir kişi bulunuyor. Bu olaylar güvenlik açısından ciddi olup, operatörün dikkatli olması gerekmektedir."
+    },
+    {
+      "path": "data/eval/Fighting/Fighting023_x264.mp4",
+      "category": "Fighting",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 34,
+      "latency_s": 30.0,
+      "summary": "Video analizi sonucunda mağazanın giriş kapısının önündeki koridor boş ve sessiz, iki kişi yakınlarında sohbet ediyor. Herhangi bir hareket veya riskli durum tespit edilmedi."
+    },
+    {
+      "path": "data/eval/Fighting/Fighting038_x264.mp4",
+      "category": "Fighting",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 27,
+      "latency_s": 45.9,
+      "summary": "Restoran içeriği gözleniyor ve iki güvenlik olayı tespit edildi: bir engellenen kişi kaçmaya çalışırken, diğer duraklayan kişi onu engeller. Olaylar normale göre değerlendirildi."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_926_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 6,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 60,
+      "latency_s": 28.3,
+      "summary": "Videonun ilk 10 saniyesinde bir kişi dikkatli bir şekilde odadan geçti. Sonraki 50 saniye boyunca laboratuvar veya üretim salonunda düşük çözünürlüklü ve siyah-beyaz tonlarda görüntü gözlemlendi. Herhangi bir riskli durum tespit edilmedi."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_928_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 26.0,
+      "summary": "Videonun ilk 30 saniyesinde, mağazanın önündeki kişiler arasında normal sohbetler devam ediyor. Çocuk ve kadınlar arasında yaklaşımlar gözlemleniyor."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_929_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 27.6,
+      "summary": "Video analizi sonucunda, odada ve ofiste normal bir şekilde konuşan ve hareket eden kişiler tespit edildi. Herhangi bir ciddi olay veya tehlike tespit edilmedi."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_932_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 12,
+      "max_severity": 1,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 59,
+      "latency_s": 58.9,
+      "summary": "Özet üretilemedi."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_936_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 11,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 38,
+      "latency_s": 36.2,
+      "summary": "Videonun ilk 10 saniyesinde normal hareketler gözlemleniyor. Sonraki 28 saniye boyunca sokakta hareket eden kişi sayısı artıyor. En ciddi olay, kırmızı ceketli kişinin hızlı hareketi (00:26) olarak tespit edildi."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_937_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 8,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 38,
+      "latency_s": 21.1,
+      "summary": "Video analizi sonucunda, sokakta normal hareket halinde olan grupların yanı sıra birkaç kişi hızla yürüyordu. Herhangi bir ciddi olay veya tehlike tespit edilmedi."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_939_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 27,
+      "latency_s": 22.3,
+      "summary": "Videonun 00:00'da bir erkek, 00:10'da mağazada çalışan bir kişi ve 00:20'de bir erkek oturmuş durumda ve paketli ürünle ilgileniyor. Her olayın önem düzeyi düşük."
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_943_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 4,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 34,
+      "latency_s": 25.4,
+      "summary": "Videonun ilk 20 saniyesinde normal durumlar gözlemlendi. 20-30 saniyeler arasında güvenlik önlemlerinin kontrol edildiği bir durum ve son 4 saniyede restoran veya kafe içeriği görüldü."
+    },
+    {
+      "path": "data/eval/RoadAccidents/RoadAccidents021_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 5,
+      "latency_s": 17.9,
+      "summary": "Video analizi sonucunda, güvenlik operatörüne herhangi bir ciddi olay tespit edilmedi. Video süresi 5 dakika olup, genel olarak normal bir çalışma ortamı gözlemlendi."
+    },
+    {
+      "path": "data/eval/RoadAccidents/RoadAccidents027_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 3,
+      "latency_s": 25.3,
+      "summary": "Video analizi sonucunda, yol üzerindeki araçların hareketleri normal seviyede. Siyah ve sarı araçlar yolun sol tarafında, beyaz araç yolun ortasından geçiyor."
+    },
+    {
+      "path": "data/eval/RoadAccidents/RoadAccidents065_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 4,
+      "latency_s": 23.3,
+      "summary": "Videonun ilk 4 saniyesinde yol kenarında motosiklet ve otomobil var. Motosikletten düşen kişi otomobille çarpıştı."
+    },
+    {
+      "path": "data/eval/Shooting/Shooting001_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 6,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 8,
+      "latency_s": 23.0,
+      "summary": "Videonun ilk saniyelerinde, sol taraftaki kişi oturmuş durumda ve sağ taraftaki kişi yere doğru eğilip oturuyor. Oda aydınlatması düşük seviyededir."
+    },
+    {
+      "path": "data/eval/Shooting/Shooting023_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 14,
+      "latency_s": 24.7,
+      "summary": "Video analizi sonucunda, grup insanların parkta normal hareketleri tespit edildi. Ancak, 00:10'da iki kişi arasında kavga meydana geldi."
+    },
+    {
+      "path": "data/eval/Shooting/Shooting037_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 10,
+      "latency_s": 17.7,
+      "summary": "Video analizi sonucunda, yol kenarında iki otomobilin durumu ve ilerlemesi, ayrıca bir siyah otomobilin gözlemlendiği belirlendi. Bu olaylar riskli değildir."
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism006_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 27,
+      "latency_s": 23.4,
+      "summary": "Video analizi sonucunda, park halindeki yol kenarında oturan kişi ve alışveriş sepeti, hızlı adım atan kişi, kamera önüne doğru yürüyen kişi ve çantayı taşıyan kişi tespit edildi. Olayların ciddiyeti düşük seviyede."
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism026_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 32,
+      "latency_s": 25.9,
+      "summary": "Video analizi sonucunda, 00:10'ta bir kişinin bıçak benzeri bir nesne ile ileri gittiği ve 00:20'de bir kişi sağa baktığı gözlemlendi. Diğer zaman dilimlerinde herhangi bir riskli durum tespit edilmedi."
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism032_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 22,
+      "latency_s": 29.2,
+      "summary": "Sokakta iki otomobil ve birkaç insan var. Bir otomobilde arka kapısı açık, sürücü yok. Sürücünün var olup olmadığı kontrol edilmeli."
+    }
+  ]
+}
