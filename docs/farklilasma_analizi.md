@@ -72,6 +72,20 @@ akademik sistem, ne bir ticari ürün, ne de bir Türk oyuncu var.
 - **Operasyonel aksiyon katmanını** sunumda öne çıkar (literatürün durduğu yer; en savunulabilir teknik fark).
 - **Türkçe + air-gapped + sıfır-yabancı-vendor** üçlüsünü egemenlik/yerlileştirme hikâyesi olarak vurgula.
 
+## F) "Türkçe örneği yok mu?" — kesin doğrulama (ayrı derin tarama)
+HF + GitHub + arXiv + YÖK/TÜBİTAK + Türk-vendor üzerinde hedefli ikinci tarama. Sonuç:
+- **Türkçe-yerli VİDEO VLM:** ❌ **Yok.** Tüm Türkçe VLM'ler image-only: Turkish-LLaVA-8B, Cosmos-LLaVA,
+  TraVisionLM-875M, TrVLM, Trendyol-Asure-12B (hiçbiri zaman-ardışık/çok-kare değil).
+- **Türkçe gözetim ürünü (NL olay-anlatımı):** ❌ **Yok.** HAVELSAN Eyeminer = tespit/takip/alarm + sıkıştırılmış
+  klip ("özet" = klip, prose değil); SESTEK = ses; ASELSAN/Baykar = NL-video yok.
+- **Türkçe çok-modlu asistan (video+Türkçe):** ❌ **Yok.** HAVELSAN MAIN görü planı OCR-seviyesi (metin-çıkarımı).
+- **TEK NÜANS (abartmayı önler):** "hiç Türkçe video işi yok" **fazla güçlü** — akademik **MSVD-Turkish**
+  (Hacettepe, 2019-21) gerçek video→Türkçe altyazı modeli eğitmiş (BLEU 23.9 / CIDEr 38.2) ama **yalnız VERİ SETİ
+  yayınlanmış (model/kod yok), 6 yıllık, düşük kalite, ürünleşmemiş.**
+- **Jüri-güvenli ifade:** *"Kamuya açık/yayınlanmış, KULLANILABİLİR hiçbir Türkçe video-anlama VLM'i veya Türkçe
+  doğal-dil olay-anlatan gözetim ürünü bulunamadı"* — "dünyada hiç yok" değil (gizli/iç savunma sistemleri,
+  yayımlanmamış TÜBİTAK çıktıları, YÖK-duvarı ardı tezler görülemez).
+
 ### Karşılaştırma için anahtar gerçek sistemler (doğrulanmış)
 Akademik: LAVAD · AnomalyRuler · Holmes-VAD/VAU · VAD-LLaMA · VERA · AssistPDA · VAU-R1 · **PANDA** (en yakın).
 Ticari: NVIDIA Metropolis VSS · Verkada · BriefCam/Milestone · Genetec · Camio · Spot AI Iris · Coram.
