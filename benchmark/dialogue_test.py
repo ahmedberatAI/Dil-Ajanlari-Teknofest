@@ -64,6 +64,56 @@ Asistan beklenen davranisi ne kadar karsiladi? 1-5 puanla (5=tam karsiladi).
 YALNIZCA JSON: {{"uygunluk": n, "gerekce": "kisa"}}"""
 
 
+# Cok-turlu zincir: her tur ONCEKI turlarin baglamini gerektirir (coreference/temporal/oz-referans)
+MULTI_TURN = [
+    ("En kritik olay neydi?",
+     "Forklift devrilmesi / yerde hareketsiz kişiyi doğru söylemeli."),
+    ("Bu olaydan hemen sonra ne oldu?",
+     "Önceki turu referans alıp 00:10'da personelin toplandığını söylemeli; uydurmamalı."),
+    ("O yerde hareketsiz kişi için ne yapmamı önerirsin?",
+     "'O kişi'yi doğru çözmeli (coreference) ve sağlık ekibi yönlendirmeyi önermeli."),
+    ("Az önce önerdiğin ilk aksiyon neydi?",
+     "Kendi önceki yanıtına tutarlı/doğru referans vermeli (öz-referans); çelişmemeli."),
+]
+
+MT_JUDGE = """Bir güvenlik asistanıyla cok-turlu sohbette, asistanın SON yanıtını değerlendiren tarafsiz hakemsin.
+
+Şu ana kadarki sohbet:
+{history}
+
+Operatörün son mesajı: "{msg}"
+Asistanın son yanıtı: "{resp}"
+Beklenen davranış: {expected}
+
+Asistan ÖNCEKI turların bağlamını doğru kullandı mı (gönderme/zaman/öz-referans), tutarlı ve grounded mı?
+1-5 puanla (5=tam). YALNIZCA JSON: {{"uygunluk": n, "gerekce": "kisa"}}"""
+
+
+def multi_turn_test(judge: VLMClient) -> float:
+    print("\n" + "-" * 55 + "\n### ÇOK-TURLU DİYALOG (bağlam taşıma)\n" + "-" * 55)
+    history: list = []
+    scores = []
+    for msg, expected in MULTI_TURN:
+        resp = chat_agent.respond(CONTEXT, history, msg)
+        hist_txt = "\n".join(f"{m['role']}: {m['content'][:120]}" for m in history) or "(başlangıç)"
+        try:
+            raw = judge.chat(
+                [{"role": "system", "content": "Sen tarafsiz bir degerlendirme hakemisin."},
+                 {"role": "user", "content": MT_JUDGE.format(history=hist_txt, msg=msg, resp=resp, expected=expected)}],
+                temperature=0.0, max_tokens=150,
+            )
+            score = float(extract_json(raw).get("uygunluk", 0))
+        except Exception as e:
+            score = 0.0
+            print(f"  [judge hata] {e}")
+        scores.append(score)
+        print(f"\n  S: {msg}\n  C: {resp[:240]}\n  -> tutarlılık: {score:.0f}/5")
+        history += [{"role": "user", "content": msg}, {"role": "assistant", "content": resp}]
+    avg = statistics.mean(scores) if scores else 0
+    print(f"\n  ÇOK-TURLU TUTARLILIK ORTALAMASI: {avg:.2f}/5  (n={len(scores)})")
+    return avg
+
+
 def main() -> None:
     judge = VLMClient()
     scores = []
@@ -85,7 +135,11 @@ def main() -> None:
         print(f"  C: {resp[:300]}")
 
     print("\n" + "=" * 55)
-    print(f"DİYALOG ROBUSTLUK ORTALAMASI: {statistics.mean(scores):.2f}/5  (n={len(scores)})")
+    print(f"TEK-TUR ROBUSTLUK ORTALAMASI: {statistics.mean(scores):.2f}/5  (n={len(scores)})")
+    print("=" * 55)
+    mt = multi_turn_test(judge)
+    print("\n" + "=" * 55)
+    print(f"GENEL DİYALOG: tek-tur {statistics.mean(scores):.2f}/5 · çok-tur {mt:.2f}/5")
     print("=" * 55)
 
 

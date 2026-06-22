@@ -30,5 +30,8 @@ class AgentState(TypedDict, total=False):
     # finalize
     result: Optional[AnalysisResult]
 
+    # adaptif yeniden-inceleme dongu muhafizi
+    reexamined: bool
+
     # izlenebilirlik / hata toleransi
     trace: List[str]

@@ -302,29 +302,43 @@ değerlendirdi. **Konsensüs:** ~B+/75 (şüpheci başkan ~66, uyum riskleri dü
 (otonomi 70→80), severity'yi kod-içi keyword'den modele/rubrik'e taşı, çok-turlu diyalog testi,
 düşme recall %67→artır, GitHub'a düzenli commit + `BilisimVadisi2026` topic'ini fiilen ekle.
 
+## 3.22 Tier-2 jüri iyileştirmeleri (devam)
+
+- **Çok-turlu diyalog testi (jüri açığı kapatıldı):** `dialogue_test.py`'a 4-turlu zincir eklendi
+  (coreference "o kişi", temporal "ondan sonra", öz-referans "az önce önerdiğin"). **Sonuç: 5.00/5** —
+  ajan bağlamı turlar arası kusursuz taşıyor. Tek-tur 5.0 + çok-tur 5.0.
+- **İstatistiksel dürüstlük (`benchmark/aggregate.py`):** çoklu koşu set-imzasına göre gruplanıp
+  **ortalama±std** raporlanıyor. Senaryo (11 koşu): recall %99±2, kategori %94±9, normal-FP %10±5;
+  UCF (13 koşu): recall %86±12 [58–100] (varyans). Tek-çekiliş "%100" yerine savunulabilir bant.
+- **Adaptif koşullu döngü (otonomi hakeminin #1 eleştirisi):** graf artık **doğrusal değil** —
+  `g.add_conditional_edges("perceive", route_after_perceive)` ile ajan **belirsiz (Orta-severity) olay**
+  varsa `reexamine` düğümüne yönlenir, orada o olayı segment kareleriyle odaklı yeniden değerlendirir
+  (RUTIN→Düşük: FP↓, CIDDI→Yüksek: ince gerçek olayı yakala, BELIRSIZ→korur), sonra `reason`'a döner
+  (tek-sefer döngü-muhafızı). Ajanin "tekrar bakayim" kararini temsil eder. Net/güçlü vakalarda (Kritik/
+  Düşük) tetiklenmez → düşük regresyon riski; yalnız belirsiz bandı işler. Config `adaptive_reexamine`.
+
 ## 4. Güncel KPI (varsayılan: **Qwen3-VL-8B-FP8 + öz-doğrulama + grounding**)
 
-**A) Senaryo-uyumlu set (yangın + düşme + gerçek normal — şartname domaini):**
+**A) Senaryo-uyumlu set (yangın + düşme + gerçek normal — şartname domaini), 11 koşu ortalaması:**
 
-| Metrik | Qwen3-VL+verify (varsayılan) | (kıyas: Qwen2.5-VL-7B) |
+| Metrik | Qwen3-VL+verify (ort ± std) |
+|---|---|
+| Anomali recall (yangın + düşme) | **%99 ± 2** [94–100] |
+| Risk kalibrasyonu (≥ Yüksek) | **%95 ± 8** |
+| Kategori eşleşme | **%94 ± 9** (yangın %100, düşme yüksek) |
+| Normal operasyonel-FP (herhangi olay/tetik) | ~**%8** (dispatch kapısı ile) |
+| Adversaryel (yangın-renkli negatif) FP | **%0** (9/9) |
+
+> Rakamlar `benchmark/aggregate.py` ile **çoklu koşudan ortalama±std** (tek-çekiliş "%100" değil). Küçük
+> setler → varyans bandı esastır. "Normal-FP %0" eski iddiası dar-eşik artefaktıydı; dürüst op-FP ~%8.
+
+**B) UCF-Crime seti (grainy 320×240, senaryo-dışı — dayanıklılık stresi), 13 koşu ortalaması:**
+
+| Metrik | Qwen3-VL+verify (ort ± std) | (kıyas: 7B) |
 |---|---|---|
-| Anomali recall (yangın + düşme) | **%100** | %100 |
-| Risk kalibrasyonu (≥ Yüksek) | **%94–100** | %89 |
-| Kategori eşleşme | **%100** (yangın %100, düşme %100) | %83 (düşme %62) |
-| Normal operasyonel-FP (herhangi olay/tetik) | ~**%8** (1/12, küçük-N) | — |
-| Normal yanlış-dispatch (boş operasyonel çağrı) | ~**%8** (dispatch kapısı ile) | — |
-| Adversaryel (yangın-renkli negatif) FP | **%0** (9/9) | %0 |
-
-> Dürüstlük notu: yüzdeler küçük setlerden (8–18 klip) — yüksek varyanslı, kesin değil **gösterge**.
-> "Normal-FP %0" eski iddiası dar-eşik artefaktıydı; dürüst operasyonel-FP ~%8 olarak raporlanır.
-
-**B) UCF-Crime seti (grainy 320×240, senaryo-dışı — dayanıklılık stresi):**
-
-| Metrik | Qwen3-VL+verify | (kıyas: 7B) |
-|---|---|---|
-| Anomali recall | **~%85–100** | %96 |
-| **Suç kategorisi adlandırma** (Explosion/Fighting/Assault/Burglary) | **%100** | **%0** |
-| Normal yanlış-pozitif | ~%25 (off-domain, daha hassas model) | %0 |
+| Anomali recall | **%86 ± 12** [58–100] (varyans) | %96 (tek koşu) |
+| Kategori (keyword / LLM-judge) | %32 / **%62** (Explosion/Assault/Burglary %100) | %25 / — |
+| Normal yanlış-pozitif (dar) | %12 ± 10 [0–25] | %0 |
 
 **Ortak:**
 

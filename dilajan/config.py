@@ -55,6 +55,7 @@ class Settings(BaseSettings):
                                  # "Yuksek-Duyarlilik modu" icin DILAJAN_VERIFY_EVENTS=false.
     spatial_grounding: bool = True  # yuksek-severity olayin karedeki konumunu (bbox + bölge) cikar (Qwen3-VL native grounding)
     facility_rules: str = ""        # tesise-ozgu kurallar (dagitimda set edilir); politika-ihlali tespitini saglar (W4)
+    adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)
 
     @property
     def base_url(self) -> str:

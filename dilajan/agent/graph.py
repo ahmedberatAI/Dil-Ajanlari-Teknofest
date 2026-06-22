@@ -335,6 +335,67 @@ def perceive(state: AgentState) -> dict:
     return {"events": events, "trace": trace}
 
 
+def _secs(mmss: str) -> int:
+    m = re.search(r"(\d{1,2}):(\d{2})", str(mmss or ""))
+    return int(m.group(1)) * 60 + int(m.group(2)) if m else 0
+
+
+def route_after_perceive(state: AgentState) -> str:
+    """Koşullu kenar: belirsiz (Orta) olay varsa yeniden-incele, yoksa doğrudan reason.
+    Ajanin 'tekrar bakayim' kararini temsil eder (adaptif otonomi)."""
+    if not settings.adaptive_reexamine or state.get("reexamined"):
+        return "reason"
+    events = state.get("events", [])
+    if any(_SEV_ORD.get(e.severity, 0) == _SEV_ORD[Severity.ORTA] for e in events):
+        return "reexamine"
+    return "reason"
+
+
+_REEX_PROMPT = (
+    "Bu güvenlik kamerası karelerinde şu gözlem var: \"{event}\". Bu GERÇEKTEN dikkate değer/anormal "
+    "bir olay mı, yoksa olağan/rutin bir aktivite mi? Yalnızca TEK KELİME yanıt ver: "
+    "CIDDI (gerçek ciddi olay), RUTIN (olağan, olay değil), veya BELIRSIZ."
+)
+
+
+def reexamine(state: AgentState) -> dict:
+    """Belirsiz (Orta) olaylari segment kareleriyle odakli yeniden-degerlendirir:
+    RUTIN -> Düşük (FP azalt), CIDDI -> Yüksek (ince gerçek olayi yakala), BELIRSIZ -> korur."""
+    trace = state.get("trace", [])
+    events = list(state.get("events", []))
+    segments = state.get("segments", [])
+    vlm = _get_vlm()
+    n_up = n_down = 0
+    new_events: List[Event] = []
+    for ev in events:
+        if _SEV_ORD.get(ev.severity, 0) != _SEV_ORD[Severity.ORTA]:
+            new_events.append(ev)
+            continue
+        t = _secs(ev.time)
+        seg = next((s for s in segments if _secs(s.start_str) <= t <= _secs(s.end_str)), None)
+        if seg is None:
+            new_events.append(ev)
+            continue
+        try:
+            ans = (vlm.analyze_frames(seg.frames, _REEX_PROMPT.format(event=ev.event),
+                                      temperature=0.0, max_tokens=20) or "").upper()
+        except Exception:
+            new_events.append(ev)
+            continue
+        if "RUTIN" in ans:
+            new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
+                                    severity=Severity.DUSUK, category=ev.category, bbox=ev.bbox, region=ev.region))
+            n_down += 1
+        elif "CIDDI" in ans:
+            new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
+                                    severity=Severity.YUKSEK, category=ev.category, bbox=ev.bbox, region=ev.region))
+            n_up += 1
+        else:
+            new_events.append(ev)
+    trace.append(f"reexamine: belirsiz olaylar yeniden-incelendi (↑{n_up} ciddi, ↓{n_down} rutin)")
+    return {"events": new_events, "reexamined": True, "trace": trace}
+
+
 def reason(state: AgentState) -> dict:
     trace = state.get("trace", [])
     vlm = _get_vlm()
@@ -453,13 +514,17 @@ def build_graph():
     g = StateGraph(AgentState)
     g.add_node("ingest", ingest)
     g.add_node("perceive", perceive)
+    g.add_node("reexamine", reexamine)
     g.add_node("reason", reason)
     g.add_node("act", act)
     g.add_node("finalize", finalize)
 
     g.add_edge(START, "ingest")
     g.add_edge("ingest", "perceive")
-    g.add_edge("perceive", "reason")
+    # Koşullu kenar (adaptif otonomi): belirsiz olay varsa yeniden-incele, yoksa reason
+    g.add_conditional_edges("perceive", route_after_perceive,
+                            {"reexamine": "reexamine", "reason": "reason"})
+    g.add_edge("reexamine", "reason")
     g.add_edge("reason", "act")
     g.add_edge("act", "finalize")
     g.add_edge("finalize", END)
