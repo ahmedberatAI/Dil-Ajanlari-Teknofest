@@ -101,12 +101,30 @@ _THREAT_EN = [
 _THREAT_EN_RE = [(sev, re.compile(r"\b(" + "|".join(ws) + r")\b")) for sev, ws in _THREAT_EN]
 
 
+# Nesne-vs-kisi: dusmus/yerde duran NESNE kritik degil; dusme severity'sini yalniz KISI baglaminda yukselt.
+_OBJ_RE = re.compile(r"nesne|alet|malzeme|eşya|esya|koli|kutu|parça|parca|ekipman|tekerlek|cisim|paket")
+_PERSON_RE = re.compile(r"kişi|kisi|insan|işçi|isci|adam|kadın|kadin|çocuk|cocuk|personel|operatör|operator|biri|yaya|şahıs|sahis|birey|genç|genc")
+_FALL_KW = {
+    "yere yığıl", "yere yigil", "yerde yat", "yere yat", "yerde hareketsiz", "hareketsiz yat",
+    "hareketsiz yer", "yığıld", "yigild", "yığılm", "yigilm", "yere seril", "yere kapan",
+    "yere düş", "yere dus", "düştü", "dustu", "yatmış", "yatmis", "yatıyor", "yatiyor",
+    "yerde yatan", "yere uzan",
+}
+
+
 def _calibrate_severity(text: str, model_sev: Severity) -> Severity:
-    """Olay metnindeki tehdit kelimelerine gore TEK-YONLU severity tabani uygular (TR + EN)."""
+    """Olay metnindeki tehdit kelimelerine gore TEK-YONLU severity tabani uygular (TR + EN).
+    NESNE (kisi degil) icin dusme/yere kelimeleri severity'yi YUKSELTMEZ (dusmus nesne kritik degil);
+    yangin/silah gibi diger tehditlerde nesne olsa bile yukseltir."""
     t = (text or "").lower()
+    obj_not_person = bool(_OBJ_RE.search(t)) and not bool(_PERSON_RE.search(t))
     floor = model_sev
     for sev, kws in _THREAT_KEYWORDS:  # once Kritik katmani (Turkce alt-dizgi)
-        if any(k in t for k in kws):
+        matched = [k for k in kws if k in t]
+        if matched:
+            # NESNE + eslesenlerin TUMU dusme/yerde kelimesiyse: yukseltme yapma, sonraki gruba bak
+            if obj_not_person and all(k in _FALL_KW for k in matched):
+                continue
             if _SEV_ORD[sev] > _SEV_ORD[floor]:
                 floor = sev
             break
