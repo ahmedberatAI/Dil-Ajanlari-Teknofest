@@ -1,0 +1,657 @@
+{
+  "summary": {
+    "n_anomaly": 9,
+    "n_normal": 6,
+    "recall": 0.8888888888888888,
+    "risk_cal_anom": 0.8888888888888888,
+    "cat_match": 0.8888888888888888,
+    "normal_fp": 0.16666666666666666,
+    "normal_fp_operational": 0.16666666666666666,
+    "normal_dispatch_fp": 0.16666666666666666,
+    "risk_cal_norm": 0.8333333333333334,
+    "latency_median": 17.2
+  },
+  "rows": [
+    {
+      "path": "data/falls_real/Fall/Subject1_fall01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 7,
+      "latency_s": 20.2,
+      "summary": "00:05'te bir kişi yere düşerek hareketsiz kalmıştır. Bu durum sağlık açısından ciddi bir tehdit oluşturuyor. Operatör hemen müdahaleyi sağlayacak şekilde sağlık ekibini yönlendirmelidir.",
+      "events": [
+        {
+          "time": "00:05",
+          "event": "Kişi yere düşmüş ve hareketsiz kalmıştır",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişi yere düşmüş ve hareketsiz kalmıştır; bu durum ciddi yaralanma veya ölümcül bir durum olma ihtimali taşıyor.",
+      "actions": [
+        {
+          "action": "Sağlık ekibini hemen çağırın.",
+          "priority": "Kritik",
+          "rationale": "Hareketsiz kalmış kişi için acil tıbbi müdahale gereklidir."
+        },
+        {
+          "action": "Kamera görüntüsünü güvenlik komutanına aktarın.",
+          "priority": "Yüksek",
+          "rationale": "Olayı üst düzey ekiplere bildirmek, müdahaleyi koordine etmek ve raporlamak için gerekli olan adımdır."
+        },
+        {
+          "action": "Yerel güvenlik personeli, kişinin etrafını kontrol ederek müdahaleye yardımcı olun.",
+          "priority": "Yüksek",
+          "rationale": "Kişinin durumu değişebilir; çevresi güvenli tutulmalı ve müdahale edecek ekiplerin ulaşmasını sağlayacak."
+        },
+        {
+          "action": "Kamera kaydıyla olayı belgeleyin ve raporlayın.",
+          "priority": "Orta",
+          "rationale": "Olayın detaylı kaydı, gelecekteki incelemelerde ve sorumluluk belirlemede kritik öneme sahiptir."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Fall/Subject1_fall02.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 6,
+      "latency_s": 16.6,
+      "summary": "00:03'te bir kişi yere düştü ve hareketsiz kaldı. Bu durum sağlık açısından ciddi bir tehdit oluşturuyor. Operatör, hemen müdahaleyi sağlayacak ekipleri yönlendirmeli.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi yere düştü ve hareketsiz kaldı",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişi yere düştü ve hareketsiz kaldı; bu durum yaşam tehdit edici olabilir ve acil sağlık müdahalesi gerektirir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz kaldı; yaşam tehlikesi olabilir, acil tıbbi müdahale gerekir."
+        },
+        {
+          "action": "Yerel güvenlik ekipleri olay yerine yönlendirilsin.",
+          "priority": "Yüksek",
+          "rationale": "Olay yerini kontrol ederek diğer riskleri önleyebilirler ve müdahaleyi destekleyebilirler."
+        },
+        {
+          "action": "Kamera kaydı ve zaman damgası ile olayı üst düzey komuta merkezine bildirin.",
+          "priority": "Orta",
+          "rationale": "Olayın detaylı analizini yapmak ve benzer olaylar için önlemler almak için kayıtlar gerekir."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Fall/Subject1_fall03.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 6,
+      "latency_s": 25.5,
+      "summary": "Video, sol tarafta bir kişinin sandalyeden düşmeye başladığını göstermektedir. Olay kısa sürede gerçekleşmiş ve ciddi bir yaralanma riski taşıyor olabilir. Operatör, hemen müdahaleyi değerlendirmeli ve sağlık ekibini yönlendirmelidir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi sandalyeden düşmeye başlıyor",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "sol"
+        }
+      ],
+      "risk_rationale": "Kişi sandalyeden düşmeye başlamış ve bu durum ciddi yaralanmaları tetikleyebilir. Sağlık riski yüksek olduğundan risk seviyesi Kritik olarak değerlendirilmelidir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibini hemen çağır ve olay yerine yönlendir.",
+          "priority": "Kritik",
+          "rationale": "Kişi düşmeye başlamış ve ciddi yaralanma riski taşıyor. Sağlık ekibi hemen müdahale etmelidir."
+        },
+        {
+          "action": "Olay yerine güvenlik görevlisini yönlendir ve çevreyi kontrol et.",
+          "priority": "Yüksek",
+          "rationale": "Çevreyi kontrol etmek, diğer kişilerin etkilenmesini engellemek ve olayı yönetmek için gerekli adımlardır."
+        },
+        {
+          "action": "Kamera kayıtlarını sakla ve olayla ilgili tüm detayları raporla.",
+          "priority": "Orta",
+          "rationale": "Olayı belgelemek, gelecekteki analizler ve sorumluluk belirlemeleri için kritik önem taşır."
+        },
+        {
+          "action": "Kişinin durumu hakkında bilgi almak için yakın çevreye soru sorma.",
+          "priority": "Orta",
+          "rationale": "Kişinin durumunu anlamak, müdahaleyi daha etkili hale getirmek için gerekli bir adımdır."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Fall/Subject2_fall01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 6,
+      "latency_s": 21.2,
+      "summary": "00:03-00:04 arasında bir kişi yere uzanmış ve hareketsiz kalmıştır. Bu durum sağlık açısından ciddi bir tehdit oluşturabilir. Hemen müdahale edilmesi gereken bir durumdur.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi yere uzanmış ve hareketsiz",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Hareketsiz ve yere uzanmış bir kişi, ciddi yaralanma veya kalp durması gibi acil sağlık durumunu gösteriyor olabilir. Bu durum hemen müdahale edilmeden ölümcül sonuçlar doğrultusundadır.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağrılmalı.",
+          "priority": "Kritik",
+          "rationale": "Hareketsiz bir kişi, acil tıbbi müdahale gerektirir. Herhangi bir ertelemeye izin verilmemelidir."
+        },
+        {
+          "action": "Yerel güvenlik personeli, kişinin etrafını güvenli hale getirmeli.",
+          "priority": "Yüksek",
+          "rationale": "Kişiye müdahale edilmeden önce çevresi tehlikeli olabilecek unsurlardan arınmalı ve müdahale alanını korumalıdır."
+        },
+        {
+          "action": "Kamera kaydı ve zaman damgası hemen kaydedilmeli ve üst düzey ekip ile paylaşılmalı.",
+          "priority": "Orta",
+          "rationale": "Olayın detaylı analizi ve raporlanması, gelecekteki benzer durumlar için kritik bir kaynak olacaktır."
+        },
+        {
+          "action": "Kişinin kimliği ve neden yere düşmesi hakkında bilgi toplanmalı.",
+          "priority": "Orta",
+          "rationale": "Bu bilgi, sağlık ekibinin müdahale stratejisini ve olayın nedenini belirlemesine yardımcı olur."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Fall/Subject2_fall02.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 8,
+      "latency_s": 17.2,
+      "summary": "Videonun başında bir kişi yere uzanmış ve hareketsiz kalmıştır. Bu durum sağlık açısından ciddi bir tehdit oluşturabilir. Operatör hemen müdahaleyi planlamalıdır.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi yere uzanmış ve hareketsiz",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişi yere uzanmış ve hareketsiz kalmıştır. Bu durum ciddi bir sağlık acil durumu olabilir ve müdahale edilmezse ölümcül sonuçlar doğrultusunda ilerleyebilir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağrılmalı",
+          "priority": "Kritik",
+          "rationale": "Hareketsiz kalmış kişi için acil tıbbi müdahale gereklidir."
+        },
+        {
+          "action": "Yerel güvenlik personeli bölgeye yönlendirilmeli",
+          "priority": "Yüksek",
+          "rationale": "Bölge güvenliği sağlanmalı ve müdahale sırasında herhangi bir tehlike olmaması için kontrol edilmelidir."
+        },
+        {
+          "action": "Kamera kaydı ve zaman damgası kaydedilmeli",
+          "priority": "Orta",
+          "rationale": "Olay raporlaması ve gelecekteki incelemeler için kaynak olarak saklanmalıdır."
+        },
+        {
+          "action": "Bölgeye erişimi engelleyici önlemler alınmalı",
+          "priority": "Orta",
+          "rationale": "Diğer kişilerin bu bölgeye yaklaşmasını engelleyerek müdahale sırasında herhangi bir müdahale engeli olmaması sağlanmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Fall/Subject2_fall03.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 7,
+      "latency_s": 13.4,
+      "summary": "Videonun tüm süresi boyunca herhangi bir tehlike, anomali veya kritik olay tespit edilmedi. Sahada normal ve beklenen faaliyetler gözlemlenmiştir.",
+      "events": [],
+      "risk_rationale": "Video içerisinde herhangi bir tehlikeli olay, kaza, yaralanma veya güvenlik ihlali tespit edilmediği için genel risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Sahada normal faaliyetler devam ediyor; operasyon devam edebilir.",
+          "priority": "Düşük",
+          "rationale": "Hiçbir tehlike tespit edilmediği için operasyonun devam etmesi güvenlidir."
+        },
+        {
+          "action": "Kamera kayıtlarını 30 dakikalık bir aralıktan sonra tekrar kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Sürekli gözlem yapmak için düzenli aralıklarla kontrol edilmelidir, ancak şu anda herhangi bir tehdit yoktur."
+        },
+        {
+          "action": "Operasyonun devam ettiği alanlarda güvenlik personeli durum kontrolü yapmaya devam etsin.",
+          "priority": "Orta",
+          "rationale": "Normal faaliyetler devam etmekteyse, güvenlik personelinin gözlem ve kontrol görevlerini sürdürmesi önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Fall/Subject3_fall01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 4,
+      "latency_s": 21.1,
+      "summary": "00:02'de bir kişi yere düşmüş ve hareketsiz kalmıştır. Bu durum sağlık açısından ciddi bir tehdit oluşturuyor. Operatör, hemen müdahaleyi sağlayacak ekipleri yönlendirmelidir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Kişi yere düşmüş ve hareketsiz kalmıştır",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişi yere düşmüş ve hareketsiz kalmıştır; bu durum yaşam tehdit edici olabilir. Sağlık acil müdahale gerektiren en ciddi olaydır.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini hemen çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz kalmıştır; yaşam tehdit edici bir durum olabilir. En kısa sürede sağlık desteği sağlanmalıdır."
+        },
+        {
+          "action": "Yerel güvenlik ekiplerini olay yerine yönlendirin.",
+          "priority": "Yüksek",
+          "rationale": "Güvenlik ekipleri, çevreyi kontrol ederek diğer personelin güvenliğini sağlar ve müdahaleyi destekler."
+        },
+        {
+          "action": "Kamera kayıtlarını saklayın ve olayla ilgili tüm detayları raporlayın.",
+          "priority": "Orta",
+          "rationale": "Olayı belgelemek, sonraki incelemelerde ve sorumluluk belirlemede kritik öneme sahiptir."
+        },
+        {
+          "action": "Olay alanına erişimi engelleyin.",
+          "priority": "Orta",
+          "rationale": "Diğer personelin veya yabancıların olay alanına girmemesi, müdahaleyi bozmadan ve güvenliği korumak için gerekli bir önlem."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Fall/Subject3_fall02.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 7,
+      "latency_s": 23.4,
+      "summary": "Video içerisinde merkezdeki yatakta hareketsiz kalan bir kişi tespit edilmiştir. Bu durum sağlık açısından ciddi olabilir; hemen müdahale edilmelidir. Operatör, sağlık ekibini çağırarak durumu kontrol etmesini sağlayabilir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi yatağın üzerinde hareketsiz kalmıştır",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "merkez"
+        },
+        {
+          "time": "00:05",
+          "event": "Kişi hâlâ hareketsiz kalmaya devam ediyor",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Hareketsiz kalan kişi, sağlık açısından acil bir durum olabilir; bu nedenle risk yüksek olarak değerlendirilmelidir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibini hemen çağırın.",
+          "priority": "Kritik",
+          "rationale": "Hareketsiz kalan kişi için acil tıbbi müdahale gerekebilir."
+        },
+        {
+          "action": "Kamera görüntüsünü güvenlik ekibiyle paylaşın.",
+          "priority": "Yüksek",
+          "rationale": "Diğer personelin durumu takip etmesi ve destek alması için gerekli bilgiyi paylaşın."
+        },
+        {
+          "action": "Yatakta kalan kişiyi gözlemleyin.",
+          "priority": "Orta",
+          "rationale": "İlk müdahale öncesi, kişinin durumunun değişip değişmediğini kontrol etmek için gözlem yapın."
+        },
+        {
+          "action": "İlgili bölgeye güvenlik görevlisini yönlendirin.",
+          "priority": "Orta",
+          "rationale": "Güvenlik personeli, durumu kontrol ederek müdahaleye yardımcı olabilir."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Fall/Subject3_fall03.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 6,
+      "latency_s": 25.7,
+      "summary": "Video, 00:02-00:05 arası bir kişiye ait hareketsiz ve yere yatmış bir durumu göstermektedir. Bu durum sağlık açısından ciddi bir tehdit oluşturabilir. Operatör hemen müdahaleyi değerlendirmeli ve sağlık ekibi çağrılmalıdır.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Kişi yere yatmış ve hareketsiz kalmaya devam etmektedir",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişi yere yatmış ve hareketsiz kalmıştır; bu durum yaşam tehdit edici olabilir ve acil sağlık müdahalesi gerektirir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağrılmalı.",
+          "priority": "Kritik",
+          "rationale": "Hareketsiz ve yere yatmış kişi, yaşam tehlikesi taşıyabilir; acil tıbbi müdahale gerekir."
+        },
+        {
+          "action": "Kamera alanı ve çevresi güvenli olup olmadığı kontrol edilmeli.",
+          "priority": "Yüksek",
+          "rationale": "Kişinin etrafında potansiyel tehlike (örneğin kimyasal sıçrama, yangın vb.) olup olmadığı belirlenmelidir."
+        },
+        {
+          "action": "Operasyonun devam eden diğer personellerden yardım istenmeli.",
+          "priority": "Orta",
+          "rationale": "Ekstra el ve gözleme ihtiyaç duyulabilir; operasyonun durumu değerlendirilerek destek sağlanmalıdır."
+        },
+        {
+          "action": "Kamera kaydı ve zaman damgası güvenlik merkezine aktarılmalı.",
+          "priority": "Orta",
+          "rationale": "Olay raporlaması ve gelecekteki incelemeler için kayıtlar korunmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Normal/Subject1_adl01.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": null,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 8,
+      "latency_s": 19.7,
+      "summary": "Videonun 00:02 anında merkezdeki yatağa uzanan kişi hareketsiz kaldı. Bu durum sağlık açısından ciddi olabilir; hemen müdahale edilmelidir. Diğer zamanlarda herhangi bir tehlike veya hareket gözlemlenmediği için genel olarak sakin bir ortamda gerçekleşmiştir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Kişi yatağa uzanıp hareketsiz kaldı",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Hareketsiz kalan kişi sağlık açısından acil durum olabilir; bu nedenle risk Yüksek olarak değerlendirilmiştir. Diğer olaylar rutin olduğu için riski yapay olarak yükseltmeden gerçek tehdidi yansıtmaktadır.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağrılmalı",
+          "priority": "Kritik",
+          "rationale": "Hareketsiz kalan kişi sağlık açısından acil durum olabilir; hemen müdahale edilmelidir."
+        },
+        {
+          "action": "Kamera görüntüsüne göre kişiye yakın güvenlik görevlisi hemen yönlendirilmeli",
+          "priority": "Yüksek",
+          "rationale": "Görevli, durumu gözlemleyip müdahale edebilir veya sağlık ekibiyle iletişime geçebilir."
+        },
+        {
+          "action": "Olay alanına erişim engellenmeli",
+          "priority": "Orta",
+          "rationale": "Diğer kişilerin müdahaleye engel olmaması için alanın korunması gerekir."
+        },
+        {
+          "action": "Videonun geri kalan kısmı kaydedilmeli",
+          "priority": "Düşük",
+          "rationale": "Daha fazla bilgi toplamak için video kaydı korunmalı; bu da sonraki analizlerde yardımcı olur."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Normal/Subject1_adl02.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 7,
+      "latency_s": 11.9,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, anomali veya kritik olay tespit edilmedi. Sahada normal faaliyetler devam etmektedir.",
+      "events": [],
+      "risk_rationale": "Video süresince herhangi bir tehlike, kaza, saldırı veya güvenlik ihlali gözlemlenmediği için genel risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Sahada devam eden normal faaliyetleri gözlemlemeye devam et.",
+          "priority": "Düşük",
+          "rationale": "Herhangi bir anormal durum olmadığı için sürekli gözlem gerekli değildir."
+        },
+        {
+          "action": "Kamera kayıtlarını 10 dakikalık aralıklarla kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Sürekli kontrol, potansiyel gecikmeleri önlemek için önerilir ancak şu anda acil durum yok."
+        },
+        {
+          "action": "Güvenlik personeliyle kısa bir durum paylaşımı yap.",
+          "priority": "Orta",
+          "rationale": "Operatörün bilgilendirilmesi, ekip içi uyum ve sorumluluk paylaşımı açısından önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Normal/Subject2_adl01.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 11,
+      "latency_s": 16.3,
+      "summary": "Videonun tüm süresi boyunca herhangi bir tehlike, anomali veya kritik olay tespit edilmedi. Saha durumu normal ve güvenli görünmektedir.",
+      "events": [],
+      "risk_rationale": "Video süresince herhangi bir tehlike, kaza, saldırı veya güvenlik ihlali gözlemlenmediği için genel risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Sistemdeki kamera akışını 10 saniyelik aralıklarla otomatik kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Normal durumda da düzenli kontrol, sistemdeki potansiyel arıza veya kamera kesintilerini erken tespit eder."
+        },
+        {
+          "action": "Operatörün gözlem notlarını günlük rapora eklemesi.",
+          "priority": "Düşük",
+          "rationale": "Tespit edilen olmayan durumlar da raporlamaya dahil edilerek sistemin sürekli gözlem altına alınması sağlanır."
+        },
+        {
+          "action": "Kamera kayıtlarını 30 gün boyunca arşivlemeye devam et.",
+          "priority": "Düşük",
+          "rationale": "Normal operasyonlar da tarihi kayıtlarla karşılaştırmalı analizler için gerekli olup, gelecekteki anomali tespitlerine yardımcı olur."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Normal/Subject2_adl02.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 12,
+      "latency_s": 13.9,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, anomali veya kritik olay tespit edilmedi. Saha durumu normal ve beklenen rutin aktivitelerle doldu.",
+      "events": [],
+      "risk_rationale": "Video içerisinde herhangi bir tehlike, kaza, yaralanma veya güvenlik ihlali gibi ciddi olay tespit edilmedi. Saha durumu tamamen normale uygun.",
+      "actions": [
+        {
+          "action": "Saha durumunu 30 dakikada bir tekrar kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Rutin kontrol, potansiyel gecikmeleri önlemek için önemlidir, ancak şu anda herhangi bir acil durum yok."
+        },
+        {
+          "action": "Kamera kayıtlarını 12 saatlik aralıklarla arşivle.",
+          "priority": "Düşük",
+          "rationale": "Sistemdeki tüm verilerin düzenli olarak saklanması, gelecekteki analizlerde kullanılabilecek referanslar oluşturur."
+        },
+        {
+          "action": "Operasyon merkezindeki personel ile kısa bir durum paylaşımı yap.",
+          "priority": "Orta",
+          "rationale": "Operatörün diğer ekiplerle bilgi paylaşımı yapması, koordinasyonu sağlar ve potansiyel olarak yeni risklerin erken tespit edilmesini sağlar."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Normal/Subject3_adl01.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 9,
+      "latency_s": 12.1,
+      "summary": "Videonun tüm süresi boyunca herhangi bir tehlike, kaza veya şüpheli aktivite tespit edilmedi. Sahada normal ve beklenen faaliyetler gözlemlenmiştir.",
+      "events": [],
+      "risk_rationale": "Video içerisinde herhangi bir tehlikeli olay, kaza veya şüpheli davranış tespit edilmediği için genel risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Sahada normal faaliyetlerin devam ettiğini doğrulamak için bir kez daha kamera kayıtlarını kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Tespit edilen olaylar rutin olduğundan, tekrar kontrol yapılması riski azaltmak için önerilir."
+        },
+        {
+          "action": "Operasyon alanındaki personelin durumunu doğrulamak için iletişim kanallarını kontrol et.",
+          "priority": "Orta",
+          "rationale": "Normal faaliyetlerin devam etmesi durumunda da personelin güvenliği ve iletişim durumu kontrol edilmelidir."
+        },
+        {
+          "action": "Kamera sistemlerinin düzgün çalıştığını ve kayıtların tam olduğunu kontrol et.",
+          "priority": "Orta",
+          "rationale": "Kamera sisteminin sorunsuz çalışması, gelecekteki olaylarda hızlı müdahale için kritik öneme sahiptir."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_real/Normal/Subject3_adl02.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 9,
+      "latency_s": 11.6,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, kaza veya anormal aktivite tespit edilmedi. Sahada normal ve beklenen faaliyetler gözlemlendi.",
+      "events": [],
+      "risk_rationale": "Video süresince herhangi bir tehlikeli olay, kaza veya anormal davranış tespit edilmediği için genel risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Sahada devam eden faaliyetleri gözlemeye devam et.",
+          "priority": "Düşük",
+          "rationale": "Normal faaliyetler devam ediyor; herhangi bir müdahale gerekmez."
+        },
+        {
+          "action": "Kamera kayıtlarını 10 dakikalık aralıklarla kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Sürekli gözlemleme, anormal durumların erken tespiti için önemlidir."
+        },
+        {
+          "action": "Operasyonun planlanan rotasını kontrol et ve gerekirse güncelle.",
+          "priority": "Orta",
+          "rationale": "Planlama, operasyonun güvenliğini ve etkinliğini sağlar; herhangi bir değişiklik varsa onaylanmalı."
+        }
+      ]
+    }
+  ]
+}

@@ -8,6 +8,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -56,6 +57,30 @@ class Settings(BaseSettings):
     spatial_grounding: bool = True  # yuksek-severity olayin karedeki konumunu (bbox + bölge) cikar (Qwen3-VL native grounding)
     facility_rules: str = ""        # tesise-ozgu kurallar (dagitimda set edilir); politika-ihlali tespitini saglar (W4)
     adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)
+
+    # --- Hizli mod (E4: gercege-yakin dusuk gecikme) ---
+    # DILAJAN_FAST_MODE=1 -> tek-gecisli algi + verify/grounding/reexamine kapali + daha az/kucuk kare.
+    # Gecikmeyi ~3-4x dusurur; dogruluk-hiz odunlesimi olculmustur (docs/iyilestirmeler.md).
+    fast_mode: bool = False
+    single_pass_perceive: bool = False  # algida TEK VLM cagrisi (describe+extract birlesik)
+
+    @model_validator(mode="after")
+    def _apply_fast_profile(self):
+        """fast_mode acikken dusuk-gecikme profilini uygular (acik daha-dusuk override'lar korunur)."""
+        if self.fast_mode:
+            self.single_pass_perceive = True
+            self.verify_events = False
+            self.spatial_grounding = False
+            self.adaptive_reexamine = False
+            if self.fps_sample > 1.0:
+                self.fps_sample = 1.0
+            if self.max_frames_per_segment > 6:
+                self.max_frames_per_segment = 6
+            if self.frame_max_side > 512:
+                self.frame_max_side = 512
+            if self.frame_min_side > 448:
+                self.frame_min_side = 448
+        return self
 
     @property
     def base_url(self) -> str:

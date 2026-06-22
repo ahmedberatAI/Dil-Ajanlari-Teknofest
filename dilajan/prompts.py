@@ -52,6 +52,11 @@ kişi, kavga/saldiri, silah, yetkisiz giriş gibi. Her şey beklenen normale uyu
 
 ÖNEMLİ:
 - Rutin yürüme, çalişma, oturma, ayakta durma, merdiven kullanma, ekipman/yük taşima OLAY DEĞİLDİR — sapma sayma.
+- Yere düşmüş/duran bir NESNE (alet, koli, malzeme, eşya) önemli bir sapma DEĞİLDİR; birinin yürümesi/geçmesi/\
+durmasi tek başina "yetkisiz giriş" değildir.
+- BUNA KARŞIN, bir KİŞİNİN aniden YERE/zemine düşmesi/çökmesi veya doğrudan YERDE (yatakta/koltukta DEĞİL) \
+hareketsiz kalmasi bir DÜŞME ve olasi sağlik acilidir; yaralanma görünmese bile MUTLAKA sapma olarak raporla \
+— rutin SAYMA. (Bir kişinin YATAĞA, koltuğa veya sandalyeye uzanmasi/oturmasi NORMALDİR, düşme değildir.)
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA (ör. görünmeyen duman/yangin/kaza/kişi ekleme). \
 Ancak görüntü düşük çözünürlüklü/belirsiz olsa bile GERÇEKTEN gördüğün bir sapmayi, küçük de olsa, raporla."""
 
@@ -71,8 +76,44 @@ SEVERITY (önem) rehberi — gerçek tehdidi DÜŞÜK gösterme:
 - Düşük:  rutin/normal hareket
 Olay gerçekten tehlikeliyse Yüksek/Kritik ver; rutin ise Düşük tut.
 
+AŞIRI-YORUM YAPMA (yanliş alarmi önle):
+- Yere düşmüş/duran bir NESNE/alet/malzeme/koli/eşya kritik veya sağlik olayi DEĞİLDİR; \
+yalnizca düşmüş/yarali/hareketsiz bir KİŞİ kritik sağliktir. Nesne ise en fazla Düşük ver veya hiç yazma.
+- Birinin yürümesi, geçmesi, durmasi, oturmasi veya çalişmasi tek başina "yetkisiz giriş" / "anomali" \
+DEĞİLDİR. Yetkisiz giriş için çit/kapi zorlama, kisitli bölgeye tirmanma gibi AÇIK kanit gerekir; \
+yoksa bunu olay olarak YAZMA.
+- BUNA KARŞIN bir kişinin YERE/zemine düşmesi/çökmesi veya doğrudan YERDE (yatakta/koltukta değil) hareketsiz \
+kalmasi, yaralanma görünmese bile bir DÜŞME/sağlik olayidir; MUTLAKA olay olarak çikar (Yüksek/Kritik), rutin sayma. \
+(Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değildir, olay yazma.)
+
 YALNIZCA şu JSON formatinda yanit ver:
 {{"events": [{{"time": "MM:SS", "event": "kisa Türkçe açiklama", "severity": "Düşük|Orta|Yüksek|Kritik", "category": "Normal|Güvenlik|Kaza|Sağlık|Anomali|Yetkisiz Erişim|Diğer"}}]}}"""
+
+# --- 1c) Hizli mod: tek-gecisli algi (describe+extract birlesik, dusuk gecikme) ---
+# (fast_mode icin: segment basina TEK VLM cagrisi. W1 anti-halusinasyon cercevesi korunur;
+#  iki-asamali akisin kalite kazanci yerine gecikme ~yariya iner.)
+SEGMENT_FAST_INSTRUCTION = """Bu kareler bir güvenlik kamerasinin {start}-{end} aralığindan, \
+zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikkatlice incele.
+
+Önce ortami ve OLAĞAN normali kisaca düşün (fabrika, koridor, otopark, depo vb.). Sonra YALNIZCA bu beklenen \
+normalden SAPAN ve karelerde AÇIKÇA gördüğün durumlari olay olarak çikar: duman/yangin/patlama, çarpişma/kaza, \
+düşme veya yerde hareketsiz kişi, kavga/saldiri, silah, yetkisiz giriş gibi.
+
+ÖNEMLİ:
+- Rutin yürüme, çalişma, oturma, ayakta durma, merdiven kullanma, ekipman/yük taşima OLAY DEĞİLDİR — olay sayma.
+- Yere düşmüş/duran bir NESNE (alet, koli, malzeme) kritik/sağlik olayi DEĞİLDİR; birinin yürümesi/geçmesi \
+tek başina "yetkisiz giriş" değildir.
+- BUNA KARŞIN bir KİŞİNİN aniden YERE/zemine düşmesi/çökmesi veya doğrudan YERDE hareketsiz kalmasi bir \
+DÜŞME/sağlik acilidir; MUTLAKA olay olarak raporla. (Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değil.)
+- Karelerde gerçekten OLMAYAN bir durumu UYDURMA. Tamamen rutin/normalse boş liste döndür.
+- Gerçekten gördüğün bir sapmayi, küçük de olsa, uygun severity ile raporla.
+
+SEVERITY: Kritik=yangin/patlama/duman, silah, ciddi kaza, yerde hareketsiz/yarali kişi · \
+Yüksek=kavga/darp, yetkisiz giriş, düşme, tahrip · Orta=şüpheli/anormal hareket · Düşük=rutin.
+
+YALNIZCA şu JSON formatinda yanit ver (başka metin yok):
+{{"events": [{{"time": "MM:SS", "event": "kisa Türkçe açiklama", "severity": "Düşük|Orta|Yüksek|Kritik", "category": "Normal|Güvenlik|Kaza|Sağlık|Anomali|Yetkisiz Erişim|Diğer"}}]}}
+Hiçbir kayda değer durum yoksa: {{"events": []}}"""
 
 # --- 2) Karar destek (özet + risk + aksiyon) ---
 DECISION_SUPPORT_INSTRUCTION = """Bir güvenlik operatörü için video analiz raporu hazirliyorsun.

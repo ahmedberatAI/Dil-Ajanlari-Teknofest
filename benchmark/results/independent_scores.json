@@ -1,0 +1,28 @@
+{
+  "judge_model": "RedHatAI/gemma-3-12b-it-FP8-dynamic",
+  "OZET kalitesi": {
+    "mean": 4.64,
+    "std": 0.53,
+    "n": 90
+  },
+  "AKSIYON kalitesi": {
+    "mean": 4.69,
+    "std": 0.47,
+    "n": 80
+  },
+  "RISK gerekce": {
+    "mean": 4.92,
+    "std": 0.46,
+    "n": 60
+  },
+  "DIYALOG tek-tur": {
+    "mean": 5.0,
+    "std": 0.0,
+    "n": 7
+  },
+  "DIYALOG cok-tur": {
+    "mean": 5.0,
+    "std": 0.0,
+    "n": 4
+  }
+}

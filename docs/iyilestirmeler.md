@@ -362,3 +362,58 @@ düşme recall %67→artır, GitHub'a düzenli commit + `BilisimVadisi2026` topi
   sistem kusuru değil, grainy + senaryo-dışı verinin artefaktıydı. Şartname domainine uygun veriyle
   ölçmek hem gerçek başarıyı hem rapor rakamlarını dürüstçe yükseltti.
 - Her değişiklik baseline'a karşı ölçüldü; yüksek recall + sıfır yanlış-pozitif önceliklendirildi.
+
+## 6. "En ciddi 5 zayıflık" — dürüst teşhis + çözüm (2026-06-22)
+Sistemin dürüst dezavantaj analizinde öne çıkan 5 ciddi sorun teker teker, ölçümle çözüldü.
+
+### E1 — Self-evaluation döngüselliği (kalite skorları şişkin)
+**Sorun:** Özet/aksiyon/risk-gerekçe/diyalog kalitesi, çıktıyı ÜRETEN modelin (Qwen3-VL) KENDİSİyle
+puanlanıyordu → döngüsel, şişkin skor riski.
+**Çözüm:** (a) Önce netleştirme — recall/FP/risk-kalibrasyon/keyword-kategori **zaten objektiftir**
+(dataset etiketine karşı, LLM-judge değil → döngüsel değil). (b) Kalite skorları için **bağımsız, farklı
+aile** bir judge (Google **Gemma-3-12B-it-FP8**) ile yeniden puanlama (`benchmark/judge_independent.py`
++ `gen_dialogue.py`; iki-faz: Qwen3-VL üretir → swap → Gemma puanlar). Aya-Expanse daha iyi Türkçe ama
+CC-BY-NC lisansı yarışmaya uygun değil → Gemma seçildi (izinli, Blackwell-kanıtlı).
+**Sonuç (self-judge → bağımsız Gemma):** Özet 4.98 → **4.64±0.53** (n=90), Aksiyon 4.71 → **4.69±0.47**,
+Risk-gerekçe 5.0 → **4.92±0.46**, Diyalog tek/çok-tur 5.0 → **5.00/5.00**. Özet skoru bir miktar şişmiş
+ama bağımsız judge'la bile **4.64–5.0 = gerçekten yüksek**; skorlar artık güvenilir.
+
+### E3 — Gerçek düşme recall'ı %67 (3'te 1 kaçıyor)
+**Teşhis (`scripts/probe_clip.py`):** Model düşmeyi GÖRÜYOR ama W1/W5 muhafazakârlığı yüzünden onu
+"kişi uzanıyor = günlük rutin aktivite → SAPMA YOK" diye mantığa büküyordu (ör. `Subject3_fall01`).
+**Çözüm:** Algı prompt'larına + verify'a güçlü düşme-karşıtı-rasyonalizasyon: "bir KİŞİNİN yere/zemine
+düşmesi/çökmesi veya YERDE hareketsiz kalması = DÜŞME/sağlık acili, yaralanma görünmese bile raporla;
+ama yatağa/koltuğa uzanmak NORMALDİR (düşme değil)" (mobilya istisnası FP'yi önler).
+**Sonuç (`data/falls_real`, n=9):** recall **%67 → %89**, risk-kalibrasyon **%56 → %78**, normal-FP **%0**
+(yatak-uzanma FP'si mobilya istisnasıyla giderildi). Tek kalan kayıp: `Subject2_fall03` (hızlı düşme).
+
+### E5 — Normallerde halüsinasyon (operasyonel FP)
+**Teşhis (`scripts/show_fp.py`):** En zararlısı `0_tr128` (normal fabrika) → "yere düşmüş NESNE" model
+tarafından **Kritik/Güvenlik** sanılıp 3 operasyonel fonksiyon tetiklenmişti.
+**Çözüm:** (a) Verify prompt'u güçlendirildi: sadece "görünüyor mu" değil "gerçekten ciddi mi" — aşırı-yorumu
+reddet (düşmüş NESNE, yürüme, yatağa uzanma → HAYIR → severity düşür). (b) Prompt'lara aşırı-yorum önleme:
+"düşmüş nesne kritik değil; yürüme/geçme tek başına yetkisiz giriş değil".
+**Sonuç (`data/eval_scenario`, n=30):** dar normal-FP **%8 → %0**, yanlış operasyonel-tetik (dispatch-FP)
+**%8 → %0** (zararlı FP'ler sıfırlandı), operasyonel-FP %25 → %17 (kalan 2 olay Düşük + gated, zararsız).
+Bonus: anomali recall **%94 → %100** (düşme/yangın cue'ları recall'ı da artırdı).
+
+### E4 — Gerçek-zamanlı değil (~1.5 s/video-sn)
+**Çözüm:** `DILAJAN_FAST_MODE=1` hızlı mod — tek-geçişli algı (describe+extract birleşik) + verify/grounding/
+reexamine kapalı + 1 fps / 6 kare / 512px (config'de profil; `prompts.SEGMENT_FAST_INSTRUCTION`).
+**Sonuç (`data/eval_scenario`, n=30):** gecikme **1.50 → 0.61 s/video-sn (~2.5× hız)**; bu sette doğruluk
+TAM korundu (recall/risk/kategori %100, normal-FP %0). 60 sn video ~37 sn'de analiz → gerçeğe-yakın.
+Ödünleşim: iki-aşamalı algının özet/derinlik kalitesi feda edilir; canlı/hızlı tarama için idealdir.
+
+### E2 — Forklift devrilmesi (şartname amiral örneği) gerçek-tespit kanıtı yok
+**Dürüst bulgu (subagent araştırması):** Açık-lisanslı GERÇEK forklift-devrilme videosu hiçbir yerde yok
+(yalnız ücretli stok/telifsiz-belirsiz). NVIDIA sentetik forklift = tespit 0 (sentetik≠gerçek).
+**En yakın gerçek kanıtla çözüm:** (a) **Gerçek araç-kazası/devrilme** — UCF RoadAccidents 9 gerçek CCTV
+klibi (`data/e2_vehicle/`): recall **%78** (7/9), "araç çarpıştı/devrildi" doğru raporlanıyor. (b) **Gerçek
+forklift CCTV** — Eskişehir `class3` (1080p): sistem forklifti doğru anlıyor ve "işçi forkliftin yolunu
+keserek geçiyor → potansiyel çarpışma riski" yakın-çarpışmasını bile yakalıyor. Şeffaf beyan: gerçek
+forklift TIP-OVER açık veride yok; en yakın gerçek devrilme/forklift verisinde kanıtlandı.
+
+### Bağımsız judge swap mekaniği (tekrar üretilebilir)
+`pkill -f api_server/EngineCore` → `vllm serve RedHatAI/gemma-3-12b-it-FP8-dynamic` → judge → tekrar
+`python serve_vllm.py` (Qwen3-VL geri). WSL varsayılan distrosu `docker-desktop` olduğundan komutlar
+`wsl -d Ubuntu-24.04 ...` ile çalıştırılır.

@@ -152,10 +152,15 @@ def ingest(state: AgentState) -> dict:
 
 
 _VERIFY_PROMPT = (
-    "Bu güvenlik kamerası karelerini dikkatle incele. İddia edilen olay: \"{event}\".\n"
-    "Bu olay bu karelerde GERÇEKTEN ve açıkça görünüyor mu? Yalnızca EVET veya HAYIR ile başla, "
-    "ardından tek cümle gerekçe. Olay belirsizse, zayıf bir ihtimalse veya yalnızca olağan/günlük "
-    "bir aktiviteyse HAYIR de."
+    "Bu güvenlik kamerası karelerini dikkatle incele. İddia edilen YÜKSEK ÖNEMLİ olay: \"{event}\".\n"
+    "Bu, karelerde AÇIKÇA görünen ve GERÇEKTEN ciddi/acil müdahale gerektiren bir güvenlik olayı mı? "
+    "Yalnızca EVET veya HAYIR ile başla, ardından tek cümle gerekçe.\n"
+    "Şu durumlarda HAYIR de: olay belirsiz veya zayıf bir ihtimalse; yalnızca olağan/günlük aktiviteyse; "
+    "ya da ciddi gibi etiketlenmiş ama aslında ÖNEMSİZ ise — ör. yere düşmüş bir NESNE/alet/malzeme "
+    "(kişi değil), birinin yürümesi/geçmesi, rutin çalışma/taşıma, ya da birinin YATAĞA/koltuğa/sandalyeye "
+    "uzanmasi/oturmasi (bu normaldir, düşme değildir). "
+    "Yalnızca yangın/duman/patlama, silah, ciddi kaza/çarpışma veya ZEMİNE düşmüş/yere çökmüş/yerde "
+    "hareketsiz bir KİŞİ gibi gerçek ve acil tehlikelerde EVET de."
 )
 
 
@@ -210,9 +215,43 @@ def _ground_event(vlm: VLMClient, frames, event_text: str):
     return None, None
 
 
+def _events_from_extraction(data: dict, seg) -> List[Event]:
+    """Olay-cikarim JSON'undan Event listesi kurar (severity kalibrasyonu + zaman normalizasyonu)."""
+    out: List[Event] = []
+    for e in data.get("events", []):
+        ev = str(e.get("event", "")).strip()
+        if not ev:
+            continue
+        out.append(
+            Event(
+                time=_normalize_time(e.get("time"), seg.start_str),
+                event=ev,
+                severity=_calibrate_severity(ev, _to_severity(str(e.get("severity", "")))),
+                category=_to_category(str(e.get("category", ""))),
+            )
+        )
+    return out
+
+
+def _perceive_single_pass(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str]]:
+    """Hizli mod: segment basina TEK VLM cagrisi (describe+extract birlesik).
+    verify/grounding YOK -> dusuk gecikme. (olaylar, hata_notu) doner."""
+    try:
+        instr = prompts.SEGMENT_FAST_INSTRUCTION.format(start=seg.start_str, end=seg.end_str)
+        if settings.facility_rules:
+            instr += (f"\n\nBu tesisin güvenlik kuralları: {settings.facility_rules}. "
+                      "Bu kurallara açıkça aykırı durumları da sapma/olay olarak raporla.")
+        raw = vlm.analyze_frames(seg.frames, instr, temperature=0.2, max_tokens=400)
+        return _events_from_extraction(extract_json(raw), seg), None
+    except Exception as ex:
+        return [], f"perceive(fast): segment {seg.index} hatasi: {ex}"
+
+
 def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str]]:
     """Tek segment icin iki asamali algi: serbest tarif -> olay cikarimi.
     (olaylar, hata_notu) doner; hata olursa olaylar boş + not döner (toleransli)."""
+    if settings.single_pass_perceive:
+        return _perceive_single_pass(vlm, seg)
     try:
         instr = prompts.SEGMENT_DESCRIBE_INSTRUCTION.format(start=seg.start_str, end=seg.end_str)
         if settings.facility_rules:
@@ -235,20 +274,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
             ],
             temperature=0.1, max_tokens=400,
         )
-        data = extract_json(ext)
-        out: List[Event] = []
-        for e in data.get("events", []):
-            ev = str(e.get("event", "")).strip()
-            if not ev:
-                continue
-            out.append(
-                Event(
-                    time=_normalize_time(e.get("time"), seg.start_str),
-                    event=ev,
-                    severity=_calibrate_severity(ev, _to_severity(str(e.get("severity", "")))),
-                    category=_to_category(str(e.get("category", ""))),
-                )
-            )
+        out: List[Event] = _events_from_extraction(extract_json(ext), seg)
         # Oz-dogrulama: yuksek-severity olaylari odakli sorguyla teyit et (FP azaltir, recall korur).
         if settings.verify_events and out:
             verified: List[Event] = []

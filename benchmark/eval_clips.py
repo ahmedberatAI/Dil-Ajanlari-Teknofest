@@ -88,6 +88,11 @@ def evaluate_clip(path: str, category: str) -> dict:
              "category": e.category.value, "region": e.region}
             for e in res.events
         ],
+        "risk_rationale": res.risk.rationale,
+        "actions": [
+            {"action": a.action, "priority": a.priority.value, "rationale": a.rationale}
+            for a in res.actions
+        ],
     }
 
 
