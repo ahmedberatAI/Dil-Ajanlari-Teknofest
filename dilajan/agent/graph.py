@@ -113,6 +113,15 @@ _FALL_KW = {
 }
 
 
+# F1: kisi-dusmesi/hareketsizlik olayi mi? (poz-tabanli dogrulama yalniz bunlara uygulanir)
+_FALL_EVENT_RE = re.compile(r"düş|dus|zemine|yere|yerde|yığıl|yigil|çök|hareketsiz|baygın|baygin|bayıl|bayil")
+
+
+def _is_person_fall_event(text: str) -> bool:
+    t = (text or "").lower()
+    return bool(_PERSON_RE.search(t)) and bool(_FALL_EVENT_RE.search(t))
+
+
 def _calibrate_severity(text: str, model_sev: Severity) -> Severity:
     """Olay metnindeki tehdit kelimelerine gore TEK-YONLU severity tabani uygular (TR + EN).
     NESNE (kisi degil) icin dusme/yere kelimeleri severity'yi YUKSELTMEZ (dusmus nesne kritik degil);
@@ -380,6 +389,26 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                     ev = Event(time=ev.time, event=ev.event, severity=Severity.ORTA, category=ev.category)
                 verified.append(ev)
             out = verified
+        # F1: POZ-TABANLI DOGRULAMA (Woodpecker/Semantic-Drive deseni; fall vs comelme/egilme).
+        # VLM "kisi yere dusmus/hareketsiz" der ama YOLO-poz kisinin EMIN bicimde DIK (comelmis/egilmis)
+        # oldugunu gosterirse severity'yi dispatch-esiginin ALTINA (Orta) cek -> sahte "dusmus kisi Kritik+cagri"
+        # kesilir. FAIL-OPEN: poz guvenilmez/kisi yoksa (ABSTAIN) VLM korunur -> gercek dusme recall'i bozulmaz.
+        pose_note = None
+        if settings.verify_pose_falls and out and any(_is_person_fall_event(e.event) for e in out):
+            try:
+                from dilajan import detector
+                verdict, vnote = detector.verify_fallen(seg.frames)
+            except Exception as ex:
+                verdict, vnote = "ABSTAIN", f"detector hata: {ex}"
+            if verdict == "REJECT":
+                adj: List[Event] = []
+                for ev in out:
+                    if _is_person_fall_event(ev.event) and _SEV_ORD[ev.severity] > _SEV_ORD[Severity.ORTA]:
+                        ev = Event(time=ev.time, end_time=ev.end_time, event=ev.event,
+                                   severity=Severity.ORTA, category=ev.category, bbox=ev.bbox, region=ev.region)
+                    adj.append(ev)
+                out = adj
+                pose_note = f"perceive: segment {seg.index} poz-doğrulama [{vnote}] -> kişi-düşme severity↓Orta"
         # Mekansal grounding: onemli olaylarin karedeki konumunu (bbox + bölge) cikar
         if settings.spatial_grounding and out:
             grounded: List[Event] = []
@@ -391,7 +420,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                                    category=ev.category, bbox=bb, region=reg)
                 grounded.append(ev)
             out = grounded
-        return out, None
+        return out, pose_note
     except Exception as ex:  # hata toleransi: segment atlanir
         return [], f"perceive: segment {seg.index} hatasi: {ex}"
 

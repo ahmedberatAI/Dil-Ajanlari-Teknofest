@@ -564,3 +564,36 @@ diyerek kendiyle çelişiyordu). **Çözüm (decoding-time, aef55 araştırması
 `6_te12` uydurma-kişi GİTTİ; falls_real recall **%89 korundu** (risk-kalib 78→89); senaryo recall/risk/kategori
 **%100**, zararlı-FP **%0**. Varsayılan **1.15** yapıldı (tam doğrulandı, recall bozulmadı). Bu, "emin yanlış-okuma"
 sınıfının grainy-OOD'de kısmen iyileştirilebildiğini gösteren ölçülü bir kazanım.
+
+## 11. Düşme-precision — POZ-TABANLI doğrulama (F1, 2026-06-22)
+**Sorun:** Endüstriyel CCTV'de **çömelen/eğilen bir işçiyi** "kişi zemine düşmüş ve hareketsiz" (Kritik/Sağlık +
+dispatch) sanma. Bu, E3'te düşme-recall için eklediğimiz hassasiyetin doğrudan yan etkisi; prompt/decoding
+tweak'leri (rp=1.15) azalttı ama stokastik olarak tekrar etti.
+
+**Benzer çalışmaların yöntemi (2 subagent literatür analizi):** Bu tam olarak fall-detection'ın "fall vs ADL"
+(oturma/eğilme/çömelme) problemi. Çözüm desenleri: **Woodpecker/Semantic-Drive** (VLM önerir → uzman dedektör
+doğrular) + **poz-tabanlı fall-detection** (PMC7729773, ACM 3478027): bbox aspect-ratio + **torso açısı** +
+spine-ratio. Ayırt edici sinyal: **çömelme/eğilme torso'yu DİK tutar; düşme torso'yu YATAY yapar** (+ temporal:
+düşme bir noktada yatay olur, çömelme hiç olmaz).
+
+**Uygulama (`detector.verify_fallen`, YOLO11n-pose):** VLM "kişi düşmüş" dediğinde poz çalışır; omuz(5,6)/kalça(11,12)
+keypoint'lerinden torso-açısı (dikeyden) hesaplanır. Eşikler (literatür): <30° = DİK (çömelme), >50° veya
+(aspect>1 & spine<1.2) = YATAY (düşmüş). **Karar (fail-open + yalnız-düşür):**
+- ≥2 karede yatay → **CONFIRM** (gerçek düşme, korunur)
+- 0 yatay + **≥6 kare** sürekli-dik → **REJECT** → severity Orta'ya (dispatch-altı) düşürülür
+- poz güvenilmez/kişi yok/overhead → **ABSTAIN** → VLM korunur (gerçek-düşme recall'i güvende)
+
+**Ölçüm (önce/sonra, recall bozmadan):**
+| Test | Sonuç |
+|---|---|
+| 6_te12 (çömelen işçi) | **REJECT** → sahte "düşmüş kişi" gitti ✓ |
+| Gerçek düşmeler (Subject1/3) | **CONFIRM** ✓ |
+| URFD overhead | **ABSTAIN** (fail-open) ✓ |
+| falls_real | recall **%89**, risk-kalib **%89**, normal-FP **%0** (bozulmadı) ✓ |
+| comp_fire | "dizleri üzerinde" → Düşük; "hareketsiz" → Yüksek korundu; yangın Kritik |
+
+REJECT-eşiği önce n_up≥3 idi (2 gerçek düşmeyi de düşürdü, risk-kalib 67); **n_up≥6** (sürekli-çömelme) yapınca
+gerçek düşmeler korundu (risk-kalib 89), çömelme yine yakalandı. **Dürüst sınır:** tepeden/overhead kamerada poz
+güvenilmez → ABSTAIN (VLM'e güvenir); derin bel-eğilmesi torso'yu yatay yapabilir (nadir kalan edge-case).
+Araçlar: `detector.verify_fallen`, `scripts/_test_pose.py`, `scripts/probe_scenes.py`. Açıklanabilirlik: trace'e
+poz-verdict yazılır.

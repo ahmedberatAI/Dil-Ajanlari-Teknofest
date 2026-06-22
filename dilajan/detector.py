@@ -55,6 +55,82 @@ def detect_segment(frames: Sequence[Tuple[str, bytes]], conf: float = 0.35) -> s
         return ""
 
 
+_pose_model = None
+
+
+def _get_pose_model():
+    global _pose_model
+    if _pose_model is None:
+        from ultralytics import YOLO
+        _pose_model = YOLO("yolo11n-pose.pt")  # ilk kullanimda ~6MB
+    return _pose_model
+
+
+def verify_fallen(frames: Sequence[Tuple[str, bytes]], kp_conf: float = 0.5,
+                  conf: float = 0.35) -> Tuple[str, str]:
+    """VLM'in 'kisi yere dusmus/hareketsiz' iddiasini POZ ile dogrular (dusme vs comelme/egilme).
+
+    Literatur esikleri (PMC7729773 / ACM 3478027): torso dikeyden <30° = DIK (comelme/egilme/oturma,
+    DUSME DEGIL); >50° veya (aspect w/h>1 ve spine-ratio<1.2) = YATAY/dusmus. COCO-17: omuz 5,6 / kalca 11,12.
+    Donus: ('CONFIRM'|'REJECT'|'ABSTAIN', not). FAIL-SAFE: poz guvenilmezse ABSTAIN (VLM iddiasi korunur).
+    REJECT = kisi DIK -> sahte 'dusmus kisi'; severity DUSURULUR (silinmez)."""
+    try:
+        import numpy as np
+        model = _get_pose_model()
+        imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
+        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        votes = []  # True=dusmus(yatay), False=dik(ADL)
+        for r in results:
+            kpts = getattr(r, "keypoints", None)
+            if kpts is None or kpts.xy is None or len(kpts.xy) == 0:
+                continue
+            xy = kpts.xy.cpu().numpy()
+            cfn = kpts.conf.cpu().numpy() if kpts.conf is not None else None
+            # en yuksek keypoint-guvenli kisiyi sec
+            bi, bs = -1, -1.0
+            for i in range(xy.shape[0]):
+                s = float(cfn[i].mean()) if cfn is not None else 1.0
+                if s > bs:
+                    bs, bi = s, i
+            if bi < 0:
+                continue
+            kp = xy[bi]
+            c = cfn[bi] if cfn is not None else np.ones(17)
+            if not all(c[j] >= kp_conf for j in (5, 6, 11, 12)):
+                continue  # omuz/kalca net degil -> bu kareyi atla (abstain'e katki)
+            sh = (kp[5] + kp[6]) / 2.0
+            hp = (kp[11] + kp[12]) / 2.0
+            v = hp - sh
+            ang = float(np.degrees(np.arctan2(abs(v[0]), abs(v[1]))))  # 0=dik, 90=yatay
+            pts = kp[c >= kp_conf]
+            if len(pts) >= 3:
+                w = float(pts[:, 0].max() - pts[:, 0].min())
+                h = float(pts[:, 1].max() - pts[:, 1].min())
+                ar = w / max(h, 1e-6)
+            else:
+                ar = 0.0
+            sr = float(np.linalg.norm(v)) / max(float(np.linalg.norm(kp[5] - kp[6])), 1e-6)
+            if ang < 30.0:
+                votes.append(False)                      # DIK = comelme/egilme/oturma
+            elif ang > 50.0 or (ar > 1.0 and sr < 1.2):
+                votes.append(True)                       # YATAY = dusmus
+            # 30-50° belirsiz -> sayma
+        n_fall = sum(1 for v in votes if v)   # yatay/dusmus kare sayisi
+        n_up = len(votes) - n_fall            # dik kare sayisi
+        if len(votes) < max(2, int(0.4 * len(frames))):
+            return "ABSTAIN", "poz güvenilmez (omuz/kalça net değil veya kişi yok)"
+        # Temporal: dusme = bir noktada YATAY poz olur (dustukten sonra); comelme/egilme HIC yatay olmaz.
+        if n_fall >= 2:
+            return "CONFIRM", f"{n_fall} karede yatay/düşmüş poz -> düşme doğrulandı"
+        # REJECT yalniz SUREKLI-dik (comelme/egilme uzun sure): cok kare DIK + HIC yatay yok.
+        # Konservatif esik (n_up>=6) gercek dusmeleri korur (kisa/gecisli -> ABSTAIN -> VLM korunur).
+        if n_fall == 0 and n_up >= 6:
+            return "REJECT", f"{n_up} güvenilir karede SÜREKLİ DİK torso (çömelme/eğilme), hiç yatay yok -> düşme değil"
+        return "ABSTAIN", f"belirsiz/yetersiz (yatay {n_fall}, dik {n_up}) -> VLM korunur"
+    except Exception as e:
+        return "ABSTAIN", f"poz hata: {e}"
+
+
 def available() -> bool:
     try:
         import ultralytics  # noqa: F401
