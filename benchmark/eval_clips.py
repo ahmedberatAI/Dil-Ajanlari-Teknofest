@@ -83,6 +83,11 @@ def evaluate_clip(path: str, category: str) -> dict:
         "duration_s": dur,
         "latency_s": round(dt, 1),
         "summary": res.summary,
+        "events": [
+            {"time": e.time, "event": e.event, "severity": e.severity.value,
+             "category": e.category.value, "region": e.region}
+            for e in res.events
+        ],
     }
 
 
@@ -125,8 +130,11 @@ def main() -> None:
     recall = frac([1 if r["n_events"] > 0 else 0 for r in anom])
     risk_cal_anom = frac([1 if r["risk_ord"] >= 3 else 0 for r in anom])
     cat_match_rate = frac([1 if r["category_match"] else 0 for r in anom])
-    # normal yanlis-pozitif: yuksek/kritik olay VEYA risk >= yuksek
+    # normal yanlis-pozitif (DAR): yuksek/kritik olay VEYA risk >= yuksek
     fp = frac([1 if (r["max_severity"] >= 3 or r["risk_ord"] >= 3) else 0 for r in norm])
+    # normal yanlis-pozitif (OPERASYONEL, durust): normalde HERHANGI olay VEYA fonksiyon tetiklendi mi
+    op_fp = frac([1 if (r["n_events"] > 0 or len(r.get("triggered", [])) > 0) else 0 for r in norm])
+    dispatch_fp = frac([1 if len(r.get("triggered", [])) > 0 else 0 for r in norm])  # yanlis operasyonel cagri
     risk_cal_norm = frac([1 if r["risk_ord"] <= 1 else 0 for r in norm])
     lat = [r["latency_s"] for r in rows]
     persec = [r["latency_s"] / max(r["duration_s"], 1) for r in rows]
@@ -136,7 +144,9 @@ def main() -> None:
     print(f"  Anomali RECALL (>=1 olay)      : {recall*100:.0f}%")
     print(f"  Anomali risk kalibrasyonu(>=Y) : {risk_cal_anom*100:.0f}%")
     print(f"  Kategori eslesme orani         : {cat_match_rate*100:.0f}%")
-    print(f"  NORMAL yanlis-pozitif orani    : {fp*100:.0f}%   (dusuk = iyi)")
+    print(f"  NORMAL FP (dar: sev/risk>=Y)   : {fp*100:.0f}%   (dusuk = iyi)")
+    print(f"  NORMAL FP (operasyonel: herhangi olay/tetik): {op_fp*100:.0f}%   (durust metrik)")
+    print(f"  NORMAL yanlis operasyonel-tetik: {dispatch_fp*100:.0f}%   (dusuk = iyi)")
     print(f"  Normal risk=Dusuk orani        : {risk_cal_norm*100:.0f}%")
     if lat:
         print(f"  Gecikme medyan                 : {statistics.median(lat):.1f}s  "
@@ -160,7 +170,8 @@ def main() -> None:
     summary = {
         "n_anomaly": len(anom), "n_normal": len(norm),
         "recall": recall, "risk_cal_anom": risk_cal_anom, "cat_match": cat_match_rate,
-        "normal_fp": fp, "risk_cal_norm": risk_cal_norm,
+        "normal_fp": fp, "normal_fp_operational": op_fp, "normal_dispatch_fp": dispatch_fp,
+        "risk_cal_norm": risk_cal_norm,
         "latency_median": statistics.median(lat) if lat else 0,
     }
     with open(out, "w", encoding="utf-8") as f:

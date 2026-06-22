@@ -1,0 +1,1168 @@
+{
+  "summary": {
+    "n_anomaly": 24,
+    "n_normal": 8,
+    "recall": 0.875,
+    "risk_cal_anom": 0.6666666666666666,
+    "cat_match": 0.4583333333333333,
+    "normal_fp": 0.125,
+    "risk_cal_norm": 0.5,
+    "latency_median": 23.35
+  },
+  "rows": [
+    {
+      "path": "data/eval/Abuse/Abuse005_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 5,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 32,
+      "latency_s": 33.6,
+      "summary": "Video içerisinde güvenlik görevlileri arasında kavga ve yere yatmış bir kişinin müdahale edildiği görülmüştür. Yatmış kişiye acil müdahale edilmekte olup, sağlık durumu kritik seviyede değerlendirilmelidir. Operatör, sağlık ekiplerinin hemen çağrılması ve güvenlik olayının kontrol altına alınması gerekmektedir.",
+      "events": [
+        {
+          "time": "00:16",
+          "event": "iki görevli arasında kavga",
+          "severity": "Orta",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:23",
+          "event": "Yerde hareketsiz bir kişi var",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        },
+        {
+          "time": "00:24",
+          "event": "Görevliler yere yatmış kişiyi müdahale ediyor",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        },
+        {
+          "time": "00:25",
+          "event": "Görevli yere yatmış kişiyi kollarıyla tutuyor",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        },
+        {
+          "time": "00:26",
+          "event": "Görevliler yere yatmış kişiyi kontrol ediyor",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Abuse/Abuse021_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 8,
+      "max_severity": 2,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 64,
+      "latency_s": 41.1,
+      "summary": "Bir yetişkin, masada anormal pozisyonda başını eğdikten sonra çocuğa şiddetle müdahale ederek onu yere düşürdü. Çocuk hareketsiz kaldı ve yetişkin devamla baskı uyguladı. Olay sonunda çocuk yere yatmış, müdahale hâlâ devam ediyor. Bu, şiddet ve sağlık riski içeren ciddi bir olaydır.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Yetişkin masada anormal pozisyonda başını eğdi",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:09",
+          "event": "Yetişkin masanın diğer tarafına dönerek dikkatini çekti",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:42",
+          "event": "Yetişkin çocuğa şiddetle müdahale ediyor",
+          "severity": "Orta",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:43",
+          "event": "Çocuk yere düşürüldü ve hareketsiz kaldı",
+          "severity": "Orta",
+          "category": "Sağlık",
+          "region": null
+        },
+        {
+          "time": "00:44",
+          "event": "Yetişkin çocuğun üzerine eğilerek baskı uyguluyor",
+          "severity": "Orta",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:48",
+          "event": "Çocuk yere yatmış ve hareketsiz",
+          "severity": "Orta",
+          "category": "Sağlık",
+          "region": null
+        },
+        {
+          "time": "00:49",
+          "event": "Yetişkin çocuğa devamla baskı uyguluyor",
+          "severity": "Orta",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "01:00",
+          "event": "Çocuk yere yatmış, yetişkin müdahale ediyor",
+          "severity": "Orta",
+          "category": "Kaza",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Abuse/Abuse029_x264.mp4",
+      "category": "Abuse",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir"
+      ],
+      "duration_s": 10,
+      "latency_s": 17.2,
+      "summary": "Kişi yerdeki nesneye odaklanarak hareketsiz kaldı ve ardından çantayı alarak ev kapısına doğru yürüdü. Bu davranışlar rutin dışıdır ancak fiziksel tehlike veya acil durum belirtisi yoktur.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Kişi yerdeki nesneye odaklanıp hareketsiz kalıyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:05",
+          "event": "Kişi çantayı alıp ev kapısına doğru yürüyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Assault/Assault018_x264.mp4",
+      "category": "Assault",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 12,
+      "latency_s": 25.6,
+      "summary": "Merkezde bir kişi yere düşmüş ve hareketsiz kalmış; güvenlik personeli müdahale etmektedir. Durum ciddi görünmektedir ve sağlık ekiplerinin hemen müdahalesi gerekmektedir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Yere düşmüş kişiye müdahale eden bir kişi var",
+          "severity": "Yüksek",
+          "category": "Güvenlik",
+          "region": "merkez"
+        },
+        {
+          "time": "00:02",
+          "event": "Bir kişi yere düşmüş ve hareketsiz kalmış",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Assault/Assault038_x264.mp4",
+      "category": "Assault",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 3,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 5,
+      "latency_s": 22.8,
+      "summary": "Merkezde iki kişi arasında ciddi fiziksel kavga meydana gelmiş ve bu kavga sonucu bir kişi yere düşerek hareketsiz kalmıştır. Durum sağlık açısından endişe verici olup, hemen müdahale gerekmektedir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "İki kişi arasında fiziksel kavga",
+          "severity": "Yüksek",
+          "category": "Güvenlik",
+          "region": "merkez"
+        },
+        {
+          "time": "00:03",
+          "event": "Bir kişi kavga sonucu yere düşüyor",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "üst sol"
+        },
+        {
+          "time": "00:04",
+          "event": "Yere düşen kişi hareketsiz kalmış",
+          "severity": "Orta",
+          "category": "Sağlık",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Assault/Assault039_x264.mp4",
+      "category": "Assault",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 3,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 10,
+      "latency_s": 25.6,
+      "summary": "Kırmızı gömlekli kişi, yetkisiz olarak kapıya yaklaşmış ve ardından mavi gömlekli kişiyi zemine düşürerek şiddetli bir saldırı gerçekleştirmiştir. Bu durum güvenlik personelinin hemen müdahale etmesi gerektiren ciddi bir olaydır.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Kırmızı gömlekli kişi kapıya doğru yürüyor",
+          "severity": "Orta",
+          "category": "Yetkisiz Erişim",
+          "region": null
+        },
+        {
+          "time": "00:04",
+          "event": "Kırmızı gömlekli kişi mavi gömlekli kişiyi zemine düşürdü",
+          "severity": "Yüksek",
+          "category": "Güvenlik",
+          "region": "alt sağ"
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Burglary/Burglary059_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 15,
+      "latency_s": 23.1,
+      "summary": "00:02'de yetkisiz giriş şüphesi tespit edildi. Girişteki kişi, kapıya odaklanarak giriş yapmaya çalışmaktadır. Bu durum güvenlik önlemlerinin ihlal edilmesi riskini artırıyor.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Yetkisiz giriş şüphesi: Kapıya odaklanarak giriş yapmaya çalışılıyor",
+          "severity": "Yüksek",
+          "category": "Yetkisiz Erişim",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Burglary/Burglary078_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 10,
+      "latency_s": 17.7,
+      "summary": "Yüzünü örtülü bir kişi, yetkisiz olarak kapıya girme girişimi yaptı. Bu durum, güvenlik önlemlerinin ihlali ve potansiyel bir tehdit oluşturuyor. Operatör hemen müdahale etmelidir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Yüzünü örtülü bir kişi kapıya girme girişimi yapıyor",
+          "severity": "Yüksek",
+          "category": "Yetkisiz Erişim",
+          "region": "alt"
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Burglary/Burglary081_x264.mp4",
+      "category": "Burglary",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 14,
+      "latency_s": 18.7,
+      "summary": "00:10'da pencereye eğilmiş, dışarıya doğru hareket eden bir şüpheli tespit edildi. Bu davranış, yetkisiz giriş veya gözlem dışı bir aktivite olabileceği için dikkat gerektirir. Videonun kısa süresi ve tek olayı nedeniyle hemen tehdit olarak kabul edilmemeli ancak izlenmeye devam edilmelidir.",
+      "events": [
+        {
+          "time": "00:10",
+          "event": "Pencereye eğilmiş, dışarıya doğru hareket eden şüpheli pozisyon",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Explosion/Explosion001_x264.mp4",
+      "category": "Explosion",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 21,
+      "latency_s": 29.8,
+      "summary": "Video, patlama sonrası yoğun duman ve uçuşan parçalarla birlikte kritik güvenlik olayını göstermektedir. Görüntüler tamamen bulanık hale gelmiş ve sahada hareketli bir tehlike ortamı hakimdir. Operatör hemen müdahale ve risk yönetimi için hazır olmalıdır.",
+      "events": [
+        {
+          "time": "00:04",
+          "event": "Patlama sonrası duman yoğunluğu arttı ve araçlar hareket etmeye başladı",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:08",
+          "event": "Görüntü tamamen duman nedeniyle bulanık hale geldi",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        },
+        {
+          "time": "00:10",
+          "event": "Ani patlama veya çarpişma sonucu duman ve parçalar havada uçuşuyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Explosion/Explosion034_x264.mp4",
+      "category": "Explosion",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 14,
+      "latency_s": 28.8,
+      "summary": "Merkezde kırmızı ışık ve alev çıkışıyla başlayan olay, hızla büyüyen duman sütunuyla devam ediyor. Tesisin merkezindeki yangın veya patlama belirtisi olduğu anlaşılmaktadır. Operatör hemen müdahale ekiplerini ve acil müdahale birimlerini yönlendirmelidir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Kırmızı ışık veya alev çıkışı",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        },
+        {
+          "time": "00:03",
+          "event": "Duman sütunu hızla büyüyerek gökyüzüne yükseliyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:10",
+          "event": "Tesis üzerinde büyük duman bulutu yükseliyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Explosion/Explosion050_x264.mp4",
+      "category": "Explosion",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 9,
+      "latency_s": 22.2,
+      "summary": "Üstte ani duman patlaması veya yangın çıktı ve insanlar panikle kaçışmaya başladı. Olay çok ciddi ve hemen müdahale gerektiriyor.",
+      "events": [
+        {
+          "time": "00:04",
+          "event": "Ani duman patlaması veya yangın",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "üst"
+        },
+        {
+          "time": "00:04-00:08",
+          "event": "İnsanlar panikle kaçışıyor",
+          "severity": "Yüksek",
+          "category": "Anomali",
+          "region": "üst"
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Fighting/Fighting018_x264.mp4",
+      "category": "Fighting",
+      "is_anomaly": true,
+      "n_events": 11,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "acil_durdurma_tetikle",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 46,
+      "latency_s": 36.8,
+      "summary": "Kamera görüntülerinde fiziksel kavga, yaralı veya hareketsiz bir kişi tespit edildi ve bu kişiye müdahale edilmeyen, anormal hareketler görüldü. Ayrıca, güvenlik görevlilerinin müdahale etmemesi ve ekranın anormal olarak görüntülenmesi, ciddi bir güvenlik riski oluşturuyor.",
+      "events": [
+        {
+          "time": "00:05",
+          "event": "erkek ve kadın arasında fiziksel kavga başlıyor",
+          "severity": "Yüksek",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:09",
+          "event": "erkek yere yatmış, hareketsiz",
+          "severity": "Orta",
+          "category": "Sağlık",
+          "region": null
+        },
+        {
+          "time": "00:09",
+          "event": "diğer erkek kavga yapanları izliyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:10",
+          "event": "Yerde hareketsiz bir kişi var",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        },
+        {
+          "time": "00:12",
+          "event": "Bir kişi yere düşmüş kişiyi kontrol ediyor",
+          "severity": "Orta",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:13",
+          "event": "Yere düşmüş kişiden uzaklaşıp koşmaya başlayan kişi",
+          "severity": "Yüksek",
+          "category": "Anomali",
+          "region": "merkez"
+        },
+        {
+          "time": "00:20",
+          "event": "Koridor ortasında yere yatmış hareketsiz bir kişi",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        },
+        {
+          "time": "00:24",
+          "event": "Bir kadın, yere yatmış kişiyi görmezden gelerek geçiyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:28",
+          "event": "Yatmış kişi başını kaldırıyor; anormal hareket",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        },
+        {
+          "time": "00:30",
+          "event": "koridor ortasında yere yatmış hareketsiz kişi",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        },
+        {
+          "time": "00:40",
+          "event": "Ekranın normalde göstermesi gereken içeriğin yerine mücadele sanatları metni görüntüleniyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Fighting/Fighting023_x264.mp4",
+      "category": "Fighting",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 34,
+      "latency_s": 31.1,
+      "summary": "Beyaz gömlekli kişi, siyah kıyafetli kişiyi zorla tutarak paketi ele geçirmeye çalışmış ve paketi elinde tutarak hızlıca dışarı kaçmıştır. Bu durum yetkisiz erişim ve güvenlik ihlali olarak değerlendirilmelidir.",
+      "events": [
+        {
+          "time": "00:10",
+          "event": "Beyaz gömlekli kişi siyah kıyafetli kişiyi zorla tutmaya çalışıyor",
+          "severity": "Orta",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:23",
+          "event": "Siyah kıyafetli kişi, beyaz kıyafetli kişiden paket alıyor",
+          "severity": "Orta",
+          "category": "Yetkisiz Erişim",
+          "region": null
+        },
+        {
+          "time": "00:24",
+          "event": "Kişi paketi elinde tutarak hızlıca dışarı koşuyor",
+          "severity": "Yüksek",
+          "category": "Yetkisiz Erişim",
+          "region": "sol"
+        },
+        {
+          "time": "00:25-00:28",
+          "event": "Kişi kapıya koşarak hızlıca dışarı çıkar",
+          "severity": "Orta",
+          "category": "Yetkisiz Erişim",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Fighting/Fighting038_x264.mp4",
+      "category": "Fighting",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 27,
+      "latency_s": 34.3,
+      "summary": "Video içerisinde güvenlik olayı olarak iki kişi arasında kavga ve birinin yere düşmesi, ardından yere yatmış kişiye itilme gibi riskli davranışlar gözlemlenmiştir. Olaylar güvenlik açısından ciddi tehditler oluşturmakta olup, hemen müdahale gerektirir.",
+      "events": [
+        {
+          "time": "00:12",
+          "event": "İki kişi arasında kavga sonucu biri yere düştü",
+          "severity": "Yüksek",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:21",
+          "event": "yere yatmış kişi başka biri tarafından itiliyor",
+          "severity": "Orta",
+          "category": "Diğer",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_926_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 60,
+      "latency_s": 18.6,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, kaza veya yetkisiz giriş gibi olay tespit edilmedi. Sahada normal ve beklenen faaliyetler devam etmektedir.",
+      "events": []
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_928_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 18.1,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, kaza veya güvenlik ihlali tespit edilmedi. Sahada normal faaliyetler devam etmekte ve herhangi bir anormal durum gözlemlenmemiştir.",
+      "events": []
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_929_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 31,
+      "latency_s": 22.1,
+      "summary": "Sistem, kameranın odasına yetkisiz giriş girişimi tespit etti. Siyah tişört giyen kişi girişe çalışırken güvenlik önlemleriyle karşılaştı. Olay kısa sürede sona erdi ve fiziksel hasar veya yaralanma yok.",
+      "events": [
+        {
+          "time": "00:30",
+          "event": "Yetkisiz giriş şüphesi: Siyah tişört giyen kişi kameranın odasına girmeye çalışıyor.",
+          "severity": "Orta",
+          "category": "Yetkisiz Erişim",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_932_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 59,
+      "latency_s": 23.9,
+      "summary": "Merdiven üstünde duran kişi, normal aktivite dışı davranış sergilemektedir. Bu davranış, potansiyel bir tehdit veya anormal durum olabileceği için dikkatli izlenmelidir. Video süresi kısa ve sadece bir anomali tespit edilmiştir.",
+      "events": [
+        {
+          "time": "00:40",
+          "event": "Merdiven üstünde duran kişi, normal aktivite dışı bir davranış sergiliyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_936_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 3,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 38,
+      "latency_s": 30.0,
+      "summary": "Video, sağlık ve güvenlik araçlarının geçişini ve bir kişinin yere düşmesini gösteriyor. Olaylar genelde rutin görünüyor ancak düşen kişinin durumu dikkat çekici. Hemen müdahale edilmesi gereken bir tehlike yok ancak gözlem artırılmalı.",
+      "events": [
+        {
+          "time": "00:25",
+          "event": "Ambulans hızla geçiyor",
+          "severity": "Orta",
+          "category": "Sağlık",
+          "region": null
+        },
+        {
+          "time": "00:26",
+          "event": "Polis aracısı geçiyor",
+          "severity": "Yüksek",
+          "category": "Güvenlik",
+          "region": "üst sol"
+        },
+        {
+          "time": "00:28",
+          "event": "Kırmızı tişört giyen kişi yere düşüyor",
+          "severity": "Orta",
+          "category": "Kaza",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_937_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 38,
+      "latency_s": 13.8,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, kaza veya güvenlik ihlali tespit edilmedi. Sahada normal faaliyetler devam etmekte ve herhangi bir anormal durum gözlemlenmemiştir.",
+      "events": []
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_939_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 27,
+      "latency_s": 14.6,
+      "summary": "Video süresince herhangi bir tehlike, kaza veya yetkisiz giriş gibi olay tespit edilmedi. Sahada normal ve kontrol altındaki faaliyetler devam etmektedir.",
+      "events": []
+    },
+    {
+      "path": "data/eval/Normal/Normal_Videos_943_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 5,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 34,
+      "latency_s": 29.3,
+      "summary": "Kişi, duvar/kabin önünde ve yere yakın eğilerek nesneleri incelemekte; son olarak yere yatmış durumda. Bu davranışlar rutin dışıdır ancak ciddi bir tehlike belirtisi değildir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Kişi duvar/kabin önünde eğilerek bir şey incelemeye çalışıyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:04",
+          "event": "Kişi yere yakın eğilerek bir şey tutuyor veya incelemeye çalışıyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:06",
+          "event": "Kişi duvar/kabin önünde eğilerek bir şey incelemeye çalışıyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:08",
+          "event": "Kişi yere yakın eğilerek bir şey tutuyor veya incelemeye çalışıyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:24",
+          "event": "Kişi yere yatmış durumda",
+          "severity": "Orta",
+          "category": "Kaza",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/RoadAccidents/RoadAccidents021_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 5,
+      "latency_s": 12.9,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, kaza veya şüpheli aktivite tespit edilmedi. Sahada normal ve beklenen faaliyetler gözlemlenmiştir.",
+      "events": []
+    },
+    {
+      "path": "data/eval/RoadAccidents/RoadAccidents027_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": true,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "guvenlik_ekibi_uyar"
+      ],
+      "duration_s": 3,
+      "latency_s": 16.2,
+      "summary": "Yaya geçidinde yaya varken araç duruyor; bu durum trafik akışına ve yaya güvenliğine yönelik bir anomali oluşturuyor. Operatör, durumu gözlemlemeli ve gerekirse müdahale etmelidir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Yaya geçidinde yaya var ama araç duruyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/RoadAccidents/RoadAccidents065_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 4,
+      "latency_s": 27.7,
+      "summary": "Motosiklet sürücüsü aracınla çarpıştı, havaya fırladı ve yere düşerek hareketsiz kaldı. Aracın çarpışması sırasında duman veya patlama etkisi gözlemlendi ve araç devrildi. Olay, sağ tarafta meydana geldi ve sağlık riski var.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Motosiklet sürücüsü aracınla çarpıştı ve havaya fırladı",
+          "severity": "Kritik",
+          "category": "Kaza",
+          "region": "sağ"
+        },
+        {
+          "time": "00:02",
+          "event": "Aracın çarpışması sırasında duman veya patlama etkisi gözlemlendi",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:03",
+          "event": "Aracın devrilerek yan yatması",
+          "severity": "Kritik",
+          "category": "Kaza",
+          "region": "üst sağ"
+        },
+        {
+          "time": "00:04",
+          "event": "Motosiklet sürücüsü yere düşmüş ve hareketsiz kalmış",
+          "severity": "Orta",
+          "category": "Sağlık",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Shooting/Shooting001_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 8,
+      "latency_s": 13.7,
+      "summary": "Videonun tüm süresi boyunca herhangi bir tehlike, anomali veya kritik olay tespit edilmedi. Sahada normal faaliyetler devam etmektedir.",
+      "events": []
+    },
+    {
+      "path": "data/eval/Shooting/Shooting023_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 9,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 14,
+      "latency_s": 28.8,
+      "summary": "Video, şüpheli bir kişinin saldırgan hareketler sergilediği ve nesneyle tehdit eden bir durum içeriyor. Kişi yere düşüyor ve diğerlerine doğru ilerleyen grup var. Sonrasında nesne sallanıyor ve tepki veriliyor. Olaylar güvenlik ve anomali türünde olup, ciddi bir tehdit belirtisi yok ancak dikkatli izlenmesi gerekiyor.",
+      "events": [
+        {
+          "time": "00:06",
+          "event": "Siyahtan ceketli kişi saldırgan hareket ediyor",
+          "severity": "Orta",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:08",
+          "event": "Kişi aracın yanından hızla koşuyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:09",
+          "event": "Kişi yere düşüyor veya çarparak hareket ediyor",
+          "severity": "Orta",
+          "category": "Kaza",
+          "region": null
+        },
+        {
+          "time": "00:09",
+          "event": "Grup hızla birbirlerine doğru ilerliyor",
+          "severity": "Orta",
+          "category": "Güvenlik",
+          "region": null
+        },
+        {
+          "time": "00:10",
+          "event": "Şüpheli nesne tutarak yaklaşan kişi",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:11",
+          "event": "Nesneyi saldırgan şekilde sallayan kişi",
+          "severity": "Yüksek",
+          "category": "Diğer",
+          "region": "sağ"
+        },
+        {
+          "time": "00:12",
+          "event": "Diğer kişiye tepki veren kişi",
+          "severity": "Yüksek",
+          "category": "Diğer",
+          "region": "sağ"
+        },
+        {
+          "time": "00:13",
+          "event": "Nesneyi bırakıp geri çekilen kişi",
+          "severity": "Orta",
+          "category": "Diğer",
+          "region": null
+        },
+        {
+          "time": "00:14",
+          "event": "Kişiler hala tepki verirken geri çekilen kişi",
+          "severity": "Orta",
+          "category": "Diğer",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Shooting/Shooting037_x264.mp4",
+      "category": "Shooting",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 12.8,
+      "summary": "Videonun tüm süresi boyunca herhangi bir tehlike, kaza veya şüpheli aktivite tespit edilmedi. Saha durumu normal ve güvenli görünmektedir.",
+      "events": []
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism006_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 27,
+      "latency_s": 23.6,
+      "summary": "Video içerisinde yaya yolu üzerinde yürüyen bir kişi yere düşmüştür. Bu durum, ciddi yaralanma riski taşıyan bir kazadır. Operatör, hemen olay yerine müdahale edecek sağlık ekibini yönlendirmelidir.",
+      "events": [
+        {
+          "time": "00:20",
+          "event": "Yaya yolu üzerinde yürüyen kişi yere düşmüştür",
+          "severity": "Orta",
+          "category": "Kaza",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism026_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": false,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 32,
+      "latency_s": 26.6,
+      "summary": "Şüpheli kişi yetkisiz giriş yaptı ve duman/sıvı yayıyor; bu, potansiyel bir yangın veya kimyasal tehlike oluşturuyor. Daha sonra tekrar yetkisiz giriş girişmeye çalıştı. Operasyon hemen durdurulmalı ve acil müdahale bekleniyor.",
+      "events": [
+        {
+          "time": "00:09",
+          "event": "Şüpheli kişi yetkisiz giriş yaptı ve duman/sıvı yayıyor",
+          "severity": "Kritik",
+          "category": "Yetkisiz Erişim",
+          "region": null
+        },
+        {
+          "time": "00:20",
+          "event": "Şüpheli kişi yetkisiz giriş yapmaya çalışıyor",
+          "severity": "Orta",
+          "category": "Yetkisiz Erişim",
+          "region": null
+        }
+      ]
+    },
+    {
+      "path": "data/eval/Vandalism/Vandalism032_x264.mp4",
+      "category": "Vandalism",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 22,
+      "latency_s": 20.1,
+      "summary": "Video, yaya geçidinde araca doğru ilerleyen bir kişiye dikkat çekiyor. Bu durum, trafik kurallarına uymayan bir davranış olarak değerlendiriliyor ve potansiyel bir kazaya yol açabilir. Operatör, durumu izlemeye devam etmeli ve gerekirse müdahale etmeli.",
+      "events": [
+        {
+          "time": "00:06",
+          "event": "Yaya geçidinde araca doğru ilerleyen kişi",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        }
+      ]
+    }
+  ]
+}

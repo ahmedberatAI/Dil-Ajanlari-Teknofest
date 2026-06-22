@@ -128,7 +128,8 @@ def _events_block(events: List[Event]) -> str:
     if not events:
         return "(Önemli bir olay tespit edilmedi.)"
     return "\n".join(
-        f"- [{e.time}] {e.event} (önem: {e.severity.value}, tür: {e.category.value}"
+        f"- [{e.time}{('–' + e.end_time) if e.end_time else ''}] {e.event} "
+        f"(önem: {e.severity.value}, tür: {e.category.value}"
         + (f", konum: {e.region}" if e.region else "") + ")"
         for e in events
     )
@@ -170,6 +171,14 @@ def _verify_event(vlm: VLMClient, frames, event_text: str) -> bool:
         return True
 
 
+def _normalize_time(raw, fallback: str) -> str:
+    """Olay zaman damgasini her zaman gecerli MM:SS'e zorlar (modele guvenme -> JSON %100 uyum)."""
+    m = re.search(r"(\d{1,2}):(\d{2})", str(raw or ""))
+    if m and int(m.group(2)) < 60:
+        return f"{int(m.group(1)):02d}:{int(m.group(2)):02d}"
+    return fallback
+
+
 def _bbox_to_region(bbox) -> Optional[str]:
     """0-1000 normalize bbox merkezini 3x3 Türkçe ızgara bölgesine eşler."""
     try:
@@ -206,6 +215,9 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
     (olaylar, hata_notu) doner; hata olursa olaylar boş + not döner (toleransli)."""
     try:
         instr = prompts.SEGMENT_DESCRIBE_INSTRUCTION.format(start=seg.start_str, end=seg.end_str)
+        if settings.facility_rules:
+            instr += (f"\n\nBu tesisin güvenlik kuralları: {settings.facility_rules}. "
+                      "Bu kurallara açıkça aykırı durumları da sapma/olay olarak raporla.")
         if settings.use_detector:
             from dilajan import detector
             evidence = detector.detect_segment(seg.frames)
@@ -231,7 +243,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                 continue
             out.append(
                 Event(
-                    time=str(e.get("time", seg.start_str)),
+                    time=_normalize_time(e.get("time"), seg.start_str),
                     event=ev,
                     severity=_calibrate_severity(ev, _to_severity(str(e.get("severity", "")))),
                     category=_to_category(str(e.get("category", ""))),
@@ -291,7 +303,12 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
                     if jacc >= 0.5 or (inter >= 1 and (len(ew) <= 4 or len(kw) <= 4)):
                         better = e.event if len(e.event) > len(k.event) else k.event
                         sev = e.severity if _SEV_ORD[e.severity] > _SEV_ORD[k.severity] else k.severity
-                        kept[-1] = Event(time=min(k.time, e.time), event=better, severity=sev, category=k.category)
+                        # olay birden cok segmente yayiliyor -> zaman PENCERESI [baslangic, bitis]
+                        t0 = min(k.time, e.time)
+                        t1 = max(k.end_time or k.time, e.end_time or e.time)
+                        kept[-1] = Event(time=t0, end_time=(t1 if t1 != t0 else None),
+                                         event=better, severity=sev, category=k.category,
+                                         bbox=k.bbox or e.bbox, region=k.region or e.region)
                         continue
         kept.append(e)
     return kept
@@ -375,8 +392,13 @@ def act(state: AgentState) -> dict:
     events = state.get("events", [])
     risk = state.get("risk")
 
-    if not events:
-        trace.append("act: olay yok, operasyonel cagri yapilmadi")
+    # Dispatch kapisi: operasyonel fonksiyonlar (saglik/guvenlik/acil-durdurma) YALNIZCA gercek
+    # yuksek-risk sinyalinde tetiklenir. Normaldeki "Orta" severity halusinasyonlari bos yere
+    # ekip cagirmasin -> operasyonel yanlis-pozitif (alarm yorgunlugu) kesilir. (Juri konsensusu)
+    max_ev = max((_SEV_ORD[e.severity] for e in events), default=0)
+    risk_ord = _SEV_ORD.get(risk.level, 0) if risk else 0
+    if not events or (max_ev < _SEV_ORD[Severity.YUKSEK] and risk_ord < _SEV_ORD[Severity.YUKSEK]):
+        trace.append("act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)")
         return {"triggered_functions": [], "action_log": [], "trace": trace}
 
     vlm = _get_vlm()

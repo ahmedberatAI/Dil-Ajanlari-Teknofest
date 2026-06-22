@@ -54,6 +54,7 @@ class Settings(BaseSettings):
                                  # dogrulanmazsa severity DUSUR (silme). FP kontrol + agentic oz-kontrol.
                                  # "Yuksek-Duyarlilik modu" icin DILAJAN_VERIFY_EVENTS=false.
     spatial_grounding: bool = True  # yuksek-severity olayin karedeki konumunu (bbox + bölge) cikar (Qwen3-VL native grounding)
+    facility_rules: str = ""        # tesise-ozgu kurallar (dagitimda set edilir); politika-ihlali tespitini saglar (W4)
 
     @property
     def base_url(self) -> str:

@@ -106,7 +106,7 @@ def analyze(video_path):
 
     risk = risk_badge_html(result.risk.level.value, result.risk.rationale)
     timeline = timeline_html(result.events, result.video_duration or "00:00")
-    events_rows = [[e.time, e.event, e.severity.value, e.category.value, e.region or "—"] for e in result.events]
+    events_rows = [[e.time + (f"–{e.end_time}" if e.end_time else ""), e.event, e.severity.value, e.category.value, e.region or "—"] for e in result.events]
     actions_md = "\n".join(
         f"- **[{a.priority.value}]** {a.action}" + (f"  \n  _{a.rationale}_" if a.rationale else "")
         for a in result.actions

@@ -35,7 +35,8 @@ class EventCategory(str, Enum):
 class Event(BaseModel):
     """Videoda tespit edilen tek bir olay (zaman damgali)."""
 
-    time: str = Field(description="Olayin zaman damgasi, MM:SS biçiminde (ör. '00:15')")
+    time: str = Field(description="Olayin (baslangic) zaman damgasi, MM:SS biçiminde (ör. '00:15')")
+    end_time: Optional[str] = Field(default=None, description="Olay birden çok segmente yayiliyorsa bitiş zamani (MM:SS)")
     event: str = Field(description="Olayin Türkçe kisa açiklamasi")
     severity: Severity = Field(default=Severity.ORTA, description="Olayin önem derecesi")
     category: EventCategory = Field(default=EventCategory.DIGER)

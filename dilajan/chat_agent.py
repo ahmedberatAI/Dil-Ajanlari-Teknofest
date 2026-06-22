@@ -30,7 +30,8 @@ def build_context(result: AnalysisResult) -> str:
         "OLAYLAR:",
     ]
     lines += [
-        f"  [{e.time}] {e.event} (önem: {e.severity.value}, tür: {e.category.value}"
+        f"  [{e.time}{('–' + e.end_time) if e.end_time else ''}] {e.event} "
+        f"(önem: {e.severity.value}, tür: {e.category.value}"
         + (f", konum: {e.region}" if e.region else "") + ")"
         for e in result.events
     ] or ["  (kayda değer olay yok)"]

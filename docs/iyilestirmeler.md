@@ -176,6 +176,132 @@ agentic yetenek** kazanımı (Fonksiyonellik/Otonomi/Yenilikçilik). Bedeli: yü
 sorgu (gecikme ~1.4→~1.6 s/vsn). Ham nesne sayımı YOLO'dan farkı: konum **tespit edilen olaya bağlı**
 (YOLO tuzağı = bağlamsız sayı enjeksiyonu, FP'yi artırmıştı; grounding salt açıklama, FP'yi etkilemez).
 
+## 3.13 W1 — Halüsinasyon/aşırı-yorum FP'si (baseline-first prompting)
+
+**Sorun:** Qwen3-VL belirsiz normalleri aşırı-yorumluyor + bazen olmayan tehdit uyduruyordu
+(ör. temiz fabrikada "makinanın yanında duman → Kritik"). **Teşhis:** kaynak describe aşaması;
+eski prompt tehdit-listesini öne çıkarıp "emin değilsen 'olası' diye yine de belirt" diyordu →
+spekülasyon/halüsinasyon davet ediyordu. **Düzeltme (subagent araştırması + kök-neden):** describe
+prompt'u **"önce BEKLENEN NORMAL'i belirt, sonra yalnızca SAPMA'yı raporla; her şey normalse SAPMA YOK"**
++ negatif örnekler (rutin yürüme/çalışma/oturma/merdiven/taşıma OLAY DEĞİL) + **anti-halüsinasyon**
+("olmayanı uydurma; ama grainy de olsa gerçek sapmayı raporla").
+**Sonuç:** Senaryo domaininde **uydurma-tehdit halüsinasyonu çözüldü** (4_tr13 "duman" → Düşük/0 olay),
+senaryo normal-FP ~%17→**~%0-8**, **recall %100 + kategori %100 korundu**. Kalan tek senaryo FP'si
+endüstriyel belirsizlik (işçi-makine yakınlığı = setin kendi "politika ihlali" gri bölgesi → W4).
+**Dürüst kısıt:** UCF (8 normal/24 anomali) küçük olduğu için recall/FP **varyans-baskın** (recall koşudan
+koşuya %67–96); prompt etkisi orada gürültü bandında. Temiz ölçüm daha büyük eval seti + LLM-judge ister (W3).
+
+## 3.14 W3 — Titiz kategori-doğruluğu (LLM-judge, keyword yerine)
+
+Eski kategori-eşleşme **sabit keyword listesi** sezgisiydi — model doğru ama listede olmayan eş anlamlı
+ifade kullanınca ("darp/itişme") kaçırıyordu, yani aslında **fazla katı** (cömert değil). `benchmark/judge_category.py`
+eklendi: her anomali klibi için gerçek kategori + tespit edilen olaylar tarafsız hakeme verilir, **0/1/2**
+puanlanır (2=türü doğru adlandırdı, 1=anormal tespit ama tür yanlış/muğlak, 0=kaçırdı). `eval_clips` artık
+olay metinlerini kaydediyor. **Sonuç (LLM-judge):** Senaryo (yangın+düşme) **%100 doğru adlandırma**;
+UCF suçları **%62 doğru / %71 tespit** (Explosion/Assault/Burglary %100, Fighting %67) — keyword'ün
+gösterdiği ~%38-46'dan **yüksek ve daha dürüst**. Bundan sonra kategori için LLM-judge esas alınır.
+
+## 3.15 W6 — Zamansal lokalizasyon (olay pencereleri + dürüst sınır)
+
+**Somut kazanım:** Olay şeması `end_time` ile zenginleştirildi; `_dedupe_events` birden çok segmente
+yayılan olayı tek **zaman penceresine [başlangıç–bitiş]** birleştiriyor (ör. "yangın 00:30–00:50").
+Pencere diyalog bağlamı, prompt'lar ve UI'ya akıyor → "tam ne zaman" artık nokta değil aralık.
+**Bulgu:** Segment-segment teşhis, ajanın olayları **doğru zaman-segmentlerine** yerleştirdiğini
+gösterdi (kompozit klipte yangın orta segmentlerde tespit edildi); granülerlik ~10 s (segment boyu).
+**Dürüst sınır:** Kare-seviyesi window-F1, kırpılmış kısa eval kliplerinde (medyan 14 s, klip≈olay)
+uygulanabilir değil + UCF temporal GT erişilemedi; kontrollü kompozit (normal→olay→normal) TIoU testi
+ffmpeg süre-kurgu artefaktlarından kesin sonuç vermedi (`scripts/make_composite.py`, `scripts/eval_temporal.py`
+ileride kırpılmamış tam video / canlı akış W7 ile kullanılabilir). Yani: segment-granülerlikte lokalizasyon
+çalışıyor + olay pencereleri üretiliyor; piksel-kare-seviyesi metrik gelecek iş.
+
+## 3.16 W2 — Gerçek video düşme verisi (sentetik yerine)
+
+Düşme sonucu önce sentetik Simuletic stilleriyle ölçülmüştü (temsili). **GMDCSA-24** (gerçek `.mp4`
+düşme videoları, 720p/30fps, CC BY 4.0, GitHub raw — auth yok; `scripts/get_gmdcsa.py`) indirildi
+(9 düşme + 6 ADL, `data/falls_real/`). CAUCAFall hâlâ Mendeley kesintisinde (GMDCSA daha iyi: gerçek
+hareketli düşme + ADL normal). **Gerçek-düşme sonucu (LLM-judge):** recall **%67** (6/9), kategori **%67**,
+**ADL normal-FP %0** (6/6 Düşük). Sentetik %100'den düşük ama **gerçek + dürüst** — gerçek düşmeler
+zor (3/9 hızlı/ince düşme kaçtı → W4). ADL günlük aktivitede sıfır yanlış-alarm güçlü. Sentetik-veri
+uyarısı kapandı; düşme artık indirilebilir gerçek veri + gerçek metrikle kanıtlı.
+
+## 3.17 W5 — UCF recall (varyans karakterizasyonu, dürüst)
+
+İlk gözlem "Qwen3-VL UCF recall %96→%79" temiz bir düşüş gibi görünüyordu. Çoklu koşu topluca incelendi:
+**UCF anomali recall = %67 / %79 / %87.5 (3 koşu, bant ~67-88, ort ~78)** — yani **24-klip setinde
+yüksek varyans** (stokastik üretim + verify/dedup). Tek koşuya bakmak yanıltıcı; 7B'nin %96'sı da tek
+çekiliş. **Senaryo (hedef domain) recall %100.** Kaçırılan UCF klipleri ağırlıkla grainy ince suçlar
+(Shooting/Vandalism) = girdi-tavanı (W4 ile örtüşür), model kusuru değil. **Çözüm/levers:** güvenilir
+ölçüm için daha büyük eval seti; recall-öncelikli yapılandırma. Sonuç: "recall düştü" yerine dürüst
+ifade = "grainy off-domain UCF'de recall varyanslı (~%78±10), senaryoda %100".
+
+## 3.18 W7 — Canlı kamera / akış yolu (kayan-pencere)
+
+"Hepsi benchmark klibi, canlı akış yok" zayıflığı için `scripts/live_analyze.py` eklendi: **webcam
+(`0`), IP kamera (`rtsp://...`) veya dosya** kaynağını OpenCV ile okur, her WINDOW saniyede bir
+tampona alıp tam ajan pipeline'i (`analyze_video`) ile işler → pencere başına risk + zaman-damgalı
+olaylar + operasyonel fonksiyon tetikleme. **Test (kompozit dosya-akışı, 15s pencere):** normal pencere
+→ Düşük/olay yok; yangın pencereleri → Kritik "yangın @merkez" + yerde hareketsiz kişi + acil-durdurma/
+sağlık/güvenlik ekibi tetiklendi. Yani sistem **sürekli akış** üzerinde çalışıyor (yalnızca yerel).
+Küçük gelecek-iş: pencere zaman damgalarını mutlak akış-zamanına ofsetlemek.
+
+## 3.19 W4 — İnce-olay tavanı (dürüst karakterizasyon + dağıtılabilir hafifletme)
+
+İnce olaylar (grainy ince suç türleri, sentetik/uzak mild çarpışmalar, tesis politika-ihlalleri)
+**girdi-bağımlı bir tavandır** — bu oturumda denenen tüm hafifletmeler ölçülüp sınırına ulaştı:
+büyük model (32B/InternVL ❌), CLAHE (❌), YOLO dedektör (FP↑ ❌), yüksek-çözünürlük (768→1280 +16 kare
+**context bütçesini aşıp hata verdi** ❌). Yani grainy/mild durumlar piksel/veri-bağımlı; gerçek çözüm
+daha iyi kamera + uzman dedektör (yangın/duman %100 zaten var; YOLO mevcut). **Dağıtılabilir hafifletme
+(politika alt-sınıfı):** config-gated `facility_rules` — tesise-özgü kurallar perceive prompt'una enjekte
+edilir; model artık somut kriterlere karşı uyum değerlendirir. Sanity: kuralsız bir endüstriyel normal klip
+yanlışlıkla flaglenirken (Orta/1 olay), kurallı versiyon doğru biçimde "ihlal yok" (Düşük/0 olay) dedi —
+yani somut kriter hem **politika-ihlali tespitini** mümkün kılıyor hem **grounded yargıyla FP'yi azaltıyor**.
+Varsayılan boş (güvenli). **Dürüst sonuç:** ince-olay tavanı çözülemez değil ama training-free tam çözümü yok;
+dramatik olaylarda mükemmeliz + ince/politika için dağıtım-zamanı hook'lar (kural enjeksiyonu, uzman dedektör) hazır.
+
+## 3.20 Holistik şartname performans testi + gap analizi
+
+Subagent ile jüri-hizalı kapsamlı karne tasarlandı; daha önce **hiç ölçülmeyen** zorunlu çıktılar için
+yeni judge'lar eklendi (`benchmark/holistic.py`): M1 aksiyon kalitesi, M2 agentic dispatch doğruluğu,
+M3 JSON şema uyumu, M4 risk gerekçe kalitesi. **Karne (temsili set, Qwen3-VL):**
+
+| Eksen | Ölçüm | Sonuç |
+|---|---|---|
+| İşlevsellik | Olay tespiti (recall) | senaryo %100 · holistik %83 |
+| İşlevsellik | Özet kalitesi (LLM-judge) | **4.98/5** |
+| İşlevsellik | **Aksiyon kalitesi (M1)** | **4.71/5** (yeni — güçlü) |
+| İşlevsellik | **Risk gerekçe (M4)** | **5.0/5** (yeni — güçlü) |
+| İşlevsellik | **JSON şema uyumu (M3)** | %89 → **%100** (zaman normalizasyonu, aşağıda) |
+| Otonomi | **Agentic dispatch (M2)** | **%78** (anomali→fonk %83, normal→yanlış-tetik-yok %67) |
+| Otonomi | Diyalog robustluğu | 5.0/5 |
+| Teknik | **Hata toleransı (G4)** | **%100 zarif** (bozuk/boş/siyah/kısa video çökmüyor) |
+| Teknik | Gecikme | ~1.6 s/vsn |
+
+**Bulgu:** En pahalı sanılan boşluklar (aksiyon, risk gerekçe) ölçülünce **çok güçlü** çıktı (veri değil
+ölçüm eksikmiş). **Kapatılan gap'ler:** (1) **JSON uyumu %89→%100** — `_normalize_time` ile olay zaman
+damgası her zaman geçerli MM:SS'e zorlanıyor (modelin bozuk çıktısına bağlı değil); (2) **hata toleransı
+%100 zarif** — kenar-durum testi (`data/robust/`). **Kalan gap'ler (kabul/ileri):** grainy recall (W4
+girdi-tavanı), normalde nadir aşırı-dispatch (W1 kalıntısı), çok-turlu diyalog tutarlılığı (G7, küçük).
+
+## 3.21 Jüri paneli değerlendirmesi + uygulanan aksiyonlar
+
+4 hakem-subagent (Teknik, Fonksiyonellik, Otonomi+Yenilikçilik, Şüpheci başkan) gerçek kod+veriyle
+değerlendirdi. **Konsensüs:** ~B+/75 (şüpheci başkan ~66, uyum riskleri düzeltilirse B+). **Oybirliğiyle
+#1 zayıflık:** "normal-FP %0" bir **metrik-eşik artefaktıydı** — normaller "Orta" severity'li uydurma olay
+üretip boşuna operasyonel fonksiyon (sağlık/güvenlik) tetikliyordu (gerçek operasyonel FP ~%17-33).
+
+**UYGULANAN AKSİYONLAR:**
+- **Dispatch kapısı (`act`):** operasyonel fonksiyonlar yalnızca risk≥Yüksek VEYA olay-severity≥Yüksek'te
+  tetiklenir → normalde yanlış sağlık/güvenlik çağrısı **kesildi**. Sonuç: normal **operasyonel-FP ~%33→%8**
+  (1/12), **anomali recall/risk/kategori %100 korundu** (gerçek tetik bozulmadı).
+- **Dürüst FP metriği:** `eval_clips` artık dar-FP yanında **operasyonel-FP** (normalde herhangi olay/tetik)
+  ve **yanlış-dispatch** oranını da raporluyor; gizli %33 yok.
+- **Veri lisans manifesti:** `docs/veri_kaynaklari.md` (her set kaynak+lisans; `data/` zaten gitignore —
+  yeniden dağıtım yok; şartmenin "açık veri linki" + lisans-zinciri netliği).
+
+**Kalan jüri-önerileri (yapılacak):** istatistiksel güven (CI/daha büyük set), adaptif koşullu döngü
+(otonomi 70→80), severity'yi kod-içi keyword'den modele/rubrik'e taşı, çok-turlu diyalog testi,
+düşme recall %67→artır, GitHub'a düzenli commit + `BilisimVadisi2026` topic'ini fiilen ekle.
+
 ## 4. Güncel KPI (varsayılan: **Qwen3-VL-8B-FP8 + öz-doğrulama + grounding**)
 
 **A) Senaryo-uyumlu set (yangın + düşme + gerçek normal — şartname domaini):**
@@ -185,8 +311,12 @@ sorgu (gecikme ~1.4→~1.6 s/vsn). Ham nesne sayımı YOLO'dan farkı: konum **t
 | Anomali recall (yangın + düşme) | **%100** | %100 |
 | Risk kalibrasyonu (≥ Yüksek) | **%94–100** | %89 |
 | Kategori eşleşme | **%100** (yangın %100, düşme %100) | %83 (düşme %62) |
-| Normal yanlış-pozitif | ~**%8** (küçük-N; modlarla ayarlanır) | %8 |
+| Normal operasyonel-FP (herhangi olay/tetik) | ~**%8** (1/12, küçük-N) | — |
+| Normal yanlış-dispatch (boş operasyonel çağrı) | ~**%8** (dispatch kapısı ile) | — |
 | Adversaryel (yangın-renkli negatif) FP | **%0** (9/9) | %0 |
+
+> Dürüstlük notu: yüzdeler küçük setlerden (8–18 klip) — yüksek varyanslı, kesin değil **gösterge**.
+> "Normal-FP %0" eski iddiası dar-eşik artefaktıydı; dürüst operasyonel-FP ~%8 olarak raporlanır.
 
 **B) UCF-Crime seti (grainy 320×240, senaryo-dışı — dayanıklılık stresi):**
 

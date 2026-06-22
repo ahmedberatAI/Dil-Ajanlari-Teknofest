@@ -43,10 +43,17 @@ Hiçbir kayda değer durum yoksa: {{"events": []}}"""
 SEGMENT_DESCRIBE_INSTRUCTION = """Bu kareler bir güvenlik kamerasinin {start}-{end} aralığindan, \
 zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikkatlice incele.
 
-Karelerde NE GÖRDÜĞÜNÜ ayrintili ve nesnel biçimde Türkçe anlat: kişiler ve hareketleri, araçlar/ekipman, \
-ve ÖZELLİKLE dikkat çekici/riskli durumlar (duman, yangin, patlama, parlama, çarpişma, kaza, düşme, \
-hareketsiz kişi, kavga, koşma, kalabalik, yetkisiz giriş, anomali). Bir durumun hangi zaman damgasinda \
-olduğunu belirt. Emin değilsen "olasi" diye nitelendir ama yine de belirt."""
+1) Önce ORTAM ve BEKLENEN NORMAL'i kisaca belirle: mekan türü (fabrika, koridor, ofis, otopark, depo vb.) \
+ve orada OLAĞAN/rutin aktivite ne görünür.
+
+2) Sonra YALNIZCA bu beklenen normalden SAPAN ve karelerde AÇIKÇA gördüğün durumlari nesnel biçimde Türkçe \
+anlat; her birinin zaman damgasini belirt: duman, yangin, patlama, çarpişma/kaza, düşme veya yerde hareketsiz \
+kişi, kavga/saldiri, silah, yetkisiz giriş gibi. Her şey beklenen normale uyuyorsa SADECE "SAPMA YOK" yaz.
+
+ÖNEMLİ:
+- Rutin yürüme, çalişma, oturma, ayakta durma, merdiven kullanma, ekipman/yük taşima OLAY DEĞİLDİR — sapma sayma.
+- Karelerde gerçekten OLMAYAN bir durumu UYDURMA (ör. görünmeyen duman/yangin/kaza/kişi ekleme). \
+Ancak görüntü düşük çözünürlüklü/belirsiz olsa bile GERÇEKTEN gördüğün bir sapmayi, küçük de olsa, raporla."""
 
 EVENT_EXTRACTION_INSTRUCTION = """Aşağida bir güvenlik kamerasi segmentinin ({start}-{end}) sahne açiklamasi var:
 ---
