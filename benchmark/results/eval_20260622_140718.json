@@ -1,0 +1,467 @@
+{
+  "summary": {
+    "n_anomaly": 9,
+    "n_normal": 0,
+    "recall": 0.8888888888888888,
+    "risk_cal_anom": 0.7777777777777778,
+    "cat_match": 0.8888888888888888,
+    "normal_fp": 0.0,
+    "normal_fp_operational": 0.0,
+    "normal_dispatch_fp": 0.0,
+    "risk_cal_norm": 0.0,
+    "latency_median": 20.5
+  },
+  "rows": [
+    {
+      "path": "data/e2_vehicle/RoadAccidents/RoadAccidents021_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 5,
+      "latency_s": 11.4,
+      "summary": "Videonun tüm süresince herhangi bir tehlike, anomali veya kritik olay tespit edilmedi. Sahada normal faaliyetler devam etmektedir.",
+      "events": [],
+      "risk_rationale": "Video süresince herhangi bir güvenlik tehditi, kaza, yaralanma veya yetkisiz giriş gibi ciddi olay gözlemlenmemiştir.",
+      "actions": [
+        {
+          "action": "Kamera izleme devam edilir.",
+          "priority": "Düşük",
+          "rationale": "Normal faaliyetler devam ettiği için sürekli izleme gerekli ancak acil müdahaleye gerek yoktur."
+        }
+      ]
+    },
+    {
+      "path": "data/e2_vehicle/RoadAccidents/RoadAccidents027_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "alan_guvenligini_sagla"
+      ],
+      "duration_s": 3,
+      "latency_s": 19.4,
+      "summary": "Yere düşmüş bir nesnenin yanından araç geçiş yaptı. Bu durum, potansiyel bir tehlike oluşturabilir ancak anında bir kaza veya saldırı belirtisi yoktur. Operatör, nesnenin ne olduğunu ve çevredeki aktiviteyi kontrol etmelidir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Yere düşmüş nesne ve yanından geçiş yapan araç",
+          "severity": "Yüksek",
+          "category": "Anomali",
+          "region": "üst"
+        }
+      ],
+      "risk_rationale": "Yere düşmüş nesne, tehlikeli bir madde olabileceği için dikkatli incelenmelidir. Ancak araç geçişi ve çevredeki aktivite normal görünüyor; bu nedenle risk Kritik değil, ancak Orta seviyede değerlendirilmelidir.",
+      "actions": [
+        {
+          "action": "Yere düşmüş nesneyi yakınlaştırarak türünü ve durumunu belirlemek için kamera zoom'u artırmak.",
+          "priority": "Yüksek",
+          "rationale": "Nesnenin ne olduğunu anlamak, potansiyel bir tehlike olup olmadığını belirlemek için kritiktir."
+        },
+        {
+          "action": "Çevredeki personeli veya güvenlik görevlisini çağırarak nesnenin etrafındaki durumu kontrol etmeleri için yönlendirmek.",
+          "priority": "Orta",
+          "rationale": "Çevredeki kişilerin gözlemi, nesnenin tehlikeli olup olmadığını hızlıca belirlemeye yardımcı olur."
+        },
+        {
+          "action": "Araç geçişi sırasında herhangi bir anomali olup olmadığını kontrol etmek ve araç sürücüsünü izlemek.",
+          "priority": "Düşük",
+          "rationale": "Araç geçişi normal görünüyor; ancak sürücünün davranışları dikkat çekiyorsa, daha fazla gözlem yapılması gerekebilir."
+        }
+      ]
+    },
+    {
+      "path": "data/e2_vehicle/RoadAccidents/RoadAccidents035_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 9,
+      "latency_s": 27.1,
+      "summary": "Sağ tarafta gri otomobil ile motosiklet çarpıştı, sürücü ve yolcu yere devrildi. Çarpışma sonrası kişiler hareketsiz kaldı ve biri kendi kendine kalkmaya çalıştı. Olay ciddi yaralanmaları veya ölümler riskiyle sonuçlanabilir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Gri otomobil motosikletle çarpıştı, motosiklet yere devrildi, sürücü ve yolcu yere düştü",
+          "severity": "Kritik",
+          "category": "Kaza",
+          "region": "sağ"
+        },
+        {
+          "time": "00:02",
+          "event": "Çarpışma sonrası kişiler yere düşmüş ve bazıları hareketsiz kaldı",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "sol"
+        },
+        {
+          "time": "00:04",
+          "event": "Yere düşen bir kişi kendi kendine kalkmaya çalışırken diğerleri hareketsiz kaldı",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "sol"
+        }
+      ],
+      "risk_rationale": "Kaza sonrası kişilerin hareketsiz kalması ve birinin kalkmaya çalışması, ciddi yaralanmalar veya bilinç kaybı ihtimalini gösterir. Sağlık acil müdahale gerektiren kritik bir durumdur.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi ve acil müdahale ekiplerini olay yerine yönlendir.",
+          "priority": "Kritik",
+          "rationale": "Hareketsiz kalan kişilerin sağlık durumu belirsiz; acil müdahale geciktirilmesi ciddi sonuçlar doğrultusundadır."
+        },
+        {
+          "action": "Olay yerine güvenlik ekiplerini yönlendir ve çevreyi kapat.",
+          "priority": "Yüksek",
+          "rationale": "Çarpışma sonrası potansiyel tehlike (kazada yaralanma, trafik kazası) için olay alanı korunmalı ve diğer araçlarla etkileşimi engellenmelidir."
+        },
+        {
+          "action": "Kamera kayıtlarını inceleyerek olayı tam olarak analiz et ve raporla.",
+          "priority": "Orta",
+          "rationale": "Olayın detaylı analizi, gelecekte benzer olaylarda önlemler almak ve sorumluları belirlemek için gereklidir."
+        },
+        {
+          "action": "Yaralıların durumunu sürekli izlemek için ekipman ve personel destek ekibi hazır tut.",
+          "priority": "Yüksek",
+          "rationale": "Hareketsiz kalan kişilerin durumu değişebilir; sürekli izleme, müdahale zamanını en aza indirir."
+        }
+      ]
+    },
+    {
+      "path": "data/e2_vehicle/RoadAccidents/RoadAccidents043_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle"
+      ],
+      "duration_s": 6,
+      "latency_s": 13.7,
+      "summary": "00:02'de iki araç birbirine girmiş ve çarpışma meydana gelmiştir. Olay kısa sürede sonlanmıştır ancak ciddi bir kazanın işaretleri bulunmaktadır. Operatör hemen bölgeye müdahale ekiplerini yönlendirmelidir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "İki araç birbirine girmiş ve çarpışma izleri var",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Aracın çarpışması, ciddi fiziksel hasar ve yaralanma riski taşıdığı için yüksek risk seviyesi verilmelidir.",
+      "actions": [
+        {
+          "action": "Sağlık ekiplerini hemen bölgeye yönlendir.",
+          "priority": "Kritik",
+          "rationale": "Çarpışma sonucu yaralanma veya ölüm riski var; acil müdahale gerekir."
+        },
+        {
+          "action": "Kaza alanını kapalı tut ve erişimi engelle.",
+          "priority": "Yüksek",
+          "rationale": "İşaretlerin ve araçların durumu, diğer araçlar için tehlike oluşturabilir."
+        },
+        {
+          "action": "Kamera kayıtlarını sakla ve yetkililere raporla.",
+          "priority": "Orta",
+          "rationale": "Olayı incelemek ve gelecekte benzer olayları önlemek için kayıtlar gerekir."
+        },
+        {
+          "action": "Operasyonun devam eden kısımlarında güvenlik kontrolü artır.",
+          "priority": "Orta",
+          "rationale": "Kaza, potansiyel bir güvenlik açıklığı olabilir; tüm alanlar kontrol edilmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/e2_vehicle/RoadAccidents/RoadAccidents065_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 4,
+      "latency_s": 20.5,
+      "summary": "00:02'de motosiklet sürücüsü aracın arkasından ani geçişle çarpıştı ve havaya fırladı. Olay anında kamera görüntüsü net ve riskli durum açıkça gözlemlenmiştir. Operatör hemen müdahale ve yardım sağlama sürecine başlamalıdır.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Motosiklet sürücüsü aracın arkasından ani geçişle çarpıştı ve havaya fırladı",
+          "severity": "Kritik",
+          "category": "Kaza",
+          "region": "sağ"
+        }
+      ],
+      "risk_rationale": "Motosiklet sürücüsünün havaya fırlaması, ciddi yaralanma veya ölüm riski taşıyan bir kaza türüdür. Bu olay, güvenlik operasyonunun en kritik durumlarından biridir ve hemen müdahale gerektirir.",
+      "actions": [
+        {
+          "action": "Hemen sağlık ekiplerini çağır ve yaralının konumunu belirt.",
+          "priority": "Kritik",
+          "rationale": "Havaya fırlayan sürücü ciddi yaralanma riski taşıdığından, acil sağlık müdahalesi en kısa sürede gereklidir."
+        },
+        {
+          "action": "Olay yerine güvenlik ekiplerini yönlendir ve bölgeyi kapat.",
+          "priority": "Kritik",
+          "rationale": "Yaralının güvenliği ve diğer kişilerin etkilenmemesi için bölgeye erişimi engellemek gerekir."
+        },
+        {
+          "action": "Kamera kayıtlarını sakla ve olayı üst düzey yetkililere bildir.",
+          "priority": "Yüksek",
+          "rationale": "Olayın detaylı analizini ve sorumlulukları belirlemek için kayıtların korunması ve yetkililere raporlanması zorunludur."
+        },
+        {
+          "action": "Motosiklet sürücüsünün kimlik bilgilerini topla ve güvenlik kayıtlarına ekle.",
+          "priority": "Orta",
+          "rationale": "Yaralının kimliği ve olayla ilgili bilgilerin kaydedilmesi, gelecekteki soruşturmalar ve güvenlik analizlerinde önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/e2_vehicle/RoadAccidents/RoadAccidents069_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 11,
+      "latency_s": 22.3,
+      "summary": "00:04'te küçük araç bir çarpışma sonucu devrilmiş, 00:10'da yol ortasında nesne ve büyük araç durması gözlemlenmiştir. Bu durumlar trafikte ciddi bir tehlike oluşturuyor ve acil müdahale gerektiriyor.",
+      "events": [
+        {
+          "time": "00:04",
+          "event": "Araç çarpışması sonucu küçük araç yere devrilmiş",
+          "severity": "Kritik",
+          "category": "Kaza",
+          "region": "üst sol"
+        },
+        {
+          "time": "00:10",
+          "event": "Yol ortasında nesne var, araçlar durdu",
+          "severity": "Yüksek",
+          "category": "Anomali",
+          "region": "üst"
+        },
+        {
+          "time": "00:10",
+          "event": "Büyük araç duruyor/yavaşlıyor",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Küçük araç çarpışması sonucu devrilmiş ve yol ortasında nesne var; bu durumlar trafik kazalarına ve yaralanmalara neden olabilir. Anomali ve kaza tespitleri birlikte ciddi bir risk oluşturuyor.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi ve acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Küçük araç devrilmiş ve kaza tespit edildiği için yaralanma ihtimali yüksek; acil müdahale gerekli."
+        },
+        {
+          "action": "Trafik akışını durdurun ve bölgeyi kapatın.",
+          "priority": "Kritik",
+          "rationale": "Yol ortasında nesne var ve araçlar duruyor; trafik akışı tehlikeli olabilir ve kazaya neden olabilir."
+        },
+        {
+          "action": "Kamera kayıtlarını inceleyin ve nesnenin ne olduğunu belirleyin.",
+          "priority": "Yüksek",
+          "rationale": "Yol ortasında nesne var; bu nesne tehlikeli olabilir ve acil müdahale için bilgiye ihtiyaç var."
+        },
+        {
+          "action": "Güvenlik ekiplerini bölgeye yönlendirin.",
+          "priority": "Orta",
+          "rationale": "Büyük araç duruyor ve yol ortasında nesne var; güvenlik ekipleri bölgeyi kontrol etmeli ve gerekirse müdahale etmeli."
+        }
+      ]
+    },
+    {
+      "path": "data/e2_vehicle/RoadAccidents/RoadAccidents128_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 19,
+      "latency_s": 28.0,
+      "summary": "Beyaz bir araç, duran bir araca çarpıştı ve sürücü yere düştü. Bu durumda hemen sağlık ekibi çağrılmalı ve kazanın etkileri gözlemlenmelidir. Arka planda ani bir araç hareketi de dikkat çekmektedir ancak anında tehdit oluşturmamaktadır.",
+      "events": [
+        {
+          "time": "00:05",
+          "event": "Beyaz araç, duran araçla çarpıştı",
+          "severity": "Kritik",
+          "category": "Kaza",
+          "region": "üst sağ"
+        },
+        {
+          "time": "00:06",
+          "event": "Kişi, kaza sonrası yere düştü",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": null
+        },
+        {
+          "time": "00:15",
+          "event": "Arka planda duran beyaz araç ani şekilde dönerek yolun sol tarafına yönlendiriliyor",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Kaza sonrası kişi yere düştüğü için ciddi yaralanma ihtimali var ve bu durum hemen sağlık müdahale gerektirir. Bu nedenle risk en az Kritik seviyesinde değerlendirilmelidir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağrılmalı ve yaralı kişiye ilk yardım yapılmalı.",
+          "priority": "Kritik",
+          "rationale": "Kişi yere düştüğü için ciddi yaralanma ihtimali var ve bu durum hemen müdahale gerektirir."
+        },
+        {
+          "action": "Kaza alanına güvenlik personeli gönderilmeli ve trafik akışı kontrol edilmeli.",
+          "priority": "Yüksek",
+          "rationale": "Kaza sonucu trafik durdurulmuş olabilir ve güvenliği sağlamak için hemen müdahale gerekir."
+        },
+        {
+          "action": "Ani dönme hareketi yapan aracın sürücüsüne ulaşmak için güvenlik ekipleri yönlendirilmeli.",
+          "priority": "Orta",
+          "rationale": "Anomali gözlemlenmiş olsa da potansiyel tehlike olabileceği için kontrol edilmeli."
+        },
+        {
+          "action": "Kamera kayıtları 30 dakika geriye kadar arşivlenmeli ve analiz edilmeli.",
+          "priority": "Düşük",
+          "rationale": "Tehditin kaynağını tam olarak belirlemek için geçmiş kayıtlar incelenmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/e2_vehicle/RoadAccidents/RoadAccidents129_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": true,
+      "triggered": [],
+      "duration_s": 8,
+      "latency_s": 15.8,
+      "summary": "00:06'da mor araç, park halindeki araçlara çok yakın geçiş yaparak anomali oluşturdu. Bu durum, potansiyel bir güvenlik tehdidi olabileceği için dikkatli izlenmelidir.",
+      "events": [
+        {
+          "time": "00:06",
+          "event": "Mor araç park halindeki araçlara çok yakın geçiş yapıyor",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Tespit edilen olay, araçların yakın geçişiyle sınırlı ve fiziksel hasar veya yaralanma riski yok. Anomali düzeyi düşük ve tehdit potansiyeli sınırlı.",
+      "actions": [
+        {
+          "action": "Araç sürücüsünü takip ederek kimlik ve nedeni belirlemek için güvenlik ekiplerine bildirmek",
+          "priority": "Orta",
+          "rationale": "Yakın geçiş, potansiyel bir ihlal veya hata olabileceği için sürücüye müdahale edilmesi gerekebilir."
+        },
+        {
+          "action": "Kamera kayıtlarını 00:06-00:08 aralığında tekrar incelemek ve çevredeki diğer araçların durumunu kontrol etmek",
+          "priority": "Düşük",
+          "rationale": "Anomali sadece bir an için geçti; tekrarlanıp tekrarlanmadığına dair bilgi edinmek için detaylı inceleme yapılmalıdır."
+        },
+        {
+          "action": "Güvenlik ekiplerine bu olayı bildirmek ve rutin kontrolde dikkat edilmesi için not almak",
+          "priority": "Düşük",
+          "rationale": "Bu tür davranışlar, gelecekte tekrarlanabilir veya daha ciddi bir duruma yol açabilir; rutin gözlemde dikkatli olunmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/e2_vehicle/RoadAccidents/RoadAccidents134_x264.mp4",
+      "category": "RoadAccidents",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 9,
+      "latency_s": 22.5,
+      "summary": "00:03'te motosiklet devrilme ve sürücü yere düşmesi, 00:04'te sürücünün yere yatması veya oturması tespit edildi. Olaylar ciddi bir kazaya işaret ediyor ve sağlık durumu kontrol edilmelidir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Motosiklet devrilme ve sürücü yere düşme",
+          "severity": "Kritik",
+          "category": "Kaza",
+          "region": "sol"
+        },
+        {
+          "time": "00:04",
+          "event": "Sürücü yere yatmış veya oturmuş",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Sürücü yere düşmüş ve sağlık durumuna ilişkin bir olay tespit edildi. Bu, ciddi yaralanma veya acil müdahale gerektiren bir durum olabilir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağırın.",
+          "priority": "Kritik",
+          "rationale": "Sürücü yere düşmüş ve sağlık durumu belirsiz. Acil müdahale gerekli."
+        },
+        {
+          "action": "Olay yerine güvenlik görevlisi gönderin.",
+          "priority": "Yüksek",
+          "rationale": "Olay yerini kontrol ederek, sürücünün durumunu ve çevreyi korumak için güvenlik desteği gerekli."
+        },
+        {
+          "action": "Kamera kayıtlarını saklayın ve yetkiliye raporlayın.",
+          "priority": "Orta",
+          "rationale": "Olay detaylarını kaydetmek, gelecekteki incelemelerde ve sorumluluk belirlemede önemlidir."
+        },
+        {
+          "action": "Motosikletin durumu ve çevresi kontrol edilsin.",
+          "priority": "Orta",
+          "rationale": "Kaza sonrası motosikletin durumu ve çevredeki potansiyel tehlikeler değerlendirilmelidir."
+        }
+      ]
+    }
+  ]
+}

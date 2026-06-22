@@ -69,6 +69,10 @@ olay olarak işaretle (duman/yangin/patlama, kaza/çarpişma, düşme/hareketsiz
 kalabalik vb.). Tamamen rutin/normalse boş liste döndür. Zaman damgasi açiklamada geçiyorsa onu kullan, \
 yoksa {start} kullan.
 
+ÇOK ÖNEMLİ (çelişki kuralı): Açiklama sonunda "SAPMA YOK", "normal" veya "olay yok" dese BİLE, açiklamanin \
+GÖVDESİNDE somut bir olay (çarpişma/kaza, düşme/yerde hareketsiz kişi, yangin/duman/patlama, kavga, silah) \
+açikça tarif edilmişse o olayi MUTLAKA çikar. Çelişki varsa somut tarifi esas al, sondaki "SAPMA YOK"u yok say.
+
 SEVERITY (önem) rehberi — gerçek tehdidi DÜŞÜK gösterme:
 - Kritik: yangin/patlama/duman, silah/ateş etme, ciddi kaza/çarpişma, yarali veya yerde hareketsiz kişi
 - Yüksek: fiziksel kavga/darp, yetkisiz giriş/hirsizlik, düşme, tahrip (vandalizm)

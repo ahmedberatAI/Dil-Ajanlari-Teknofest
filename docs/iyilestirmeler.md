@@ -417,3 +417,35 @@ forklift TIP-OVER açık veride yok; en yakın gerçek devrilme/forklift verisin
 `pkill -f api_server/EngineCore` → `vllm serve RedHatAI/gemma-3-12b-it-FP8-dynamic` → judge → tekrar
 `python serve_vllm.py` (Qwen3-VL geri). WSL varsayılan distrosu `docker-desktop` olduğundan komutlar
 `wsl -d Ubuntu-24.04 ...` ile çalıştırılır.
+
+## 7. Dürüst kalan noktalar — adım adım ele alındı (2026-06-22)
+§6'daki çözümlerin geride bıraktığı dürüst artıklar da teşhis edilip ölçüldü.
+
+### E2 araç-kazası recall %78 → %89 (kök-neden fix)
+**Teşhis (`probe_clip.py`):** Kaçan `RoadAccidents043`'te model kazayı GÖVDEDE mükemmel tarif ediyor
+("sağdaki araç soldakine çarpmıştır… bu bir trafik kazasıdır") ama açıklamanın SONUNDA "SAPMA YOK" diye
+kendini çürütüyor; iki-aşamalı algının extraction adımı son-yargıya bakıp olayı düşürüyordu.
+**Çözüm:** `EVENT_EXTRACTION_INSTRUCTION`'a **çelişki kuralı** — "sonda 'SAPMA YOK' dese bile gövdede somut
+bir olay (çarpışma/kaza, düşme, yangın, kavga, silah) tarif edilmişse onu MUTLAKA çıkar; çelişkide somut
+tarifi esas al." **Sonuç:** araç-kazası recall **%78 → %89** (`RoadAccidents043` kurtarıldı); E3 (%89) ve
+senaryo zararlı-FP (%0) bozulmadı. Genel bir robustluk iyileştirmesi.
+
+### E4 hız-modu kalite ödünleşimi — ölçüldü (kayıp YOK)
+Bağımsız Gemma judge ile tam-mod vs hız-mod (aynı 30-klip senaryo seti):
+| Metrik | Tam mod | Hızlı mod |
+|---|---|---|
+| Özet kalitesi | 4.64 | **4.62** |
+| Aksiyon kalitesi | 4.66 | **4.74** |
+| Risk gerekçe | 4.87 | **5.00** |
+Özet/aksiyon/risk **neredeyse aynı** (özet/risk üreten `reason` düğümü iki modda özdeş; fark yalnız algıda
+ve bu sette ikisi de %100 recall). Yani "hız modu özet derinliğini feda eder" çekincesi bu sette **veriyle
+çürütüldü**; gerçek risk yalnız çok-ince/grainy olaylarda kalır (bu sette fark yok). Hız modu pratikte bedava.
+
+### İndirgenemez kalan (veri/girdi tavanı — dürüstçe beyan)
+- **E2 gerçek forklift TIP-OVER videosu:** açık lisansta YOK; yaratılamaz. En yakın gerçek devrilme/forklift
+  verisinde kanıtlandı. `RoadAccidents021` (320×240 grainy) kişi-düşmesi girdi-tavanı (ince+düşük çözünürlük).
+- **E3 `Subject2_fall03`:** model "kişi yatağa yatıyor" görüyor — yatak-üstü düşme ile kasıtlı uzanma arasındaki
+  GERÇEK belirsizlik. Zorlamak `Subject1_adl01` yatak-FP'sini geri getirir → 89% recall + %0 FP doğru çalışma
+  noktası. (recall/FP sınır frontu)
+- **E5 senaryo'da kalan 2-3 olay:** hepsi **Düşük + dispatch-gated + yarı-meşru** (yürüyüş yolunda nesne;
+  forklift yolunu kesen işçi). Zararlı FP (Kritik/dispatch) **%0**.
