@@ -136,7 +136,9 @@ Aşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmişt
 Video toplam süresi: {duration}
 
 Bu olaylara dayanarak şunlari üret:
-1. summary: Videonun 2-4 cümlelik, operatörün hizli karar almasini sağlayacak Türkçe özeti.
+1. summary: Videonun 2-4 cümlelik, operatörün hizli karar almasini sağlayacak Türkçe özeti. \
+Olaylar arasinda otomatik NEDEN-SONUÇ veya tek bir öykü KURMA ("önce ... olduğu için sonra ..." deme); \
+yalnizca AÇIKÇA ayni sahneye ait ve bağlantili olaylari ilişkilendir, aksi halde her olayi BAĞIMSIZ aktar.
 2. risk: Genel risk değerlendirmesi (level + kisa gerekçe). Risk, tespit edilen EN CİDDİ olayla \
 TUTARLI olmali: yangin/patlama/silah/ciddi kaza/yarali kişi gibi kritik bir olay varsa risk en az \
 Yüksek, çoğunlukla Kritik olmalidir. Gerçek tehdidi düşük gösterme; ama olaylar rutin/normalse riski \

@@ -531,3 +531,25 @@ verir). **Asıl ve en iyi çözüm zaten committed domain+severity-fix'leriydi.*
 ile **opt-in "yüksek-hassasiyet modu"** olarak bırakıldı (varsayılan KAPALI=1 → recall-öncelik); FER'i yarıdan
 fazla düşürür ama recall + 2-3× gecikme bedeliyle. Bu, "her yöntemi baseline'a karşı ölç, yalnız net kazananı
 uygula" disiplininin (CLAHE/YOLO/temporal-CoT/evidence-şeması ret) bir örneği daha. Yeni araç: `scripts/audit_outputs.py`.
+
+## 10. Çok-bölümlü/kopuk video — sahne-kesimi + neden-sonuç-bağımsızlık (M3, 2026-06-22)
+**Sorun:** Kullanıcının yüklediği video iki bölümlüydü (gözetim CCTV + sonradan eklenmiş şömine); ajan ikisini
+TEK bir olay öyküsüne birleştiriyordu ("önce ... sonra yangın ... sonra ..."). Bağımsız sahneler arası yapay
+neden-sonuç = bir confabulation türü.
+
+**İki katmanlı çözüm:**
+1. **Sahne-kesimi tespiti** (`video.detect_scene_cuts`): ardışık karelerin 4×4×4 RGB renk-histogramı kesişim
+   mesafesi; eşik üstü = sert kesim. `ingest` bunu hesaplar (`state.scene_cuts`); `reason` olayları **Bölüm
+   1/2/...** diye gruplar + "bölümler KOPUK, aralarında neden-sonuç KURMA" talimatı ekler.
+2. **Her-zaman-açık neden-sonuç-bağımsızlık backstop'u** (`DECISION_SUPPORT` summary kuralı): kesim tespit
+   edilse de edilmese de, "olaylar arası otomatik öykü/neden-sonuç kurma; yalnız açıkça aynı sahnedekileri
+   ilişkilendir." Bu, asıl ROBUST katman.
+
+**Spliced test (industrial + fire concat):** Kesim **00:11'de** tespit edildi; özet artık birleştirmiyor →
+*"00:02 yere düşmüş kişi … 00:12-30 yangın … İki olay birbirinden bağımsızdır ve farklı sahnelerdir."*
+
+**Dürüst sınır (ölçülmüş):** Saf-görsel kesim tespiti **yangın/parlama sahnelerinde temelden güvenilmez** —
+yangın sahne-içi titremesinin histogram-mesafesi (0.208) gerçek sahne-kesiminden (0.197) bile YÜKSEK çıkabiliyor;
+hiçbir sabit eşik ikisini temiz ayıramaz. Bu yüzden kesim-eşiği **konservatif (0.30)** bırakıldı (yangın klibini
+yanlış-bölmemek için yalnız çok-dramatik kesimleri yakalar) ve asıl iş **prompt-seviyesi neden-sonuç-bağımsızlık
+backstop'una** verildi (false-positive yok, birleştirmeyi tek başına önler — test edildi). Araç: `scripts/probe_scenes.py`.

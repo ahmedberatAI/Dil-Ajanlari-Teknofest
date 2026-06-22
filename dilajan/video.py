@@ -135,6 +135,54 @@ def extract_timestamped_frames(
     return frames, info
 
 
+def detect_scene_cuts(
+    frames: List[TimedFrame],
+    threshold: float | None = None,
+    min_gap: float = 2.0,
+) -> List[float]:
+    """Ardisik ornek kareler arasi ANI gorsel degisimi (sert sahne-kesimi) tespit eder.
+
+    Splice/kopuk video bolumlerini (or. gozetim klibi + sonradan eklenmis sahne) ayirmak icin:
+    her kareyi 32x32 gri-tonlamaya indirger, ardisik kareler arasi normalize ortalama-mutlak-fark
+    esigi asarsa kesim sayar. Donus: kesim zaman-damgalari (saniye).
+    """
+    threshold = settings.scene_cut_threshold if threshold is None else threshold
+    if len(frames) < 2:
+        return []
+    try:
+        import numpy as np
+    except Exception:
+        return []
+
+    def _hist(jpeg: bytes):
+        # 4x4x4 = 64 kovali normalize RGB renk-histogrami. Renk dagilimi sahne-degisimine duyarli;
+        # sahne-ICI hareket/titreme (or. yangin) renk dagilimini buyuk olcude korur -> daha az yanlis kesim.
+        a = np.asarray(Image.open(io.BytesIO(jpeg)).convert("RGB").resize((64, 64)), dtype=np.float32)
+        q = (a / 64).astype(int).clip(0, 3)
+        idx = q[..., 0] * 16 + q[..., 1] * 4 + q[..., 2]
+        h = np.bincount(idx.ravel(), minlength=64).astype(np.float32)
+        return h / h.sum() if h.sum() else h
+
+    cuts: List[float] = []
+    try:
+        prev = _hist(frames[0][1])
+    except Exception:
+        return []
+    last_cut = -1e9
+    for t, jpeg in frames[1:]:
+        try:
+            cur = _hist(jpeg)
+        except Exception:
+            continue
+        # histogram-kesisim mesafesi: 1 - sum(min(h1,h2)) ∈ [0,1]; buyuk = renk dagilimi koklu degisti
+        dist = 1.0 - float(np.minimum(cur, prev).sum())
+        if dist > threshold and (t - last_cut) >= min_gap:
+            cuts.append(round(t, 1))
+            last_cut = t
+        prev = cur
+    return cuts
+
+
 def build_segments(
     frames: List[TimedFrame],
     segment_seconds: float | None = None,

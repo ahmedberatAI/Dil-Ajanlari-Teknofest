@@ -14,6 +14,7 @@ class AgentState(TypedDict, total=False):
     # ingest cikti
     segments: List[Segment]
     video_info: VideoInfo
+    scene_cuts: List[float]  # M3: sert sahne-kesimi zaman-damgalari (kopuk/spliced bolumler)
 
     # perceive cikti (segment bazli birikimli olaylar)
     events: List[Event]

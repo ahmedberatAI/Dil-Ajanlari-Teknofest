@@ -33,7 +33,8 @@ from dilajan.schema import (
     Severity,
 )
 from dilajan.utils import extract_json
-from dilajan.video import build_segments, extract_timestamped_frames
+from dilajan.utils import format_timestamp
+from dilajan.video import build_segments, detect_scene_cuts, extract_timestamped_frames
 
 # --- tembel istemci ---
 _vlm: Optional[VLMClient] = None
@@ -199,17 +200,47 @@ def _events_block(events: List[Event]) -> str:
     )
 
 
+def _scene_index(time_str: str, cuts: List[float]) -> int:
+    """Bir olay zaman-damgasinin hangi sahne/bolume dustugunu dondurur (kesimlere gore)."""
+    t = _secs(time_str)
+    idx = 0
+    for c in cuts:
+        if t >= c:
+            idx += 1
+        else:
+            break
+    return idx
+
+
+def _events_block_scened(events: List[Event], cuts: List[float]) -> str:
+    """Olaylari KOPUK bolumlere (sahne-kesimleri) gore gruplayarak yazar; tek bolumde normal blok."""
+    if not cuts:
+        return _events_block(events)
+    groups: dict = {}
+    for e in events:
+        groups.setdefault(_scene_index(e.time, cuts), []).append(e)
+    parts = []
+    for i in range(len(cuts) + 1):
+        evs = groups.get(i, [])
+        parts.append(f"[Bölüm {i + 1}]\n" + _events_block(evs))
+    return "\n".join(parts)
+
+
 # --- dugumler ---
 def ingest(state: AgentState) -> dict:
     trace = state.get("trace", [])
     try:
         frames, info = extract_timestamped_frames(state["video_path"])
         segments = build_segments(frames)
+        cuts = detect_scene_cuts(frames) if settings.scene_cut_threshold > 0 else []
         if not segments:
             trace.append("ingest: video okundu ama kare cikarilamadi (boş/bozuk olabilir)")
         else:
-            trace.append(f"ingest: {info.duration_str} video, {len(segments)} segment, {info.sampled_frames} kare")
-        return {"segments": segments, "video_info": info, "trace": trace}
+            note = f"ingest: {info.duration_str} video, {len(segments)} segment, {info.sampled_frames} kare"
+            if cuts:
+                note += f"; {len(cuts)+1} kopuk bölüm (kesim: {', '.join(format_timestamp(c) for c in cuts)})"
+            trace.append(note)
+        return {"segments": segments, "video_info": info, "scene_cuts": cuts, "trace": trace}
     except Exception as ex:  # okunamayan/bozuk video -> toleransli devam
         trace.append(f"ingest: video okunamadi: {ex}")
         return {"segments": [], "video_info": None, "trace": trace}
@@ -532,10 +563,20 @@ def reason(state: AgentState) -> dict:
     events = state.get("events", [])
     info = state.get("video_info")
     duration = info.duration_str if info else "?"
+    cuts = state.get("scene_cuts", []) or []
 
     instr = prompts.DECISION_SUPPORT_INSTRUCTION.format(
-        events_block=_events_block(events), duration=duration
+        events_block=_events_block_scened(events, cuts), duration=duration
     )
+    # M3: cok-bolumlu/kopuk video -> bolumleri bagimsiz ele al, neden-sonuc/oyku kurma
+    if cuts:
+        instr += (
+            f"\n\nÖNEMLİ — ÇOK BÖLÜMLÜ VİDEO: Bu video {len(cuts) + 1} AYRI ve KOPUK bölümden oluşuyor "
+            f"(sahne kesimleri: {', '.join(format_timestamp(c) for c in cuts)}). Bölümler BİRBİRİNDEN "
+            "BAĞIMSIZDIR; aralarında neden-sonuç ilişkisi veya tek bir olay öyküsü KURMA "
+            "(ör. 'önce ... sonra ...' deme). Özette her bölümü AYRI cümleyle değerlendir; genel risk "
+            "en ciddi bölüme göre belirlenir."
+        )
     messages = [
         {"role": "system", "content": prompts.SYSTEM_PERSONA},
         {"role": "user", "content": instr},
