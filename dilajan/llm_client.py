@@ -43,13 +43,18 @@ class VLMClient:
         messages: list,
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
+        repetition_penalty: Optional[float] = None,
     ) -> str:
-        resp = self.client.chat.completions.create(
+        kwargs = dict(
             model=self.model,
             messages=messages,
             temperature=settings.temperature if temperature is None else temperature,
             max_tokens=settings.max_tokens if max_tokens is None else max_tokens,
         )
+        # vLLM-ozgu repetition_penalty (degenerate dongu/tekrar kirmak icin) -> extra_body
+        if repetition_penalty and repetition_penalty != 1.0:
+            kwargs["extra_body"] = {"repetition_penalty": repetition_penalty}
+        resp = self.client.chat.completions.create(**kwargs)
         return resp.choices[0].message.content or ""
 
     # --- yuksek seviyeli ---
@@ -59,6 +64,7 @@ class VLMClient:
         instruction: str,
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
+        repetition_penalty: Optional[float] = None,
     ) -> str:
         """Zaman damgali kareleri + bir talimati VLM'e gönderir, metin yanit döndürür."""
         content: List[dict] = []
@@ -73,7 +79,8 @@ class VLMClient:
             {"role": "system", "content": SYSTEM_PERSONA},
             {"role": "user", "content": content},
         ]
-        return self.chat(messages, temperature=temperature, max_tokens=max_tokens)
+        return self.chat(messages, temperature=temperature, max_tokens=max_tokens,
+                         repetition_penalty=repetition_penalty)
 
     def health_check(self) -> bool:
         """Sunucu ayakta ve model yüklü mü?"""

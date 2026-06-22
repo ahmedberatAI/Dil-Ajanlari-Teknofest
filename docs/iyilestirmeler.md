@@ -553,3 +553,14 @@ yangın sahne-içi titremesinin histogram-mesafesi (0.208) gerçek sahne-kesimin
 hiçbir sabit eşik ikisini temiz ayıramaz. Bu yüzden kesim-eşiği **konservatif (0.30)** bırakıldı (yangın klibini
 yanlış-bölmemek için yalnız çok-dramatik kesimleri yakalar) ve asıl iş **prompt-seviyesi neden-sonuç-bağımsızlık
 backstop'una** verildi (false-positive yok, birleştirmeyi tek başına önler — test edildi). Araç: `scripts/probe_scenes.py`.
+
+### Bonus (aynı video tetikledi) — algı `repetition_penalty` ile "düşmüş kişi" uydurması düzeltildi
+Kullanıcının videosunda model, koridorda **yürüyen bir işçiyi** "yere düşmüş hareketsiz kişi" sanıyordu.
+Kaynak klibi (`6_te12`) probe edince neden görüldü: describe adımı **degenerate döngüye** girip ("...düşmüş
+gibi... düşmüş gibi..." 3×) belirsiz okumayı şişiriyordu (model aynı klibin 2. segmentinde "kişi GÖRÜNMÜYOR"
+diyerek kendiyle çelişiyordu). **Çözüm (decoding-time, aef55 araştırması):** algı çağrısına
+`repetition_penalty` (`config.perceive_repetition_penalty`, `VLMClient` → vLLM `extra_body`).
+**Ölçüm:** rp=1.3 döngüyü kesti ama recall'ı düşürdü (falls_real 89→78) → fazla agresif. **rp=1.15** tatlı nokta:
+`6_te12` uydurma-kişi GİTTİ; falls_real recall **%89 korundu** (risk-kalib 78→89); senaryo recall/risk/kategori
+**%100**, zararlı-FP **%0**. Varsayılan **1.15** yapıldı (tam doğrulandı, recall bozulmadı). Bu, "emin yanlış-okuma"
+sınıfının grainy-OOD'de kısmen iyileştirilebildiğini gösteren ölçülü bir kazanım.

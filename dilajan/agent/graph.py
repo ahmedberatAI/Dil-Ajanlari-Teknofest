@@ -336,7 +336,8 @@ def _perceive_single_pass(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[st
         if settings.facility_rules:
             instr += (f"\n\nBu tesisin güvenlik kuralları: {settings.facility_rules}. "
                       "Bu kurallara açıkça aykırı durumları da sapma/olay olarak raporla.")
-        raw = vlm.analyze_frames(seg.frames, instr, temperature=0.2, max_tokens=400)
+        raw = vlm.analyze_frames(seg.frames, instr, temperature=0.2, max_tokens=400,
+                                 repetition_penalty=settings.perceive_repetition_penalty)
         return _events_from_extraction(extract_json(raw), seg), None
     except Exception as ex:
         return [], f"perceive(fast): segment {seg.index} hatasi: {ex}"
@@ -360,6 +361,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                           "dikkate al (ama yalnizca gerçekten gördüğünü raporla).")
         desc = vlm.analyze_frames(
             seg.frames, instr, temperature=0.2, max_tokens=400,
+            repetition_penalty=settings.perceive_repetition_penalty,
         )
         ext = vlm.chat(
             [

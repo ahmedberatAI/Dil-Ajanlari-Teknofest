@@ -60,6 +60,11 @@ class Settings(BaseSettings):
     event_consistency_n: int = 1  # H (algı self-consistency / SelfCheckGPT+AnomalyRuler): >1 ise her segment
                                   # N kez algılanır; olay yalnız koşuların ÇOĞUNDA tekrar ederse tutulur
                                   # (stokastik halüsinasyon elenir, gerçek olay kalır). Reason/act tek sefer çalışır.
+    perceive_repetition_penalty: float = 1.15  # algi (describe) repetition_penalty: degenerate dongu/tekrari kirar
+                                               # -> belirsiz okumada UYDURMA olay sismesini azaltir (or. yuruyen isciyi
+                                               # "dusmus kisi" sanma). OLCULDU: 1.15 -> 6_te12 uydurma-kisi gitti,
+                                               # falls_real recall %89 KORUNDU (risk-kalib 78->89). 1.3 fazla agresif
+                                               # (recall 89->78), bu yuzden 1.15. (1.0 = kapali)
     use_detector: bool = False  # YOLO nesne dedektoru kanitini perceive'e enjekte et (heterojen ensemble)
     verify_events: bool = True   # öz-doğrulama (deduce-then-verify): yüksek-severity olaylari teyit et,
                                  # dogrulanmazsa severity DUSUR (silme). FP kontrol + agentic oz-kontrol.
