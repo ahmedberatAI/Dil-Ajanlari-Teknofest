@@ -87,12 +87,31 @@ _THREAT_KEYWORDS = [
 ]
 
 
+# G11: severity tabani MODEL-ONCELIKLIDIR (Qwen3-VL severity'yi semantik atar; dil-bagimsiz).
+# Asagidaki kelimeler yalniz TEK-YONLU bir guvenlik TABANI'dir (model gercek tehdidi dusuk
+# puanlarsa devreye girer). Turkce-disi (Ingilizce/OOD) tarifte de kor kalmamak icin Ingilizce
+# esdegerler KELIME-SINIRI ile eklendi (Turkce metinle cakismaz; yalniz yukseltir, asla dusurmez).
+_THREAT_EN = [
+    (Severity.KRITIK, ["fire", "smoke", "explosion", "explosive", "blast", "gunshot", "gunfire",
+                       "weapon", "rifle", "pistol", "firearm", "collision", "crash", "overturn",
+                       "rollover", "injured", "unconscious", "bleeding", "wounded", "collapsed", "dead"]),
+    (Severity.YUKSEK, ["fight", "fighting", "assault", "intruder", "unauthorized", "trespass",
+                       "theft", "burglary", "robbery", "vandalism", "fallen", "fall"]),
+]
+_THREAT_EN_RE = [(sev, re.compile(r"\b(" + "|".join(ws) + r")\b")) for sev, ws in _THREAT_EN]
+
+
 def _calibrate_severity(text: str, model_sev: Severity) -> Severity:
-    """Olay metnindeki tehdit kelimelerine gore severity tabani uygular."""
+    """Olay metnindeki tehdit kelimelerine gore TEK-YONLU severity tabani uygular (TR + EN)."""
     t = (text or "").lower()
     floor = model_sev
-    for sev, kws in _THREAT_KEYWORDS:  # once Kritik katmani
+    for sev, kws in _THREAT_KEYWORDS:  # once Kritik katmani (Turkce alt-dizgi)
         if any(k in t for k in kws):
+            if _SEV_ORD[sev] > _SEV_ORD[floor]:
+                floor = sev
+            break
+    for sev, rx in _THREAT_EN_RE:  # Ingilizce/OOD esdeger (kelime-siniri)
+        if rx.search(t):
             if _SEV_ORD[sev] > _SEV_ORD[floor]:
                 floor = sev
             break
@@ -122,6 +141,33 @@ def _to_category(value: str) -> EventCategory:
         if c.value.lower() == value.strip().lower():
             return c
     return EventCategory.DIGER
+
+
+# G12: dil-safligi — Turkce-disi script (Cince/Japonca/Korece/Kiril/Arapca/Tayca) sizintisini yakala.
+# (Turkce ç/ğ/ı/ö/ş/ü Latin'dir; yalniz YABANCI script tetikler.)
+_FOREIGN = re.compile(r"[一-鿿぀-ヿ가-힯Ѐ-ӿ؀-ۿ฀-๿]")
+
+
+def _has_foreign(text: str) -> bool:
+    return bool(_FOREIGN.search(text or ""))
+
+
+def _purify(vlm: VLMClient, text: str) -> str:
+    """Metinde Turkce-disi karakter varsa anlamini koruyarak SADECE Turkce'ye yeniden yazdirir.
+    Temiz metinde EK CAGRI YAPMAZ (sifir maliyet); yalniz sizinti varsa tek duzeltme cagrisi."""
+    if not text or not _has_foreign(text):
+        return text
+    try:
+        fixed = vlm.chat(
+            [{"role": "system", "content": prompts.SYSTEM_PERSONA},
+             {"role": "user", "content": "Aşağıdaki metni anlamını koruyarak SADECE düzgün Türkçe olarak "
+              "yeniden yaz; Türkçe dışı hiçbir karakter veya kelime (Çince/İngilizce vb.) kullanma. "
+              "Yalnızca düzeltilmiş metni döndür:\n\n" + text}],
+            temperature=0.0, max_tokens=400,
+        ).strip()
+        return fixed if (fixed and not _has_foreign(fixed)) else text
+    except Exception:
+        return text
 
 
 def _events_block(events: List[Event]) -> str:
@@ -467,6 +513,15 @@ def reason(state: AgentState) -> dict:
             bumped = _ORD_SEV[max_ev]
             trace.append(f"reason: risk tabani uygulandi {risk.level.value}->{bumped.value}")
             risk = RiskAssessment(level=bumped, rationale=risk.rationale)
+
+    # G12 dil-safligi guard: Turkce-disi karakter sizdiysa ozet/gerekce/aksiyonlari duzelt (temizse no-op)
+    if _has_foreign(summary) or _has_foreign(risk.rationale) or any(_has_foreign(a.action) for a in actions):
+        summary = _purify(vlm, summary)
+        risk = RiskAssessment(level=risk.level, rationale=_purify(vlm, risk.rationale))
+        actions = [Action(action=_purify(vlm, a.action), priority=a.priority,
+                          rationale=(_purify(vlm, a.rationale) if a.rationale else a.rationale))
+                   for a in actions]
+        trace.append("reason: dil-safligi guard uygulandi (Türkçe-disi karakter düzeltildi)")
 
     trace.append(f"reason: risk={risk.level.value}, {len(actions)} aksiyon önerisi")
     return {"summary": summary, "risk": risk, "actions": actions, "trace": trace}

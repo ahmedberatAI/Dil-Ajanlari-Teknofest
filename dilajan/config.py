@@ -38,6 +38,8 @@ class Settings(BaseSettings):
 
     # --- Video ornekleme ---
     segment_seconds: float = 10.0  # her analiz segmentinin uzunlugu (sn)
+    segment_overlap: float = 0.0   # ardisik segmentler arasi ortusme (sn); >0 ise segment-siniri olaylari
+                                   # iki pencerede de gorunur (dedup birlestirir). Uzun videolarda sinir-kaybini onler.
     fps_sample: float = 2.0        # saniyede ornieklenecek kare sayisi (ablasyon: risk-kalib 25->46%)
     max_frames_per_segment: int = 12  # bir segmentte VLM'e gonderilecek azami kare
     frame_max_side: int = 768      # kare uzun kenari ust siniri (token tasarrufu)

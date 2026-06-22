@@ -1,0 +1,312 @@
+{
+  "summary": {
+    "n_anomaly": 6,
+    "n_normal": 0,
+    "recall": 1.0,
+    "risk_cal_anom": 1.0,
+    "cat_match": 1.0,
+    "normal_fp": 0.0,
+    "normal_fp_operational": 0.0,
+    "normal_dispatch_fp": 0.0,
+    "risk_cal_norm": 0.0,
+    "latency_median": 21.0
+  },
+  "rows": [
+    {
+      "path": "data/falls_surveillance/Fall/urfd_fall01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 3,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 11,
+      "latency_s": 21.4,
+      "summary": "Merkezdeki alanda bir kişi ani şekilde yere düşmüş ve hareketsiz kalmıştır. Bu durum sağlık acil müdahale gerektiren ciddi bir olaydır. Operatör, hemen sağlık ekibini çağırarak durumu kontrol etmeye yönelik eylem planlamalıdır.",
+      "events": [
+        {
+          "time": "00:06",
+          "event": "Kişi ani şekilde yere düşüyor",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "merkez"
+        },
+        {
+          "time": "00:10",
+          "event": "Kişi yere düşmüş ve hareketsiz",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi yere düşmüş ve hareketsiz kalmıştır; bu durum yaşam tehdit edici olabilir ve acil sağlık müdahalesi gerektirir. Risk, ciddi yaralanma veya ölüm tehlikesi nedeniyle Kritik seviyededir.",
+      "actions": [
+        {
+          "action": "Hemen sağlık ekibini çağır ve acil müdahale için koordinasyon sağla.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz kalmış ve ciddi bir kazaya maruz kalmıştır; sağlık ekibi hemen müdahale etmelidir."
+        },
+        {
+          "action": "Olay yerine güvenlik görevlisini yönlendir ve çevreyi kontrol et.",
+          "priority": "Yüksek",
+          "rationale": "Çevreyi kontrol etmek, diğer kişilerin etkilenmesini engellemek ve olay alanını korumak için gerekli olan ilk adımdır."
+        },
+        {
+          "action": "Kamera kayıtlarını sakla ve olayla ilgili tüm detayları raporla.",
+          "priority": "Orta",
+          "rationale": "Olay sonrası inceleme ve sorumluluk belirlemesi için kayıtların korunması ve raporlanması zorunludur."
+        },
+        {
+          "action": "İlgili personel ve güvenlik ekiplerine olayı bildir ve koordinasyonu sağla.",
+          "priority": "Orta",
+          "rationale": "Olayın tüm ekipler tarafından bilinmesi, müdahale etme sürecini hızlandırır ve hataları önler."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_surveillance/Fall/urfd_fall02.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 7,
+      "latency_s": 15.0,
+      "summary": "Videonun 00:04 anında merkezde bir kişi ani şekilde yere düşmüştür. Bu durum sağlık açısından ciddi olabilir; hemen müdahale edilmelidir. Video süresi kısa ve sadece bu olay tespit edilmiştir.",
+      "events": [
+        {
+          "time": "00:04",
+          "event": "Kişi ani şekilde yere düşmüştür",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi ani şekilde yere düşmüştür; bu, ciddi yaralanma veya sağlık acil durumu olabileceği için yüksek risk seviyesi gerektirir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağrılmalı",
+          "priority": "Kritik",
+          "rationale": "Ani düşme, ciddi yaralanma veya kalp durması gibi acil sağlık durumunu işaret edebilir."
+        },
+        {
+          "action": "Yerel güvenlik personeli olay yerine yönlendirilmeli",
+          "priority": "Yüksek",
+          "rationale": "Güvenlik, olay yerini kontrol ederek diğerleriyle etkileşime girmeyi ve müdahaleyi desteklemeyi sağlar."
+        },
+        {
+          "action": "Kamera kaydı tam olarak saklanmalı",
+          "priority": "Orta",
+          "rationale": "Olay detaylarını analiz etmek ve gerektiğinde raporlamak için kayıtlar korunmalıdır."
+        },
+        {
+          "action": "Operasyonun diğer bölgelerine haber verilmeli",
+          "priority": "Orta",
+          "rationale": "Diğer personellerin dikkatli olması ve acil durumda destek olabilmeleri için bilgilendirilmeleri gerekir."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_surveillance/Fall/urfd_fall03.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 14,
+      "latency_s": 20.6,
+      "summary": "Videonun 00:12'sinde bir kişi yere düşmüş ve hareketsiz kalmıştır. Bu durum sağlık açısından kritik bir olaydır ve hemen müdahale edilmelidir. Video süresi kısa olup, olayın ciddiyeti yüksek görünmektedir.",
+      "events": [
+        {
+          "time": "00:12",
+          "event": "Kişi yere düşmüş ve hareketsiz",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi yere düşmüş ve hareketsiz kalmıştır. Bu durum yaşam tehdit edici olabilir ve acil sağlık müdahalesi gerektirir. Risk, olayın doğrudan insan sağlığına etkisiyle belirlenmiştir.",
+      "actions": [
+        {
+          "action": "Hemen sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz ve yere düşmüş; bu durum yaşam tehdit edici olabilir. Sağlık ekibi hemen müdahale etmelidir."
+        },
+        {
+          "action": "Olay yerine güvenlik personeli gönderin.",
+          "priority": "Yüksek",
+          "rationale": "Güvenlik personeli, olay yerini koruyarak müdahaleyi destekleyebilir ve çevreyi kontrol edebilir."
+        },
+        {
+          "action": "Kamera kayıtlarını saklayın ve olaya ilişkin tüm detayları raporlayın.",
+          "priority": "Orta",
+          "rationale": "Olay sonrası inceleme ve sorumluluk belirlemesi için kayıtların korunması gerekir."
+        },
+        {
+          "action": "Çevredeki kişilerden yardım isteyin ve olay yerine müdahale edenlere yönlendirin.",
+          "priority": "Orta",
+          "rationale": "Çevredeki kişilerin yardımına ihtiyaç duyulabilir; onları yönlendirmek, müdahale süresini kısaltır."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_surveillance/Fall/urfd_fall04.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 6,
+      "latency_s": 17.2,
+      "summary": "Bir kişi merkezdeki sandalyeden düşerek yere çöktü. Bu durum sağlık açısından ciddi olabilir ve hemen müdahale gerektirir. Operatör, yaralının durumunu değerlendirmek ve sağlık ekibi çağrak için harekete geçmelidir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Kişi sandalyeden düşerek yere çöktü",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi yere düşerek ciddi bir sağlık olayı yaşayabilir; bu durum hemen müdahale edilmesi gereken bir risk oluşturur.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağrılmalı.",
+          "priority": "Kritik",
+          "rationale": "Kişi yere düşmüş ve sağlık açısından ciddi bir durum olabilir; hemen müdahale edilmelidir."
+        },
+        {
+          "action": "Yerel güvenlik personeli, yaralının çevresini kontrol edip, müdahaleye engel olabilecek bir durum var mı kontrol etmeli.",
+          "priority": "Yüksek",
+          "rationale": "Yaralının çevresinde potansiyel tehlike olup olmadığına dikkat edilmelidir."
+        },
+        {
+          "action": "Kamera kaydı ve olay zamanı kaydedilmeli.",
+          "priority": "Orta",
+          "rationale": "Olay raporlaması ve gelecekteki incelemeler için kayıtlar korunmalıdır."
+        },
+        {
+          "action": "Yaralı kişiye yakın diğer kişilerden yardım istenmeli.",
+          "priority": "Orta",
+          "rationale": "Yardımın hızlıca sağlanabilmesi için çevredeki kişilerin de dahil edilmesi faydalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_surveillance/Fall/urfd_fall05.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 10,
+      "latency_s": 21.9,
+      "summary": "00:06-00:08 arası bir kişi yere yatmış ve hareketsiz kalmıştır. Bu durum sağlık açısından ciddi bir tehdit oluşturabilir. Hemen müdahale edilmesi gereken bir durumdur.",
+      "events": [
+        {
+          "time": "00:06",
+          "event": "Kişi yere yatmış ve hareketsiz",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "üst"
+        }
+      ],
+      "risk_rationale": "Kişi yere yatmış ve hareketsiz kalmıştır. Bu, ciddi bir sağlık acil durumu olabileceği için en yüksek risk seviyesi verilmelidir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağrılmalı.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz ve yere yatmış durumda. Sağlık acil durumu olduğu için en yüksek öncelikli aksiyon."
+        },
+        {
+          "action": "Yerel güvenlik personeli, kişinin çevresini kontrol ederek müdahale edecek şekilde hazır beklemeli.",
+          "priority": "Yüksek",
+          "rationale": "Kişinin durumu belirsiz olabilir. Çevre güvenliği ve müdahale için hazır olmak gerekir."
+        },
+        {
+          "action": "Kamera kaydı ve zaman damgasıyla ilgili tüm veriler kaydedilmeli ve yetkililere iletilmeli.",
+          "priority": "Orta",
+          "rationale": "Olayla ilgili tüm bilgilerin kaydedilmesi, sonrası için inceleme ve sorumluluk belirlemesi açısından önemlidir."
+        },
+        {
+          "action": "Kişinin etrafındaki alan güvenli olup olmadığı kontrol edilmeli.",
+          "priority": "Orta",
+          "rationale": "Kişinin etrafında potansiyel tehlike (örneğin kimyasal, elektrik, yangın vb.) olup olmadığı kontrol edilmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/falls_surveillance/Fall/urfd_fall06.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 7,
+      "latency_s": 22.6,
+      "summary": "00:03-00:06 arasında merkezde bir kişi yere yatmış ve hareketsiz kalmıştır. Bu durum sağlık açısından ciddi bir tehdit oluşturuyor. Hemen müdahale edilmesi gerekmektedir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi yere yatmış ve hareketsiz",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi hareketsiz ve yere yatmış durumda; bu, ciddi yaralanma veya acil sağlık durumu olabileceğini göstermektedir. Sağlık riski en yüksek seviyede değerlendirilmelidir.",
+      "actions": [
+        {
+          "action": "Hemen sağlık ekibi çağrılmalı ve bölgeye acil müdahale sağlanmalıdır.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz ve yere yatmış; bu durumda yaşam tehlikesi olabilir. Sağlık ekibi hemen müdahale etmelidir."
+        },
+        {
+          "action": "Bölgeye güvenlik personeli yönlendirilmeli ve çevreyi kontrol altına almalıdır.",
+          "priority": "Yüksek",
+          "rationale": "Kişinin durumu belirsiz olduğu için çevredeki kişilerin etkilenmesini önlemek için bölgeyi kontrol altına almak gerekir."
+        },
+        {
+          "action": "Kamera kayıtları ve çevresel veriler kaydedilmeli ve yetkililere raporlanmalıdır.",
+          "priority": "Orta",
+          "rationale": "Olayın nedeni ve gelişimi belirlenerek gelecekte benzer olaylar için önlem alınabilir."
+        }
+      ]
+    }
+  ]
+}

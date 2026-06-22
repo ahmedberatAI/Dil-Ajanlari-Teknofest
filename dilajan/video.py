@@ -139,11 +139,16 @@ def build_segments(
     frames: List[TimedFrame],
     segment_seconds: float | None = None,
     max_frames_per_segment: int | None = None,
+    overlap: float | None = None,
 ) -> List[Segment]:
     """Kareleri zaman pencerelerine böler; her segmentte azami kare sayisini asarsa
-    eşit araliklarla alt-örnekler."""
+    eşit araliklarla alt-örnekler. `overlap`>0 ise ardisik pencereler ortusur (segment-siniri
+    olaylari iki pencerede de gorunur; dedup birlestirir) — uzun videolarda sinir-kaybini onler."""
     segment_seconds = segment_seconds or settings.segment_seconds
     max_frames = max_frames_per_segment or settings.max_frames_per_segment
+    overlap = settings.segment_overlap if overlap is None else overlap
+    # guvenlik: ortusme segment uzunlugundan kucuk olmali (ilerleme garantisi)
+    overlap = max(0.0, min(overlap, segment_seconds - 1.0))
 
     if not frames:
         return []
@@ -167,5 +172,5 @@ def build_segments(
             )
             segments.append(seg)
             idx += 1
-        start = end
+        start = end - overlap if overlap > 0 else end
     return segments

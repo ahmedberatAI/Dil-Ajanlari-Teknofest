@@ -449,3 +449,47 @@ ve bu sette ikisi de %100 recall). Yani "hız modu özet derinliğini feda eder"
   noktası. (recall/FP sınır frontu)
 - **E5 senaryo'da kalan 2-3 olay:** hepsi **Düşük + dispatch-gated + yarı-meşru** (yürüyüş yolunda nesne;
   forklift yolunu kesen işçi). Zararlı FP (Kritik/dispatch) **%0**.
+
+## 8. Ölçüm & genelleme + mimari zayıflıkları (G6-G12, 2026-06-22)
+Dürüst dezavantaj listesindeki "ölçüm/genelleme" (G6-G8) ve "mimari/teknik" (G9-G12) kalemleri ele alındı.
+
+### G6 — Minik eval seti → büyük-n + dürüst varyans
+**Çözüm:** (a) `scripts/get_ucf_many.py` ile **64-klip** set (`data/eval_big`, 48 anomali/8 kategori + 16 normal);
+(b) `benchmark/aggregate.py` ile TÜM koşular mean±std + aralık raporlanır (varyans artık gizlenmiyor).
+**Sonuç:** Büyük-n (n=48 anomali) recall **%92** (kararlı tek tahmin). Konsolide varyans: Senaryo (16 koşu)
+recall **%99±2** [94–100]; UCF-grainy (13 koşu) **%86±12** [58–100]; GMDCSA düşme (5 koşu) **%80±11**.
+Dürüst mesaj: in-domain kararlı; grainy-OOD model doğal olarak daha değişken (n büyüdükçe daralıyor: 92%@n48).
+
+### G7 — Gerçek-dünya/jüri-videosu robustluğu
+**Çözüm:** (a) **Zarif bozulma** doğrulandı — bozuk/boş/var-olmayan video `ingest`'te çökmeden 0-segment +
+açıklama döner (jüri çöp dosya yüklese bile sistem çökmez). (b) **Çeşitlilik kanıtı:** 320×240 grainy UCF →
+1080p endüstriyel → frontal (GMDCSA) → **tavan/overhead** (URFD) → yol kazası → geniş çözünürlük/açı/domain
+yelpazesinde test edildi. Kalan dürüst gerçek: gerçek savunma-tesisi videosu yok (açık veride mevcut değil).
+
+### G8 — Gözetim-açılı düşme verisi (frontal değil)
+**Sorun:** GMDCSA frontal ev-webcam; gözetim/savunma açısı değil.
+**Çözüm:** `scripts/get_urfd_overhead.py` — URFD cam1 = gerçek **tavan/ceiling** kamera düşme klipleri
+(PNG→mp4), `data/falls_surveillance/`. **Sonuç:** overhead açıda fall recall **%100 (6/6)**, risk %100,
+kategori %100 — frontal GMDCSA'dan (%89) bile yüksek. E3 düşme-fix'i **farklı dataset + açıda da çalışıyor**
+(GMDCSA'ya overfit DEĞİL). (Not: URFD falls simüle ama kamera-montajı gerçek surveillance görüşü.)
+
+### G9 — Tek-GPU/sunucu güvenilirliği (watchdog)
+**Çözüm:** `scripts/watchdog.py` — `/v1/models` sağlık-kontrolü; ardışık başarısızlıkta stale temizle +
+`serve_vllm.py` ile otomatik yeniden-başlat (sunucu sessizce ölürse kendini toparlar). Ölçekleme yolu
+belgelendi: vLLM continuous-batching eşzamanlı istekleri kuyruklar; çok-GPU için `--tensor-parallel-size`.
+
+### G10 — Kare-örnekleme/segment-sınırı olayları
+**Çözüm:** `config.segment_overlap` + `build_segments(overlap=)` — örtüşen pencereler (ör. overlap=3 →
+[0-10),[7-17),[14-24)…) segment-sınırına denk gelen olayları iki pencerede gösterir (dedup birleştirir).
+Varsayılan 0 (regresyonsuz); uzun-video/canlı-akış için açılır. Saniye-altı olaylar için `fps_sample` levyesi.
+
+### G11 — Severity keyword-bağımlılığı (OOD/dil-körlüğü)
+**Çözüm:** Severity zaten **model-öncelikli** (Qwen3-VL semantik atar, dil-bağımsız); keyword'ler yalnız
+**tek-yönlü güvenlik tabanı**. Taban artık **iki-dilli** — İngilizce eşdeğerler (fire/smoke/collision/weapon…)
+**kelime-sınırı** ile eklendi (Türkçe metinle çakışmaz, asla düşürmez). İngilizce/OOD tarif artık kör değil.
+
+### G12 — Türkçe dil-saflığı (yabancı-karakter sızıntısı)
+**Ölçüm (`scripts/scan_purity.py`):** 3054 metinde **%0.5** yabancı-script sızıntısı — ve örneklerin TÜMÜ eski
+(Qwen2.5/öncesi) koşulardan; güncel Qwen3-VL koşularında görülmedi. **Çözüm:** `graph._purify` guard — çıktıda
+Türkçe-dışı karakter varsa anlamı koruyarak yeniden-Türkçeleştirir; **temiz metinde sıfır ek-çağrı** (yalnız
+sızıntıda tek düzeltme). Jüri-güveni için kalıcı güvenlik ağı.
