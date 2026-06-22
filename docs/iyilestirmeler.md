@@ -493,3 +493,41 @@ Varsayılan 0 (regresyonsuz); uzun-video/canlı-akış için açılır. Saniye-a
 (Qwen2.5/öncesi) koşulardan; güncel Qwen3-VL koşularında görülmedi. **Çözüm:** `graph._purify` guard — çıktıda
 Türkçe-dışı karakter varsa anlamı koruyarak yeniden-Türkçeleştirir; **temiz metinde sıfır ek-çağrı** (yalnız
 sızıntıda tek düzeltme). Jüri-güveni için kalıcı güvenlik ağı.
+
+## 9. Halüsinasyon — sistematik test + çoklu-subagent yöntem araştırması (2026-06-22)
+Kullanıcı, canlı demoda çok-bölümlü bir videoda (gözetim + şömine) modelin "fabrikada yangın + yaralı işçi"
+uydurduğunu fark etti. İstek: ad-hoc düzeltme yerine **(1) halüsinasyonun genelliğini ölç, (2) birçok subagent
+ile literatürdeki çözümleri araştır, (3) yöntemlerle çöz.** Dürüst, ölçüm-odaklı süreç:
+
+### Kök neden (önceki turlarda zaten çözülmüştü)
+Asıl bug = **domain-varsayım confabulation** (persona "savunma tesisi" prime ediyordu) + **nesne-severity
+aşırı-yükseltme**. İkisi de §6-§7'de çözülüp commit edildi (sahne-agnostik persona + nesne-vs-kişi severity);
+kullanıcının videosunda doğrulandı ("fabrika/işçi" → "iç mekân/kişi"). Bu turda bunun ÜZERİNE artık-halüsinasyonu
+daha da düşürmeye çalıştık.
+
+### Ölçüm metriği (subagent araştırması → POPE/CHAIR literatürü)
+**False-Event-Rate (FER)** = (olay üreten normal klip)/(normal klip) — judge-suz, objektif, "olay/bağlam uydurma"yı
+doğrudan ölçer (CHAIR_S analoğu; reference=∅). `eval_clips` operasyonel-normal-FP'si bunu zaten verir.
+
+### 4 subagent — yöntem aileleri + uygulanabilirlik
+- **Decoding-time** (VCD/DoLa/OPERA/M3ID): hepsi ikinci-pass/hidden-state/attention ister → **vLLM HTTP'den UYGULANAMAZ**
+  (vLLM'i terk etmek gerekir). Kullanılabilir olan: düşük-sıcaklık + guided-JSON (artımlı).
+- **Self-verification/abstention** (CoVe/Woodpecker/SelfCheckGPT): kanıt+güven şeması, varlık-doğrulayıcı, olay-oylama.
+- **Ölçüm** (POPE/CHAIR/VideoHallucer): FER + POPE-probu.
+- **VAD-özel** (AnomalyRuler perception-smoothing, Holmes-VAD gate): zamansal çoğunluk-oyu = en yüksek kaldıraç.
+
+### Uygulanan + ÖLÇÜLEN yöntemler (eval_big, aynı 16 normal + anomali)
+| Yöntem | FER | Narrow-FP | Recall | Karar |
+|---|---|---|---|---|
+| Baseline (domain+severity fix) | %31 | %6 | %88 | **en iyi denge** |
+| Kanıt/güven şeması + abstention | %56 | %12 | %88 | ❌ **reddedildi** — model kanıt UYDURUP daha çok olay üretti |
+| Self-consistency N=3 (çoğunluk) | **%12** | %0 | %72 | ⚠️ recall -16; opt-in precision-modu |
+| Self-consistency N=3 (severity-hibrit) | %31 | %19 | %89 | ❌ yüksek-sev normal-halüsinasyonu geçirdi |
+
+### Dürüst sonuç
+Grainy footage'da **hem gerçek olay hem halüsinasyon stokastik + yüksek-severity olabildiğinden self-consistency
+ikisini temiz ayıramıyor** — "bedava öğle yemeği yok". Kanıt-şeması ise geri tepti (model kendi uydurmasına güven
+verir). **Asıl ve en iyi çözüm zaten committed domain+severity-fix'leriydi.** Self-consistency `event_consistency_n`
+ile **opt-in "yüksek-hassasiyet modu"** olarak bırakıldı (varsayılan KAPALI=1 → recall-öncelik); FER'i yarıdan
+fazla düşürür ama recall + 2-3× gecikme bedeliyle. Bu, "her yöntemi baseline'a karşı ölç, yalnız net kazananı
+uygula" disiplininin (CLAHE/YOLO/temporal-CoT/evidence-şeması ret) bir örneği daha. Yeni araç: `scripts/audit_outputs.py`.

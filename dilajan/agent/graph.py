@@ -404,17 +404,57 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
     return kept
 
 
+def _segment_consistent_events(vlm: VLMClient, seg, n: int) -> Tuple[List[Event], Optional[str]]:
+    """Algı self-consistency (SelfCheckGPT + AnomalyRuler aggregation): segmenti N kez algılar,
+    bir olayı YALNIZCA koşuların ÇOĞUNDA (>= n//2+1) tekrar ederse tutar. Stokastik halüsinasyon
+    (tek koşuda beliren uydurma olay) elenir; gerçek/tutarlı olay korunur. Severity self-rating'e
+    güvenmez — tutarlılık grounding vekilidir."""
+    runs: List[List[Event]] = []
+    for _ in range(n):
+        evs, _note = _analyze_one_segment(vlm, seg)
+        runs.append(evs)
+    clusters: list = []  # her biri: {"cat","words","events","runs"(set)}
+    for ri, evs in enumerate(runs):
+        for e in evs:
+            ew = _dedup_words(e.event)
+            placed = False
+            for c in clusters:
+                if c["cat"] != e.category or not ew:
+                    continue
+                inter, union = len(ew & c["words"]), len(ew | c["words"])
+                jacc = inter / union if union else 0.0
+                if jacc >= 0.5 or (inter >= 1 and (len(ew) <= 4 or len(c["words"]) <= 4)):
+                    c["events"].append(e); c["runs"].add(ri); c["words"] |= ew
+                    placed = True
+                    break
+            if not placed:
+                clusters.append({"cat": e.category, "words": set(ew), "events": [e], "runs": {ri}})
+    # COGUNLUK-OYU (SelfCheckGPT): olay yalniz kosularin >= n//2+1'inde tekrar ederse tutulur.
+    # OLCULDU (docs/iyilestirmeler.md §9): FER %31->12 (halusinasyon duser) AMA recall %88->72 (grainy'de
+    # gercek olay da stokastik). OPT-IN "yuksek-hassasiyet modu"dur; varsayilan KAPALI (n=1) -> recall-oncelik.
+    thr = n // 2 + 1
+    kept = [max(c["events"], key=lambda e: (_SEV_ORD[e.severity], len(e.event)))
+            for c in clusters if len(c["runs"]) >= thr]
+    note = (f"perceive: segment {seg.index} self-consistency {n}× -> "
+            f"{len(clusters)} aday, {len(kept)} tutuldu (eşik {thr}/{n})")
+    return kept, note
+
+
 def perceive(state: AgentState) -> dict:
     """Iki asamali algi (serbest tarif -> olay cikarimi), segmentler PARALEL islenir.
-    vLLM eszamanli istekleri batch'ledigi icin uzun videolarda buyuk hiz kazanci saglar."""
+    event_consistency_n>1 ise her segment N kez algılanır ve olaylar çoğunluk-oyuyla süzülür
+    (halüsinasyon-azaltma). vLLM eszamanli istekleri batch'ledigi icin paralel calisir."""
     trace = state.get("trace", [])
     vlm = _get_vlm()
     segments = list(state.get("segments", []))
     events: List[Event] = []
     if segments:
+        N = max(1, settings.event_consistency_n)
+        analyze = ((lambda s: _segment_consistent_events(vlm, s, N)) if N > 1
+                   else (lambda s: _analyze_one_segment(vlm, s)))
         workers = max(1, min(len(segments), settings.max_parallel_segments))
         with ThreadPoolExecutor(max_workers=workers) as pool:
-            for evs, note in pool.map(lambda s: _analyze_one_segment(vlm, s), segments):
+            for evs, note in pool.map(analyze, segments):
                 events.extend(evs)
                 if note:
                     trace.append(note)

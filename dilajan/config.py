@@ -52,6 +52,9 @@ class Settings(BaseSettings):
     request_timeout: float = 120.0
     max_parallel_segments: int = 6  # segment analizinde eszamanli istek sayisi (vLLM batch'ler)
     n_samples: int = 1  # self-consistency: >1 ise grafik N kez calisip risk oylanir (kararlilik modu)
+    event_consistency_n: int = 1  # H (algı self-consistency / SelfCheckGPT+AnomalyRuler): >1 ise her segment
+                                  # N kez algılanır; olay yalnız koşuların ÇOĞUNDA tekrar ederse tutulur
+                                  # (stokastik halüsinasyon elenir, gerçek olay kalır). Reason/act tek sefer çalışır.
     use_detector: bool = False  # YOLO nesne dedektoru kanitini perceive'e enjekte et (heterojen ensemble)
     verify_events: bool = True   # öz-doğrulama (deduce-then-verify): yüksek-severity olaylari teyit et,
                                  # dogrulanmazsa severity DUSUR (silme). FP kontrol + agentic oz-kontrol.
