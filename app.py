@@ -129,13 +129,15 @@ def build_ui() -> gr.Blocks:
     with gr.Blocks(title="DilAjanları - Video Analiz ve Karar Destek") as demo:
         gr.Markdown(
             "# 🎥 DilAjanları — Video Analiz ve Karar Destek Ajanı\n"
-            "TEKNOFEST TYDA 3. Senaryo · Yerel / offline · Qwen2.5-VL + vLLM + LangGraph"
+            "TEKNOFEST TYDA 3. Senaryo · Yerel / offline · Qwen3-VL-8B + vLLM + LangGraph"
         )
         context_state = gr.State("")
 
         with gr.Row():
             with gr.Column(scale=1):
-                video_in = gr.Video(label="Video", sources=["upload"])
+                # format="mp4": yuklenen videoyu (avi/mkv/mov/HEVC vb.) ffmpeg ile mp4'e cevirir
+                # -> tarayici onizlemesi her formatta oynar + handler oynatilabilir dosya alir
+                video_in = gr.Video(label="Video", sources=["upload"], format="mp4")
                 analyze_btn = gr.Button("🔍 Analiz Et", variant="primary")
                 status_out = gr.Markdown("")
                 summary_out = gr.Textbox(label="Özet", lines=3)
