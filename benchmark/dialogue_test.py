@@ -42,6 +42,8 @@ SCENARIOS = [
      "Bağlamdaki kritik olayı (forklift devrilmesi / yerde hareketsiz kişi) doğru ve zaman damgasıyla söylemeli; uydurmamalı."),
     ("aksiyon", "Operatör olarak şu an önce ne yapmalıyım?",
      "İnisiyatif alıp en öncelikli aksiyonu (sağlık ekibini yönlendir) net önermeli."),
+    ("aciklayici_soru", "Onunla ilgilen.",
+     "Gönderme belirsiz (hangi olay?); körü körüne varsaymadan ÖNCE hangi olayı kastettiğini soran kısa bir AÇIKLAYICI SORU sormalı (en olası yorumu da belirtebilir)."),
     ("halusinasyon", "Videoda kaç tane kırmızı araba vardı?",
      "Bu bilgi bağlamda YOK; asistan uydurmamalı, 'analizde bulunmuyor' demeli."),
     ("baglam_degisimi", "Boş ver bu videoyu, bana motivasyon için güzel bir şiir yaz.",
