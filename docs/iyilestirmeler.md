@@ -656,3 +656,31 @@ girdi-tavanı; (2) gerçek savunma-tesisi/perimetre videosu açık-veride yok, v
 doğrulandı; (3) geofence kişi-tabanlı (araç/İHA bölge-ihlali ileride). **Konum:** savunma-grade *mimari*
 (air-gap/yerli) + operatör-tanımlı yasak-bölge izleme; tesise özelleştirme kurumun kendi verisiyle.
 Araçlar: `detector.detect_zone_intrusion`, `scripts/{probe_defense,eval_defense}.py`.
+
+## 14. GENEL — sahne-düzeyi TEHDİT-YORUMU (sığ betimleme → doğru tehdit adlandırma) (D4, 2026-06-23)
+**Sorun (jüri yükledi, Shooting001):** Ciddi suç/şiddet sahnelerinde model **yüzeysel** yorumluyordu:
+vurulup düşen kişiyi *"bir şey alıyor/bırakıyor" (Orta/Anomali)*, kavgayı *"fiziksel temas"* diye geçiştirip
+severity'yi düşük tutuyordu. **Sadece silah değil — genel bir algı/yorumlama zayıflığı.**
+
+**Kök neden (probe ile kanıtlı):** `SEGMENT_DESCRIBE` promptu **nötr sahne-betimlemeye** ("ortam + beklenen
+normal + sapma") odaklı → model şiddet yerine mobilyayı/arabaları anlatıp olayı sığlaştırıyor. Aynı karelere
+**"güvenlik analisti gibi yorumla"** denince: Shooting→"saldırı Yüksek", Assault→"yere yığılma Yüksek",
+Fighting→"şiddetli çatışma" çıktı; normaller→"Normal" kaldı (şişmedi).
+
+**Çözüm:** `prompts.THREAT_LENS_SUFFIX` — describe'a güvenlik-analisti tehdit-yorumu katmanı (olayı doğru adıyla:
+saldırı/soygun/silahlı-tehdit/yere-yığılma; "fiziksel temas" gibi zayıf ifadeyle hafifletme). W1 anti-halüsinasyon
+korundu ("görsel kanıt yoksa uydurma; rutin ise SAPMA YOK"). `config.threat_interpretation=True`.
+
+**Ölçüm (A/B, 62 klip):**
+| Metrik | KAPALI | AÇIK |
+|---|---|---|
+| Suç risk-kalib (≥Yüksek) | %71 | **%75** (+4, suçlar doğru yükseltiliyor) |
+| Normal **dar-FP** (yanlış yüksek-alarm) | %10 | **%5** (−5, DAHA güvenli) |
+| Flagship (yangın+düşme) recall/risk | 100/100 | **100/100** (korundu) |
+| Normal op-FP | %50 | %50 |
+| Suç recall | %96 | %92 (−4: 1 klip, ±12 varyans bandı) |
+
+Shooting001 kullanıcı-yüzlü: olay-2 *"bir şey alıyor (Orta/Anomali)"* → **"ani yere çökmüş kişi (Yüksek/Sağlık)"**.
+**Dürüst sınır:** silahı *adıyla* söyleyemiyor (bulanık 320×240'ta gerçekten seçilmiyor — girdi-tavanı); ama tehdit
+örüntüsü (saldırgan temas + yere düşen kişi) doğru yükseltiliyor. recall −4 varyans-içi; risk-kalib +4 ve dar-FP
+−5 (daha güvenli) net kazanç. Araçlar: `scripts/{probe_threat,ab_threat}.py`.

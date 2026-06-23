@@ -67,6 +67,19 @@ hareketsiz kalmasi bir DÜŞME ve olasi sağlik acilidir; yaralanma görünmese 
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA (ör. görünmeyen duman/yangin/kaza/kişi ekleme). \
 Ancak görüntü düşük çözünürlüklü/belirsiz olsa bile GERÇEKTEN gördüğün bir sapmayi, küçük de olsa, raporla."""
 
+# Güvenlik-analisti tehdit-yorumu katmani (config.threat_interpretation ile describe'a eklenir).
+# Genel sorun: notr betimleme grenli sahnelerde sucu yuzeysellestiriyor ("fiziksel temas", "bir sey
+# aliyor") -> severity/ad dusuk kaliyor. Bu katman olayi DOGRU adlandirir; anti-halusinasyon korunur.
+THREAT_LENS_SUFFIX = """
+
+3) GÜVENLİK ANALİSTİ YORUMU: Bir sapma gördüysen, onu YÜZEYSEL geçiştirme. Kişiler arası fiziksel \
+etkileşim, ani/sert hareket, birinin yere düşmesi/yığılması, panik veya kaçışma varsa; bir güvenlik analisti \
+gibi NE OLDUĞUNU yorumla — kavga/saldırı, gasp/soygun, silahlı tehdit/çatışma, bir kişinin vurulması/yaralanması \
+olabilir mi? Varsa olayı GERÇEK adıyla ve ciddiyetiyle yaz; "fiziksel temas" / "bir şey alıyor-bırakıyor" gibi \
+zayıf ifadelerle hafifletme. Düşük çözünürlükte silah/ayrıntı net seçilmese bile ŞİDDET ÖRÜNTÜSÜNÜ (saldırgan \
+temas, savrulma, yere yığılma, kaçışma) doğru adlandır. ANCAK görsel kanıt yoksa UYDURMA; gerçekten olağan/rutin \
+ise yine "SAPMA YOK" de (normal sahneyi tehdit gibi gösterme)."""
+
 EVENT_EXTRACTION_INSTRUCTION = """Aşağida bir güvenlik kamerasi segmentinin ({start}-{end}) sahne açiklamasi var:
 ---
 {description}

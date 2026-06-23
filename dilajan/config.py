@@ -66,6 +66,10 @@ class Settings(BaseSettings):
                                                # falls_real recall %89 KORUNDU (risk-kalib 78->89). 1.3 fazla agresif
                                                # (recall 89->78), bu yuzden 1.15. (1.0 = kapali)
     use_detector: bool = False  # YOLO nesne dedektoru kanitini perceive'e enjekte et (heterojen ensemble)
+    threat_interpretation: bool = True   # GENEL: describe'a "guvenlik analisti tehdit-yorumu" katmani ekle
+                                         # (prompts.THREAT_LENS_SUFFIX). Notr betim sucu yuzeysellestiriyordu
+                                         # ("fiziksel temas"); bu katman olayi DOGRU adlandirir (saldiri/soygun/
+                                         # silahli-tehdit). Anti-halusinasyon korunur. (olculecek)
     motion_saliency_cue: bool = True   # algida en belirgin ANI hareket anini bulup perceive'e YUMUSAK dikkat
                                        # ipucu enjekte et (motion-saliency; iddia DEGIL). Yalniz izole zirvede
                                        # tetikler (mutlak>6 VE >2x ort) -> uniform/dusuk-hareket normalde FP yok.

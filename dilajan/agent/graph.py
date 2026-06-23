@@ -404,6 +404,8 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
             if evidence:
                 instr += (f"\n\nYardimci kanit — {evidence}. Bu nesne bilgisini betimlemende "
                           "dikkate al (ama yalnizca gerçekten gördüğünü raporla).")
+        if settings.threat_interpretation:
+            instr += prompts.THREAT_LENS_SUFFIX
         if settings.motion_saliency_cue:
             instr += _motion_cue(seg)
         desc = vlm.analyze_frames(
