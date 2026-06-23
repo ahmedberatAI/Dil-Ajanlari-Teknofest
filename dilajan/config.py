@@ -78,6 +78,10 @@ class Settings(BaseSettings):
                                  # "Yuksek-Duyarlilik modu" icin DILAJAN_VERIFY_EVENTS=false.
     spatial_grounding: bool = True  # yuksek-severity olayin karedeki konumunu (bbox + bölge) cikar (Qwen3-VL native grounding)
     facility_rules: str = ""        # tesise-ozgu kurallar (dagitimda set edilir); politika-ihlali tespitini saglar (W4)
+    restricted_zones: str = ""      # SAVUNMA: yasak/kisitli bolgeler (3x3 izgara etiketleri, virgulle:
+                                    # "üst sağ,sağ,alt sağ"). Set edilirse YOLO-geofence: bu bolgelerde
+                                    # KISI tespit edilirse "Yasak Bölge İhlali" (Yüksek/Yetkisiz Erişim).
+                                    # Deterministik (VLM zone-reasoning guvenilmez); opt-in (bos=kapali).
     adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)
 
     # --- Hizli mod (E4: gercege-yakin dusuk gecikme) ---

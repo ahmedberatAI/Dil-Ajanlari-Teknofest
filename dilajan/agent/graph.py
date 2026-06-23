@@ -458,6 +458,23 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                                    category=ev.category, bbox=bb, region=reg)
                 grounded.append(ev)
             out = grounded
+        # SAVUNMA geofence: yasak/kisitli bolgelerde KISI -> "Yasak Bölge İhlali" (deterministik YOLO).
+        # Opt-in (restricted_zones bos=kapali -> mevcut davranis degismez); VLM zone-reasoning guvenilmez
+        # oldugu icin uzman dedektorle yapilir (perimetre/tesis guvenligi cekirdegi).
+        if settings.restricted_zones:
+            try:
+                from dilajan import detector
+                zones = settings.restricted_zones.split(",")
+                hits = detector.detect_zone_intrusion(seg.frames, zones)
+            except Exception:
+                hits = {}
+            existing = {(e.region, e.category) for e in out}
+            for reg, (t, cf) in hits.items():
+                if (reg, EventCategory.YETKISIZ_ERISIM) in existing:
+                    continue  # ayni bolgede zaten yetkisiz-erisim olayi var -> tekrar etme
+                out.append(Event(
+                    time=t, event=f"Yasak bölge ihlali: yetkisiz kişi '{reg}' kısıtlı bölgesinde tespit edildi",
+                    severity=Severity.YUKSEK, category=EventCategory.YETKISIZ_ERISIM, region=reg))
         return out, pose_note
     except Exception as ex:  # hata toleransi: segment atlanir
         return [], f"perceive: segment {seg.index} hatasi: {ex}"

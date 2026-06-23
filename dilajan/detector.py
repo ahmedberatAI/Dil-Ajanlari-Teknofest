@@ -131,6 +131,45 @@ def verify_fallen(frames: Sequence[Tuple[str, bytes]], kp_conf: float = 0.5,
         return "ABSTAIN", f"poz hata: {e}"
 
 
+def _region_of(cx: float, cy: float, w: float, h: float) -> str:
+    """Piksel merkezini 3x3 Türkçe ızgara bölgesine eşler (graph._bbox_to_region ile tutarlı)."""
+    xr = "sol" if cx < w / 3 else ("sağ" if cx > 2 * w / 3 else None)
+    yr = "üst" if cy < h / 3 else ("alt" if cy > 2 * h / 3 else None)
+    if xr and yr:
+        return f"{yr} {xr}"
+    return yr or xr or "merkez"
+
+
+def detect_zone_intrusion(frames: Sequence[Tuple[str, bytes]], zones: Sequence[str],
+                          conf: float = 0.35) -> dict:
+    """SAVUNMA geofence: YASAK/kisitli bolgelerde KISI tespit eder (perimetre ihlali).
+
+    VLM'in zone-reasoning'i guvenilmez oldugu icin DETERMINISTIK: YOLO ile kisi(ler)i bulur,
+    bbox-merkezinden 3x3 bolge hesaplar; bolge yasak listede ise ihlal. Donus: {bolge: (MM:SS, guven)}
+    (her yasak-bolge icin ILK tespit). Hata olursa bos (toleransli — yanlis ihlal uretmez)."""
+    try:
+        zones_n = {z.strip().lower() for z in zones if z and z.strip()}
+        if not zones_n:
+            return {}
+        model = _get_model()
+        imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
+        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        hits: dict = {}
+        for fi, r in enumerate(results):
+            w, h = imgs[fi].size
+            for box, cls, cf in zip(r.boxes.xyxy.tolist(), r.boxes.cls.tolist(),
+                                    r.boxes.conf.tolist()):
+                if int(cls) != 0:  # COCO 0 = person
+                    continue
+                cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
+                reg = _region_of(cx, cy, w, h)
+                if reg.lower() in zones_n and reg not in hits:
+                    hits[reg] = (frames[fi][0], round(float(cf), 2))  # ILK tespit (zaman, guven)
+        return hits
+    except Exception:
+        return {}
+
+
 def available() -> bool:
     try:
         import ultralytics  # noqa: F401

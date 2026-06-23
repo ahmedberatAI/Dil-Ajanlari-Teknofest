@@ -630,3 +630,29 @@ Kullanıcı-yüzlü doğrulama: **021 artık** `[00:02] Pikap ani hareketle geri
 (gerçekten sınırda/tavan); 021 severity Düşük (düşük-hızlı temas için kalibrasyon doğru, zorlamadım). Tek maliyet:
 falls_real'de 1 normal klipte düşük-severity op-FP (dispatch-altı, dar-FP %0). Araçlar: `scripts/probe_road.py`,
 `scripts/ab_motion_cue.py`, `scripts/eval_all_datasets.py`.
+
+## 13. SAVUNMA — yasak/kısıtlı bölge ihlali (geofence) + perimetre (D3, 2026-06-23)
+**Bağlam:** Şartname savunma sanayi/saha operasyonlarını öncelikliyor. Savunma-tesisi gözetiminin çekirdeği
+**perimetre/yasak-bölge izleme.** Probe ile bulundu: VLM'e "üst-sağ yasak bölge, oraya giren kişi ihlal"
+dense (`facility_rules`), model **zone-reasoning'i güvenilir yapamıyor** (bölge kontrolü yok). Ayrıca silahlı
+tehdit (UCF Shooting 320×240) tamamen kaçıyor — girdi-tavanı.
+
+**Çözüm — DETERMİNİSTİK YOLO geofence (`detector.detect_zone_intrusion`):** VLM zone-reasoning'i yerine uzman
+dedektör. YOLO ile KİŞİ tespit → bbox-merkezinden 3×3 ızgara bölgesi → bölge yasak listede ise **"Yasak Bölge
+İhlali" (Yüksek/Yetkisiz Erişim)** olayı + bölge etiketi. Operatör bölgeleri Gradio'dan girer
+(`config.restricted_zones`, ör. "üst sağ,sağ"). **Opt-in** (boş=kapalı → mevcut davranış birebir korunur).
+Tesis-kuralı kutusu (`facility_rules`) da UI'ye bağlandı (politika-ihlali enjeksiyonu).
+
+**Ölçüm:**
+| Yetenek | Sonuç |
+|---|---|
+| Geofence **recall** (kişi yasak bölgede → ihlal) | **%88** (7/8) |
+| Geofence **precision** (boş bölgede yanlış-ihlal) | **%100** (8/8) |
+| Perimetre/izinsiz-giriş (VLM, Burglary+kural) | %50 (3/6) |
+
+Geofence güvenilir (deterministik, VLM'in zayıf olduğu yerde uzman dedektör — heterojen ensemble; VLM kişiyi
+kaçırsa bile geofence yakalar). **Dürüst sınır:** (1) silahlı-tehdit (Shooting) 320×240'ta hâlâ kaçıyor —
+girdi-tavanı; (2) gerçek savunma-tesisi/perimetre videosu açık-veride yok, vekil veri (Burglary/Normal) ile
+doğrulandı; (3) geofence kişi-tabanlı (araç/İHA bölge-ihlali ileride). **Konum:** savunma-grade *mimari*
+(air-gap/yerli) + operatör-tanımlı yasak-bölge izleme; tesise özelleştirme kurumun kendi verisiyle.
+Araçlar: `detector.detect_zone_intrusion`, `scripts/{probe_defense,eval_defense}.py`.

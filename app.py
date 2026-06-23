@@ -122,10 +122,14 @@ def _blank():
     return (gr.update(),) * 8
 
 
-def analyze(video_path):
+def analyze(video_path, facility_rules="", restricted_zones=""):
     if not video_path:
         yield ("Lütfen bir video yükleyin.", *_blank())
         return
+    # SAVUNMA/tesis: operatörün girdiği kuralları + yasak bölgeleri bu analiz için uygula
+    from dilajan.config import settings as _settings
+    _settings.facility_rules = (facility_rules or "").strip()
+    _settings.restricted_zones = (restricted_zones or "").strip()
     result: AnalysisResult | None = None
     for step in _graph.stream({"video_path": video_path, "trace": []}):
         node, out = next(iter(step.items()))
@@ -173,6 +177,14 @@ def build_ui() -> gr.Blocks:
                 # HEVC/eski-mpeg4/avi/mkv tarayicida oynamiyordu; format="mp4" container-only oldugu
                 # icin yetmiyordu. Codec'i universal yapinca onizleme her formatta oynar.
                 video_in = gr.Video(label="Video", sources=["upload"])
+                with gr.Accordion("🛡️ Savunma / Tesis Ayarları (opsiyonel)", open=False):
+                    facility_in = gr.Textbox(
+                        label="Tesise özgü güvenlik kuralları",
+                        placeholder="Örn: Bu kritik tesise izinsiz giriş yasaktır; baret takmayan personel ihlaldir.",
+                        lines=2)
+                    zones_in = gr.Textbox(
+                        label="Yasak / kısıtlı bölgeler (3×3 ızgara, virgülle)",
+                        placeholder="Örn: üst sağ, sağ, alt sağ  → bu bölgelerde kişi = Yasak Bölge İhlali (Yüksek)")
                 analyze_btn = gr.Button("🔍 Analiz Et", variant="primary")
                 status_out = gr.Markdown("")
                 summary_out = gr.Textbox(label="Özet", lines=3)
@@ -201,7 +213,7 @@ def build_ui() -> gr.Blocks:
         video_in.upload(_ensure_playable, inputs=[video_in], outputs=[video_in])
 
         analyze_btn.click(
-            analyze, inputs=[video_in],
+            analyze, inputs=[video_in, facility_in, zones_in],
             outputs=[status_out, summary_out, risk_out, timeline_out,
                      events_out, actions_out, funcs_out, json_out, context_state],
         )
