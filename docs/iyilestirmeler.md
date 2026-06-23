@@ -770,9 +770,11 @@ grounding/geofence **görsel overlay**; demoyu **ağ-kapalı** çekerek offline'
 −0.20 = sistematik DÜŞÜK-puanlama**, normaller 39/42 doğru. Jüri-yüzlü, GPU'suz, mevcut cevaplardan.
 - **Zamansal-süreklilik yükseltmesi** (`config.persist_escalation`, `_dedupe_events`): tehlike-olayı ≥2 bitişik
 segmentte sürüyorsa severity Orta→Yüksek (+1, capped, tek-yönlü). −0.20 sapmayı hedefler; izole olayı/recall'i bozmaz.
-- **Threat-lens V2** (mülk+kaza adlandırması): A/B (eval dengeli, n=3/kat) **AKSİYON-recall %71→83 (+12)**,
-dar-FP düz; Vandalism %0→100, Shooting %33→100 (hedef isabet) ama RoadAccidents/Burglary n=3-gürültü düşüşü →
-**eval_big ile doğrulanıyor** (adapte etmeden).
+- **Threat-lens V2** (mülk+kaza adlandırması) + **persist**: A/B (eval dengeli, n=3/kat) umut verici görünmüştü
+(AKSİYON %71→83). **AMA eval_big doğrulaması (48 suç+16 normal, yarı-gürültü) REDDETTİ:** AKSİYON %81→81 (+0,
+n=3 kazancı gürültüymüş), risk-kalib %77→75 (persist yardım etmedi), **dar-FP %0→12 + op-FP %38→56 (KÖTÜ)**.
+→ **İkisi de default-KAPALI bırakıldı** (kod inert; model birebir korundu). Ders (benign-gate/LoRA ile tutarlı):
+küçük-N sinyaline güvenme; büyük-sette doğrula. Bu turun KALAN kazancı = ordinal kalibrasyon metrikleri.
 
 **D) Veri/eval:** skor girdi-bağlı; çözüm domain-uygun **yüksek-res** açık veri. Eklenebilir (link+lisans doğrulandı):
 **MSAD** (1080p, 14 senaryo, warehouse/fall/fire/accident), **NVIDIA Warehouse** (1080p, forklift-near-miss, OpenMDW=ticari-OK),
