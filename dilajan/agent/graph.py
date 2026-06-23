@@ -60,6 +60,8 @@ def _tools_description() -> str:
 # --- yardimcilar ---
 _SEV_ORD = {Severity.DUSUK: 1, Severity.ORTA: 2, Severity.YUKSEK: 3, Severity.KRITIK: 4}
 _ORD_SEV = {v: k for k, v in _SEV_ORD.items()}
+# Tehlike kategorileri (zamansal-süreklilik yükseltmesi yalnız bunlara uygulanır; Anomali/Normal/Diğer hariç)
+_DANGER_CATS = {EventCategory.GUVENLIK, EventCategory.KAZA, EventCategory.SAGLIK, EventCategory.YETKISIZ_ERISIM}
 
 # Tehdit anahtar kelimeleri -> asgari severity. Model olayi tespit eder (gucu bu);
 # bu katman severity'yi kalibre eder (7B model gercek tehdidi sistematik dusuk puanliyor).
@@ -520,6 +522,18 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
                                          bbox=k.bbox or e.bbox, region=k.region or e.region)
                         continue
         kept.append(e)
+    # Zamansal-SUREKLILIK yukseltmesi (Agent-C): bir TEHLIKE olayi >=2 bitisik segmentte surduyse
+    # (end_time set) ve severity Orta'da takildiysa Yuksek'e cek (+1, capped). Gercek tehlike surer,
+    # halusinasyon izoledir; tek-yonlu/yukari -> recall'i bozmaz. (sistematik dusuk-puanlamayi duzeltir)
+    if settings.persist_escalation:
+        esc: List[Event] = []
+        for e in kept:
+            if (e.end_time and e.end_time != e.time
+                    and e.category in _DANGER_CATS and e.severity == Severity.ORTA):
+                e = Event(time=e.time, end_time=e.end_time, event=e.event,
+                          severity=Severity.YUKSEK, category=e.category, bbox=e.bbox, region=e.region)
+            esc.append(e)
+        kept = esc
     return kept
 
 

@@ -66,6 +66,10 @@ class Settings(BaseSettings):
                                                # falls_real recall %89 KORUNDU (risk-kalib 78->89). 1.3 fazla agresif
                                                # (recall 89->78), bu yuzden 1.15. (1.0 = kapali)
     use_detector: bool = False  # YOLO nesne dedektoru kanitini perceive'e enjekte et (heterojen ensemble)
+    persist_escalation: bool = False  # Agent-C: zamansal-SUREKLILIK yukseltmesi. Bir TEHLIKE-kategori olayi
+                                      # >=2 bitisik segmentte SURUYORSA (end_time set) severity Orta->Yuksek (+1, capped).
+                                      # Tek-yonlu/yukari -> recall'i bozmaz, izole olayi cezalandirmaz. Sistematik
+                                      # dusuk-puanlamayi (olculen sapma -0.20) duzeltir; gercek tehlike surer, halusinasyon izoledir.
     threat_interpretation: bool = True   # GENEL: describe'a "guvenlik analisti tehdit-yorumu" katmani ekle
                                          # (prompts.THREAT_LENS_SUFFIX). Notr betim sucu yuzeysellestiriyordu
                                          # ("fiziksel temas"); bu katman olayi DOGRU adlandirir (saldiri/soygun/

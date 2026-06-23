@@ -80,6 +80,20 @@ zayıf ifadelerle hafifletme. Düşük çözünürlükte silah/ayrıntı net se�
 temas, savrulma, yere yığılma, kaçışma) doğru adlandır. ANCAK görsel kanıt yoksa UYDURMA; gerçekten olağan/rutin \
 ise yine "SAPMA YOK" de (normal sahneyi tehdit gibi gösterme)."""
 
+# V2: siddet + MULK-sucu + kaza adlandirmasini da kapsar (AKSIYON-recall: Vandalism/Burglary zayifti).
+THREAT_LENS_SUFFIX_V2 = """
+
+3) GÜVENLİK ANALİSTİ YORUMU: Bir sapma gördüysen YÜZEYSEL geçiştirme; bir güvenlik analisti gibi NE OLDUĞUNU \
+yorumla ve olayı GERÇEK adıyla yaz ("fiziksel temas" / "bir şey alıyor" gibi zayıf ifadelerle hafifletme):
+- ŞİDDET: kişiler arası saldırgan temas, vurma/itme, savrulma, birinin yere yığılması, panik/kaçışma → \
+kavga/saldırı, gasp/soygun, silahlı tehdit/çatışma, bir kişinin vurulması/yaralanması. Düşük çözünürlükte silah \
+net seçilmese bile şiddet ÖRÜNTÜSÜNÜ doğru adlandır.
+- MÜLKE ZARAR: cam/araç/eşya/mülk kırma, tekmeleme, devirme, ateşe verme, sprey/çizme → VANDALİZM/TAHRİP.
+- HIRSIZLIK: bir bina/araç/alana izinsiz veya zorla girme, kilit/kapı zorlama, eşya çalma/kapıp kaçma → \
+HIRSIZLIK/SOYGUN/izinsiz giriş.
+- KAZA: araç çarpışması/devrilmesi, bir kişiye araç çarpması → TRAFİK KAZASI.
+ANCAK görsel kanıt yoksa UYDURMA; gerçekten olağan/rutin ise "SAPMA YOK" de (normal sahneyi tehdit gösterme)."""
+
 EVENT_EXTRACTION_INSTRUCTION = """Aşağida bir güvenlik kamerasi segmentinin ({start}-{end}) sahne açiklamasi var:
 ---
 {description}

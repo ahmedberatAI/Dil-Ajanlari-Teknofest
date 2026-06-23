@@ -747,3 +747,38 @@ diyor = doğru tepki+dispatch). Yani modelin gerçek kullanım-faydası %46 değ
 **Gerçek yol (dürüst):** TANIMA'yı yükseltmenin tek yolu daha iyi GİRDİ (dağıtımda kamera çözünürlüğü) veya kurumun
 kendi verisiyle domain ince-ayarı — yerel hızlı-fix değil. Şartname-domaini yüksek-res veride tanıma zaten ~%100.
 Araçlar: `scripts/{probe_zoom,probe_zoom2,probe_clip_type,probe_violence,action_recall}.py`; 3 subagent raporu.
+
+## 17. Skor-maksimizasyon — 4-subagent (farklı eksen) sentezi + güvenli kazanımlar (D7, 2026-06-23)
+Hedef: skoru olabildiğince yükseltmek. **4 paralel subagent** dört FARKLI eksenden taradı; her biri kanıtlı +
+bizim stack'e uygulanabilir + regresyon-riski sıralı döndürdü. Yakınsayan karar:
+
+**A) LoRA domain ince-ayar → KOŞULLU NO-GO (kritik yol değil).** ms-swift ile 24GB'da QLoRA teknik olarak
+yapılabilir AMA: gerçek-kazanç olasılığı ~%25-40 (girdi-tavanı; pixel ekleyemez), **veri-yanlılığı ezberleme**
+riski (aynı-dağılımda şişer, çapraz-kaynakta düz → sahte kazanç), **vLLM multimodal-LoRA servisleyemiyor**
+(#28640/#28186 → bf16'ya merge + yeniden-kuantize zorunlu), gradient-checkpointing bug (#1955), çalışan
+Blackwell-cu13 ortamını bozma riski, 2-4 gün. → **Yalnız çitlenmiş, ayrı-venv, ≤3-gün deney + çapraz-kaynak
+dürüstlük-kapısı** ile yapılır; aksi halde negatif-sonuç olarak raporlanır. (Kaynak: ms-swift, vLLM/Qwen3-VL issue'ları.)
+
+**B) Rubrik (jüri açısı):** sistem zaten A-/B+; en büyük sızıntı **bayat sunum/teslimat** (sunum_iskeleti.md hâlâ
+Qwen2.5-VL/%96/4.33 diyor). Yüksek-EV: güncel KPI'lara çek; **değerlendirme-titizliğini** (bağımsız Gemma-juri,
+8+ reddedilen teknik, varyans) Teknik manşet yap; **netleştirici-soru** (şartname ödüllendiriyor); UI'ye
+grounding/geofence **görsel overlay**; demoyu **ağ-kapalı** çekerek offline'ı kanıtla.
+
+**C) Risk-kalibrasyon → EN İYİ GÜVENLİ MODEL-KAZANCI (uygulandı):**
+- **Ordinal kalibrasyon metrikleri** (`scripts/calibration_metrics.py`): "%X ≥Yüksek" yerine **QWK / MAE / işaretli-sapma
+/ asimetrik beklenen-maliyet / 4×4 karışıklık**. Ölçüm: **QWK 0.733** ("substantial"), MAE 0.51, **işaretli sapma
+−0.20 = sistematik DÜŞÜK-puanlama**, normaller 39/42 doğru. Jüri-yüzlü, GPU'suz, mevcut cevaplardan.
+- **Zamansal-süreklilik yükseltmesi** (`config.persist_escalation`, `_dedupe_events`): tehlike-olayı ≥2 bitişik
+segmentte sürüyorsa severity Orta→Yüksek (+1, capped, tek-yönlü). −0.20 sapmayı hedefler; izole olayı/recall'i bozmaz.
+- **Threat-lens V2** (mülk+kaza adlandırması): A/B (eval dengeli, n=3/kat) **AKSİYON-recall %71→83 (+12)**,
+dar-FP düz; Vandalism %0→100, Shooting %33→100 (hedef isabet) ama RoadAccidents/Burglary n=3-gürültü düşüşü →
+**eval_big ile doğrulanıyor** (adapte etmeden).
+
+**D) Veri/eval:** skor girdi-bağlı; çözüm domain-uygun **yüksek-res** açık veri. Eklenebilir (link+lisans doğrulandı):
+**MSAD** (1080p, 14 senaryo, warehouse/fall/fire/accident), **NVIDIA Warehouse** (1080p, forklift-near-miss, OpenMDW=ticari-OK),
+**VIRAT** (perimetre/otopark, DARPA), **D-Fire** (CC0), **MEVA** (termal/İHA, CC-BY), **FallVision** (CC-BY). Eval stratejisi:
+**çözünürlük-katmanlı rapor** ("≥720p domain: ~%X; ≤320p degrade: ~%46 girdi-tavanı") → zayıflığı *karakterize edilmiş
+çalışma-zarfı*na çevirir; per-kategori denge + varyans/CI + gerçek-vs-sentetik ayrımı. (`docs/veri_genisletme_plani.md` — gelecek iş.)
+
+**Net:** %70-ağırlıklı çekirdeği (Fonksiyon/Teknik/Otonomi) riske atmadan güvenli kazanımlara odaklanıldı; LoRA
+çitlendi. Araçlar: `scripts/{calibration_metrics,ab_threatv2,ab_combined}.py`; 4 subagent raporu.
