@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
+import tempfile
 
 import gradio as gr
 
@@ -84,6 +86,38 @@ def timeline_html(events, duration_str: str) -> str:
     return track + f"<ul style='list-style:none;padding-left:4px;margin:6px 0;font-size:.92em'>{rows}</ul>"
 
 
+def _ensure_playable(path):
+    """Yuklenen videoyu tarayicinin OYNATABILECEGI H.264/yuv420p mp4'e transcode eder.
+
+    Sorun: gr.Video'nun HTML5 oynaticisi HEVC/H.265, eski mpeg4 (.avi), bazi .mkv/.mov
+    codec'lerini OYNATAMIYOR ("video not playable"). format='mp4' yalnizca container'i
+    degistiriyor, codec'i degil -> yetmiyor. Bu fonksiyon codec'i universal H.264 yapar.
+
+    - Zaten H.264 mp4 ise dokunmaz (hizli). Degilse ffmpeg ile transcode eder.
+    - PyAV analiz zaten her codec'i okuyabiliyor; bu yalniz TARAYICI ONIZLEMESI icindir
+      (transcode edilen dosya analizde de kullanilir; crf=23 ~gorsel-kayipsiz, algi 768'e iniyor).
+    - FAIL-OPEN: ffmpeg yoksa/hata/zaman asimi -> orijinal yol (analiz yine calisir)."""
+    if not path or not os.path.exists(path):
+        return path
+    try:
+        codec = subprocess.run(
+            ["ffprobe", "-v", "error", "-select_streams", "v:0",
+             "-show_entries", "stream=codec_name", "-of", "default=nw=1:nk=1", path],
+            capture_output=True, text=True, timeout=30).stdout.strip()
+        if codec == "h264" and path.lower().endswith(".mp4"):
+            return path  # zaten oynatilabilir
+        out = os.path.join(tempfile.gettempdir(), f"dilajan_play_{abs(hash(path)) % 10**9}.mp4")
+        subprocess.run(
+            ["ffmpeg", "-y", "-i", path, "-c:v", "libx264", "-pix_fmt", "yuv420p",
+             "-preset", "veryfast", "-crf", "23", "-an", "-movflags", "+faststart", out],
+            capture_output=True, timeout=600)
+        if os.path.exists(out) and os.path.getsize(out) > 0:
+            return out
+    except Exception:
+        pass
+    return path  # fail-open
+
+
 def _blank():
     return (gr.update(),) * 8
 
@@ -135,9 +169,10 @@ def build_ui() -> gr.Blocks:
 
         with gr.Row():
             with gr.Column(scale=1):
-                # format="mp4": yuklenen videoyu (avi/mkv/mov/HEVC vb.) ffmpeg ile mp4'e cevirir
-                # -> tarayici onizlemesi her formatta oynar + handler oynatilabilir dosya alir
-                video_in = gr.Video(label="Video", sources=["upload"], format="mp4")
+                # Yuklenen videoyu upload'ta H.264/yuv420p mp4'e TRANSCODE et (_ensure_playable):
+                # HEVC/eski-mpeg4/avi/mkv tarayicida oynamiyordu; format="mp4" container-only oldugu
+                # icin yetmiyordu. Codec'i universal yapinca onizleme her formatta oynar.
+                video_in = gr.Video(label="Video", sources=["upload"])
                 analyze_btn = gr.Button("🔍 Analiz Et", variant="primary")
                 status_out = gr.Markdown("")
                 summary_out = gr.Textbox(label="Özet", lines=3)
@@ -161,6 +196,9 @@ def build_ui() -> gr.Blocks:
         with gr.Row():
             chat_in = gr.Textbox(placeholder="Örn: En kritik olay neydi? Hangi aksiyonlar alındı?", scale=4, show_label=False)
             chat_btn = gr.Button("Gönder", scale=1)
+
+        # Upload'ta tarayici-oynatilabilir H.264'e cevir (onizleme + analiz ayni dosyayi kullanir)
+        video_in.upload(_ensure_playable, inputs=[video_in], outputs=[video_in])
 
         analyze_btn.click(
             analyze, inputs=[video_in],
