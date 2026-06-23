@@ -1,0 +1,62 @@
+{
+  "Senaryo (Yangın+Düşme+Normal)": {
+    "n_anom": 18,
+    "n_norm": 12,
+    "recall": 100.0,
+    "risk_cal": 100.0,
+    "cat": 100.0,
+    "narrow_fp": 0.0,
+    "op_fp": 33.333333333333336,
+    "lat": 1.875
+  },
+  "UCF dengeli (8 kategori)": {
+    "n_anom": 24,
+    "n_norm": 8,
+    "recall": 87.5,
+    "risk_cal": 75.0,
+    "cat": 37.5,
+    "narrow_fp": 12.5,
+    "op_fp": 50.0,
+    "lat": 1.202910052910053
+  },
+  "UCF büyük (8 kategori)": {
+    "n_anom": 48,
+    "n_norm": 16,
+    "recall": 87.5,
+    "risk_cal": 77.08333333333333,
+    "cat": 33.333333333333336,
+    "narrow_fp": 0.0,
+    "op_fp": 37.5,
+    "lat": 1.4049999999999998
+  },
+  "Gerçek düşme — GMDCSA": {
+    "n_anom": 9,
+    "n_norm": 6,
+    "recall": 88.88888888888889,
+    "risk_cal": 77.77777777777777,
+    "cat": 88.88888888888889,
+    "narrow_fp": 0.0,
+    "op_fp": 0.0,
+    "lat": 2.45
+  },
+  "Overhead düşme — URFD": {
+    "n_anom": 6,
+    "n_norm": 0,
+    "recall": 100.0,
+    "risk_cal": 83.33333333333333,
+    "cat": 100.0,
+    "narrow_fp": 0.0,
+    "op_fp": 0.0,
+    "lat": 2.812857142857143
+  },
+  "Araç kazası — UCF Road": {
+    "n_anom": 9,
+    "n_norm": 0,
+    "recall": 88.88888888888889,
+    "risk_cal": 66.66666666666667,
+    "cat": 77.77777777777777,
+    "narrow_fp": 0.0,
+    "op_fp": 0.0,
+    "lat": 2.7800000000000002
+  }
+}

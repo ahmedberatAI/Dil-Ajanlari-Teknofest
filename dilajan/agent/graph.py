@@ -345,11 +345,47 @@ def _perceive_single_pass(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[st
         if settings.facility_rules:
             instr += (f"\n\nBu tesisin güvenlik kuralları: {settings.facility_rules}. "
                       "Bu kurallara açıkça aykırı durumları da sapma/olay olarak raporla.")
+        if settings.motion_saliency_cue:
+            instr += _motion_cue(seg)
         raw = vlm.analyze_frames(seg.frames, instr, temperature=0.2, max_tokens=400,
                                  repetition_penalty=settings.perceive_repetition_penalty)
         return _events_from_extraction(extract_json(raw), seg), None
     except Exception as ex:
         return [], f"perceive(fast): segment {seg.index} hatasi: {ex}"
+
+
+def _motion_cue(seg) -> str:
+    """Segment karelerinde en belirgin ANI gorsel degisim (hareket) anini bulur; BELIRGIN, IZOLE bir
+    zirve varsa perceive'e YUMUSAK dikkat ipucu doner (motion-saliency / video-anomali literaturunde
+    hareket-belirginligi). IDDIA DEGIL — model yine kendi karar verir, "emin degilsen normal de" denir.
+    Zirve yoksa (uniform/dusuk hareket) bos doner -> normal videoda FP riski yok.
+
+    Gerekce: gecici olay (carpisma/devrilme onset) ON PLANDAKI buyuk nesnenin golgesinde kalip
+    kacirilabiliyor; hareket zirvesi modelin dikkatini DOGRU ana yonlendirir."""
+    try:
+        import io as _io
+        import numpy as np
+        from PIL import Image
+        frames = seg.frames
+        if len(frames) < 3:
+            return ""
+        grays = [np.asarray(Image.open(_io.BytesIO(j)).convert("L").resize((64, 64)), dtype=np.float32)
+                 for _, j in frames]
+        diffs = [float(np.abs(grays[i] - grays[i - 1]).mean()) for i in range(1, len(grays))]
+        if not diffs:
+            return ""
+        mean = sum(diffs) / len(diffs)
+        peak_i = max(range(len(diffs)), key=lambda i: diffs[i])
+        peak = diffs[peak_i]
+        # Belirgin + izole zirve sarti: hem mutlak (>6) hem goreli (>2x ortalama). Aksi halde sessiz.
+        if mean < 1e-6 or peak < 6.0 or peak / mean < 2.0:
+            return ""
+        ts = frames[peak_i + 1][0]  # zirve karesinin zaman damgasi (MM:SS)
+        return (f"\n\nHareket-analizi (yardımcı ipucu): en belirgin ANİ görsel değişim ~{ts} civarında. "
+                "O kısa ana ÖZELLİKLE dikkat et — ani çarpışma, devrilme, düşme veya kaza olabilir. "
+                "Yalnızca gerçekten gördüğünü raporla; emin değilsen olağan/normal olarak değerlendir.")
+    except Exception:
+        return ""
 
 
 def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str]]:
@@ -368,6 +404,8 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
             if evidence:
                 instr += (f"\n\nYardimci kanit — {evidence}. Bu nesne bilgisini betimlemende "
                           "dikkate al (ama yalnizca gerçekten gördüğünü raporla).")
+        if settings.motion_saliency_cue:
+            instr += _motion_cue(seg)
         desc = vlm.analyze_frames(
             seg.frames, instr, temperature=0.2, max_tokens=400,
             repetition_penalty=settings.perceive_repetition_penalty,

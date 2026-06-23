@@ -1,0 +1,32 @@
+{
+  "Senaryo (Yangın+Düşme+Normal)": {
+    "n_anom": 18,
+    "n_norm": 12,
+    "recall": 100.0,
+    "risk_cal": 100.0,
+    "cat": 100.0,
+    "narrow_fp": 0.0,
+    "op_fp": 33.333333333333336,
+    "lat": 1.6807692307692306
+  },
+  "Gerçek düşme — GMDCSA": {
+    "n_anom": 9,
+    "n_norm": 6,
+    "recall": 88.88888888888889,
+    "risk_cal": 77.77777777777777,
+    "cat": 77.77777777777777,
+    "narrow_fp": 0.0,
+    "op_fp": 16.666666666666668,
+    "lat": 2.5285714285714285
+  },
+  "Araç kazası — UCF Road": {
+    "n_anom": 9,
+    "n_norm": 0,
+    "recall": 100.0,
+    "risk_cal": 66.66666666666667,
+    "cat": 88.88888888888889,
+    "narrow_fp": 0.0,
+    "op_fp": 0.0,
+    "lat": 3.066666666666667
+  }
+}

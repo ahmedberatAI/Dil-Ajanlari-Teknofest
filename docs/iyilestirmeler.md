@@ -597,3 +597,36 @@ gerçek düşmeler korundu (risk-kalib 89), çömelme yine yakalandı. **Dürüs
 güvenilmez → ABSTAIN (VLM'e güvenir); derin bel-eğilmesi torso'yu yatay yapabilir (nadir kalan edge-case).
 Araçlar: `detector.verify_fallen`, `scripts/_test_pose.py`, `scripts/probe_scenes.py`. Açıklanabilirlik: trace'e
 poz-verdict yazılır.
+
+## 12. Araç-kazası recall — HAREKET-BELİRGİNLİĞİ dikkat ipucu (D1, 2026-06-23)
+**Sorun (jüri yükledi):** 5sn'lik park-alanı klibinde (RoadAccidents021, 320×240) **2.sn'deki araç çarpışması**
+kaçtı; model "iki kişi etkileşimde, olay yok / Düşük" dedi. Tüm araç setinde recall %89 (UCF-dengeli'de %33).
+
+**Kök-neden (probe ile, varsayım değil):** Örnekleme **değil** — çarpışma anı (hareket-zirvesi t=1.3s) zaten
+örnekleniyor (en yakın kare 0.2s uzakta). Model **0 olay** veriyor. Doğrudan "çarpışma var mı?" diye sorulunca,
+**1024px'e büyütülüp 4fps'te bile** "Hayır" diyor → 320×240'ta tanıma **tavanı**. Kareleri kendi gözümle
+inceledim: çarpışma gerçek ama **düşük-hızlı, sol-üst köşede, küçük** bir park-teması; model ön plandaki büyük
+kamyonet+2 kişiye odaklanıp köşedeki ufak olayı gözden kaçırıyor. **Net örüntü:** dramatik kazalar (5/9) zaten
+Kritik/Yüksek doğru; **ince/düşük-hızlı/uzak** olaylar (021,027,128,129) zayıf.
+
+**Çözüm (motion-saliency / video-anomali literatürü):** Segment karelerinde en belirgin **ANİ görsel değişim**
+anını ucuzca bul (64×64 gri ardışık-kare farkı; GPU yok), perceive'e **YUMUŞAK dikkat ipucu** enjekte et:
+"~MM:SS'e özellikle dikkat et — ani çarpışma/devrilme/düşme/kaza olabilir; **emin değilsen normal de**". İddia
+DEĞİL (FP zorlamaz). Yalnız **belirgin+izole zirvede** tetikler (mutlak>6 VE >2× ortalama) → uniform/düşük-hareketli
+normalde sessiz. (`config.motion_saliency_cue=True`, `graph._motion_cue`).
+
+**Ölçüm (A/B, sonra 3 sette regresyon kontrolü):**
+| Metrik | KAPALI | AÇIK |
+|---|---|---|
+| Araç recall (e2_vehicle, n=9) | %89 | **%100** (027 tam-kaçıştan kurtuldu) |
+| Araç risk≥Yüksek | %67 | %67 |
+| Normal op-FP (UCF+senaryo, n=20) | %35 | **%30** (artmadı, düştü) |
+| Normal dar-FP | %0 | %0 |
+| **Senaryo** (yangın+düşme) | 100/100/100/0/33 | **birebir aynı** (flagship korundu) |
+| falls_real | recall 89 / dar-FP 0 | recall 89 / **dar-FP 0** (op-FP 0→17: 1 normal, düşük-sev.) |
+
+Kullanıcı-yüzlü doğrulama: **021 artık** `[00:02] Pikap ani hareketle geriye kayarak beyaz otomobile dokunmuş
+(kat=Kaza)` veriyor (önce: "olay yok"). **Dürüst sınır:** ipucu olasılıksal — 027 bazı koşularda hâlâ kaçıyor
+(gerçekten sınırda/tavan); 021 severity Düşük (düşük-hızlı temas için kalibrasyon doğru, zorlamadım). Tek maliyet:
+falls_real'de 1 normal klipte düşük-severity op-FP (dispatch-altı, dar-FP %0). Araçlar: `scripts/probe_road.py`,
+`scripts/ab_motion_cue.py`, `scripts/eval_all_datasets.py`.

@@ -66,6 +66,10 @@ class Settings(BaseSettings):
                                                # falls_real recall %89 KORUNDU (risk-kalib 78->89). 1.3 fazla agresif
                                                # (recall 89->78), bu yuzden 1.15. (1.0 = kapali)
     use_detector: bool = False  # YOLO nesne dedektoru kanitini perceive'e enjekte et (heterojen ensemble)
+    motion_saliency_cue: bool = True   # algida en belirgin ANI hareket anini bulup perceive'e YUMUSAK dikkat
+                                       # ipucu enjekte et (motion-saliency; iddia DEGIL). Yalniz izole zirvede
+                                       # tetikler (mutlak>6 VE >2x ort) -> uniform/dusuk-hareket normalde FP yok.
+                                       # Geçici-olay (carpisma/devrilme onset) algisina yardim hedefi. (olculecek)
     verify_pose_falls: bool = True  # F1: VLM "kisi yere dusmus" iddiasini YOLO-poz ile dogrula (fall vs comelme).
                                     # FAIL-OPEN + yalniz-DUSUR: poz kisinin DIK (comelmis) oldugunu EMIN gosterirse
                                     # severity bir kademe duser; poz guvenilmezse VLM korunur (recall guvenli).
