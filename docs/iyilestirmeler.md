@@ -706,5 +706,14 @@ Vandalism %100→%11, Abuse %78→%11, Explosion %100→%33; Burglary/RoadAccide
 %93, gerçek olay-tanıma %51** — fark, ölçüme yansımayan kaçırılan/yanlış-adlandırılan suçlar. (Bu, jüri panelinin
 "normal-FP %0 metrik artefaktıydı" bulgusuyla aynı tür dürüstlük düzeltmesi.) **D4 etkisi (kısmi post-D4):**
 Assault %56→78, Fighting %67→89, Explosion %33→56 yükseldi; Shooting/Abuse algı-tavanında kaldı. **Dürüst sonuç:**
-tehdit-yorumu (D4) şiddet-etkileşimi suçlarında *tanımayı* yükseltir; grenli 320×240'ta silah/ince-suç tanıma
-girdi-tavanı. Tam post-D4 TANIMA-recall ölçümü `benchmark/results/answers_*` ile sürüyor.
+grenli 320×240'ta silah/ince-suç tanıma girdi-tavanı.
+
+**TAM post-D4 ölçüm (81 suç klibi, kesin):** TESPİT-recall **%96** vs TANIMA-recall **%46** (pre-D4 %51). **Dürüst
+sonuç — D4 TANIMA-recall'ı GENELDE YÜKSELTMEDİ** (51→46, tek-koşu varyansı içinde): Abuse %11→44, Explosion
+%33→56 çıktı; Fighting %67→56, RoadAccidents %89→67, Shooting %22→**0**, Vandalism %11→**0** düştü. D4'ün gerçek
+ölçülmüş kazancı suç-tipi *tanıma* değil, **risk-kalibrasyon (+4) + dar-FP (−5, güvenlik)** idi (§14). **Asıl gerçek:**
+model güçlü bir İKİLİ anomali-tespitçisi (TESPİT %96, dar-FP ~%0, flagship %100) ama grenli UCF'de **ince suç-TİPİ
+sınıflandırıcısı zayıf** (TANIMA %46; Shooting/Vandalism %0 — şiddeti betimliyor ama tipini adlandıramıyor, silah
+görünmüyor). Bu **prompting'le aşılamayan girdi-algı tavanı** (bkz. baştan beri "NET TAVAN"; çözüm: daha yüksek
+çözünürlük girdi veya silah-özel uzman dedektör — gelecek iş). Şartname-domaini yüksek-res veride (yangın/düşme)
+tanıma zaten ~%100. Kaynak: `benchmark/results/answers_20260623_184153.json(l)`, `scripts/strict_recall.py`.
