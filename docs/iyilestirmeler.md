@@ -684,3 +684,27 @@ Shooting001 kullanıcı-yüzlü: olay-2 *"bir şey alıyor (Orta/Anomali)"* → 
 **Dürüst sınır:** silahı *adıyla* söyleyemiyor (bulanık 320×240'ta gerçekten seçilmiyor — girdi-tavanı); ama tehdit
 örüntüsü (saldırgan temas + yere düşen kişi) doğru yükseltiliyor. recall −4 varyans-içi; risk-kalib +4 ve dar-FP
 −5 (daha güvenli) net kazanç. Araçlar: `scripts/{probe_threat,ab_threat}.py`.
+
+### Denenip REDDEDİLEN (ölçülü negatif) — benign-kapı (op-FP bastırma, 2026-06-23)
+Normallerdeki düşük-severity aşırı-raporlamayı (op-FP) azaltmak için **benign-kapı** denendi: bir segmentin TÜM
+olayları Düşük ise modelin 2. görüşüyle "olağan mı?" sorulup düşürme (Orta+ asla dokunulmaz — yapısal koruma).
+**A/B (62 klip) NET KAYIP:** op-FP %27→%27 (iyileşme yok), **dar-FP %4→%8 (kötü)**, recall %97→%89 (3 GERÇEK
+olay kaçtı: 027 araç + 2 gerçek düşme — "olağan" sanıldı). **GERİ ALINDI.** Ders (E5 ile tutarlı, artık veriyle):
+bu op-FP recall'ı bozmadan güvenle düşürülemiyor; Düşük-severity aşırı-rapor dispatch-altı (dar-FP'yi bozmuyor).
+
+## 15. ÖLÇÜM DÜRÜSTLÜĞÜ — TANIMA-recall (olay TİPİ doğru mu) (D5, 2026-06-23)
+**Jüri/kullanıcı yakaladı:** Bulanık Shooting klibinde adam silah çekip ateş ediyor; model "fiziksel temas / bir
+şey alıyor" deyip silahı görmüyor — **ama bu hata recall'a yansımıyordu.** Kök: `eval_clips.py` **`recall = n_olay>0`**
+(ikili "anomali var mı"); herhangi bir olay üreten klip "yakaladı" sayılıyor → silahı kaçıran Shooting bile recall-hit.
+
+**Düzeltme:** `scripts/strict_recall.py` — **TANIMA-recall** (model olay TİPİNİ kategori-özel terimlerle doğru
+adlandırdı mı), kayıtlı cevaplardan (answers_*.jsonl), GPU'suz/şeffaf. Manşet metrik artık ikili: TESPİT (hoşgörülü)
++ TANIMA (dürüst).
+
+**Ölçüm (pre-D4, 81 suç klibi):** TESPİT-recall **%93** vs **TANIMA-recall %51**. Kategori: Shooting %89→**%22**,
+Vandalism %100→%11, Abuse %78→%11, Explosion %100→%33; Burglary/RoadAccidents korunuyor (%78/%89). **Yani manşet
+%93, gerçek olay-tanıma %51** — fark, ölçüme yansımayan kaçırılan/yanlış-adlandırılan suçlar. (Bu, jüri panelinin
+"normal-FP %0 metrik artefaktıydı" bulgusuyla aynı tür dürüstlük düzeltmesi.) **D4 etkisi (kısmi post-D4):**
+Assault %56→78, Fighting %67→89, Explosion %33→56 yükseldi; Shooting/Abuse algı-tavanında kaldı. **Dürüst sonuç:**
+tehdit-yorumu (D4) şiddet-etkileşimi suçlarında *tanımayı* yükseltir; grenli 320×240'ta silah/ince-suç tanıma
+girdi-tavanı. Tam post-D4 TANIMA-recall ölçümü `benchmark/results/answers_*` ile sürüyor.
