@@ -717,3 +717,33 @@ sınıflandırıcısı zayıf** (TANIMA %46; Shooting/Vandalism %0 — şiddeti 
 görünmüyor). Bu **prompting'le aşılamayan girdi-algı tavanı** (bkz. baştan beri "NET TAVAN"; çözüm: daha yüksek
 çözünürlük girdi veya silah-özel uzman dedektör — gelecek iş). Şartname-domaini yüksek-res veride (yangın/düşme)
 tanıma zaten ~%100. Kaynak: `benchmark/results/answers_20260623_184153.json(l)`, `scripts/strict_recall.py`.
+
+## 16. TANIMA-recall iyileştirme — 3-subagent araştırması + 5 ölçülmüş deney → girdi-tavanı kanıtı + AKSİYON-recall (D6, 2026-06-23)
+**Hedef:** TANIMA-recall %46'yı yükseltmek (Shooting/Vandalism %0). **3 paralel araştırma subagent'ı** (girdi-iyileştirme /
+uzman-dedektör / çıkarım-teknikleri) 12+ yöntem tarayıp kanıtlı+uygulanabilir sıraladı. **Yakınsama:** prompting
+daha fazla yardım etmez (bilgisel sorun); **bağımsız grounded sinyal** gerek; **silah-dedektörü 320×240'ta ölü**
+(DORI standardı: tabanca <20px, tüm tanıma eşiklerinin altında + telefon/alet FP'si dar-FP'yi bozar).
+
+**Ölçülüp ELENEN kaldıraçlar (hepsi gerçek deney, sahte fix yok):**
+| Kaldıraç | Ölçüm | Sonuç |
+|---|---|---|
+| ROI-zoom (yalnız crop) | Assault doğru→"Normal" | bağlam kaybı, zararlı |
+| ROI-zoom (full+crop, Cerberus deseni) | Shooting hâlâ "kavga" | FP-güvenli ama **tip kazancı yok** |
+| CLIP/SigLIP-base tip-priori | %8 ham / %17 recenter | rastgele + normalde suç-FP |
+| **SigLIP2-so400m** tip-priori | %17 ham / **%0 recenter** | güçlü model de çöktü; her normal→suç |
+| Poz/hareket şiddet sinyali | şiddet 1.44 vs normal 1.60 = **0.90x** | ayrışmıyor (grenli'de poz tespit edilemiyor) |
+
+**Kanıtlanmış sonuç:** Grenli 320×240'ta ince suç-tipi tanıma **gerçek girdi-bilgi tavanı** — bilgi piksellerde yok,
+hiçbir yerel kaldıraç (zoom/CLIP×2/poz-şiddet/silah) aşamıyor. Literatür (DORI, CLIP grenli-çöküşü, SR-halüsinasyonu)
++ bizim 5 ölçümümüz hemfikir. **Zorlamak sahte olurdu — yapmadım.**
+
+**DÜRÜST DEĞER AÇISI — AKSİYON-recall (`scripts/action_recall.py`):** UCF Shooting/Fighting/Assault'ı ayrı etiketler
+ama grenli görüntüde GÖRSEL OLARAK aynılar; bir güvenlik karar-destek ajanı için asıl ölçüt **doğru GÜVENLİK-TEPKİSİ**
+(şiddet/mülk/kaza/yangın), ince alt-etiket değil. Süper-sınıf değerlendirmesi:
+**TESPİT %96 · AKSİYON %73 · TANIMA %46.** Shooting: TANIMA %0 ama AKSİYON %67 (atışı "şiddetli saldırı Yüksek"
+diyor = doğru tepki+dispatch). Yani modelin gerçek kullanım-faydası %46 değil **%73 (tepki) / %96 (alarm)**;
+%46 hem grenli'de imkânsız hem güvenlik-amacıyla aşırı-katı bir alt-etiket ayrımını ölçüyor.
+
+**Gerçek yol (dürüst):** TANIMA'yı yükseltmenin tek yolu daha iyi GİRDİ (dağıtımda kamera çözünürlüğü) veya kurumun
+kendi verisiyle domain ince-ayarı — yerel hızlı-fix değil. Şartname-domaini yüksek-res veride tanıma zaten ~%100.
+Araçlar: `scripts/{probe_zoom,probe_zoom2,probe_clip_type,probe_violence,action_recall}.py`; 3 subagent raporu.
