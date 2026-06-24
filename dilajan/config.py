@@ -66,6 +66,12 @@ class Settings(BaseSettings):
                                                # falls_real recall %89 KORUNDU (risk-kalib 78->89). 1.3 fazla agresif
                                                # (recall 89->78), bu yuzden 1.15. (1.0 = kapali)
     use_detector: bool = False  # YOLO nesne dedektoru kanitini perceive'e enjekte et (heterojen ensemble)
+    risk_recall_bias: bool = False    # OPT-IN "yuksek-duyarlilik risk modu" (Agent-C #1, maliyet-asimetrik).
+                                      # TEHLIKE-kategori (Guvenlik/Kaza/Saglik/Yetkisiz) olayi Orta+ ise genel RISK
+                                      # >= Yuksek. OLCULDU (A/B): risk-kalib +12 (76->88) AMA dar-FP +4 (4->8) +
+                                      # dispatch de tetiklenir (act risk'e bagli). Bu yuzden DEFAULT KAPALI (muhafazakar
+                                      # dar-FP~0 profili korunur); yuksek-guvenlik dagitimlarinda acilabilir. Default-guvenli
+                                      # surum = dispatch'i biased-risk'ten ayirmak (gelecek is).
     persist_escalation: bool = False  # Agent-C: zamansal-SUREKLILIK yukseltmesi. Bir TEHLIKE-kategori olayi
                                       # >=2 bitisik segmentte SURUYORSA (end_time set) severity Orta->Yuksek (+1, capped).
                                       # Tek-yonlu/yukari -> recall'i bozmaz, izole olayi cezalandirmaz. Sistematik

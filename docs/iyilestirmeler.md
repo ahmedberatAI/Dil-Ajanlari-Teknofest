@@ -784,3 +784,15 @@ küçük-N sinyaline güvenme; büyük-sette doğrula. Bu turun KALAN kazancı =
 
 **Net:** %70-ağırlıklı çekirdeği (Fonksiyon/Teknik/Otonomi) riske atmadan güvenli kazanımlara odaklanıldı; LoRA
 çitlendi. Araçlar: `scripts/{calibration_metrics,ab_threatv2,ab_combined}.py`; 4 subagent raporu.
+
+## 18. Risk-recall-bias — opt-in yüksek-duyarlılık modu (D8, 2026-06-23)
+Agent-C #1: maliyet-asimetrik risk eskalasyonu — TEHLİKE-kategori olay Orta+ ise genel RİSK ≥ Yüksek
+(`config.risk_recall_bias`, `reason` node). Risk-kalibrasyon boşluğunu (araç %67/düşme %78/UCF %75) hedefler.
+**A/B (42 anom + 26 normal):** risk-kalib **%76→88 (+12, gerçek kazanç)** AMA **dar-FP %4→8 (+4)** + op-FP %42→46;
+recall %86→98 değişimi bias'tan değil (tespiti etkilemez) — koşu-gürültüsü. **Karar:** dar-FP guardrail'ına
+(tüm oturum ~%0 korundu) ve dispatch-eşleşmesine (act risk≥Yüksek'e bağlı → bias sahte-dispatch tetikler) dokunduğu
+için **DEFAULT KAPALI** (V2/persist/benign ile tutarlı: tek-koşuda güvenlik-metriğini riske atma). **Opt-in mod**
+olarak korundu (yüksek-güvenlik dağıtımı; "kaçırılan tehlike ≫ fazladan uyarı" rasyoneli). Default-güvenli sürüm
+= dispatch'i biased-risk'ten ayırmak + büyük-sette dar-FP doğrulaması (gelecek iş). Araç: `scripts/ab_riskbias.py`.
+**Operasyonel hata notu:** durum-sorgu komutu mangle olup A/B'yi 2. kez başlatmıştı; süreç-yaşı tabanlı
+killer ile kopya elendi, orijinal korundu (log temiz çıktı).

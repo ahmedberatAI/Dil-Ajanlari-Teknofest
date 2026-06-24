@@ -715,6 +715,14 @@ def reason(state: AgentState) -> dict:
             trace.append(f"reason: risk tabani uygulandi {risk.level.value}->{bumped.value}")
             risk = RiskAssessment(level=bumped, rationale=risk.rationale)
 
+    # Agent-C #1: risk-RECALL-bias (maliyet-asimetrik). Tehlike-kategori olay Orta+ ise genel RISK >= Yuksek.
+    # Alarm recall-yanli (kacirilan tehlike >> fazladan uyari); DISPATCH (act) AYRI/hassas kapida -> dar-FP kontrollu.
+    if settings.risk_recall_bias and events:
+        if any(e.category in _DANGER_CATS and _SEV_ORD[e.severity] >= _SEV_ORD[Severity.ORTA] for e in events):
+            if _SEV_ORD[risk.level] < _SEV_ORD[Severity.YUKSEK]:
+                trace.append(f"reason: risk-recall-bias {risk.level.value}->Yüksek (tehlike-olay Orta+)")
+                risk = RiskAssessment(level=Severity.YUKSEK, rationale=risk.rationale)
+
     # G12 dil-safligi guard: Turkce-disi karakter sizdiysa ozet/gerekce/aksiyonlari duzelt (temizse no-op)
     if _has_foreign(summary) or _has_foreign(risk.rationale) or any(_has_foreign(a.action) for a in actions):
         summary = _purify(vlm, summary)
