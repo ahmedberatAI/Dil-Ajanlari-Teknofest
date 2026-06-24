@@ -794,5 +794,12 @@ recall %86→98 değişimi bias'tan değil (tespiti etkilemez) — koşu-gürül
 için **DEFAULT KAPALI** (V2/persist/benign ile tutarlı: tek-koşuda güvenlik-metriğini riske atma). **Opt-in mod**
 olarak korundu (yüksek-güvenlik dağıtımı; "kaçırılan tehlike ≫ fazladan uyarı" rasyoneli). Default-güvenli sürüm
 = dispatch'i biased-risk'ten ayırmak + büyük-sette dar-FP doğrulaması (gelecek iş). Araç: `scripts/ab_riskbias.py`.
+
+**DOĞRULAMA koşusu (dispatch-decoupled, 2. A/B):** dispatch'i biased-risk'ten ayırdım (`act`: bias açıkken yalnız
+grounded olay-severity dispatch'ler) → **dispatch-FP %4→0** (çalıştı). AMA risk-kalib bu koşuda **%79→79 (+0)** —
+ilk koşudaki **+12 GÜRÜLTÜYMÜŞ** (bias'ın etkisi hangi anomalinin "tehlike-Orta" olayı ürettiğine bağlı; stokastik).
+**Net:** risk-recall-bias güvenilir kazanç değil → **default KAPALI** (opt-in kalır); dispatch-decouple inert-at-default
+tutuldu (yalnız opt-in modu güvenli kılar). Bu, model-tarafındaki son gerçek-metrik denemesiydi; çekirdek default
+birebir korundu. **Ders (yine):** tek-koşu sinyaline güvenme — doğrulama +12'yi çürüttü.
 **Operasyonel hata notu:** durum-sorgu komutu mangle olup A/B'yi 2. kez başlatmıştı; süreç-yaşı tabanlı
 killer ile kopya elendi, orijinal korundu (log temiz çıktı).

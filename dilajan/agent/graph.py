@@ -748,7 +748,13 @@ def act(state: AgentState) -> dict:
     # ekip cagirmasin -> operasyonel yanlis-pozitif (alarm yorgunlugu) kesilir. (Juri konsensusu)
     max_ev = max((_SEV_ORD[e.severity] for e in events), default=0)
     risk_ord = _SEV_ORD.get(risk.level, 0) if risk else 0
-    if not events or (max_ev < _SEV_ORD[Severity.YUKSEK] and risk_ord < _SEV_ORD[Severity.YUKSEK]):
+    # Dispatch sinyali: normalde grounded olay-severity VEYA risk. AMA risk_recall_bias acikken risk
+    # recall-yanli sisirilmis olabilir -> dispatch'i YALNIZ grounded olay-severity'ye bagla (biased-risk
+    # operatore Yuksek FLAG verir ama sahte operasyonel-cagri YAPMAZ). Boylece bias risk-kalibrasyonu
+    # yukseltirken dispatch HASSAS kalir (Agent-C: recall-yanli alarm + hassas dispatch).
+    dispatch_signal = (max_ev >= _SEV_ORD[Severity.YUKSEK]) or (
+        risk_ord >= _SEV_ORD[Severity.YUKSEK] and not settings.risk_recall_bias)
+    if not events or not dispatch_signal:
         trace.append("act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)")
         return {"triggered_functions": [], "action_log": [], "trace": trace}
 

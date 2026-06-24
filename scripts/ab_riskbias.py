@@ -24,17 +24,19 @@ def run(paths):
     for p in paths:
         r = analyze_video(p)
         ev = r.events
-        out.append((len(ev) > 0, SEV.get(r.risk.level, 0), max([SEV[e.severity] for e in ev], default=0)))
+        disp = len(getattr(r, "triggered_functions", []) or [])
+        out.append((len(ev) > 0, SEV.get(r.risk.level, 0), max([SEV[e.severity] for e in ev], default=0), disp))
     return out
 
 
 def rep(tag, A, N):
-    rec = 100*sum(1 for d,_,_ in A if d)/len(A)
-    rc = 100*sum(1 for _,rk,_ in A if rk >= 3)/len(A)
-    dar = 100*sum(1 for _,rk,ms in N if rk >= 3 or ms >= 3)/len(N)
-    opf = 100*sum(1 for d,_,_ in N if d)/len(N)
-    print(f"  [{tag}] ANOM(n={len(A)}): recall={rec:.0f}% risk-kalib={rc:.0f}%   NORMAL(n={len(N)}): dar-FP={dar:.0f}% op-FP={opf:.0f}%")
-    return rec, rc, dar, opf
+    rec = 100*sum(1 for d,_,_,_ in A if d)/len(A)
+    rc = 100*sum(1 for _,rk,_,_ in A if rk >= 3)/len(A)
+    dar = 100*sum(1 for _,rk,ms,_ in N if rk >= 3 or ms >= 3)/len(N)
+    opf = 100*sum(1 for d,_,_,_ in N if d)/len(N)
+    disp = 100*sum(1 for _,_,_,dp in N if dp > 0)/len(N)
+    print(f"  [{tag}] ANOM(n={len(A)}): recall={rec:.0f}% risk-kalib={rc:.0f}%   NORMAL(n={len(N)}): dar-FP={dar:.0f}% dispatch-FP={disp:.0f}% op-FP={opf:.0f}%")
+    return rec, rc, dar, opf, disp
 
 
 def main():
@@ -43,7 +45,7 @@ def main():
     o = rep("KAPALI", run(ANOM), run(NORMAL))
     settings.risk_recall_bias = True
     v = rep("AÇIK  ", run(ANOM), run(NORMAL))
-    print(f"\n  DELTA: recall {v[0]-o[0]:+.0f} / risk-kalib {v[1]-o[1]:+.0f} / dar-FP {v[2]-o[2]:+.0f} / op-FP {v[3]-o[3]:+.0f}")
+    print(f"\n  DELTA: recall {v[0]-o[0]:+.0f} / risk-kalib {v[1]-o[1]:+.0f} / dar-FP {v[2]-o[2]:+.0f} / dispatch-FP {v[4]-o[4]:+.0f} / op-FP {v[3]-o[3]:+.0f}")
     settings.risk_recall_bias = False
 
 
