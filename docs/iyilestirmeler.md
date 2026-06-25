@@ -843,3 +843,42 @@ değişir) ve **2/4 klipte risk düştü** (batch-prompt per-event'ten daha sert
 eş-zamanlı x4 throughput **3.7→4.6 video/dk (+24%)**, eş-zamanlı gecikme **16.3→12.9s/video (−21%)**, tek-akış
 gecikme ort 0.93→0.86 sn/vsn; **VRAM 22.5/24GB (OOM yok), accuracy birebir korundu.** fp8-KV ortam-reddi,
 batch-verify opt-in. §4 ⚠️ → ölçülü ✅. Araçlar: `scripts/{bench_performance,ab_batchverify}.py`; 2 subagent raporu.
+
+---
+
+## §20 — D10: Güncel (2026) multimodal-VLM frontier araştırması + uyarlama
+
+3 paralel araştırma subagent'ı (GitHub + HuggingFace + arXiv): **(A)** en güncel açık video-VLM'ler, **(B)** agentic/VAD
+yöntemleri, **(C)** VLM reasoning/inference teknikleri. Hepsine ölçülmüş gerçekliğimiz (grenli-tip-tavanı +
+zaten-reddedilenler) verildi → sadece gerçekten-yeni + uyarlanabilir mekanizmalar değerlendirildi.
+
+**(A) Model-yükseltmesi: GEREK YOK (karar).** Qwen3-VL-8B doğru taban: Apache-2.0, **119 dil (Türkçe dahil — çoğu
+rakipte belgesiz)**, 24GB'a sığar, vLLM-hazır. Hiçbir 2026 açık-VLM (InternVL3.5, MiniCPM-V4.5, GLM-4.6V, Ovis2.5,
+Keye-VL, VideoLLaMA3) bizim darboğazımızı (grenli-tip = **bilgi-teorik** tavan, model-boyu değil) anlamlı aşmıyor;
+swap ~16GB indirme + yeniden-doğrulama + çalışan Blackwell/WSL stack riski getirir. Qwen3.5/3.6 (2026) **metin-only**;
+VL hattı hâlâ Qwen3-VL → zaten güncel-nesildeyiz. 2026 VAD sistemleri (Cerberus/GridVAD) **orkestrasyon katmanı** =
+bizim LangGraph'imizle aynı desen (teknik transfer edilir, ağırlık değil).
+
+**(B/C) UYGULANDI — Grounded algı-güveni (VL-Calibration uyarlaması).** *Mekanizma:* algı-güvenini ayrık sinyal yap;
+düşükse operatöre "manuel teyit önerilir" advisory. *Ölçüm-pivotu:* VLM'e `algi_guveni` sormak **çalışmadı** — model
+**aşırı-özgüvenli** (ölçüldü: 240p grenli klipte bile "düşük" demiyor; literatür bunu öngörüyor). → algı-güvenini
+**OBJEKTİF çözünürlükten** türettik (`config.perception_confidence`, reason'da min-kenar<360 → Düşük-öncelik advisory).
+*Doğrulama:* düşük-res (240p/288p) → advisory ✓, yüksek-res (720p) → sessiz ✓; **additive** (tespit/risk/dispatch
+değişmez → recall & dar-FP yapısal korunur). *Değer:* girdi-tavanını **sessiz düşük-puanlamadan** şeffaf
+operatör-uyarısına + **puanlanan otonomi davranışına** çevirir (default açık).
+
+**ROADMAP (araştırıldı, gerekçeyle ertelendi):** ① **cross-context reviewer** (taze-oturum, downgrade-only) — dar-FP'miz
+zaten ~%0, headroom dar; ② **VERA davranışsal-probe** (yes/no davranış-probları, tip-tavanını dolanır, CVPR'25) —
+prompt-değişimi riski (taksonomi/CoT bizde geriletmişti) → dikkatli A/B gerek; ③ **CISC** (güven-ağırlıklı
+self-consistency, recall-safe) + **WQD** kalibrasyon-metriği — N× gecikme, borderline-only; ④ **olay-sınırı
+segmentasyonu** (EventVAD/VADTree) — W6 temporal-localization açığı; ⑤ **anomali-RAG** (PANDA/SlowFastVAD) —
+`facility_rules`'un dinamik halefi; ⑥ **budget'li thinking** (Qwen3-VL-Thinking, sadece action-node, küçük budget);
+⑦ **xgrammar `guided_choice`** (şema güvenilirlik-tabanı).
+
+**Literatürün doğruladığı ÖLÜ-UÇLAR (denemedik):** çok-ajan debate (güvenilir kazanç yok, 3-5× maliyet), RL-tuned
+anomali-modelleri (fine-tune — vLLM multimodal-LoRA + bias-ezberleme; P2C-CoT ≈ bizim 2-aşamalı perceive), tam
+sahne-grafı (girdi-tavanı + ağır), in-context self-kritik (FlipFlop — bizim verify/şema denememizin geriletme sebebi),
+naif self-consistency (mode nadir-doğruyu boğar), logit-yöntemleri (VCD/DoLa/OPERA — vLLM HTTP'de erişilemez).
+Kaynaklar: 3 subagent raporu (arXiv/HF/GitHub linkleri transcript'te). **Strateji:** frontier'in gerçek ilerlemesi
+tip-tanımada değil **karar/kalibrasyon/temporal** katmanında — tam bizim dürüst-headroom'umuz; tip-tavanı sonucumuz
+2025-26 literatürünce tam doğrulanıyor (her training-free sistem 7B-MLLM'e biniyor, tip'i zor kabul ediyor).

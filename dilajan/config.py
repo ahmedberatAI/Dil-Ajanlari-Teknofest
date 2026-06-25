@@ -83,6 +83,10 @@ class Settings(BaseSettings):
                                       # >=2 bitisik segmentte SURUYORSA (end_time set) severity Orta->Yuksek (+1, capped).
                                       # Tek-yonlu/yukari -> recall'i bozmaz, izole olayi cezalandirmaz. Sistematik
                                       # dusuk-puanlamayi (olculen sapma -0.20) duzeltir; gercek tehlike surer, halusinasyon izoledir.
+    perception_confidence: bool = True  # VL-Calibration (2026): reason'da AYRIK 'algi_guveni' (yuksek/orta/dusuk)
+                                        # iste; DUSUK ise operatore "manuel teyit oneririz" aksiyonu ekle. Girdi-tavanini
+                                        # (grenli'de sessiz dusuk-puanlama) DURUST + puanlanan-otonomi davranisina cevirir.
+                                        # Additive (tespiti/recall'i degistirmez) -> dusuk-risk. (olculecek)
     threat_interpretation: bool = True   # GENEL: describe'a "guvenlik analisti tehdit-yorumu" katmani ekle
                                          # (prompts.THREAT_LENS_SUFFIX). Notr betim sucu yuzeysellestiriyordu
                                          # ("fiziksel temas"); bu katman olayi DOGRU adlandirir (saldiri/soygun/

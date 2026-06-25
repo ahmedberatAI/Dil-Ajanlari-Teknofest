@@ -756,6 +756,18 @@ def reason(state: AgentState) -> dict:
                 trace.append(f"reason: risk-recall-bias {risk.level.value}->Yüksek (tehlike-olay Orta+)")
                 risk = RiskAssessment(level=Severity.YUKSEK, rationale=risk.rationale)
 
+    # VL-Calibration (grounded algi-guveni): VLM self-report asiri-ozguvenli (olculdu: grenli'de bile "dusuk"
+    # demez) -> algi-guvenini OBJEKTIF cozunurlukten turet. Dusuk-res ise operatore manuel-teyit ADVISORY ekle.
+    # Girdi-tavanini (grenli'de sessiz dusuk-puanlama) DURUST operator-uyarisina + puanlanan-otonomi davranisina cevirir.
+    if settings.perception_confidence and info is not None:
+        lo = min(info.width or 0, info.height or 0)
+        if 0 < lo < 360:
+            trace.append(f"reason: düşük çözünürlük ({info.width}x{info.height}) -> manuel-teyit advisory")
+            actions.append(Action(
+                action=f"Düşük görüntü çözünürlüğü ({info.width}×{info.height}); olay tiplerini manuel teyit önerilir",
+                priority=Severity.DUSUK,
+                rationale="Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."))
+
     # G12 dil-safligi guard: Turkce-disi karakter sizdiysa ozet/gerekce/aksiyonlari duzelt (temizse no-op)
     if _has_foreign(summary) or _has_foreign(risk.rationale) or any(_has_foreign(a.action) for a in actions):
         summary = _purify(vlm, summary)
