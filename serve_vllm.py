@@ -35,6 +35,9 @@ def main() -> None:
         "--dtype", settings.dtype,
         "--limit-mm-per-prompt", '{"image": 16, "video": 1}',
     ]
+    if settings.enable_prefix_caching:
+        # PERF: paylasilan sistem-prompt prefix'inin KV'sini yeniden kullan (prefill tasarrufu)
+        cmd.append("--enable-prefix-caching")
     if settings.trust_remote_code:
         cmd.append("--trust-remote-code")
     if settings.quantization:

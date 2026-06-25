@@ -803,3 +803,27 @@ tutuldu (yalnız opt-in modu güvenli kılar). Bu, model-tarafındaki son gerçe
 birebir korundu. **Ders (yine):** tek-koşu sinyaline güvenme — doğrulama +12'yi çürüttü.
 **Operasyonel hata notu:** durum-sorgu komutu mangle olup A/B'yi 2. kez başlatmıştı; süreç-yaşı tabanlı
 killer ile kopya elendi, orijinal korundu (log temiz çıktı).
+
+## 19. PERFORMANS & ÖLÇEKLENEBİLİRLİK — ölçüm + prefix-caching optimizasyonu (D9, 2026-06-25)
+Şartname §4 "düşük gecikme / kaynak-opt / gerçeğe-yakın / yüksek-hacim davranışı" maddesi tek ⚠️'ımızdı.
+**2 subagent** (vLLM-serving + pipeline-concurrency) optimizasyon yol haritası verdi; `scripts/bench_performance.py`
+ile **ölçtüm** (n=6 klip).
+
+**Baseline ölçüm (⚠️'yi gerçek sayılarla ✅'ye çevirdi):**
+- **Aşama kırılımı:** decode **~%2** (0.55s), inference **~%98** (32.5s) → darboğaz VLM çağrıları. ⇒ **seek-decode &
+gri-cache REDDEDİLDİ** (decode zaten ihmal-edilebilir; ölçüp eledim — düşük-değer iş yapmadım).
+- **Gecikme:** ort **0.93 sn/video-sn** (tam mod; klip 0.46–3.6 arası, kısa klipte sabit-yük baskın).
+- **Yüksek-hacim/eş-zamanlılık** (vLLM continuous-batching): sıralı 27.7s/video → eş-zamanlı x4 **16.3s/video
+(1.70×, 3.7 video/dk)**. **Tepe VRAM ~21GB / 24GB** (FP8 ~19GB).
+
+**Uygulanan optimizasyon — `--enable-prefix-caching`** (`config.enable_prefix_caching=True`, `serve_vllm.py`):
+paylaşılan uzun Türkçe sistem-promptu HER segment çağrısında tekrar ediyordu; prefix-cache prefill'i yeniden
+hesaplamaz. **Ölçüldü (önce→sonra):** analiz ort 32.5→**29.95s (−8%)**; eş-zamanlı x4 **16.3→14.3s/video (−12%)**,
+throughput 3.7→**4.2 video/dk (+13.5%)**, hızlanma 1.70→**1.95×**; **VRAM aynı (~21GB)**. **Accuracy-safe:**
+3 örnek klip (yangın/düşme/kaza) doğru + garble yok (V1 blok-hash'e mm-hash dahil → #20261 yok). **TUTULDU (default açık).**
+
+**Gelecek levere (araştırıldı, ölçülecek):** (A-serving) max-num-seqs↑, gpu-mem-util 0.90, max-model-len right-size
+(8192→~4096 → ~2× concurrency), fp8-KV-cache (Blackwell-validated, ~2× concurrency, accuracy-doğrula); (B-pipeline)
+**verify+ground'u olay-başına→segment-başına batch** (inference %98 olduğu için en büyük çağrı-azaltma, recall-safe),
+çok-video async dispatcher (yüksek-hacim mimarisi). Araçlar: `scripts/bench_performance.py`,
+`benchmark/results/bench_perf_*_20260625.log`; 2 subagent raporu.

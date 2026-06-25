@@ -30,6 +30,10 @@ class Settings(BaseSettings):
     api_key: str = "EMPTY"  # yerel vLLM sunucusu anahtari yok sayar
     max_model_len: int = 8192
     gpu_memory_utilization: float = 0.85
+    enable_prefix_caching: bool = True  # PERF: paylasilan uzun Turkce sistem-promptu HER segment cagrisinda
+                                        # tekrar ediyor -> prefix-cache prefill'i yeniden-hesaplamaz (buyuk TTFT/
+                                        # throughput kazanci). V1'de blok-hash'e mm-hash dahil -> farkli kareler
+                                        # karismaz (accuracy-risksiz, KV-seviyesi). Aninda geri-al: =false.
     dtype: str = "bfloat16"
     trust_remote_code: bool = False  # InternVL gibi modeller icin true
     quantization: str = ""           # "awq" vb.; bos = otomatik algila/yok
