@@ -94,6 +94,10 @@ class Settings(BaseSettings):
     verify_pose_falls: bool = True  # F1: VLM "kisi yere dusmus" iddiasini YOLO-poz ile dogrula (fall vs comelme).
                                     # FAIL-OPEN + yalniz-DUSUR: poz kisinin DIK (comelmis) oldugunu EMIN gosterirse
                                     # severity bir kademe duser; poz guvenilmezse VLM korunur (recall guvenli).
+    batch_verify: bool = False   # PERF (OPT-IN): >=2 yuksek-sev olay -> hepsini TEK VLM cagrisinda teyit (N->1).
+                                 # OLCULDU: cok-olayli kliplerde latency -24% (136->103s) AMA batch-prompt per-event'ten
+                                 # daha sert olabilir (2/4 klipte risk dustu; A/B stokastik-confounded). Accuracy
+                                 # kanitlanmadigi icin DEFAULT KAPALI; latency-oncelikli dagitimda acilabilir.
     verify_events: bool = True   # öz-doğrulama (deduce-then-verify): yüksek-severity olaylari teyit et,
                                  # dogrulanmazsa severity DUSUR (silme). FP kontrol + agentic oz-kontrol.
                                  # "Yuksek-Duyarlilik modu" icin DILAJAN_VERIFY_EVENTS=false.

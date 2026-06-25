@@ -282,6 +282,35 @@ def _verify_event(vlm: VLMClient, frames, event_text: str) -> bool:
         return True
 
 
+_VERIFY_BATCH_PROMPT = (
+    "Bu güvenlik kamerası karelerini dikkatle incele. Aşağıda iddia edilen {n} YÜKSEK ÖNEMLİ olay var:\n{listing}\n\n"
+    "Her olay için: karelerde AÇIKÇA görünen ve GERÇEKTEN ciddi/acil müdahale gerektiren bir güvenlik olayı mı? "
+    "Şu durumlarda 'gercek' false olsun: belirsiz/zayıf ihtimal; yalnızca olağan/günlük aktivite; ya da ciddi "
+    "etiketli ama ÖNEMSİZ (yere düşmüş NESNE/alet, yürüme/geçme, rutin çalışma/taşıma, yatağa/koltuğa uzanma/oturma). "
+    "Yalnızca yangın/duman/patlama, silah, ciddi kaza/çarpışma veya ZEMİNE düşmüş/yerde hareketsiz bir KİŞİ gibi "
+    "gerçek+acil tehlikelerde 'gercek' true olsun. SADECE JSON: {{\"sonuc\":[{{\"no\":1,\"gercek\":true}}, ...]}}"
+)
+
+
+def _verify_events_batch(vlm: VLMClient, frames, texts: List[str]) -> List[bool]:
+    """N yuksek-sev olayi TEK cagrida teyit eder (deduce-then-verify, batch). Donus: list[bool]
+    (True=gercek/koru, False=dusur). FAIL-OPEN: hata/parse-fail -> hepsi True (olaylari korur)."""
+    try:
+        listing = "\n".join(f"{i + 1}) {t}" for i, t in enumerate(texts))
+        raw = vlm.analyze_frames(frames, _VERIFY_BATCH_PROMPT.format(n=len(texts), listing=listing),
+                                 temperature=0.0, max_tokens=240)
+        data = extract_json(raw)
+        res = {}
+        for r in data.get("sonuc", []):
+            try:
+                res[int(r.get("no"))] = bool(r.get("gercek", True))
+            except Exception:
+                continue
+        return [res.get(i + 1, True) for i in range(len(texts))]  # eksik = koru (fail-safe)
+    except Exception:
+        return [True] * len(texts)
+
+
 def _normalize_time(raw, fallback: str) -> str:
     """Olay zaman damgasini her zaman gecerli MM:SS'e zorlar (modele guvenme -> JSON %100 uyum)."""
     m = re.search(r"(\d{1,2}):(\d{2})", str(raw or ""))
@@ -425,12 +454,16 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         out: List[Event] = _events_from_extraction(extract_json(ext), seg)
         # Oz-dogrulama: yuksek-severity olaylari odakli sorguyla teyit et (FP azaltir, recall korur).
         if settings.verify_events and out:
-            verified: List[Event] = []
-            for ev in out:
-                if _SEV_ORD[ev.severity] >= _SEV_ORD[Severity.YUKSEK] and not _verify_event(vlm, seg.frames, ev.event):
-                    ev = Event(time=ev.time, event=ev.event, severity=Severity.ORTA, category=ev.category)
-                verified.append(ev)
-            out = verified
+            hi = [i for i, ev in enumerate(out) if _SEV_ORD[ev.severity] >= _SEV_ORD[Severity.YUKSEK]]
+            # PERF: >=2 yuksek-sev olay -> TEK batch cagri (N->1); aksi halde per-event (degisiklik yok). Recall-safe.
+            if settings.batch_verify and len(hi) >= 2:
+                keep = _verify_events_batch(vlm, seg.frames, [out[i].event for i in hi])
+            else:
+                keep = [_verify_event(vlm, seg.frames, out[i].event) for i in hi]
+            for k, i in enumerate(hi):
+                if not keep[k]:
+                    ev = out[i]
+                    out[i] = Event(time=ev.time, event=ev.event, severity=Severity.ORTA, category=ev.category)
         # F1: POZ-TABANLI DOGRULAMA (Woodpecker/Semantic-Drive deseni; fall vs comelme/egilme).
         # VLM "kisi yere dusmus/hareketsiz" der ama YOLO-poz kisinin EMIN bicimde DIK (comelmis/egilmis)
         # oldugunu gosterirse severity'yi dispatch-esiginin ALTINA (Orta) cek -> sahte "dusmus kisi Kritik+cagri"

@@ -832,5 +832,14 @@ ortamında FlashInfer JIT kernel'ini linkleyemedi (`collect2: ld error`; flashin
 Accuracy değil, derleme kısıtı → `kv_cache_dtype=""` (varsayılan çalışır).
 
 **max-model-len right-size:** atlandı (VRAM-bound değiliz; 22.5/24GB → KV-headroom kazancı marjinal, request-red riski var).
-**Gelecek lever:** verify+ground batch (pipeline, multi-yüksek-sev segmentlerde) + çok-video async dispatcher.
-Araçlar: `scripts/bench_performance.py`, `benchmark/results/bench_perf_*_20260625.log`; 2 subagent raporu.
+
+**Round 3 — batch-verify (pipeline): OPT-IN (default kapalı).** ≥2 yüksek-sev olay → hepsini TEK VLM cagrisinda
+teyit (`config.batch_verify`, `graph._verify_events_batch`). **Ölçüldü:** çok-olaylı 4 klipte latency **136→103s
+(−24%)**. AMA accuracy A/B **stokastik-confounded** (describe/extract temp 0.2 → olay-sayısı koşudan koşuya zaten
+değişir) ve **2/4 klipte risk düştü** (batch-prompt per-event'ten daha sert olabilir). Accuracy kanıtlanmadığı için
+**default KAPALI** (latency-öncelikli dağıtımda opt-in). Discipline: latency için accuracy'yi kanıtsız riske atma.
+
+**ÖZET — kümülatif performans kazanımı (default açık olanlar):** prefix-caching + serving-flags (gpu0.90+seqs32):
+eş-zamanlı x4 throughput **3.7→4.6 video/dk (+24%)**, eş-zamanlı gecikme **16.3→12.9s/video (−21%)**, tek-akış
+gecikme ort 0.93→0.86 sn/vsn; **VRAM 22.5/24GB (OOM yok), accuracy birebir korundu.** fp8-KV ortam-reddi,
+batch-verify opt-in. §4 ⚠️ → ölçülü ✅. Araçlar: `scripts/{bench_performance,ab_batchverify}.py`; 2 subagent raporu.
