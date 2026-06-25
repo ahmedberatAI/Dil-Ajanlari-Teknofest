@@ -442,6 +442,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         desc = vlm.analyze_frames(
             seg.frames, instr, temperature=0.2, max_tokens=400,
             repetition_penalty=settings.perceive_repetition_penalty,
+            as_video=(settings.video_pruning_rate > 0),  # EVS video-path (yalniz perceive-describe)
         )
         ext = vlm.chat(
             [

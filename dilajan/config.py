@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     max_num_seqs: int = 32     # PERF: es-zamanli dizi tavani (continuous-batching); 0=vLLM varsayilani. Yuksek-hacim icin.
     kv_cache_dtype: str = ""   # PERF: "fp8" DENENDI -> bu Blackwell/WSL kismi-CUDA ortaminda FlashInfer JIT linklenemiyor
                                # (collect2/ld error; flashinfer-sampler de ayni sebeple kapali). REDDEDILDI. ""=varsayilan (calisir)
+    video_pruning_rate: float = 0.0  # PERF/EVS (vLLM 0.23, OPT-IN): temporal-token budama; >0 ise perceive-describe
+                                     # VIDEO-path'ten gider (server'a --video-pruning-rate gerekir). OLCULDU: izole
+                                     # describe -40% AMA tam-pipeline ~0 (describe kucuk parca; verify/ground image-path;
+                                     # mp4-encode maliyeti) + accuracy SAPMA (normal klipte FP) -> DEFAULT KAPALI.
     enable_prefix_caching: bool = True  # PERF: paylasilan uzun Turkce sistem-promptu HER segment cagrisinda
                                         # tekrar ediyor -> prefix-cache prefill'i yeniden-hesaplamaz (buyuk TTFT/
                                         # throughput kazanci). V1'de blok-hash'e mm-hash dahil -> farkli kareler

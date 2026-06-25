@@ -42,6 +42,9 @@ def main() -> None:
         cmd += ["--max-num-seqs", str(settings.max_num_seqs)]
     if settings.kv_cache_dtype:
         cmd += ["--kv-cache-dtype", settings.kv_cache_dtype]
+    if settings.video_pruning_rate and settings.video_pruning_rate > 0:
+        # EVS: temporal-redundancy token pruning (yalniz video-path'i etkiler)
+        cmd += ["--video-pruning-rate", str(settings.video_pruning_rate)]
     if settings.trust_remote_code:
         cmd.append("--trust-remote-code")
     if settings.quantization:
