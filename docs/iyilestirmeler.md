@@ -882,3 +882,47 @@ naif self-consistency (mode nadir-doğruyu boğar), logit-yöntemleri (VCD/DoLa/
 Kaynaklar: 3 subagent raporu (arXiv/HF/GitHub linkleri transcript'te). **Strateji:** frontier'in gerçek ilerlemesi
 tip-tanımada değil **karar/kalibrasyon/temporal** katmanında — tam bizim dürüst-headroom'umuz; tip-tavanı sonucumuz
 2025-26 literatürünce tam doğrulanıyor (her training-free sistem 7B-MLLM'e biniyor, tip'i zor kabul ediyor).
+
+---
+
+## §21 — D11: VLM-mimari frontier 2. tur (4 subagent) — derinleşmiş tarama
+
+D10'dan farklı/daha derin 4 eksen (her agent'a D10 sonuçları verildi → tekrar yok): **serving/quant mimarisi**,
+**video-token/temporal mimarisi**, **agentic orkestrasyon mimarisi** (+ post-D10 model-deltası serving içinde).
+NOT: ilk 3 eş-zamanlı salınınca geçici servis-throttle yedi → sıralı (staggered) yeniden salındı.
+
+**DENENDI → REDDEDILDI (ortam): Model Runner V2 (`VLLM_USE_V2_MODEL_RUNNER=1`).** Serving-agent'ın #1 düşük-riskli
+adayı (env-var, FlashInfer'sız, +10–25% throughput beklenen). Ölçüldü: EngineCore init'te `RuntimeError: UVA is not
+available` (`buffer_utils.py` UvaBuffer). MRV2'nin GPU-native zero-copy input-prep'i **UVA gerektiriyor; WSL2 GPU-passthrough
+UVA sağlamıyor** → fp8-KV gibi *ortam* duvarı (accuracy değil). Çalışan baseline'a geri dönüldü. **Baseline (aynı-oturum
+ölçüm, referans):** x4 eş-zamanlı 9.8s/video, **6.1 video/dk**, 2.92×, tek-akış 0.84 sn/vsn, VRAM 22.5GB.
+
+**Diğer serving bulguları (uygulanmadı, gerekçeli):** `TRITON_ATTN` backend-pin = yalnız *stabilite* (FlashInfer'a
+upgrade-kaçışını önler), ölçülebilir hız kazancı yok + çalışan backend'i değiştirmek WSL'de risk → **belge-notu, dokunma**.
+CUDA-graph: V1 default `FULL_AND_PIECEWISE` zaten aktif (`--enforce-eager` vermiyoruz) → değişiklik yok. **ÖLÜ-UÇ:**
+NVFP4/FP4 (aynı sm_120 GEMM duvarı + VRAM-bound değiliz), EAGLE/draft/Medusa spec-decode (vLLM multimodal-blocked),
+ngram-spec (JSON'u bozar), fp8-KV/FlashInfer/cascade-attn (linker), disagg-prefill (tek-GPU), async-scheduling-as-win
+(structured-output ile çakışır — bizde sorun çıkarmıyor ama hız-kazancı değil).
+
+**ROADMAP — yüksek-değer ama büyük/riskli refactor (ölçülerek yapılmalı, aceleye gelmez):**
+- ⭐ **EVS (Efficient Video Sampling)** — vLLM 0.23'te **yerleşik** (`--video-pruning-rate`). Temporal-token budama, **CCTV
+  için ideal** (statik arka plan budanır, hareketli özne kalır; pozisyon-koruyan → grounding bozulmaz). q=0.5 ~2× token /
+  ~0 accuracy. **Şart:** `image:16` → **video-path** (`video:1`) taşıma (artı bonus: timestamp-token + Interleaved-MRoPE).
+  İlk adım: FP8+EVS smoke-test (PR #44205 token-sayım fix'i build'de mi). Kazanç: aynı budçede ~2× temporal kapsam VEYA
+  4× TTFT. A/B: recall-guard + dar-FP + latency, sahne-hareketine göre tabakalı. (arXiv 2510.14624)
+- ⭐ **Neurosimbolik kural-motoru (tool) + abstain→VLM + semantik-olabilirlik filtresi + temporal-smoothing** — mevcut
+  YOLO `detector.py`/geofence/`facility_rules`'u *nudge*'dan **deterministik karar-otoritesine** yükseltir; belirsizde
+  VLM'e abstain eder. dar-FP/kalibrasyona nişan (CPS makalesinde sıfır-FP). CPU. Güçlü **otonomi+yenilik** anlatısı.
+  (arXiv 2604.03790). A/B: recall-guard + operasyonel-FP↓ + VLM-çağrı-sayısı↓.
+- **Graded compute-cascade** (reexamine'i çok-basamaklı yap: re-query→Q-zoom→N-rollout, zorluk-tetikli) — kalibrasyon;
+  bizim ölçtüğümüz "fps=2+640px → kalibrasyon 25→46%" tam bu leveri doğruluyor (sadece zor segmente uygula).
+- **Dispider-tarzı ucuz perception-gate** (boş segmenti VLM'e yollama) — yüksek-hacim verimliliği.
+- **Tipli world-state / episodik-bellek** — canlı/uzun-footage ve 24/7-operatör anlatısı (kısa-klipte marjinal).
+
+**ÖLÜ-UÇLAR (B/orkestrasyon):** generation-time SMT-constrained decoding (logit erişimi yok), eğitilebilir çok-katmanlı
+bellek (fine-tune), Z3/ağır-teorem-prover (kuralarımız propozisyonel — düz Python tablo yeter), manager-multi-agent
+(debate ailesi — reddedildi), parallel act-dispatch (araçlarımız anlık-mock → latency kazancı ~0).
+
+**Sonuç (D11):** Bu turun tek temiz drop-in adayı (MRV2) **WSL-UVA duvarına** çarptı; geri kalan yüksek-değer bulgular
+(EVS, kural-motoru) gerçek ama **ölçülerek yapılması gereken refactor'lar** — disiplin gereği aceleyle default'a alınmadı,
+tam entegrasyon + A/B planlarıyla roadmap'e yazıldı. Kaynaklar: 4 subagent raporu (arXiv/GitHub linkleri transcript'te).
