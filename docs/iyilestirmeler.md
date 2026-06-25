@@ -926,3 +926,31 @@ bellek (fine-tune), Z3/ağır-teorem-prover (kuralarımız propozisyonel — dü
 **Sonuç (D11):** Bu turun tek temiz drop-in adayı (MRV2) **WSL-UVA duvarına** çarptı; geri kalan yüksek-değer bulgular
 (EVS, kural-motoru) gerçek ama **ölçülerek yapılması gereken refactor'lar** — disiplin gereği aceleyle default'a alınmadı,
 tam entegrasyon + A/B planlarıyla roadmap'e yazıldı. Kaynaklar: 4 subagent raporu (arXiv/GitHub linkleri transcript'te).
+
+---
+
+## §22 — D12: İki roadmap bulgusu uygulandı + ölçüldü (ikisi de opt-in → dürüst)
+
+D11'in iki yüksek-değer bulgusu ayrı ayrı **uygulanıp tam-pipeline A/B ile ölçüldü.** İkisi de gerçek-kazanç
+göstermeyip **default-KAPALI (opt-in)** kaldı — kanıtsız kazancı default'a alma disiplini.
+
+**(1) EVS — video-path token budama (`config.video_pruning_rate`, `llm_client.analyze_frames(as_video)`).**
+*Feasibility POZİTİF (önemli):* FP8 + `--video-pruning-rate` sunucu **çalıştı** (fp8-KV/MRV2'nin aksine duvara
+çarpmadı); izole **perceive-describe** çağrısında video-path **−40% latency** + çıktı-kalitesi denk. *AMA tam-pipeline
+A/B:* latency **−1%** (describe tüm pipeline'ın küçük parçası; extract text + verify/ground image-path kalır;
+client mp4-encode maliyeti var) **+ accuracy SAPMA** (normal `0_tr128` klibinde FP: 0→1 olay, risk 1→2 — video-path
+model davranışını kaydırıyor). → recall/FP-safe değil → **opt-in**. Plumbing fail-open (encode hatası→image-path).
+Ders: izole-test (−40%) yanıltıcıydı; rigor full-pipeline gerçeği gösterdi.
+
+**(2) Neurosimbolik semantik-olabilirlik (`config.semantic_plausibility`, `detector.persons_present`).**
+Kişi-merkezli yüksek-sev olay + YOLO nesne-buldu-ama-kişi-yok → Orta'ya düşür (fail-open). *Ölçüm-pivotu:* full-pipeline
+A/B confounded çıktı (stokastik describe → kuralın yapamayacağı *yükseltme*ler görüldü) → **deterministik sinyali
+DOĞRUDAN test ettim:** `persons_present` **gerçek Fighting005 klibinde False döndü** (YOLO11n grenli 320×240'ta kişiyi
+kaçırıp başka nesne buldu). Yani **deterministik sinyalin kendisi grenli girdide güvenilmez** — VLM'i sınırlayan aynı
+bilgi-tavanı YOLO'yu da vuruyor → güvenilmez sinyalle gerçek olay düşürmek = **RECALL RİSKİ** → **default KAPALI**
+(yüksek-res dağıtımda YOLO-kişi güvenilir olduğunda açılabilir). Araçlar: `scripts/ab_evs*.py`, `ab_plausibility.py`.
+
+**D12 dersi:** D11 roadmap'inin iki "yüksek-değer" bulgusu da uygulanınca **bizim ortam/girdi gerçeğimizde** kazanç
+vermedi (EVS pipeline-dilüsyon + davranış-sapması; kural-motoru grenli-YOLO-tavanı). İkisi de **çalışır+gated** halde
+repo'da (yüksek-res / describe-dominant senaryolarda opt-in). Bu, "yeni mimari = otomatik kazanç değil; ortamda ölç"
+disiplininin bir başka kanıtı — tip-tavanımız gibi, **çözüm girdi-kalitesinde, mimaride değil.**

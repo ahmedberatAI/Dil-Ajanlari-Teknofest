@@ -55,6 +55,25 @@ def detect_segment(frames: Sequence[Tuple[str, bytes]], conf: float = 0.35) -> s
         return ""
 
 
+def persons_present(frames: Sequence[Tuple[str, bytes]], conf: float = 0.35):
+    """Segmentte KİŞİ (COCO 0) var mı? None=belirlenemedi (YOLO hata / hiç nesne yok) -> FAIL-OPEN (VLM korunur);
+    True=kişi tespit edildi; False=nesne(ler) bulundu ama kişi yok (kişi-merkezli iddia fiziksel olarak şüpheli)."""
+    try:
+        model = _get_model()
+        imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
+        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        any_obj = False
+        for r in results:
+            cls = r.boxes.cls.tolist()
+            if cls:
+                any_obj = True
+            if any(int(c) == 0 for c in cls):
+                return True
+        return False if any_obj else None  # nesne var/kişi yok -> False; hiç nesne yok -> None (abstain)
+    except Exception:
+        return None
+
+
 _pose_model = None
 
 

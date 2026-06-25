@@ -465,6 +465,20 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                 if not keep[k]:
                     ev = out[i]
                     out[i] = Event(time=ev.time, event=ev.event, severity=Severity.ORTA, category=ev.category)
+        # NEUROSIMBOLIK semantik-olabilirlik: KİŞİ-merkezli yuksek-sev olay (yarali/dusmus/saldiri vb.) iddia
+        # ediliyor ama YOLO segmentte nesne bulup KİŞİ bulamadiysa -> fiziksel olarak suheli -> Orta'ya cek.
+        # FAIL-OPEN: YOLO abstain (None) veya kisi-var (True) ise DOKUNMA -> grenli'de gercek kisi-olayi recall'i korunur.
+        if settings.semantic_plausibility and out and any(
+                _SEV_ORD[e.severity] >= _SEV_ORD[Severity.YUKSEK] and _PERSON_RE.search(e.event) for e in out):
+            try:
+                from dilajan import detector
+                pp = detector.persons_present(seg.frames)
+            except Exception:
+                pp = None
+            if pp is False:  # nesne var ama kisi yok (None=abstain'de dokunmayiz)
+                for i, ev in enumerate(out):
+                    if _SEV_ORD[ev.severity] >= _SEV_ORD[Severity.YUKSEK] and _PERSON_RE.search(ev.event):
+                        out[i] = Event(time=ev.time, event=ev.event, severity=Severity.ORTA, category=ev.category)
         # F1: POZ-TABANLI DOGRULAMA (Woodpecker/Semantic-Drive deseni; fall vs comelme/egilme).
         # VLM "kisi yere dusmus/hareketsiz" der ama YOLO-poz kisinin EMIN bicimde DIK (comelmis/egilmis)
         # oldugunu gosterirse severity'yi dispatch-esiginin ALTINA (Orta) cek -> sahte "dusmus kisi Kritik+cagri"

@@ -87,6 +87,10 @@ class Settings(BaseSettings):
                                       # >=2 bitisik segmentte SURUYORSA (end_time set) severity Orta->Yuksek (+1, capped).
                                       # Tek-yonlu/yukari -> recall'i bozmaz, izole olayi cezalandirmaz. Sistematik
                                       # dusuk-puanlamayi (olculen sapma -0.20) duzeltir; gercek tehlike surer, halusinasyon izoledir.
+    semantic_plausibility: bool = False  # NEUROSIMBOLIK (2026, OPT-IN): kişi-merkezli yuksek-sev olay + YOLO nesne
+                                         # buldu ama KİŞİ yok -> Orta'ya dusur. OLCULDU: YOLO11n grenli 320x240'ta
+                                         # kişiyi kaciriyor (gercek Fighting klibinde persons_present=False) -> gercek
+                                         # olayi yanlis dusurur = RECALL RISKI -> DEFAULT KAPALI. Yuksek-res'te acilabilir.
     perception_confidence: bool = True  # VL-Calibration (2026): reason'da AYRIK 'algi_guveni' (yuksek/orta/dusuk)
                                         # iste; DUSUK ise operatore "manuel teyit oneririz" aksiyonu ekle. Girdi-tavanini
                                         # (grenli'de sessiz dusuk-puanlama) DURUST + puanlanan-otonomi davranisina cevirir.
