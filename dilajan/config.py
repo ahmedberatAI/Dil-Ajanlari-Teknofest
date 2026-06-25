@@ -29,7 +29,10 @@ class Settings(BaseSettings):
     vllm_port: int = 8000
     api_key: str = "EMPTY"  # yerel vLLM sunucusu anahtari yok sayar
     max_model_len: int = 8192
-    gpu_memory_utilization: float = 0.85
+    gpu_memory_utilization: float = 0.90  # PERF: 0.85->0.90 (VRAM headroom ~21/24GB olculdu) -> daha fazla KV blogu
+    max_num_seqs: int = 32     # PERF: es-zamanli dizi tavani (continuous-batching); 0=vLLM varsayilani. Yuksek-hacim icin.
+    kv_cache_dtype: str = ""   # PERF: "fp8" DENENDI -> bu Blackwell/WSL kismi-CUDA ortaminda FlashInfer JIT linklenemiyor
+                               # (collect2/ld error; flashinfer-sampler de ayni sebeple kapali). REDDEDILDI. ""=varsayilan (calisir)
     enable_prefix_caching: bool = True  # PERF: paylasilan uzun Turkce sistem-promptu HER segment cagrisinda
                                         # tekrar ediyor -> prefix-cache prefill'i yeniden-hesaplamaz (buyuk TTFT/
                                         # throughput kazanci). V1'de blok-hash'e mm-hash dahil -> farkli kareler

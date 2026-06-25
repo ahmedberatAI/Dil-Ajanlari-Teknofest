@@ -822,8 +822,15 @@ hesaplamaz. **Ölçüldü (önce→sonra):** analiz ort 32.5→**29.95s (−8%)*
 throughput 3.7→**4.2 video/dk (+13.5%)**, hızlanma 1.70→**1.95×**; **VRAM aynı (~21GB)**. **Accuracy-safe:**
 3 örnek klip (yangın/düşme/kaza) doğru + garble yok (V1 blok-hash'e mm-hash dahil → #20261 yok). **TUTULDU (default açık).**
 
-**Gelecek levere (araştırıldı, ölçülecek):** (A-serving) max-num-seqs↑, gpu-mem-util 0.90, max-model-len right-size
-(8192→~4096 → ~2× concurrency), fp8-KV-cache (Blackwell-validated, ~2× concurrency, accuracy-doğrula); (B-pipeline)
-**verify+ground'u olay-başına→segment-başına batch** (inference %98 olduğu için en büyük çağrı-azaltma, recall-safe),
-çok-video async dispatcher (yüksek-hacim mimarisi). Araçlar: `scripts/bench_performance.py`,
-`benchmark/results/bench_perf_*_20260625.log`; 2 subagent raporu.
+**Round 1 — serving concurrency flag'leri (gpu-mem-util 0.85→0.90 + max-num-seqs 32, accuracy-nötr): UYGULANDI.**
+Ölçüldü (prefix→R1): sıralı x4 27.9→24.9s/video (−11%), eş-zamanlı x4 14.3→**12.9s/video (−10%)**, throughput
+4.2→**4.6 video/dk**, tepe VRAM 21→22.5GB (OOM yok). **Kümülatif (baseline→R1): x4 throughput 3.7→4.6 (+24%),
+eş-zamanlı 16.3→12.9s/video (−21%).** TUTULDU.
+
+**fp8-KV-cache: DENENDI → REDDEDILDI (ortam).** `--kv-cache-dtype fp8` bu Blackwell/WSL kısmi-CUDA-toolkit
+ortamında FlashInfer JIT kernel'ini linkleyemedi (`collect2: ld error`; flashinfer-sampler de aynı sebeple kapalı).
+Accuracy değil, derleme kısıtı → `kv_cache_dtype=""` (varsayılan çalışır).
+
+**max-model-len right-size:** atlandı (VRAM-bound değiliz; 22.5/24GB → KV-headroom kazancı marjinal, request-red riski var).
+**Gelecek lever:** verify+ground batch (pipeline, multi-yüksek-sev segmentlerde) + çok-video async dispatcher.
+Araçlar: `scripts/bench_performance.py`, `benchmark/results/bench_perf_*_20260625.log`; 2 subagent raporu.

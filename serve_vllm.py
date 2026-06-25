@@ -38,6 +38,10 @@ def main() -> None:
     if settings.enable_prefix_caching:
         # PERF: paylasilan sistem-prompt prefix'inin KV'sini yeniden kullan (prefill tasarrufu)
         cmd.append("--enable-prefix-caching")
+    if settings.max_num_seqs:
+        cmd += ["--max-num-seqs", str(settings.max_num_seqs)]
+    if settings.kv_cache_dtype:
+        cmd += ["--kv-cache-dtype", settings.kv_cache_dtype]
     if settings.trust_remote_code:
         cmd.append("--trust-remote-code")
     if settings.quantization:
