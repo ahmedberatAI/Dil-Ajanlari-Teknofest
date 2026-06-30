@@ -17,7 +17,7 @@ import tempfile
 
 import gradio as gr
 
-from dilajan import chat_agent
+from dilajan import chat_agent, memory
 from dilajan.agent.graph import build_graph
 from dilajan.schema import AnalysisResult, Severity
 
@@ -126,6 +126,7 @@ def analyze(video_path, facility_rules="", restricted_zones=""):
     if not video_path:
         yield ("Lütfen bir video yükleyin.", *_blank())
         return
+    memory.reset_decisions()  # yeni analiz -> oturum karar-günlüğü sıfırlanır (B#1/memory)
     # SAVUNMA/tesis: operatörün girdiği kuralları + yasak bölgeleri bu analiz için uygula
     from dilajan.config import settings as _settings
     _settings.facility_rules = (facility_rules or "").strip()
@@ -152,8 +153,10 @@ def analyze(video_path, facility_rules="", restricted_zones=""):
     funcs_md = "\n".join(f"- `{f}`" for f in result.triggered_functions) or "— (operasyonel çağrı yapılmadı)"
     trace_md = "\n".join(f"- {t}" for t in result.decision_trace) or "—"
     raw = json.dumps(result.model_dump(), ensure_ascii=False, indent=2)
+    ctx = chat_agent.build_context(result)  # mevcut analiz henüz episodik bellekte değil -> "geçmiş" olarak görünmez
+    memory.append_episode(result, source=os.path.basename(str(video_path)))
     yield ("✅ Analiz tamamlandı.", result.summary, risk, timeline,
-           events_rows, actions_md, funcs_md, trace_md, raw, chat_agent.build_context(result))
+           events_rows, actions_md, funcs_md, trace_md, raw, ctx)
 
 
 def chat_respond(message, history, context):
