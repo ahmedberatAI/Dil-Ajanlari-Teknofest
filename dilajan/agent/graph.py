@@ -862,6 +862,7 @@ def finalize(state: AgentState) -> dict:
         actions=state.get("actions", []),
         video_duration=info.duration_str if info else None,
         triggered_functions=state.get("triggered_functions", []),
+        decision_trace=state.get("trace", []),
     )
     return {"result": result}
 

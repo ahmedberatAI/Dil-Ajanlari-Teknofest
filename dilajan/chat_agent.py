@@ -23,9 +23,15 @@ def _get_client() -> VLMClient:
 
 def build_context(result: AnalysisResult) -> str:
     """AnalysisResult'i sohbet baglam metnine cevirir."""
+    # B#2: grounded algi-guveni (cozunurluk advisory'sinden) -> asistan "ne kadar eminsin?"e durust cevap verir
+    low_q = any(("çözünürlük" in a.action.lower() or "manuel teyit" in a.action.lower())
+                for a in result.actions)
+    algi = ("DÜŞÜK — düşük çözünürlük; ayrıntı-kesinliği sınırlı, kritik olaylarda manuel teyit önerilir"
+            if low_q else "normal")
     lines = [
         f"ÖZET: {result.summary}",
         f"RİSK: {result.risk.level.value} - {result.risk.rationale}",
+        f"ALGI GÜVENİ: {algi}",
         f"VİDEO SÜRESİ: {result.video_duration or '?'}",
         "OLAYLAR:",
     ]
@@ -39,6 +45,10 @@ def build_context(result: AnalysisResult) -> str:
     lines += [f"  - {a.action} (öncelik: {a.priority.value})" for a in result.actions] or ["  (yok)"]
     if result.triggered_functions:
         lines.append("TETİKLENEN OPERASYONEL FONKSİYONLAR: " + ", ".join(result.triggered_functions))
+    # C#1: karar-izi (aciklanabilirlik) -> operatör "neden bu karar?" diye sorarsa dayanak
+    if result.decision_trace:
+        lines.append("KARAR İZİ (açıklanabilirlik — operatör sorarsa bu adımlara dayan):")
+        lines += [f"  · {t}" for t in result.decision_trace]
     return "\n".join(lines)
 
 

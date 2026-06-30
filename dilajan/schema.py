@@ -71,6 +71,10 @@ class AnalysisResult(BaseModel):
         default_factory=list,
         description="Ajanin çağirdigi mock operasyonel fonksiyonlar",
     )
+    decision_trace: List[str] = Field(
+        default_factory=list,
+        description="Ajanin adim-adim karar-izi (aciklanabilirlik): hangi dugum ne karar verdi",
+    )
 
     def to_sartname_dict(self) -> dict:
         """Sartnamenin sade JSON formatini üretir."""

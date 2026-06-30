@@ -119,7 +119,7 @@ def _ensure_playable(path):
 
 
 def _blank():
-    return (gr.update(),) * 8
+    return (gr.update(),) * 9
 
 
 def analyze(video_path, facility_rules="", restricted_zones=""):
@@ -150,9 +150,10 @@ def analyze(video_path, facility_rules="", restricted_zones=""):
         for a in result.actions
     ) or "—"
     funcs_md = "\n".join(f"- `{f}`" for f in result.triggered_functions) or "— (operasyonel çağrı yapılmadı)"
+    trace_md = "\n".join(f"- {t}" for t in result.decision_trace) or "—"
     raw = json.dumps(result.model_dump(), ensure_ascii=False, indent=2)
     yield ("✅ Analiz tamamlandı.", result.summary, risk, timeline,
-           events_rows, actions_md, funcs_md, raw, chat_agent.build_context(result))
+           events_rows, actions_md, funcs_md, trace_md, raw, chat_agent.build_context(result))
 
 
 def chat_respond(message, history, context):
@@ -200,6 +201,9 @@ def build_ui() -> gr.Blocks:
             actions_out = gr.Markdown(label="Aksiyon Önerileri")
             funcs_out = gr.Markdown(label="Tetiklenen Operasyonel Fonksiyonlar")
 
+        with gr.Accordion("🧠 Ajan Karar Günlüğü (açıklanabilirlik)", open=False):
+            trace_out = gr.Markdown(label="Karar İzi")
+
         with gr.Accordion("Ham JSON Çıktısı", open=False):
             json_out = gr.Code(language="json", label="AnalysisResult")
 
@@ -215,7 +219,7 @@ def build_ui() -> gr.Blocks:
         analyze_btn.click(
             analyze, inputs=[video_in, facility_in, zones_in],
             outputs=[status_out, summary_out, risk_out, timeline_out,
-                     events_out, actions_out, funcs_out, json_out, context_state],
+                     events_out, actions_out, funcs_out, trace_out, json_out, context_state],
         )
         chat_btn.click(chat_respond, [chat_in, chatbot, context_state], [chatbot, chat_in])
         chat_in.submit(chat_respond, [chat_in, chatbot, context_state], [chatbot, chat_in])
