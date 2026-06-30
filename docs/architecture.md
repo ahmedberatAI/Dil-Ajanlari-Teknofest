@@ -18,7 +18,7 @@ flowchart TD
     ACT --> FIN[finalize<br/>AnalysisResult JSON]
 
     subgraph LLM[Yerel Model Servisi]
-      VLLM[vLLM · Qwen2.5-VL-7B<br/>OpenAI uyumlu API · CUDA graphs]
+      VLLM[vLLM · Qwen3-VL-8B-FP8<br/>OpenAI uyumlu API · CUDA graphs · prefix-cache]
     end
     PER -. görsel+metin .-> VLLM
     REA -. metin .-> VLLM
@@ -40,7 +40,7 @@ ASCII özeti:
 ```
 Video → [ingest] → [perceive] → [reason] → [act] → [finalize] → JSON
                        │            │          │
-                       └────────────┴──────────┴──→ vLLM (Qwen2.5-VL)
+                       └────────────┴──────────┴──→ vLLM (Qwen3-VL-8B-FP8)
                                                │
                                                └──→ Mock operasyonel fonksiyonlar
 ```
@@ -76,8 +76,8 @@ Video → [ingest] → [perceive] → [reason] → [act] → [finalize] → JSON
 
 ## Performans (RTX 5090 Laptop, 24GB, WSL2)
 
-- Model servisleme: vLLM + CUDA graphs, ~37 token/s decode (tek istek).
-- Uçtan uca analiz: ~2–3 s / video-saniyesi (iki aşamalı algı nedeniyle segment başına 2 model çağrısı).
+- Model servisleme: vLLM + CUDA graphs + prefix-caching (gpu-util 0.90, max-num-seqs 32).
+- Uçtan uca analiz: ~1.5 s / video-saniyesi (hızlı mod ~0.6); eşzamanlı (x4) throughput +24% (3.7→4.6 video/dk).
 - Tamamen yerel; dış API / bulut bağımlılığı yok.
 
 ### İki Aşamalı Algı (perceive)

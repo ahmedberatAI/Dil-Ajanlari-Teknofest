@@ -8,7 +8,7 @@ Gerçek şartname metnine (19 sayfa) göre madde-madde uyum denetimi. ✅ karş�
 | Video girdisi al + içeriği analiz et | ✅ | `ingest`+`perceive` (PyAV kare/segment, VLM analiz) |
 | Olay/kişi/riskli durum tespiti | ✅ | iki-aşamalı algı; senaryo recall %99±2 |
 | Kritik anları zaman bilgisiyle belirle | ✅ | olay `time` + zaman-pencereleri `[00:30–00:50]` |
-| Kısa anlaşılır Türkçe özet | ✅ | özet kalitesi 4.98/5 (LLM-judge) |
+| Kısa anlaşılır Türkçe özet | ✅ | özet kalitesi 4.64/5 (bağımsız Gemma judge) |
 | Operatöre aksiyon önerileri | ✅ | `actions[öncelik,gerekçe]`, 4.71/5 |
 | Yapılandırılmış JSON | ✅ | `to_sartname_dict` — mock örnekle birebir; uyum %100 |
 | Offline/yerel + dış-API/kapalı-servis yok | ✅ | sadece 127.0.0.1 (kodda doğrulandı) |
@@ -20,7 +20,7 @@ Gerçek şartname metnine (19 sayfa) göre madde-madde uyum denetimi. ✅ karş�
 | Multimodal anlama (sahne/zamansal/olay akışı) | ✅ | çok-kareli segment + bağlamsal yorumlama |
 | Olay tespiti + anlamsal yorumlama (tür/önem/etki) | ✅ | severity + kategori + risk gerekçesi |
 | Zamansal farkındalık + kritik an (başlangıç/gelişim/sonuç) | ✅ | zaman-damgası + pencere; özet akış anlatır |
-| Türkçe doğal dil + özetleme (özlü, karar-destekleyici) | ✅ | özet 4.98/5, akıcılık 5.0 |
+| Türkçe doğal dil + özetleme (özlü, karar-destekleyici) | ✅ | özet 4.64/5 (bağımsız Gemma), diyalog 5.0/5 |
 | Aksiyon önerisi + karar destek (risk + uygulanabilir + bağlam-tutarlı) | ✅ | aksiyon 4.71/5, risk-gerekçe 5.0 |
 | Yapılandırılmış + açıklanabilir çıktı (JSON zorunlu) | ✅ | JSON %100 + severity/kategori/bbox-bölge/gerekçe |
 | Yerel çalışma + bağımsızlık | ✅ | tam yerel |
@@ -48,6 +48,6 @@ Gerçek şartname metnine (19 sayfa) göre madde-madde uyum denetimi. ✅ karş�
 
 ## 🔴 Açık uyum maddeleri (takım/web-tarafı)
 - GitHub: **`BilisimVadisi2026` topic'i** + **"Türkiye Açık Kaynak Platformu" etiketi** + **takım adları** eklenmeli.
-- **En az haftalık commit** (hâlihazırda 3 commit; düzenli devam).
+- **En az haftalık commit** (yarışma penceresinde düzenli devam edilecek).
 - **Sunum PDF+PPTX** GitHub'a yüklenmeli (PDF export gerekli).
 - Başvuru (t3kys.com, son 12 Temmuz) + takım tanıtım sunumu + Turnitin (proje bu dönem yeni olmalı).

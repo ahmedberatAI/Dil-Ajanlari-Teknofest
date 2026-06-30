@@ -127,17 +127,22 @@ Veriye dayalı bir değerlendirme altyapısı kurulmuştur:
 
 | Metrik | Senaryo seti (yangın+düşme) | UCF-Crime (dayanıklılık) |
 |---|---|---|
-| Anomali recall (≥1 olay) | **%100** | %96 |
-| Kategori adlandırma | **%100** | suçlarda %0→**%100** (Qwen3-VL) |
-| Risk kalibrasyonu (≥ Yüksek) | **%100** | — |
-| Normal yanlış-pozitif | düşük (modlarla ayarlanır) | — |
-| Diyalog robustluğu | **5.00/5** | |
-| Segment paralelleştirme | **3.2× hızlanma** (116s → 36s) | |
+| Anomali recall (≥1 olay) | **%99±2** (11 koşu; tek koşu %100) | ~%78±10 (grainy; tek çekiliş %96) |
+| Kategori adlandırma | %94±9 | grainy'de düşük — girdi-tavanı (aşağıda) |
+| Risk kalibrasyonu | senaryo ~%95; **QWK 0.733** | — |
+| Normal yanlış-pozitif | dar-FP ~%0; **operasyonel-FP ~%8–10 (dürüst)** | — |
+| Diyalog robustluğu | **5.00/5** (bağımsız Gemma) | |
+| Eşzamanlı throughput (x4) | **+24%** (3.7→4.6 video/dk) | |
 
-> Not: değerlendirme setleri küçük olduğundan yanlış-pozitif oranı yüksek varyanslıdır; ayrıntı ve
-> ablasyonlar (Qwen2.5-VL-7B precision-yedek dahil) `docs/iyilestirmeler.md`'de.
+> **Dürüst 3-seviyeli recall (grainy UCF):** TESPİT (olay var mı) **%96** · AKSİYON (doğru müdahale sınıfı)
+> **%73** · TANIMA (birebir alt-etiket) **%46** — grainy 320×240'ta ince tip-tanıma bilgi-teorik tavandır
+> (model-boyu değil; bkz `docs/iyilestirmeler.md` §15-§16).
+>
+> Not: değerlendirme setleri küçük → yanlış-pozitif/recall **varyans-baskın** (ortalama±std raporlanır);
+> ayrıntı ve ablasyonlar (Qwen2.5-VL-7B precision-yedek dahil) `docs/iyilestirmeler.md`'de.
 
-> Her iyileştirme baseline'a karşı ölçülmüştür; güvenlik senaryosunda **yüksek recall + sıfır yanlış-pozitif** önceliklendirilir.
+> Her iyileştirme baseline'a karşı ölçülür; güvenlik senaryosunda **yüksek recall + düşük dar-yanlış-pozitif
+> (~%0)** önceliklendirilir; operasyonel-FP (~%8–10) dürüstçe raporlanır.
 
 ## Proje Yapısı
 ```
@@ -167,12 +172,12 @@ requirements-lock.txt   tam sürüm kilidi (pip freeze)
   yorumluyordu). Çözüm: **iki aşamalı algı** — önce serbest Türkçe tarif, sonra tariften olay
   çıkarımı. Bu, gerçek UCF-Crime kliplerinde tespit oranını belirgin artırdı.
 - **Risk kalibrasyonu:** Model gerçek tehlikeyi tarif edip riski düşük puanlıyordu. Severity
-  kalibrasyonu (tehdit kelimeleri) + risk tabanı guardrail'i ile anomalilerde risk yükseldi,
-  normal videolarda yanlış-pozitif %0 korundu.
-- **Performans:** Segment analizi paralelleştirilerek **3.2× hızlanma** sağlandı (vLLM eşzamanlı
-  istekleri batch'ler).
+  kalibrasyonu (tehdit kelimeleri) + risk tabanı guardrail'i ile anomalilerde risk yükseldi
+  (QWK 0.733); normalde dar-yanlış-pozitif ~%0 tutuldu (operasyonel-FP ~%8–10 dürüstçe raporlanır).
+- **Performans:** vLLM eşzamanlı istekleri batch'ler; prefix-caching + serving-flag'leriyle (gpu-util
+  0.90, max-num-seqs 32) eşzamanlı (x4) throughput **+24%** (3.7→4.6 video/dk), tek-akış ~1.5 s/vsn (hızlı mod ~0.6).
 - **Diyalog robustluğu:** Bağlam-değişimi/prompt-injection denemelerine karşı few-shot reddetme
-  örnekleriyle ajan göreve bağlı kalacak biçimde sertleştirildi (robustluk 4.33/5).
+  örnekleriyle ajan göreve bağlı kalacak biçimde sertleştirildi (diyalog robustluğu 5.00/5).
 - **Daha büyük model denemesi (32B-AWQ):** Qwen2.5-VL-32B-Instruct-AWQ indirilip servis edilmeye
   çalışıldı. AWQ kernelleri Blackwell'de **çalıştı** (ağırlıklar yüklendi — uyumsuzluk yok), ancak
   ~20.5 GB ağırlık + KV cache 24 GB laptop GPU'ya sığmadı (*"No available memory for cache blocks"*).
