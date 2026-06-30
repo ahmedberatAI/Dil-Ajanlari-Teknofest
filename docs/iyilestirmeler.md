@@ -929,6 +929,33 @@ tam entegrasyon + A/B planlarıyla roadmap'e yazıldı. Kaynaklar: 4 subagent ra
 
 ---
 
+## §22 — D12–D15: Yarışma-uyum filosu (4 subagent) + uygulanan otonomi/dürüstlük kazanımları
+
+Şartname-odaklı 4 paralel denetim subagent'ı (VLM-mimari değil): **(A)** şartname-fit + puanlama-açığı (iç),
+**(B)** Otonomi-derinliği (iç), **(C)** dünya-geneli yaklaşımlar (dış), **(D)** teslim/sunum/yenilik (iç). Çıktılar
+**çapraz-sorgulandı.** Birleşik gerçekçi skor **≈84/100** (band 78–85): Fonk 86 · Tek 84 · Oto 80 · Yen 82.
+**4/4 yakınsama:** "görünmez işi görünür kıl" + diyalog-otonomi ucuz-headroom + `memory` rubrik-açığı. **Önemli düzeltme
+(B):** eski "%78" bir *pipeline* (act-dispatch) metriği — diyalog-otonomisi değil; §7 jüriyi sohbetle ölçer.
+
+**UYGULANDI (ölçüldü + commit):**
+- **D13 / P1 — Belge dürüstlüğü:** README/sunum_iskeleti/architecture/sartname_uyum'daki eski sayılar güncel
+  kaynak-doğrulukla hizalandı. En riskli: "normal-FP %0" → dar-FP ~%0 / **op-FP ~%8–10 (dürüst)**; Qwen2.5→Qwen3-VL;
+  3.2×→+24%; diyalog 4.33→5.0. 3-seviyeli recall (TESPİT %96/AKSİYON %73/TANIMA %46) README+sunuma eklendi. (§16 optik-riski kapatıldı.)
+- **D14 / C#1+B#2 — Görünür-kıl:** `AnalysisResult.decision_trace` (finalize trace'i taşır) → UI "Ajan Karar Günlüğü"
+  + JSON. `build_context`'e **ALGI GÜVENİ** (grounded, çözünürlükten) + karar-izi; CHAT_SYSTEM "ne kadar eminsin/neden"
+  sorularında bunlara dayanır. Additive (recall değişmez). Offline doğrulandı.
+- **D15 / B#1+memory — Confirm-then-act + hafıza (Otonomi %20):** chat ajanı artık operatör **onayıyla** mock-fonksiyonu
+  **gerçekten çalıştırır** (cheap regex ön-filtre + LLM-çıkarım kapısı + fonksiyon-adı dedupe → FP-güvenli; serbest-metin
+  yanıtı değişmedi → injection/bağlam-değişimi direnci korundu). `memory.py`: oturum karar-günlüğü ("az önce ne yaptım?")
+  + episodik bellek (`data/memory/episodes.jsonl`, gitignore). **End-to-end doğrulandı:** onay→icra+rapor+hafıza;
+  geçmiş-soru→re-icra YOK; onay-dışı→icra YOK.
+
+**ROADMAP (filodan, ertelendi — gerekçeli):** PDF olay-raporu · politika-UI first-class · dedup→olay-gruplama ·
+forensic-arama · graded compute-cascade · neurosimbolik kural-motoru (D11 §21'le aynı) · teslim kalemleri (pptx
+artık-sayıları → pptx-skill, **takım-adları/roller**, sunum.pptx→**PDF export**). Kaynaklar: 4 subagent raporu (transcript).
+
+---
+
 ## §22 — D12: İki roadmap bulgusu uygulandı + ölçüldü (ikisi de opt-in → dürüst)
 
 D11'in iki yüksek-değer bulgusu ayrı ayrı **uygulanıp tam-pipeline A/B ile ölçüldü.** İkisi de gerçek-kazanç
