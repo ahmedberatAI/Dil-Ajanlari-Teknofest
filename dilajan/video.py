@@ -135,6 +135,37 @@ def extract_timestamped_frames(
     return frames, info
 
 
+def timedframes_from_bgr(
+    bgr_frames: List,
+    timestamps: List[float],
+    max_side: int | None = None,
+    min_side: int | None = None,
+) -> List[TimedFrame]:
+    """cv2 (BGR) kare dizisini (zaman, jpeg) TimedFrame listesine cevirir — DECODE-ONCE.
+
+    Canli akista kareler zaten decode edilmis olur; bunlari gecici bir mp4'e yazip PyAV ile
+    YENIDEN decode etmek yerine dogrudan JPEG'e kodlariz (mp4 yaz->yeniden-oku gidis-donusu yok).
+    _resize_jpeg ile ayni olcek/kalite (analiz akisi degismez)."""
+    import numpy as np
+    max_side = max_side or settings.frame_max_side
+    min_side = settings.frame_min_side if min_side is None else min_side
+    out: List[TimedFrame] = []
+    for bgr, t in zip(bgr_frames, timestamps):
+        rgb = np.ascontiguousarray(np.asarray(bgr)[:, :, ::-1])  # BGR -> RGB
+        img = Image.fromarray(rgb)
+        out.append((float(t), _resize_jpeg(img, max_side, min_side)))
+    return out
+
+
+def build_video_info(path: str, frames: List[TimedFrame], fps: float,
+                     width: int, height: int) -> VideoInfo:
+    """Onceden-cikarilmis kareler icin VideoInfo uretir (width/height ORIJINAL cozunurluk;
+    perception_confidence dusuk-res advisory'sinin dogru calismasi icin)."""
+    duration = frames[-1][0] if frames else 0.0
+    return VideoInfo(path=path, duration=duration, fps=fps,
+                     width=width, height=height, sampled_frames=len(frames))
+
+
 def detect_scene_cuts(
     frames: List[TimedFrame],
     threshold: float | None = None,

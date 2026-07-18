@@ -121,6 +121,16 @@ class Settings(BaseSettings):
                                     # Deterministik (VLM zone-reasoning guvenilmez); opt-in (bos=kapali).
     adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)
 
+    # --- Hizli-kazanim dedektor senaryolari (opt-in; deterministik YOLO/geometri -> grenli-guvenli) ---
+    detect_vehicles: bool = False   # YOLO ile arac (araba/kamyon/otobüs/motosiklet) tespiti. Araclar iri/kaba-sinif
+                                    # oldugundan grenli CCTV'de kisiden GUVENILIR. vehicle_zones set ise ihlal uretir.
+    vehicle_zones: str = ""         # araç YASAK/yanlis-konum bolgeleri (3x3 izgara etiketleri, virgulle). Bu
+                                    # bolgelerde arac = "Yetkisiz/Yanlis Konumlu Arac" (Yüksek/Yetkisiz Erişim).
+                                    # Bos ise: bir segmentte SUREKLI (dwell) gorulen durak arac bilgi amacli raporlanir.
+    detect_crowd: bool = False      # YOLO kisi-sayimi + hareket ile toplanma (gathering) ve ani-dagilma (panik) tespiti.
+                                    # Sartname ornegini ("00:35 personel toplanmasi") dogrudan karsilar.
+    crowd_min_persons: int = 5      # bir segmentte bu sayi+ kisi ESZAMANLI gorulurse "toplanma" olayi uretilir
+
     # --- Hizli mod (E4: gercege-yakin dusuk gecikme) ---
     # DILAJAN_FAST_MODE=1 -> tek-gecisli algi + verify/grounding/reexamine kapali + daha az/kucuk kare.
     # Gecikmeyi ~3-4x dusurur; dogruluk-hiz odunlesimi olculmustur (docs/iyilestirmeler.md).

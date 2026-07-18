@@ -119,18 +119,24 @@ def _ensure_playable(path):
 
 
 def _blank():
-    return (gr.update(),) * 9
+    # status disindaki tum ciktilar (summary, risk, timeline, events, actions, funcs, trace,
+    # json, context_state, result_state, path_state) icin akis-arasi yer-tutucu
+    return (gr.update(),) * 11
 
 
-def analyze(video_path, facility_rules="", restricted_zones=""):
+def analyze(video_path, facility_rules="", restricted_zones="",
+            detect_vehicles=False, vehicle_zones="", detect_crowd=False):
     if not video_path:
         yield ("Lütfen bir video yükleyin.", *_blank())
         return
     memory.reset_decisions()  # yeni analiz -> oturum karar-günlüğü sıfırlanır (B#1/memory)
-    # SAVUNMA/tesis: operatörün girdiği kuralları + yasak bölgeleri bu analiz için uygula
+    # SAVUNMA/tesis: operatörün girdiği kuralları + yasak bölgeleri + dedektör senaryolarını uygula
     from dilajan.config import settings as _settings
     _settings.facility_rules = (facility_rules or "").strip()
     _settings.restricted_zones = (restricted_zones or "").strip()
+    _settings.detect_vehicles = bool(detect_vehicles)
+    _settings.vehicle_zones = (vehicle_zones or "").strip()
+    _settings.detect_crowd = bool(detect_crowd)
     result: AnalysisResult | None = None
     for step in _graph.stream({"video_path": video_path, "trace": []}):
         node, out = next(iter(step.items()))
@@ -155,8 +161,9 @@ def analyze(video_path, facility_rules="", restricted_zones=""):
     raw = json.dumps(result.model_dump(), ensure_ascii=False, indent=2)
     ctx = chat_agent.build_context(result)  # mevcut analiz henüz episodik bellekte değil -> "geçmiş" olarak görünmez
     memory.append_episode(result, source=os.path.basename(str(video_path)))
+    # result + video yolu State'lere yazilir -> Tutanak / Kanıt Paketi butonlari bunlari kullanir
     yield ("✅ Analiz tamamlandı.", result.summary, risk, timeline,
-           events_rows, actions_md, funcs_md, trace_md, raw, ctx)
+           events_rows, actions_md, funcs_md, trace_md, raw, ctx, result, str(video_path))
 
 
 def chat_respond(message, history, context):
@@ -167,6 +174,38 @@ def chat_respond(message, history, context):
     return history, ""
 
 
+def make_briefing(hours):
+    """Vardiya devir-teslim brifingi üretir (episodik bellekten)."""
+    from dilajan import briefing
+    try:
+        h = float(hours) if hours else 8.0
+    except Exception:
+        h = 8.0
+    return briefing.generate_shift_briefing(h)
+
+
+def make_report(result, path):
+    """Analiz sonucundan resmi Markdown olay tutanağı üretir."""
+    if not result:
+        return "Önce bir video analiz edin; ardından tutanak üretebilirsiniz."
+    from dilajan import report
+    cam = os.path.basename(str(path)) if path else "—"
+    return report.build_incident_report(result, camera=cam)
+
+
+def make_evidence(result, path):
+    """Yüksek-önemli olaylar için bbox-overlay kanıt kareleri + hash'li manifest üretir."""
+    if not result or not path:
+        return None
+    from dilajan import evidence
+    out_dir = os.path.join(tempfile.gettempdir(), "dilajan_kanit")
+    res = evidence.build_evidence_bundle(str(path), result, out_dir)
+    files = list(res.get("frames", []))
+    if res.get("manifest"):
+        files.append(res["manifest"])
+    return files or None
+
+
 def build_ui() -> gr.Blocks:
     with gr.Blocks(title="DilAjanları - Video Analiz ve Karar Destek") as demo:
         gr.Markdown(
@@ -174,6 +213,8 @@ def build_ui() -> gr.Blocks:
             "TEKNOFEST TYDA 3. Senaryo · Yerel / offline · Qwen3-VL-8B + vLLM + LangGraph"
         )
         context_state = gr.State("")
+        result_state = gr.State(None)   # son AnalysisResult (tutanak/kanit icin)
+        path_state = gr.State("")       # son analiz edilen video yolu (kanit karesi cikarimi icin)
 
         with gr.Row():
             with gr.Column(scale=1):
@@ -189,6 +230,12 @@ def build_ui() -> gr.Blocks:
                     zones_in = gr.Textbox(
                         label="Yasak / kısıtlı bölgeler (3×3 ızgara, virgülle)",
                         placeholder="Örn: üst sağ, sağ, alt sağ  → bu bölgelerde kişi = Yasak Bölge İhlali (Yüksek)")
+                    with gr.Row():
+                        crowd_in = gr.Checkbox(label="👥 Kalabalık / toplanma + ani dağılma tespiti", value=False)
+                        vehicles_in = gr.Checkbox(label="🚗 Araç tespiti (yasak bölge)", value=False)
+                    vehicle_zones_in = gr.Textbox(
+                        label="Araç yasak bölgeleri (3×3 ızgara, virgülle — boşsa durağan araç bilgi amaçlı)",
+                        placeholder="Örn: alt sağ, sağ  → bu bölgelerde araç = Yetkisiz/Yanlış Konumlu Araç (Yüksek)")
                 analyze_btn = gr.Button("🔍 Analiz Et", variant="primary")
                 status_out = gr.Markdown("")
                 summary_out = gr.Textbox(label="Özet", lines=3)
@@ -210,6 +257,19 @@ def build_ui() -> gr.Blocks:
         with gr.Accordion("Ham JSON Çıktısı", open=False):
             json_out = gr.Code(language="json", label="AnalysisResult")
 
+        with gr.Accordion("📄 Olay Tutanağı & Kanıt Paketi", open=False):
+            with gr.Row():
+                report_btn = gr.Button("📄 Olay Tutanağı Üret")
+                evidence_btn = gr.Button("🖼️ Kanıt Paketi Oluştur")
+            report_out = gr.Markdown()
+            evidence_out = gr.File(label="Kanıt kareleri + manifest (bbox-overlay, SHA-256)", file_count="multiple")
+
+        with gr.Accordion("🕐 Vardiya Devir-Teslim Brifingi", open=False):
+            with gr.Row():
+                brief_hours = gr.Number(value=8, label="Pencere (saat)", precision=0, scale=1)
+                brief_btn = gr.Button("Brifing Oluştur", variant="secondary", scale=2)
+            brief_out = gr.Markdown()
+
         gr.Markdown("## 💬 Analiz Hakkında Sohbet (Operatör Asistanı)")
         chatbot = gr.Chatbot(height=300, label="Operatör Asistanı")
         with gr.Row():
@@ -220,12 +280,18 @@ def build_ui() -> gr.Blocks:
         video_in.upload(_ensure_playable, inputs=[video_in], outputs=[video_in])
 
         analyze_btn.click(
-            analyze, inputs=[video_in, facility_in, zones_in],
+            analyze, inputs=[video_in, facility_in, zones_in, vehicles_in, vehicle_zones_in, crowd_in],
             outputs=[status_out, summary_out, risk_out, timeline_out,
-                     events_out, actions_out, funcs_out, trace_out, json_out, context_state],
+                     events_out, actions_out, funcs_out, trace_out, json_out, context_state,
+                     result_state, path_state],
         )
         chat_btn.click(chat_respond, [chat_in, chatbot, context_state], [chatbot, chat_in])
         chat_in.submit(chat_respond, [chat_in, chatbot, context_state], [chatbot, chat_in])
+
+        # Hizli-kazanim UI baglantilari
+        report_btn.click(make_report, [result_state, path_state], [report_out])
+        evidence_btn.click(make_evidence, [result_state, path_state], [evidence_out])
+        brief_btn.click(make_briefing, [brief_hours], [brief_out])
 
     return demo
 

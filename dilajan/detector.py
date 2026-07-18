@@ -189,6 +189,86 @@ def detect_zone_intrusion(frames: Sequence[Tuple[str, bytes]], zones: Sequence[s
         return {}
 
 
+# Arac COCO siniflari -> Turkce (iri/kaba-sinif -> grenli CCTV'de kisiden guvenilir tespit)
+_VEHICLE_CLS = {2: "araba", 3: "motosiklet", 5: "otobüs", 7: "kamyon"}
+
+
+def detect_vehicle_intrusion(frames: Sequence[Tuple[str, bytes]], zones: Sequence[str] = (),
+                             conf: float = 0.35, dwell_frac: float = 0.5) -> List[dict]:
+    """Arac (araba/kamyon/otobüs/motosiklet) tespiti — yetkisiz/yanlis-konumlu arac senaryosu.
+
+    `zones` verilirse (3x3 izgara etiketleri): arac MERKEZI yasak bir bolgede ise IHLAL (perimetre/
+    yangin-yolu/kapi onu araci). `zones` bos ise: segment karelerinin >= dwell_frac'inda gorulen
+    DURAK (dwell) arac bilgi amacli raporlanir. Deterministik + FAIL-OPEN (hata -> []).
+    Donus: list[dict] {time, region, label, conf, violation(bool)} (her (bolge,tip) icin ILK tespit)."""
+    try:
+        model = _get_model()
+        imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
+        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        zones_n = {z.strip().lower() for z in zones if z and z.strip()}
+        first: dict = {}          # (region_or_'*', label) -> (time, conf)
+        frames_with_vehicle = 0
+        for fi, r in enumerate(results):
+            w, h = imgs[fi].size
+            frame_has = False
+            for box, cls, cf in zip(r.boxes.xyxy.tolist(), r.boxes.cls.tolist(), r.boxes.conf.tolist()):
+                ci = int(cls)
+                if ci not in _VEHICLE_CLS:
+                    continue
+                frame_has = True
+                cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
+                reg = _region_of(cx, cy, w, h)
+                label = _VEHICLE_CLS[ci]
+                key = ((reg, label) if zones_n else ("*", label))
+                if key not in first:
+                    first[key] = (frames[fi][0], round(float(cf), 2))
+            if frame_has:
+                frames_with_vehicle += 1
+        n = len(results) or 1
+        events: List[dict] = []
+        if zones_n:
+            for (reg, label), (t, cf) in first.items():
+                if reg.lower() in zones_n:
+                    events.append({"time": t, "region": reg, "label": label, "conf": cf, "violation": True})
+        else:
+            # bolge yok -> yalniz SUREKLI (dwell) gorulen durak araci bilgi olarak raporla (FP azalt)
+            if frames_with_vehicle >= max(2, int(dwell_frac * n)):
+                for (_, label), (t, cf) in first.items():
+                    events.append({"time": t, "region": None, "label": label, "conf": cf, "violation": False})
+        return events
+    except Exception:
+        return []
+
+
+def crowd_stats(frames: Sequence[Tuple[str, bytes]], conf: float = 0.35,
+                min_persons: int = 5) -> dict:
+    """Kisi-sayimi zaman serisinden toplanma (gathering) ve ani-dagilma/panik (dispersal) tespiti.
+
+    Deterministik: her karede COCO-kisi sayilir; zirve >= min_persons ise TOPLANMA. Zirveden sonra
+    sayim yariya (<= peak//2) DUSERSE ani-dagilma/panik. FAIL-OPEN (hata -> {}).
+    Donus: {peak, peak_time, gathering, dispersal, dispersal_time, counts}."""
+    try:
+        model = _get_model()
+        imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
+        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        counts = [sum(1 for c in r.boxes.cls.tolist() if int(c) == 0) for r in results]
+        if not counts:
+            return {}
+        peak = max(counts)
+        peak_i = counts.index(peak)
+        gathering = peak >= min_persons
+        dispersal, dispersal_time = False, None
+        if gathering:  # panik = toplanmadan sonra ani cozulme
+            for j in range(peak_i + 1, len(counts)):
+                if counts[j] <= max(1, peak // 2):
+                    dispersal, dispersal_time = True, frames[j][0]
+                    break
+        return {"peak": peak, "peak_time": frames[peak_i][0], "gathering": gathering,
+                "dispersal": dispersal, "dispersal_time": dispersal_time, "counts": counts}
+    except Exception:
+        return {}
+
+
 def available() -> bool:
     try:
         import ultralytics  # noqa: F401

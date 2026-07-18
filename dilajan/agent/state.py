@@ -11,6 +11,11 @@ class AgentState(TypedDict, total=False):
     # Girdi
     video_path: str
 
+    # canli/decode-once: onceden cikarilmis (zaman, jpeg) kareler + VideoInfo.
+    # Verilirse ingest videoyu YENIDEN decode etmez (canli akista mp4 ara-adimini atlar).
+    prebuilt_frames: List
+    prebuilt_info: Optional[VideoInfo]
+
     # ingest cikti
     segments: List[Segment]
     video_info: VideoInfo

@@ -79,6 +79,27 @@ def recent_episodes(n: int = 5) -> List[dict]:
         return []
 
 
+def episodes_since(hours: float = 8.0, limit: int = 500) -> List[dict]:
+    """Son `hours` saat icindeki epizodlari (ts parse edilebilenler) dondurur — vardiya brifingi icin.
+    Fail-open -> []."""
+    try:
+        eps = recent_episodes(limit)
+        if not eps:
+            return []
+        cutoff = datetime.datetime.now() - datetime.timedelta(hours=hours)
+        out = []
+        for e in eps:
+            try:
+                t = datetime.datetime.strptime(e.get("ts", ""), "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                continue
+            if t >= cutoff:
+                out.append(e)
+        return out
+    except Exception:
+        return []
+
+
 def format_episodes(n: int = 5, exclude_source: Optional[str] = None) -> str:
     """Gecmis epizodlari sohbet baglami metnine cevirir (bos ise '')."""
     eps = [e for e in recent_episodes(n + 1) if e.get("source") != exclude_source][-n:]

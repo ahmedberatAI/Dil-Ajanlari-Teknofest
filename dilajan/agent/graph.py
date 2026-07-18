@@ -238,20 +238,34 @@ def _events_block_scened(events: List[Event], cuts: List[float]) -> str:
 
 
 # --- dugumler ---
+def _ingest_output(frames, info, trace: list) -> dict:
+    """Cikarilmis karelerden segment + sahne-kesimi cikti sozlugu kurar (ortak yol)."""
+    segments = build_segments(frames)
+    cuts = detect_scene_cuts(frames) if settings.scene_cut_threshold > 0 else []
+    if not segments:
+        trace.append("ingest: video okundu ama kare cikarilamadi (boş/bozuk olabilir)")
+    else:
+        note = f"ingest: {info.duration_str} video, {len(segments)} segment, {info.sampled_frames} kare"
+        if cuts:
+            note += f"; {len(cuts)+1} kopuk bölüm (kesim: {', '.join(format_timestamp(c) for c in cuts)})"
+        trace.append(note)
+    return {"segments": segments, "video_info": info, "scene_cuts": cuts, "trace": trace}
+
+
 def ingest(state: AgentState) -> dict:
     trace = state.get("trace", [])
+    # DECODE-ONCE: kareler onceden cikarilmissa (canli akis) videoyu yeniden decode etme
+    pf = state.get("prebuilt_frames")
+    if pf is not None:
+        info = state.get("prebuilt_info")
+        try:
+            return _ingest_output(pf, info, trace)
+        except Exception as ex:
+            trace.append(f"ingest: onceden-cikarilmis kare islenemedi: {ex}")
+            return {"segments": [], "video_info": info, "trace": trace}
     try:
         frames, info = extract_timestamped_frames(state["video_path"])
-        segments = build_segments(frames)
-        cuts = detect_scene_cuts(frames) if settings.scene_cut_threshold > 0 else []
-        if not segments:
-            trace.append("ingest: video okundu ama kare cikarilamadi (boş/bozuk olabilir)")
-        else:
-            note = f"ingest: {info.duration_str} video, {len(segments)} segment, {info.sampled_frames} kare"
-            if cuts:
-                note += f"; {len(cuts)+1} kopuk bölüm (kesim: {', '.join(format_timestamp(c) for c in cuts)})"
-            trace.append(note)
-        return {"segments": segments, "video_info": info, "scene_cuts": cuts, "trace": trace}
+        return _ingest_output(frames, info, trace)
     except Exception as ex:  # okunamayan/bozuk video -> toleransli devam
         trace.append(f"ingest: video okunamadi: {ex}")
         return {"segments": [], "video_info": None, "trace": trace}
@@ -527,6 +541,42 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                 out.append(Event(
                     time=t, event=f"Yasak bölge ihlali: yetkisiz kişi '{reg}' kısıtlı bölgesinde tespit edildi",
                     severity=Severity.YUKSEK, category=EventCategory.YETKISIZ_ERISIM, region=reg))
+        # Hizli-kazanim: YETKISIZ/YANLIS-KONUMLU ARAC (deterministik YOLO; araclar iri -> grenli-guvenli).
+        # vehicle_zones set ise: yasak bolgedeki arac -> ihlal; bos ise: durak (dwell) arac bilgi amacli.
+        if settings.detect_vehicles:
+            try:
+                from dilajan import detector
+                vzones = settings.vehicle_zones.split(",") if settings.vehicle_zones else []
+                vhits = detector.detect_vehicle_intrusion(seg.frames, vzones)
+            except Exception:
+                vhits = []
+            for vh in vhits:
+                if vh.get("violation"):
+                    out.append(Event(
+                        time=vh["time"],
+                        event=f"Yetkisiz/yanlış konumlu araç: {vh['label']} '{vh['region']}' kısıtlı bölgesinde",
+                        severity=Severity.YUKSEK, category=EventCategory.YETKISIZ_ERISIM, region=vh.get("region")))
+                else:
+                    out.append(Event(
+                        time=vh["time"], event=f"Durağan araç tespit edildi ({vh['label']})",
+                        severity=Severity.ORTA, category=EventCategory.ANOMALI))
+        # Hizli-kazanim: KALABALIK/TOPLANMA + ANI DAGILMA (panik). Sartname ornegi: "personel toplanmasi".
+        if settings.detect_crowd:
+            try:
+                from dilajan import detector
+                cs = detector.crowd_stats(seg.frames, min_persons=settings.crowd_min_persons)
+            except Exception:
+                cs = {}
+            if cs.get("gathering"):
+                out.append(Event(
+                    time=cs.get("peak_time", seg.start_str),
+                    event=f"Personel/insan toplanması ({cs['peak']} kişi bir arada)",
+                    severity=Severity.ORTA, category=EventCategory.ANOMALI))
+            if cs.get("dispersal"):
+                out.append(Event(
+                    time=cs.get("dispersal_time", seg.start_str),
+                    event=f"Ani dağılma / panik hareketi (kalabalık {cs['peak']} kişiden hızla azaldı)",
+                    severity=Severity.YUKSEK, category=EventCategory.GUVENLIK))
         return out, pose_note
     except Exception as ex:  # hata toleransi: segment atlanir
         return [], f"perceive: segment {seg.index} hatasi: {ex}"
@@ -862,6 +912,7 @@ def finalize(state: AgentState) -> dict:
         actions=state.get("actions", []),
         video_duration=info.duration_str if info else None,
         triggered_functions=state.get("triggered_functions", []),
+        action_log=state.get("action_log", []),
         decision_trace=state.get("trace", []),
     )
     return {"result": result}
@@ -918,6 +969,25 @@ def analyze_video(video_path: str, n_samples: Optional[int] = None) -> AnalysisR
     with ThreadPoolExecutor(max_workers=n) as pool:
         results = list(pool.map(
             lambda _: _GRAPH.invoke({"video_path": video_path, "trace": []})["result"],
+            range(n),
+        ))
+    return _vote(results)
+
+
+def analyze_prepared(frames, info, n_samples: Optional[int] = None) -> AnalysisResult:
+    """Onceden-cikarilmis (zaman, jpeg) karelerden uctan-uca analiz — DECODE-ONCE (canli akis).
+
+    Videoyu yeniden decode etmez (canli akista mp4 yaz->PyAV-oku gidis-donusunu atlar) -> dusuk gecikme.
+    `frames`: video.timedframes_from_bgr ciktisi; `info`: video.build_video_info ciktisi."""
+    global _GRAPH
+    if _GRAPH is None:
+        _GRAPH = build_graph()
+    n = n_samples if n_samples is not None else settings.n_samples
+    if n <= 1:
+        return _GRAPH.invoke({"prebuilt_frames": frames, "prebuilt_info": info, "trace": []})["result"]
+    with ThreadPoolExecutor(max_workers=n) as pool:
+        results = list(pool.map(
+            lambda _: _GRAPH.invoke({"prebuilt_frames": frames, "prebuilt_info": info, "trace": []})["result"],
             range(n),
         ))
     return _vote(results)

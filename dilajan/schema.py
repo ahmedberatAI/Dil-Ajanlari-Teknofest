@@ -71,6 +71,10 @@ class AnalysisResult(BaseModel):
         default_factory=list,
         description="Ajanin çağirdigi mock operasyonel fonksiyonlar",
     )
+    action_log: List[dict] = Field(
+        default_factory=list,
+        description="Tetiklenen operasyonel çağrilarin ayrintili kaydi (fonksiyon, args, sonuç, zaman) — tutanak/kanit için",
+    )
     decision_trace: List[str] = Field(
         default_factory=list,
         description="Ajanin adim-adim karar-izi (aciklanabilirlik): hangi dugum ne karar verdi",

@@ -243,6 +243,22 @@ CHAT_SYSTEM = (
     "ANALİZ BAĞLAMI:\n{context}"
 )
 
+# --- Vardiya devir-teslim brifingi (hizli-kazanim; episodik bellek -> tek Turkce brifing) ---
+SHIFT_BRIEF_PROMPT = (
+    "Sen bir güvenlik operasyon merkezinde VARDİYA DEVİR-TESLİM brifingi hazırlayan karar destek "
+    "asistanısın. Aşağıda son vardiya penceresinde analiz edilen olay kayıtları ve operatör onayıyla "
+    "yürütülen aksiyonlar var. Gelen operatöre KISA, NET ve TÜRKÇE bir devir-teslim brifingi yaz. "
+    "Yalnızca verilenlere dayan; UYDURMA.\n\n"
+    "VARDİYA VERİLERİ:\n{data}\n\n"
+    "Brifingi TAM OLARAK şu başlıklarla, madde madde üret:\n"
+    "1) GENEL DURUM: 1-2 cümle (kaç analiz yapıldı, en yüksek risk seviyesi).\n"
+    "2) ÖNE ÇIKAN OLAYLAR: en yüksek riskli 3-5 olay (zaman + kısa açıklama + risk seviyesi).\n"
+    "3) YÜRÜTÜLEN AKSİYONLAR: onaylanıp tetiklenen operasyonel çağrılar (yoksa 'yok').\n"
+    "4) AÇIK / İZLENECEK: dikkat gerektiren, henüz kapatılmamış durumlar (yoksa 'takip gerektiren açık durum yok').\n"
+    "5) ÖNCELİK: gelen operatöre 'önce şuna bak' diyeceğin TEK en kritik madde.\n"
+    "Operasyonel ve öz yaz; süslü/uzun dil kullanma."
+)
+
 # B#1 confirm-then-act: operatör onayindan sonra hangi mock-fonksiyon(lar)in çalistirilacagini çikarir.
 CHAT_EXECUTE_PROMPT = (
     "Bir güvenlik operasyon asistanısın. Operatör, ASİSTANIN DAHA ÖNCE ÖNERDİĞİ bir operasyonel "
