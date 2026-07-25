@@ -22,7 +22,7 @@ import gradio as gr
 
 from dilajan import chat_agent, memory
 from dilajan.agent.graph import build_graph
-from dilajan.config import settings
+from dilajan.config import request_config, settings
 from dilajan.schema import AnalysisResult, Severity
 
 _graph = build_graph()
@@ -235,23 +235,27 @@ def analyze(video_path, facility_rules="", restricted_zones="",
         yield (_alert("Lütfen önce bir video yükleyin."), *_blank())
         return
     memory.reset_decisions()  # yeni analiz -> oturum karar-günlüğü sıfırlanır (B#1/memory)
-    # SAVUNMA/tesis: operatörün girdiği kuralları + yasak bölgeleri + dedektör senaryolarını uygula
-    settings.facility_rules = (facility_rules or "").strip()
-    settings.restricted_zones = (restricted_zones or "").strip()
-    settings.detect_vehicles = bool(detect_vehicles)
-    settings.vehicle_zones = (vehicle_zones or "").strip()
-    settings.detect_crowd = bool(detect_crowd)
-
-    seen: list = []
-    yield (_pipeline_html(seen), *_blank())  # baslangic: Görüntü Alımı aktif
-    result: AnalysisResult | None = None
-    for step in _graph.stream({"video_path": video_path, "trace": []}):
-        node, out = next(iter(step.items()))
-        seen.append(node)
-        if node == "finalize":
-            result = out.get("result")
-        else:
-            yield (_pipeline_html(seen), *_blank())
+    # K2 (İSTEK İZOLASYONU): SAVUNMA/tesis ayarları artık kalıcı global mutasyonla değil,
+    # istek-kapsamlı bir bağlam yöneticisiyle uygulanır. Analiz süresince kapı tutulur
+    # (eşzamanlı ikinci analiz bu alanları EZEMEZ) ve çıkışta eski değerler geri yüklenir
+    # (ayar bir sonraki isteğe/kullanıcıya SIZMAZ). Detay: dilajan/config.py::request_config
+    with request_config(
+        facility_rules=(facility_rules or "").strip(),
+        restricted_zones=(restricted_zones or "").strip(),
+        detect_vehicles=bool(detect_vehicles),
+        vehicle_zones=(vehicle_zones or "").strip(),
+        detect_crowd=bool(detect_crowd),
+    ):
+        seen: list = []
+        yield (_pipeline_html(seen), *_blank())  # baslangic: Görüntü Alımı aktif
+        result: AnalysisResult | None = None
+        for step in _graph.stream({"video_path": video_path, "trace": []}):
+            node, out = next(iter(step.items()))
+            seen.append(node)
+            if node == "finalize":
+                result = out.get("result")
+            else:
+                yield (_pipeline_html(seen), *_blank())
 
     if result is None:
         yield (_alert("Analiz tamamlanamadı — model sunucusunun çalıştığından emin olun."), *_blank())

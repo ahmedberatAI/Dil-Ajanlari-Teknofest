@@ -5,8 +5,9 @@ baglam-degisimi/prompt-injection direnci, dogal Turkce.
 """
 from __future__ import annotations
 
+import json
 import re
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from dilajan import memory
 from dilajan.llm_client import VLMClient
@@ -22,6 +23,48 @@ _client: Optional[VLMClient] = None
 _CONFIRM_RE = re.compile(
     r"\b(evet|onay|tamam|gönder|gonder|sevk|çağır|cagir|uygula|başlat|baslat|tetikle|hallet|olur|devam et)",
     re.IGNORECASE)
+
+# K5 — OLUMSUZLAMA FARKINDALIGI.
+# Sorun: yalniz onay-KOKUNE bakan filtre Türkçe olumsuzlamalarda YANLIS-POZITIF veriyordu:
+# "gönderme", "onaylamıyorum", "tamam değil", "iptal et", "vazgeçtim", "şimdilik bekle"
+# -> hepsi _CONFIRM_RE'yi tetikliyor ve icra kapisini aciyordu.
+# Cözüm: onay-koku VE olumsuzlama birlikteyse ICRA TETIKLENMEZ (LLM kapisina bile gidilmez).
+# Yön: FP-güvenli — süphede ICRA ETME (operatör her zaman acikca tekrar onaylayabilir).
+
+# (1) Olumsuz emir: onay-fiili + -ma/-me (+ opsiyonel kisi/emir eki).
+#     'gönderme', 'göndermeyin', 'sevk etme', 'onaylamayın', 'uygulama', 'yapma', 'arama'
+_NEG_IMPERATIVE_RE = re.compile(
+    r"\b(?:gönder|gonder|çağır|cagir|çagir|başlat|baslat|tetikle|uygula|yap|ara|hallet|onayla|bildir|"
+    r"(?:sevk|devam|icra|müdahale|mudahale|not)\s*et)"
+    r"m[ae](?:y(?:in|iniz|elim)|sin(?:ler)?|z)?\b",
+    re.IGNORECASE)
+
+# (2) Genel olumsuzlama belirtecleri (olumsuz genis/simdiki zaman, red, erteleme, iptal).
+_NEGATION_RE = re.compile(
+    r"\b\w*m[ıiuü]yor(?:um|uz|sun|sunuz|lar)?\b"          # onaylamıyorum, istemiyorum, gerekmiyor
+    r"|\b(?:değil|degil|hayır|hayir|olmaz|yok|yoktur|iptal|sakın|sakin)\b"
+    r"|\bvazgeç|\bvazgec"                                  # vazgeçtim, vazgeçiyorum
+    r"|\bgerek(?:siz|mez)\b"
+    r"|\b(?:gerek|ihtiyaç|ihtiyac|lüzum|luzum)\s+(?:yok|görmüyorum|gormuyorum|duymuyorum)\b"
+    r"|\bdur(?:dur)?(?:un|sun|sunuz|alım|alim)?\b"         # dur / durdur / durdurun ('durum' EŞLEŞMEZ)
+    r"|\bbekle(?:yin|yiniz|yelim|lim|r|riz)?\b|\bbekliyor\w*\b"
+    r"|\berteleyelim\b|\berteleyin\b",
+    re.IGNORECASE)
+
+
+def is_confirmation(message: Optional[str]) -> bool:
+    """Operatör mesaji GERÇEK bir icra onayi mi? (olumsuzlama-farkindalikli ön-filtre)
+
+    True yalniz: onay-koku VAR **ve** olumsuzlama YOK. Böylece "gönderme",
+    "onaylamıyorum", "tamam değil", "iptal et", "şimdilik bekle" gibi ifadeler
+    icrayi tetiklemez. FP-güvenli: belirsizse False (icra yok).
+    """
+    text = (message or "").strip()
+    if not text or not _CONFIRM_RE.search(text):
+        return False
+    if _NEG_IMPERATIVE_RE.search(text) or _NEGATION_RE.search(text):
+        return False
+    return True
 
 
 def _tools_desc() -> str:
@@ -102,11 +145,37 @@ def respond(
     except Exception as ex:
         return f"Yanıt üretilirken hata oluştu: {ex}"
     # 2) B#1 KAPILI ICRA: operatör ONAY verdiyse, önerilen aksiyonu GERÇEKTEN çalıştır (insan-onay kapısı)
-    if _CONFIRM_RE.search(message or ""):
+    #    K5: onay tespiti olumsuzlama-farkindalikli ("gönderme"/"onaylamıyorum" icra ETMEZ)
+    if is_confirmation(message):
         executed = _maybe_execute(context, history, message)
         if executed:
             answer += "\n\n" + executed
     return answer
+
+
+def _dedup_key(fn: Optional[str], args: Optional[Dict[str, Any]]) -> str:
+    """K4: mükerrer-dispatch anahtari = (fonksiyon_adi, NORMALIZE edilmis argümanlar).
+
+    Eskiden dedup YALNIZ fonksiyon adina bakiyordu -> ayni oturumda IKI AYRI olay icin
+    ayni araç (ör. iki farkli konuma saglik ekibi) çagrilamiyor, ikinci onay SESSIZCE
+    hiçbir sey yapmiyordu. Argüman-farkindali anahtar bunu düzeltir:
+      ayni fn + AYNI arg  -> engellenir (gerçek mükerrer / geçmis-soru re-icrasi)
+      ayni fn + FARKLI arg -> çalisir (yeni olay, yeni konum)
+
+    Normalizasyon: anahtar/deger strip+lower, ic bosluklar tek bosluga indirilir,
+    JSON sort_keys ile sira-bagimsiz hale getirilir (model arg sirasi degisebilir).
+    Fail-open: normalize edilemezse repr'e düser (dedup yine çalisir).
+    """
+    name = (fn or "").strip().lower()
+    try:
+        norm: Dict[str, Any] = {}
+        for k, v in (args or {}).items():
+            key = " ".join(str(k).split()).strip().lower()
+            norm[key] = " ".join(str(v).split()).strip().lower() if isinstance(v, str) else v
+        payload = json.dumps(norm, sort_keys=True, ensure_ascii=False, default=str)
+    except Exception:
+        payload = repr(args)
+    return f"{name}|{payload}"
 
 
 def _maybe_execute(context: str, history: Optional[List[dict]], message: str) -> str:
@@ -126,15 +195,20 @@ def _maybe_execute(context: str, history: Optional[List[dict]], message: str) ->
     except Exception:
         return ""
     out = ["✅ Yürütülen operasyonel aksiyonlar:"]
-    done = {d["function"] for d in memory.SESSION_DECISIONS}  # bu oturumda çalışan fonksiyonlar
+    # K4: dedup anahtari (fonksiyon, normalize-args) — bu oturumda AYNI argümanlarla çalışanlar
+    done = {_dedup_key(d.get("function"), d.get("args")) for d in memory.SESSION_DECISIONS}
     for c in calls or []:
         fn = c.get("function")
         args = c.get("args", {}) or {}
         tool = TOOL_REGISTRY.get(fn)
         if not tool:
             continue
-        if fn in done:  # mükerrer-dispatch koruması: aynı fonksiyon oturumda 1 kez (geçmiş-soru re-icrasını da keser)
+        key = _dedup_key(fn, args)
+        # mükerrer-dispatch koruması: aynı fn + AYNI argüman oturumda 1 kez (geçmiş-soru
+        # re-icrasını da keser). Aynı fn + FARKLI argüman (yeni olay/konum) ÇALIŞIR.
+        if key in done:
             continue
+        done.add(key)  # aynı yanıt içinde tekrarlanan özdeş çağrıyı da keser
         try:
             res = str(tool.invoke(args))
         except Exception as ex:

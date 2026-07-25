@@ -4,6 +4,15 @@
 Bir eval sonuc JSON'undaki ozetleri, tespit edilen olaylara gore puanlar:
 referanssiz tutarlilik/akicilik/ozluluk degerlendirmesi.
 
+!!! K11 — OLCUM SINIRI (RAPORLARKEN MUTLAKA BELIRT) !!!
+Bu betik IC TUTARLILIK olcer, videoya DAYANAKLILIK DEGIL. Hakeme yalnizca sistemin
+KENDI olay listesi + KENDI ozeti verilir; klibin gercek etiketi veya kareleri VERILMEZ.
+Sonuc: sistem bir olayi UYDURSA bile ozeti o uydurma olayla tutarliysa TAM PUAN alir.
+Bu yuzden buradan cikan skor "ozet dogru" degil, "ozet kendi tespitleriyle tutarli" demektir.
+
+DAYANAKLI (grounded) olcum icin: benchmark/judge_independent.py — klibin BILINEN
+ground-truth etiketini hakeme verir ve 'olgusal_dayanaklilik' eksenini AYRI raporlar.
+
 Kullanim:
     python benchmark/judge.py                       # en son eval_*.json
     python benchmark/judge.py benchmark/results/eval_XX;.json

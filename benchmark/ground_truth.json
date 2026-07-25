@@ -1,10 +1,2913 @@
 {
-  "data/test_clip.mp4": {
-    "risk": "Kritik",
+  "_meta": {
+    "sema_surumu": 2,
+    "uretici": "benchmark/build_ground_truth.py",
+    "uretildi": "2026-07-25 23:50:18",
+    "aciklama": "Klip-duzeyi ground truth. Etiket kaynagi: dataset yayincisinin kategori KLASOR adi. Zaman-penceresi etiketi YALNIZCA kompozit-insa kliplerde vardir (splice noktasi tasarim geregi bilinir); diger tum kliplerde events=[] ve temporal alani 'insan-anotasyonu-gerekir' olarak isaretlidir.",
+    "durustluk_notlari": [
+      "K7: sentetik karikatur data/test_clip.mp4 GT'den KALDIRILDI (gerekce: _meta.dislanan).",
+      "K10: ayni MD5'e sahip klipler TEK KEZ sayilir; elenenler _meta.dedup.atlananlar.",
+      "K9: data/eval, data/eval_big'in alt kumesidir; dedup sonrasi tamamen elenir.",
+      "Temporal metrik yalnizca _meta.sayimlar.temporal_kesin kadar klipte MESRUDUR."
+    ],
+    "risk_politikasi": "Tek bir 'dogru' risk seviyesi iddia edilmez; 'risk_kabul' KABUL EDILEBILIR seviyeler listesidir (anomali -> Yüksek/Kritik, normal -> Düşük).",
+    "sayimlar": {
+      "toplam_klip": 108,
+      "anomali": 78,
+      "normal": 30,
+      "sentetik_dahil": 0,
+      "temporal_kesin": 2,
+      "temporal_anotasyonsuz": 106,
+      "kategori_bazli": {
+        "Abuse": 6,
+        "Assault": 6,
+        "Burglary": 6,
+        "Explosion": 7,
+        "Fall": 15,
+        "Fighting": 6,
+        "Fire": 11,
+        "Normal": 30,
+        "RoadAccidents": 9,
+        "Shooting": 6,
+        "Vandalism": 6
+      }
+    },
+    "dedup": {
+      "yontem": "MD5 (birebir icerik esitligi)",
+      "n_atlanan": 66,
+      "atlananlar": [
+        {
+          "path": "data/eval_big/Normal/Normal_Videos_937_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_936_x264.mp4",
+          "md5": "88800dc18af0bc29d05aa74656b638bf"
+        },
+        {
+          "path": "data/eval_scenario/Normal/0_tr128.mp4",
+          "duplicate_of": "data/eval_big/Normal/0_tr128.mp4",
+          "md5": "4f03223fc9d83b8e14ed4a6e0d88490b"
+        },
+        {
+          "path": "data/eval_scenario/Normal/1_tr61.mp4",
+          "duplicate_of": "data/eval_big/Normal/1_tr61.mp4",
+          "md5": "838e170f78f8642e322ab4a1723f1eea"
+        },
+        {
+          "path": "data/eval_scenario/Normal/2_te12.mp4",
+          "duplicate_of": "data/eval_big/Normal/2_te12.mp4",
+          "md5": "8ead0382552dee029bc2dad9da4dbb9c"
+        },
+        {
+          "path": "data/eval_scenario/Normal/3_tr45.mp4",
+          "duplicate_of": "data/eval_big/Normal/3_tr45.mp4",
+          "md5": "5189b670108b337213e5541ace0ff911"
+        },
+        {
+          "path": "data/eval_scenario/Normal/4_tr13.mp4",
+          "duplicate_of": "data/eval_big/Normal/4_tr13.mp4",
+          "md5": "81ba82aa12eea30503c40dc9a6d733b0"
+        },
+        {
+          "path": "data/eval_scenario/Normal/5_tr19.mp4",
+          "duplicate_of": "data/eval_big/Normal/5_tr19.mp4",
+          "md5": "57e671d54901ec4f0c70e51480c83e4b"
+        },
+        {
+          "path": "data/eval_scenario/Normal/6_te12.mp4",
+          "duplicate_of": "data/eval_big/Normal/6_te12.mp4",
+          "md5": "15d57923db934727f7e78044438a23a7"
+        },
+        {
+          "path": "data/eval_scenario/Normal/7_tr15.mp4",
+          "duplicate_of": "data/eval_big/Normal/7_tr15.mp4",
+          "md5": "12a83546d0e9d97f6630f35e7f293ddf"
+        },
+        {
+          "path": "data/eval_scenario/Normal/Normal_Videos_926_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_926_x264.mp4",
+          "md5": "810575fec288ce50c5f268f586b83bf6"
+        },
+        {
+          "path": "data/eval_scenario/Normal/Normal_Videos_928_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_928_x264.mp4",
+          "md5": "54de0f8c801061f333514c096f07db4c"
+        },
+        {
+          "path": "data/eval_scenario/Normal/Normal_Videos_929_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_929_x264.mp4",
+          "md5": "8ad4f24efcfe85c28770bc98b8dea7fa"
+        },
+        {
+          "path": "data/eval_scenario/Normal/Normal_Videos_932_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_932_x264.mp4",
+          "md5": "b12e913d26db7caf0f2ddea969c82e1d"
+        },
+        {
+          "path": "data/falls_real/Fall/Subject1_fall01.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/Subject1_fall01.mp4",
+          "md5": "1db78bb626ebc91bdc32b20763363747"
+        },
+        {
+          "path": "data/falls_real/Fall/Subject1_fall02.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/Subject1_fall02.mp4",
+          "md5": "28e746cee9c3b4b542802cadbc7e62e1"
+        },
+        {
+          "path": "data/falls_real/Fall/Subject1_fall03.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/Subject1_fall03.mp4",
+          "md5": "04422ec43603ad44885ef02ff24480c5"
+        },
+        {
+          "path": "data/falls_real/Fall/Subject2_fall01.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/Subject2_fall01.mp4",
+          "md5": "edf9c6053c7e3adddfd88ff01f964659"
+        },
+        {
+          "path": "data/falls_real/Fall/Subject2_fall02.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/Subject2_fall02.mp4",
+          "md5": "8b2176b0b31add67192232387457aa03"
+        },
+        {
+          "path": "data/falls_real/Fall/Subject2_fall03.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/Subject2_fall03.mp4",
+          "md5": "59d65a2baf8fdecc2f5456167c72e160"
+        },
+        {
+          "path": "data/falls_real/Fall/Subject3_fall01.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/Subject3_fall01.mp4",
+          "md5": "1725d602006158b0328152c364b88f10"
+        },
+        {
+          "path": "data/falls_real/Fall/Subject3_fall02.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/Subject3_fall02.mp4",
+          "md5": "12fd0e6b5bd68a73cec91867a8523671"
+        },
+        {
+          "path": "data/falls_real/Fall/Subject3_fall03.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/Subject3_fall03.mp4",
+          "md5": "95edea6d1a2a1d313ee136c537a8d932"
+        },
+        {
+          "path": "data/falls_surveillance/Fall/urfd_fall01.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/urfd_fall01.mp4",
+          "md5": "4f674512481792882d87a265e952ed7d"
+        },
+        {
+          "path": "data/falls_surveillance/Fall/urfd_fall02.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/urfd_fall02.mp4",
+          "md5": "0942e17d6381cfb035930ca86a277244"
+        },
+        {
+          "path": "data/falls_surveillance/Fall/urfd_fall03.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/urfd_fall03.mp4",
+          "md5": "e35c66181c114f32fbfef4926ce8e7c4"
+        },
+        {
+          "path": "data/falls_surveillance/Fall/urfd_fall04.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/urfd_fall04.mp4",
+          "md5": "e0e3d13ca421434ff8a7249bf2f1f01b"
+        },
+        {
+          "path": "data/falls_surveillance/Fall/urfd_fall05.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/urfd_fall05.mp4",
+          "md5": "91026edf3af32568eb8d0966d7e3560f"
+        },
+        {
+          "path": "data/falls_surveillance/Fall/urfd_fall06.mp4",
+          "duplicate_of": "data/eval_scenario/Fall/urfd_fall06.mp4",
+          "md5": "320f60b7b5f6bc6ab9e0dc80ce0b114e"
+        },
+        {
+          "path": "data/e2_vehicle/RoadAccidents/RoadAccidents021_x264.mp4",
+          "duplicate_of": "data/eval_big/RoadAccidents/RoadAccidents021_x264.mp4",
+          "md5": "a0b5354ef5166bd3842722fee92b33a2"
+        },
+        {
+          "path": "data/e2_vehicle/RoadAccidents/RoadAccidents027_x264.mp4",
+          "duplicate_of": "data/eval_big/RoadAccidents/RoadAccidents027_x264.mp4",
+          "md5": "a7c9ddce57a2d6e1b2b2fb9815972a83"
+        },
+        {
+          "path": "data/e2_vehicle/RoadAccidents/RoadAccidents065_x264.mp4",
+          "duplicate_of": "data/eval_big/RoadAccidents/RoadAccidents065_x264.mp4",
+          "md5": "45b92790f2b9c2c0081c0e40c37d4f69"
+        },
+        {
+          "path": "data/e2_vehicle/RoadAccidents/RoadAccidents069_x264.mp4",
+          "duplicate_of": "data/eval_big/RoadAccidents/RoadAccidents069_x264.mp4",
+          "md5": "e71142939b5dede35b1cb9484e244309"
+        },
+        {
+          "path": "data/e2_vehicle/RoadAccidents/RoadAccidents129_x264.mp4",
+          "duplicate_of": "data/eval_big/RoadAccidents/RoadAccidents129_x264.mp4",
+          "md5": "9d80eefb09a7d0539d50a5e3b5479794"
+        },
+        {
+          "path": "data/e2_vehicle/RoadAccidents/RoadAccidents134_x264.mp4",
+          "duplicate_of": "data/eval_big/RoadAccidents/RoadAccidents134_x264.mp4",
+          "md5": "1b96152d4897a6829621dda6ad13b865"
+        },
+        {
+          "path": "data/eval/Abuse/Abuse005_x264.mp4",
+          "duplicate_of": "data/eval_big/Abuse/Abuse005_x264.mp4",
+          "md5": "cc1cc5aba1d32c66768d04573f9437e9"
+        },
+        {
+          "path": "data/eval/Abuse/Abuse021_x264.mp4",
+          "duplicate_of": "data/eval_big/Abuse/Abuse021_x264.mp4",
+          "md5": "6ae95021cb893c759904feeb1b50e969"
+        },
+        {
+          "path": "data/eval/Abuse/Abuse029_x264.mp4",
+          "duplicate_of": "data/eval_big/Abuse/Abuse029_x264.mp4",
+          "md5": "a5913f9451aadb7a0fe6d020a324467d"
+        },
+        {
+          "path": "data/eval/Assault/Assault018_x264.mp4",
+          "duplicate_of": "data/eval_big/Assault/Assault018_x264.mp4",
+          "md5": "883f43bdd87e20cdc08bcc7a20074bda"
+        },
+        {
+          "path": "data/eval/Assault/Assault038_x264.mp4",
+          "duplicate_of": "data/eval_big/Assault/Assault038_x264.mp4",
+          "md5": "fb409165eaaf3d0d4cafa406c78c748e"
+        },
+        {
+          "path": "data/eval/Assault/Assault039_x264.mp4",
+          "duplicate_of": "data/eval_big/Assault/Assault039_x264.mp4",
+          "md5": "cf80a25d2c54fc4d1a5898366b678e72"
+        },
+        {
+          "path": "data/eval/Burglary/Burglary059_x264.mp4",
+          "duplicate_of": "data/eval_big/Burglary/Burglary059_x264.mp4",
+          "md5": "ec0de7216c7ce4ef0a5944b43e0f8678"
+        },
+        {
+          "path": "data/eval/Burglary/Burglary078_x264.mp4",
+          "duplicate_of": "data/eval_big/Burglary/Burglary078_x264.mp4",
+          "md5": "55e24949b7757c0dec6554e762c8a50f"
+        },
+        {
+          "path": "data/eval/Burglary/Burglary081_x264.mp4",
+          "duplicate_of": "data/eval_big/Burglary/Burglary081_x264.mp4",
+          "md5": "56e50abce5daa1daaa93e86953081b4a"
+        },
+        {
+          "path": "data/eval/Explosion/Explosion001_x264.mp4",
+          "duplicate_of": "data/eval_big/Explosion/Explosion001_x264.mp4",
+          "md5": "490fd73778cae2dee1ca92032c6778df"
+        },
+        {
+          "path": "data/eval/Explosion/Explosion034_x264.mp4",
+          "duplicate_of": "data/eval_big/Explosion/Explosion034_x264.mp4",
+          "md5": "df9a26a13f11bdb7d6143083ae7b043f"
+        },
+        {
+          "path": "data/eval/Explosion/Explosion050_x264.mp4",
+          "duplicate_of": "data/eval_big/Explosion/Explosion050_x264.mp4",
+          "md5": "14fd36a65a7f9aba88dbaa82979a2030"
+        },
+        {
+          "path": "data/eval/Fighting/Fighting018_x264.mp4",
+          "duplicate_of": "data/eval_big/Fighting/Fighting018_x264.mp4",
+          "md5": "f5bbc1750a19fc858516e0999b006acb"
+        },
+        {
+          "path": "data/eval/Fighting/Fighting023_x264.mp4",
+          "duplicate_of": "data/eval_big/Fighting/Fighting023_x264.mp4",
+          "md5": "b480e13610636e5440636327ffa78d8f"
+        },
+        {
+          "path": "data/eval/Fighting/Fighting038_x264.mp4",
+          "duplicate_of": "data/eval_big/Fighting/Fighting038_x264.mp4",
+          "md5": "da6b27dbc0e016e47638d6a4f025f505"
+        },
+        {
+          "path": "data/eval/Normal/Normal_Videos_926_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_926_x264.mp4",
+          "md5": "810575fec288ce50c5f268f586b83bf6"
+        },
+        {
+          "path": "data/eval/Normal/Normal_Videos_928_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_928_x264.mp4",
+          "md5": "54de0f8c801061f333514c096f07db4c"
+        },
+        {
+          "path": "data/eval/Normal/Normal_Videos_929_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_929_x264.mp4",
+          "md5": "8ad4f24efcfe85c28770bc98b8dea7fa"
+        },
+        {
+          "path": "data/eval/Normal/Normal_Videos_932_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_932_x264.mp4",
+          "md5": "b12e913d26db7caf0f2ddea969c82e1d"
+        },
+        {
+          "path": "data/eval/Normal/Normal_Videos_936_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_936_x264.mp4",
+          "md5": "88800dc18af0bc29d05aa74656b638bf"
+        },
+        {
+          "path": "data/eval/Normal/Normal_Videos_937_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_936_x264.mp4",
+          "md5": "88800dc18af0bc29d05aa74656b638bf"
+        },
+        {
+          "path": "data/eval/Normal/Normal_Videos_939_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_939_x264.mp4",
+          "md5": "33cfba23fa7317021cab7d64d0437995"
+        },
+        {
+          "path": "data/eval/Normal/Normal_Videos_943_x264.mp4",
+          "duplicate_of": "data/eval_big/Normal/Normal_Videos_943_x264.mp4",
+          "md5": "4daf6da27c26a143816a5f3ed5edf833"
+        },
+        {
+          "path": "data/eval/RoadAccidents/RoadAccidents021_x264.mp4",
+          "duplicate_of": "data/eval_big/RoadAccidents/RoadAccidents021_x264.mp4",
+          "md5": "a0b5354ef5166bd3842722fee92b33a2"
+        },
+        {
+          "path": "data/eval/RoadAccidents/RoadAccidents027_x264.mp4",
+          "duplicate_of": "data/eval_big/RoadAccidents/RoadAccidents027_x264.mp4",
+          "md5": "a7c9ddce57a2d6e1b2b2fb9815972a83"
+        },
+        {
+          "path": "data/eval/RoadAccidents/RoadAccidents065_x264.mp4",
+          "duplicate_of": "data/eval_big/RoadAccidents/RoadAccidents065_x264.mp4",
+          "md5": "45b92790f2b9c2c0081c0e40c37d4f69"
+        },
+        {
+          "path": "data/eval/Shooting/Shooting001_x264.mp4",
+          "duplicate_of": "data/eval_big/Shooting/Shooting001_x264.mp4",
+          "md5": "d22f1b81f594187765b788ed88ad2254"
+        },
+        {
+          "path": "data/eval/Shooting/Shooting023_x264.mp4",
+          "duplicate_of": "data/eval_big/Shooting/Shooting023_x264.mp4",
+          "md5": "1b767d6b26a7d277065b224b0e2eb05e"
+        },
+        {
+          "path": "data/eval/Shooting/Shooting037_x264.mp4",
+          "duplicate_of": "data/eval_big/Shooting/Shooting037_x264.mp4",
+          "md5": "a82f4f77277538a818b9012ec147c4a0"
+        },
+        {
+          "path": "data/eval/Vandalism/Vandalism006_x264.mp4",
+          "duplicate_of": "data/eval_big/Vandalism/Vandalism006_x264.mp4",
+          "md5": "0b320b9efab54237fac44cf005eda89c"
+        },
+        {
+          "path": "data/eval/Vandalism/Vandalism026_x264.mp4",
+          "duplicate_of": "data/eval_big/Vandalism/Vandalism026_x264.mp4",
+          "md5": "eb9eff19245ea7eec43ebd7c72b1cd41"
+        },
+        {
+          "path": "data/eval/Vandalism/Vandalism032_x264.mp4",
+          "duplicate_of": "data/eval_big/Vandalism/Vandalism032_x264.mp4",
+          "md5": "3b6b91c10ebbad7a9c63c747e64e536a"
+        }
+      ]
+    },
+    "dislanan": [
+      {
+        "path": "data/test_clip.mp4",
+        "sebep": "K7: scripts/make_test_video.py urunu SENTETIK PIL karikaturu; kareye '!!! FORKLIFT DEVRILDI !!!' METNI GOMULU. VLM burada video anlama degil OCR yapar -> olculen sey model yetenegi degil metin okuma.",
+        "eski_gt_kaydiydi": true
+      },
+      {
+        "path": "data/eval_scenario/_deprecated_frozen_fall/lying01.mp4",
+        "sebep": "'_deprecated_frozen_fall' klasor adi bilinen bir sinif etiketi DEGIL (bilinen sinif: Abuse, Assault, Burglary, Explosion, Fall, Fighting, Fire, Normal, RoadAccidents, Shooting, Smoke, Vandalism); etiket uydurulmadi."
+      },
+      {
+        "path": "data/eval_scenario/_deprecated_frozen_fall/lying15.mp4",
+        "sebep": "'_deprecated_frozen_fall' klasor adi bilinen bir sinif etiketi DEGIL (bilinen sinif: Abuse, Assault, Burglary, Explosion, Fall, Fighting, Fire, Normal, RoadAccidents, Shooting, Smoke, Vandalism); etiket uydurulmadi."
+      },
+      {
+        "path": "data/eval_scenario/_deprecated_frozen_fall/lying30.mp4",
+        "sebep": "'_deprecated_frozen_fall' klasor adi bilinen bir sinif etiketi DEGIL (bilinen sinif: Abuse, Assault, Burglary, Explosion, Fall, Fighting, Fire, Normal, RoadAccidents, Shooting, Smoke, Vandalism); etiket uydurulmadi."
+      },
+      {
+        "path": "data/eval_scenario/_deprecated_frozen_fall/lying45.mp4",
+        "sebep": "'_deprecated_frozen_fall' klasor adi bilinen bir sinif etiketi DEGIL (bilinen sinif: Abuse, Assault, Burglary, Explosion, Fall, Fighting, Fire, Normal, RoadAccidents, Shooting, Smoke, Vandalism); etiket uydurulmadi."
+      },
+      {
+        "path": "data/eval_scenario/_deprecated_frozen_fall/lying60.mp4",
+        "sebep": "'_deprecated_frozen_fall' klasor adi bilinen bir sinif etiketi DEGIL (bilinen sinif: Abuse, Assault, Burglary, Explosion, Fall, Fighting, Fire, Normal, RoadAccidents, Shooting, Smoke, Vandalism); etiket uydurulmadi."
+      },
+      {
+        "path": "data/eval_scenario/_deprecated_frozen_fall/lying75.mp4",
+        "sebep": "'_deprecated_frozen_fall' klasor adi bilinen bir sinif etiketi DEGIL (bilinen sinif: Abuse, Assault, Burglary, Explosion, Fall, Fighting, Fire, Normal, RoadAccidents, Shooting, Smoke, Vandalism); etiket uydurulmadi."
+      },
+      {
+        "path": "data/eval_scenario/_deprecated_frozen_fall/lying90.mp4",
+        "sebep": "'_deprecated_frozen_fall' klasor adi bilinen bir sinif etiketi DEGIL (bilinen sinif: Abuse, Assault, Burglary, Explosion, Fall, Fighting, Fire, Normal, RoadAccidents, Shooting, Smoke, Vandalism); etiket uydurulmadi."
+      },
+      {
+        "path": "data/eval_scenario/_deprecated_frozen_fall/lying99.mp4",
+        "sebep": "'_deprecated_frozen_fall' klasor adi bilinen bir sinif etiketi DEGIL (bilinen sinif: Abuse, Assault, Burglary, Explosion, Fall, Fighting, Fire, Normal, RoadAccidents, Shooting, Smoke, Vandalism); etiket uydurulmadi."
+      },
+      {
+        "path": "data/industrial/class0/0_te11.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class0/0_tr110.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class0/0_tr128.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class0/0_tr176.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class0/0_tr178.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class1/1_te10.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class1/1_tr61.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class1/1_tr67.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class1/1_tr7.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class1/1_tr81.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class2/2_te12.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class2/2_tr101.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class2/2_tr126.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class2/2_tr128.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class2/2_tr53.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class3/3_te2.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class3/3_tr15.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class3/3_tr28.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class3/3_tr36.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class3/3_tr45.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class4/4_te16.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class4/4_te19.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class4/4_tr13.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class4/4_tr23.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class4/4_tr35.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class5/5_te1.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class5/5_te12.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class5/5_te14.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class5/5_tr19.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class5/5_tr20.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class6/6_te10.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class6/6_te12.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class6/6_tr17.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class6/6_tr8.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class6/6_tr9.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class7/7_tr15.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class7/7_tr18.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class7/7_tr2.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class7/7_tr3.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      },
+      {
+        "path": "data/industrial/class7/7_tr5.mp4",
+        "sebep": "K14: klasor adlari class0..class7 semantik sinif etiketi DEGIL; guvenli/guvensiz eslesmesi dogrulanmadan etiket uretmek uydurma olur."
+      }
+    ],
+    "sentetik_dahil_edildi": false
+  },
+  "data/temporal/comp_explosion.mp4": {
+    "kategori": "Explosion",
+    "kategori_tr": "patlama (alev topu, duman, sok dalgasi)",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "patlama",
+      "duman",
+      "yangın",
+      "alev",
+      "parlama"
+    ],
+    "kaynak_dataset": "KOMPOZIT (scripts/make_composite.py)",
+    "kaynak_not": "normal(15s)+olay(15s)+normal(15s); splice noktalari tasarim geregi KESIN bilinir",
+    "md5": "96fce03e71c982233692bb8e74061050",
+    "sure_s": 45.0,
+    "temporal": "kompozit-insa",
+    "temporal_guven": "kesin",
+    "temporal_not": "normal|OLAY|normal splice; olay parcasi kaynagi: ucf_explosion.mp4. Pencere tasarim geregi bilinir.",
     "events": [
-      {"window": ["00:05", "00:07"], "keywords": ["forklift", "devril"], "severity": "Kritik", "critical": true},
-      {"window": ["00:06", "00:09"], "keywords": ["yerde", "hareketsiz", "yat", "kişi"], "severity": "Kritik", "critical": true},
-      {"window": ["00:09", "00:12"], "keywords": ["topla", "personel"], "severity": "Orta", "critical": false}
+      {
+        "window": [
+          "00:15",
+          "00:30"
+        ],
+        "keywords": [
+          "patlama",
+          "duman",
+          "yangın",
+          "alev",
+          "parlama"
+        ],
+        "severity": "Yüksek",
+        "critical": true
+      }
     ]
+  },
+  "data/temporal/comp_fire.mp4": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "KOMPOZIT (scripts/make_composite.py)",
+    "kaynak_not": "normal(15s)+olay(15s)+normal(15s); splice noktalari tasarim geregi KESIN bilinir",
+    "md5": "d75ffff6fe9ac969bae534069670437f",
+    "sure_s": 45.0,
+    "temporal": "kompozit-insa",
+    "temporal_guven": "kesin",
+    "temporal_not": "normal|OLAY|normal splice; olay parcasi kaynagi: posVideo4.873.avi. Pencere tasarim geregi bilinir.",
+    "events": [
+      {
+        "window": [
+          "00:15",
+          "00:30"
+        ],
+        "keywords": [
+          "yangın",
+          "alev",
+          "ateş",
+          "yan",
+          "tutuş"
+        ],
+        "severity": "Yüksek",
+        "critical": true
+      }
+    ]
+  },
+  "data/eval_big/Abuse/Abuse005_x264.mp4": {
+    "kategori": "Abuse",
+    "kategori_tr": "bir kisiye yonelik istismar / siddet",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "istismar",
+      "şiddet",
+      "darp",
+      "saldır",
+      "taciz"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "cc1cc5aba1d32c66768d04573f9437e9",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Abuse/Abuse014_x264.mp4": {
+    "kategori": "Abuse",
+    "kategori_tr": "bir kisiye yonelik istismar / siddet",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "istismar",
+      "şiddet",
+      "darp",
+      "saldır",
+      "taciz"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "72eb8a15e93b5035ff0c6eb86a0b9450",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Abuse/Abuse018_x264.mp4": {
+    "kategori": "Abuse",
+    "kategori_tr": "bir kisiye yonelik istismar / siddet",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "istismar",
+      "şiddet",
+      "darp",
+      "saldır",
+      "taciz"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "39a9d27a9bbe8977a26e15df81d8df26",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Abuse/Abuse021_x264.mp4": {
+    "kategori": "Abuse",
+    "kategori_tr": "bir kisiye yonelik istismar / siddet",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "istismar",
+      "şiddet",
+      "darp",
+      "saldır",
+      "taciz"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "6ae95021cb893c759904feeb1b50e969",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Abuse/Abuse023_x264.mp4": {
+    "kategori": "Abuse",
+    "kategori_tr": "bir kisiye yonelik istismar / siddet",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "istismar",
+      "şiddet",
+      "darp",
+      "saldır",
+      "taciz"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "0cb894bfd11c47d6ec0c77d28c6bd3a6",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Abuse/Abuse029_x264.mp4": {
+    "kategori": "Abuse",
+    "kategori_tr": "bir kisiye yonelik istismar / siddet",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "istismar",
+      "şiddet",
+      "darp",
+      "saldır",
+      "taciz"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "a5913f9451aadb7a0fe6d020a324467d",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Assault/Assault018_x264.mp4": {
+    "kategori": "Assault",
+    "kategori_tr": "bir kisiye fiziksel saldiri / darp",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "saldır",
+      "darp",
+      "şiddet",
+      "kavga",
+      "vur"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "883f43bdd87e20cdc08bcc7a20074bda",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Assault/Assault020_x264.mp4": {
+    "kategori": "Assault",
+    "kategori_tr": "bir kisiye fiziksel saldiri / darp",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "saldır",
+      "darp",
+      "şiddet",
+      "kavga",
+      "vur"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "92aca6c602e14fa281d1d9a6724da668",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Assault/Assault024_x264.mp4": {
+    "kategori": "Assault",
+    "kategori_tr": "bir kisiye fiziksel saldiri / darp",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "saldır",
+      "darp",
+      "şiddet",
+      "kavga",
+      "vur"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "b7d81a73d7f101787b304a60fb237d45",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Assault/Assault038_x264.mp4": {
+    "kategori": "Assault",
+    "kategori_tr": "bir kisiye fiziksel saldiri / darp",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "saldır",
+      "darp",
+      "şiddet",
+      "kavga",
+      "vur"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "fb409165eaaf3d0d4cafa406c78c748e",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Assault/Assault039_x264.mp4": {
+    "kategori": "Assault",
+    "kategori_tr": "bir kisiye fiziksel saldiri / darp",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "saldır",
+      "darp",
+      "şiddet",
+      "kavga",
+      "vur"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "cf80a25d2c54fc4d1a5898366b678e72",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Assault/Assault051_x264.mp4": {
+    "kategori": "Assault",
+    "kategori_tr": "bir kisiye fiziksel saldiri / darp",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "saldır",
+      "darp",
+      "şiddet",
+      "kavga",
+      "vur"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "a590d59640b4799f48f353474494093d",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Burglary/Burglary043_x264.mp4": {
+    "kategori": "Burglary",
+    "kategori_tr": "hirsizlik / yetkisiz giris-soygun",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "hırsız",
+      "soygun",
+      "yetkisiz",
+      "kır",
+      "giriş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "a0dae7a8fb57b7122f7e585daf78d56c",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Burglary/Burglary054_x264.mp4": {
+    "kategori": "Burglary",
+    "kategori_tr": "hirsizlik / yetkisiz giris-soygun",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "hırsız",
+      "soygun",
+      "yetkisiz",
+      "kır",
+      "giriş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "5158d6071587fc323244afb9ce7e9817",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Burglary/Burglary059_x264.mp4": {
+    "kategori": "Burglary",
+    "kategori_tr": "hirsizlik / yetkisiz giris-soygun",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "hırsız",
+      "soygun",
+      "yetkisiz",
+      "kır",
+      "giriş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "ec0de7216c7ce4ef0a5944b43e0f8678",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Burglary/Burglary078_x264.mp4": {
+    "kategori": "Burglary",
+    "kategori_tr": "hirsizlik / yetkisiz giris-soygun",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "hırsız",
+      "soygun",
+      "yetkisiz",
+      "kır",
+      "giriş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "55e24949b7757c0dec6554e762c8a50f",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Burglary/Burglary081_x264.mp4": {
+    "kategori": "Burglary",
+    "kategori_tr": "hirsizlik / yetkisiz giris-soygun",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "hırsız",
+      "soygun",
+      "yetkisiz",
+      "kır",
+      "giriş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "56e50abce5daa1daaa93e86953081b4a",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Burglary/Burglary097_x264.mp4": {
+    "kategori": "Burglary",
+    "kategori_tr": "hirsizlik / yetkisiz giris-soygun",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "hırsız",
+      "soygun",
+      "yetkisiz",
+      "kır",
+      "giriş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "5fa7f9defcaf3bec2c6dd28242593e28",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Explosion/Explosion001_x264.mp4": {
+    "kategori": "Explosion",
+    "kategori_tr": "patlama (alev topu, duman, sok dalgasi)",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "patlama",
+      "duman",
+      "yangın",
+      "alev",
+      "parlama"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "490fd73778cae2dee1ca92032c6778df",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Explosion/Explosion019_x264.mp4": {
+    "kategori": "Explosion",
+    "kategori_tr": "patlama (alev topu, duman, sok dalgasi)",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "patlama",
+      "duman",
+      "yangın",
+      "alev",
+      "parlama"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "066e4db1f6925c2e3c4766fe0da1cda3",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Explosion/Explosion034_x264.mp4": {
+    "kategori": "Explosion",
+    "kategori_tr": "patlama (alev topu, duman, sok dalgasi)",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "patlama",
+      "duman",
+      "yangın",
+      "alev",
+      "parlama"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "df9a26a13f11bdb7d6143083ae7b043f",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Explosion/Explosion044_x264.mp4": {
+    "kategori": "Explosion",
+    "kategori_tr": "patlama (alev topu, duman, sok dalgasi)",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "patlama",
+      "duman",
+      "yangın",
+      "alev",
+      "parlama"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "87e46efde567965fad003cbeb408500e",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Explosion/Explosion048_x264.mp4": {
+    "kategori": "Explosion",
+    "kategori_tr": "patlama (alev topu, duman, sok dalgasi)",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "patlama",
+      "duman",
+      "yangın",
+      "alev",
+      "parlama"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "056672bea01ad8aa0adebfb06faf8fa2",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Explosion/Explosion050_x264.mp4": {
+    "kategori": "Explosion",
+    "kategori_tr": "patlama (alev topu, duman, sok dalgasi)",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "patlama",
+      "duman",
+      "yangın",
+      "alev",
+      "parlama"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "14fd36a65a7f9aba88dbaa82979a2030",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Fighting/Fighting005_x264.mp4": {
+    "kategori": "Fighting",
+    "kategori_tr": "iki veya daha fazla kisi arasinda kavga/dovus",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kavga",
+      "dövüş",
+      "saldır",
+      "şiddet",
+      "itiş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "ae606ba17e80adb51131e1a2d644b7c9",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Fighting/Fighting018_x264.mp4": {
+    "kategori": "Fighting",
+    "kategori_tr": "iki veya daha fazla kisi arasinda kavga/dovus",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kavga",
+      "dövüş",
+      "saldır",
+      "şiddet",
+      "itiş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "f5bbc1750a19fc858516e0999b006acb",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Fighting/Fighting023_x264.mp4": {
+    "kategori": "Fighting",
+    "kategori_tr": "iki veya daha fazla kisi arasinda kavga/dovus",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kavga",
+      "dövüş",
+      "saldır",
+      "şiddet",
+      "itiş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "b480e13610636e5440636327ffa78d8f",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Fighting/Fighting033_x264.mp4": {
+    "kategori": "Fighting",
+    "kategori_tr": "iki veya daha fazla kisi arasinda kavga/dovus",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kavga",
+      "dövüş",
+      "saldır",
+      "şiddet",
+      "itiş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "dee9c20ec31a5e5211885207e9e44dc3",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Fighting/Fighting035_x264.mp4": {
+    "kategori": "Fighting",
+    "kategori_tr": "iki veya daha fazla kisi arasinda kavga/dovus",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kavga",
+      "dövüş",
+      "saldır",
+      "şiddet",
+      "itiş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "f5ec9dd22d4c6eb68bd9b59e0607fa39",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Fighting/Fighting038_x264.mp4": {
+    "kategori": "Fighting",
+    "kategori_tr": "iki veya daha fazla kisi arasinda kavga/dovus",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kavga",
+      "dövüş",
+      "saldır",
+      "şiddet",
+      "itiş"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "da6b27dbc0e016e47638d6a4f025f505",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/0_tr128.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "4f03223fc9d83b8e14ed4a6e0d88490b",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/1_tr61.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "838e170f78f8642e322ab4a1723f1eea",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/2_te12.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "8ead0382552dee029bc2dad9da4dbb9c",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/3_tr45.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "5189b670108b337213e5541ace0ff911",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/4_tr13.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "81ba82aa12eea30503c40dc9a6d733b0",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/5_tr19.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "57e671d54901ec4f0c70e51480c83e4b",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/6_te12.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "15d57923db934727f7e78044438a23a7",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/7_tr15.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "12a83546d0e9d97f6630f35e7f293ddf",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/Normal_Videos_926_x264.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "810575fec288ce50c5f268f586b83bf6",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/Normal_Videos_928_x264.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "54de0f8c801061f333514c096f07db4c",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/Normal_Videos_929_x264.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "8ad4f24efcfe85c28770bc98b8dea7fa",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/Normal_Videos_932_x264.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "b12e913d26db7caf0f2ddea969c82e1d",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/Normal_Videos_936_x264.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "88800dc18af0bc29d05aa74656b638bf",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/Normal_Videos_939_x264.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "33cfba23fa7317021cab7d64d0437995",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Normal/Normal_Videos_943_x264.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "4daf6da27c26a143816a5f3ed5edf833",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/RoadAccidents/RoadAccidents021_x264.mp4": {
+    "kategori": "RoadAccidents",
+    "kategori_tr": "trafik kazasi / arac carpismasi veya devrilmesi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kaza",
+      "çarpış",
+      "araç",
+      "trafik",
+      "devril"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "a0b5354ef5166bd3842722fee92b33a2",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/RoadAccidents/RoadAccidents027_x264.mp4": {
+    "kategori": "RoadAccidents",
+    "kategori_tr": "trafik kazasi / arac carpismasi veya devrilmesi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kaza",
+      "çarpış",
+      "araç",
+      "trafik",
+      "devril"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "a7c9ddce57a2d6e1b2b2fb9815972a83",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/RoadAccidents/RoadAccidents065_x264.mp4": {
+    "kategori": "RoadAccidents",
+    "kategori_tr": "trafik kazasi / arac carpismasi veya devrilmesi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kaza",
+      "çarpış",
+      "araç",
+      "trafik",
+      "devril"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "45b92790f2b9c2c0081c0e40c37d4f69",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/RoadAccidents/RoadAccidents069_x264.mp4": {
+    "kategori": "RoadAccidents",
+    "kategori_tr": "trafik kazasi / arac carpismasi veya devrilmesi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kaza",
+      "çarpış",
+      "araç",
+      "trafik",
+      "devril"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "e71142939b5dede35b1cb9484e244309",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/RoadAccidents/RoadAccidents129_x264.mp4": {
+    "kategori": "RoadAccidents",
+    "kategori_tr": "trafik kazasi / arac carpismasi veya devrilmesi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kaza",
+      "çarpış",
+      "araç",
+      "trafik",
+      "devril"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "9d80eefb09a7d0539d50a5e3b5479794",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/RoadAccidents/RoadAccidents134_x264.mp4": {
+    "kategori": "RoadAccidents",
+    "kategori_tr": "trafik kazasi / arac carpismasi veya devrilmesi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kaza",
+      "çarpış",
+      "araç",
+      "trafik",
+      "devril"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "1b96152d4897a6829621dda6ad13b865",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Shooting/Shooting001_x264.mp4": {
+    "kategori": "Shooting",
+    "kategori_tr": "silahli saldiri / ates acma",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "silah",
+      "ateş",
+      "vur",
+      "çatış"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "d22f1b81f594187765b788ed88ad2254",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Shooting/Shooting023_x264.mp4": {
+    "kategori": "Shooting",
+    "kategori_tr": "silahli saldiri / ates acma",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "silah",
+      "ateş",
+      "vur",
+      "çatış"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "1b767d6b26a7d277065b224b0e2eb05e",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Shooting/Shooting030_x264.mp4": {
+    "kategori": "Shooting",
+    "kategori_tr": "silahli saldiri / ates acma",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "silah",
+      "ateş",
+      "vur",
+      "çatış"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "249d81ce7b7453f5a4148109330b2565",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Shooting/Shooting037_x264.mp4": {
+    "kategori": "Shooting",
+    "kategori_tr": "silahli saldiri / ates acma",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "silah",
+      "ateş",
+      "vur",
+      "çatış"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "a82f4f77277538a818b9012ec147c4a0",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Shooting/Shooting039_x264.mp4": {
+    "kategori": "Shooting",
+    "kategori_tr": "silahli saldiri / ates acma",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "silah",
+      "ateş",
+      "vur",
+      "çatış"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "d792af2397956723c93096fedc182651",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Shooting/Shooting044_x264.mp4": {
+    "kategori": "Shooting",
+    "kategori_tr": "silahli saldiri / ates acma",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "silah",
+      "ateş",
+      "vur",
+      "çatış"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "a6cf454b98d2c78143d1d9d9f0c97c6d",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Vandalism/Vandalism006_x264.mp4": {
+    "kategori": "Vandalism",
+    "kategori_tr": "vandalizm / mala kasitli zarar verme",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "vandal",
+      "tahrip",
+      "zarar",
+      "kır"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "0b320b9efab54237fac44cf005eda89c",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Vandalism/Vandalism014_x264.mp4": {
+    "kategori": "Vandalism",
+    "kategori_tr": "vandalizm / mala kasitli zarar verme",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "vandal",
+      "tahrip",
+      "zarar",
+      "kır"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "f7fd87688aa813e2db3d8f38c44bbc10",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Vandalism/Vandalism026_x264.mp4": {
+    "kategori": "Vandalism",
+    "kategori_tr": "vandalizm / mala kasitli zarar verme",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "vandal",
+      "tahrip",
+      "zarar",
+      "kır"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "eb9eff19245ea7eec43ebd7c72b1cd41",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Vandalism/Vandalism027_x264.mp4": {
+    "kategori": "Vandalism",
+    "kategori_tr": "vandalizm / mala kasitli zarar verme",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "vandal",
+      "tahrip",
+      "zarar",
+      "kır"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "e71539c66e7f17339cd1e28e69cc716f",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Vandalism/Vandalism032_x264.mp4": {
+    "kategori": "Vandalism",
+    "kategori_tr": "vandalizm / mala kasitli zarar verme",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "vandal",
+      "tahrip",
+      "zarar",
+      "kır"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "3b6b91c10ebbad7a9c63c747e64e536a",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_big/Vandalism/Vandalism039_x264.mp4": {
+    "kategori": "Vandalism",
+    "kategori_tr": "vandalizm / mala kasitli zarar verme",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "vandal",
+      "tahrip",
+      "zarar",
+      "kır"
+    ],
+    "kaynak_dataset": "UCF-Crime (HF mirror: ertiaM/Anomaly_Detection_in_Surveillance_Videos)",
+    "kaynak_not": "gercek CCTV; cogunlukla 320x240 dusuk cozunurluk",
+    "md5": "d23102beab675097d7574be49e51b841",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/Subject1_fall01.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "1db78bb626ebc91bdc32b20763363747",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/Subject1_fall02.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "28e746cee9c3b4b542802cadbc7e62e1",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/Subject1_fall03.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "04422ec43603ad44885ef02ff24480c5",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/Subject2_fall01.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "edf9c6053c7e3adddfd88ff01f964659",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/Subject2_fall02.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "8b2176b0b31add67192232387457aa03",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/Subject2_fall03.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "59d65a2baf8fdecc2f5456167c72e160",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/Subject3_fall01.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "1725d602006158b0328152c364b88f10",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/Subject3_fall02.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "12fd0e6b5bd68a73cec91867a8523671",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/Subject3_fall03.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "95edea6d1a2a1d313ee136c537a8d932",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/urfd_fall01.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "4f674512481792882d87a265e952ed7d",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/urfd_fall02.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "0942e17d6381cfb035930ca86a277244",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/urfd_fall03.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "e35c66181c114f32fbfef4926ce8e7c4",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/urfd_fall04.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "e0e3d13ca421434ff8a7249bf2f1f01b",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/urfd_fall05.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "91026edf3af32568eb8d0966d7e3560f",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fall/urfd_fall06.mp4": {
+    "kategori": "Fall",
+    "kategori_tr": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "düş",
+      "yere",
+      "hareketsiz",
+      "yığıl",
+      "bayıl",
+      "yatıyor",
+      "yatan",
+      "kalkamı"
+    ],
+    "kaynak_dataset": "GERCEK dusme videolari: GMDCSA-24 (Subject*_fall*, CC BY 4.0) + URFD cam1 (urfd_fall*, CC BY-NC-SA)",
+    "kaynak_not": "K8 GIDERILDI: sentetik lying*.mp4 (donmus PNG) karantinaya alindi, yerine olculmus gercek video kondu (3.8-14.4 sn, 15-30 fps, kare-arasi hareket 0.40-3.06). scripts/build_scenario_eval.py donmus adayi otomatik REDDEDER. DIKKAT: klipler falls_real/ + falls_surveillance/ ile HARDLINK ayni dosyadir — ucu birlikte raporlanirsa CIFT SAYIM olur. URFD kolu CC BY-NC (ticari kullanim yok).",
+    "md5": "320f60b7b5f6bc6ab9e0dc80ce0b114e",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo1.868.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "b3bcb4817a6fbdcc8e6824f306c7c6dd",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo10.869.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "6cd4c82dd03f9db67470b8c90833473d",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo11.870.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "c370ac2c52f07c441b7050ac1264ff4e",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo2.871.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "44df879c33b3b8a18fbe1fd15bf328f7",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo3.872.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "b97636c31b25f46fdeff3a9ddd9a0989",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo4.873.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "037cb9fcc7a163feca598291f56442dd",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo5.874.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "36c3d7fd9ec1213995332a72b5cec707",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo6.875.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "0979345496b04b9b48f85c0dd3017a1a",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo7.876.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "8dd1aea3388e294872dbbac9b4507581",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_scenario/Fire/posVideo8.877.avi": {
+    "kategori": "Fire",
+    "kategori_tr": "gorunur yangin / alev",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "yangın",
+      "alev",
+      "ateş",
+      "yan",
+      "tutuş"
+    ],
+    "kaynak_dataset": "FIRESENSE (posVideo*)",
+    "kaynak_not": "gercek yangin/alev videolari",
+    "md5": "3a64cf926d9a0f0feae89efac84cd836",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/falls_real/Normal/Subject1_adl01.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "GMDCSA-24 (CC BY 4.0)",
+    "kaynak_not": "gercek dusme + ADL; frontal ev/webcam acisi",
+    "md5": "2e52c844d65380c1b59b60dc59a03813",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/falls_real/Normal/Subject1_adl02.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "GMDCSA-24 (CC BY 4.0)",
+    "kaynak_not": "gercek dusme + ADL; frontal ev/webcam acisi",
+    "md5": "790f8c4fdce06217320d91d83af417f5",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/falls_real/Normal/Subject2_adl01.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "GMDCSA-24 (CC BY 4.0)",
+    "kaynak_not": "gercek dusme + ADL; frontal ev/webcam acisi",
+    "md5": "d0890cf1e575e0dd03bd66486a878612",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/falls_real/Normal/Subject2_adl02.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "GMDCSA-24 (CC BY 4.0)",
+    "kaynak_not": "gercek dusme + ADL; frontal ev/webcam acisi",
+    "md5": "bda1187861c8a155f243fa10c081a3fe",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/falls_real/Normal/Subject3_adl01.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "GMDCSA-24 (CC BY 4.0)",
+    "kaynak_not": "gercek dusme + ADL; frontal ev/webcam acisi",
+    "md5": "22ab3177404bb945e4b26e13284e6be2",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/falls_real/Normal/Subject3_adl02.mp4": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "GMDCSA-24 (CC BY 4.0)",
+    "kaynak_not": "gercek dusme + ADL; frontal ev/webcam acisi",
+    "md5": "572d09d8e613008d09f3a91c79bf8da3",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/e2_vehicle/RoadAccidents/RoadAccidents035_x264.mp4": {
+    "kategori": "RoadAccidents",
+    "kategori_tr": "trafik kazasi / arac carpismasi veya devrilmesi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kaza",
+      "çarpış",
+      "araç",
+      "trafik",
+      "devril"
+    ],
+    "kaynak_dataset": "UCF-Crime RoadAccidents (HF mirror)",
+    "kaynak_not": "gercek CCTV arac kazalari",
+    "md5": "4fe9430ffcd99b101c6a22c1a89beab1",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/e2_vehicle/RoadAccidents/RoadAccidents043_x264.mp4": {
+    "kategori": "RoadAccidents",
+    "kategori_tr": "trafik kazasi / arac carpismasi veya devrilmesi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kaza",
+      "çarpış",
+      "araç",
+      "trafik",
+      "devril"
+    ],
+    "kaynak_dataset": "UCF-Crime RoadAccidents (HF mirror)",
+    "kaynak_not": "gercek CCTV arac kazalari",
+    "md5": "3dabd667b17f92c9611d441f474487ad",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/e2_vehicle/RoadAccidents/RoadAccidents128_x264.mp4": {
+    "kategori": "RoadAccidents",
+    "kategori_tr": "trafik kazasi / arac carpismasi veya devrilmesi",
+    "anomali": true,
+    "risk_kabul": [
+      "Yüksek",
+      "Kritik"
+    ],
+    "keywords": [
+      "kaza",
+      "çarpış",
+      "araç",
+      "trafik",
+      "devril"
+    ],
+    "kaynak_dataset": "UCF-Crime RoadAccidents (HF mirror)",
+    "kaynak_not": "gercek CCTV arac kazalari",
+    "md5": "7b3d076caaf1ead84de1376cb53985c3",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_stress/Normal/testneg01.807.avi": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "FIRESENSE negatif (testneg*)",
+    "kaynak_not": "yangin-benzeri ama yangin OLMAYAN sahneler (FP stres testi)",
+    "md5": "bc4f4328a36ad3f027453a7474f4c8e4",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_stress/Normal/testneg02.808.avi": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "FIRESENSE negatif (testneg*)",
+    "kaynak_not": "yangin-benzeri ama yangin OLMAYAN sahneler (FP stres testi)",
+    "md5": "752945888744768b636b514bfa36998a",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_stress/Normal/testneg03.809.avi": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "FIRESENSE negatif (testneg*)",
+    "kaynak_not": "yangin-benzeri ama yangin OLMAYAN sahneler (FP stres testi)",
+    "md5": "77520b7cc94974dd7e2d285497d73067",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_stress/Normal/testneg04.810.avi": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "FIRESENSE negatif (testneg*)",
+    "kaynak_not": "yangin-benzeri ama yangin OLMAYAN sahneler (FP stres testi)",
+    "md5": "e8b62522b26ba1e5885d37c45195696f",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_stress/Normal/testneg05.811.avi": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "FIRESENSE negatif (testneg*)",
+    "kaynak_not": "yangin-benzeri ama yangin OLMAYAN sahneler (FP stres testi)",
+    "md5": "e87ec264f3d515458cbd8ffcf492a32c",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_stress/Normal/testneg06.812.avi": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "FIRESENSE negatif (testneg*)",
+    "kaynak_not": "yangin-benzeri ama yangin OLMAYAN sahneler (FP stres testi)",
+    "md5": "bbe17312edc6d1d0b77bd83d74d50e02",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_stress/Normal/testneg07.813.avi": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "FIRESENSE negatif (testneg*)",
+    "kaynak_not": "yangin-benzeri ama yangin OLMAYAN sahneler (FP stres testi)",
+    "md5": "f5db4ce8fc62e8ea56f42fe3f04e2956",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_stress/Normal/testneg08.814.avi": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "FIRESENSE negatif (testneg*)",
+    "kaynak_not": "yangin-benzeri ama yangin OLMAYAN sahneler (FP stres testi)",
+    "md5": "797558948531f89fea89f381f3f3b9ea",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
+  },
+  "data/eval_stress/Normal/testneg09.815.avi": {
+    "kategori": "Normal",
+    "kategori_tr": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    "anomali": false,
+    "risk_kabul": [
+      "Düşük"
+    ],
+    "keywords": [],
+    "kaynak_dataset": "FIRESENSE negatif (testneg*)",
+    "kaynak_not": "yangin-benzeri ama yangin OLMAYAN sahneler (FP stres testi)",
+    "md5": "a5089cb92483ebfb52e44fa61893ec42",
+    "temporal": "insan-anotasyonu-gerekir",
+    "temporal_guven": "yok",
+    "temporal_not": "Bu klip icin olay baslangic/bitis saniyesi BILINMIYOR. Klip-duzeyi etiket (kategori/anomali) dataset klasorunden gelir; zaman penceresi UYDURULMAMISTIR. Temporal metrik icin insan anotasyonu gerekir.",
+    "events": []
   }
 }

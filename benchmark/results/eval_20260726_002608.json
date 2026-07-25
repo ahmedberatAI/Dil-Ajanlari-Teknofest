@@ -1,0 +1,1437 @@
+{
+  "summary": {
+    "n_anomaly": 20,
+    "n_normal": 20,
+    "recall": 0.25,
+    "risk_cal_anom": 0.1,
+    "cat_match": 0.1,
+    "normal_fp": 0.05,
+    "normal_fp_operational": 0.25,
+    "normal_dispatch_fp": 0.05,
+    "risk_cal_norm": 0.85,
+    "latency_median": 11.3,
+    "ci": {
+      "recall": {
+        "k": 5,
+        "n": 20,
+        "p": 0.25,
+        "ci_low": 0.1119,
+        "ci_high": 0.4687,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "risk_cal_anom": {
+        "k": 2,
+        "n": 20,
+        "p": 0.1,
+        "ci_low": 0.0279,
+        "ci_high": 0.301,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "cat_match": {
+        "k": 2,
+        "n": 20,
+        "p": 0.1,
+        "ci_low": 0.0279,
+        "ci_high": 0.301,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "normal_fp": {
+        "k": 1,
+        "n": 20,
+        "p": 0.05,
+        "ci_low": 0.0089,
+        "ci_high": 0.2361,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "normal_fp_operational": {
+        "k": 5,
+        "n": 20,
+        "p": 0.25,
+        "ci_low": 0.1119,
+        "ci_high": 0.4687,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "normal_dispatch_fp": {
+        "k": 1,
+        "n": 20,
+        "p": 0.05,
+        "ci_low": 0.0089,
+        "ci_high": 0.2361,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "risk_cal_norm": {
+        "k": 17,
+        "n": 20,
+        "p": 0.85,
+        "ci_low": 0.6396,
+        "ci_high": 0.9476,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      }
+    },
+    "ci_method": "wilson",
+    "ci_level": 0.95,
+    "per_category_ci": {
+      "Anomali": {
+        "recall": {
+          "k": 5,
+          "n": 20,
+          "p": 0.25,
+          "ci_low": 0.1119,
+          "ci_high": 0.4687,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        },
+        "cat_match": {
+          "k": 2,
+          "n": 20,
+          "p": 0.1,
+          "ci_low": 0.0279,
+          "ci_high": 0.301,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        }
+      },
+      "Normal": {
+        "recall": {
+          "k": 5,
+          "n": 20,
+          "p": 0.25,
+          "ci_low": 0.1119,
+          "ci_high": 0.4687,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        },
+        "cat_match": {
+          "k": 0,
+          "n": 0,
+          "p": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 1.0,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        }
+      }
+    }
+  },
+  "leak_warning": null,
+  "eval_dir": "data/eval_defense",
+  "dedup": {
+    "enabled": true,
+    "n_input": 40,
+    "n_unique": 40,
+    "n_skipped": 0,
+    "skipped": []
+  },
+  "rows": [
+    {
+      "path": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te2.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": true,
+      "triggered": [],
+      "duration_s": 11,
+      "latency_s": 17.4,
+      "summary": "Video içerisinde sol üstteki kişi ani ve hızlı hareket etmiş, ardından forklift ani hızlanarak ilerlemiş ve ışıkları açılmıştır. Bu hareketler birbirine doğrudan bağlanmamıştır ve her ikisi de rutin dışı davranışlar olarak değerlendirilmektedir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "sol üstteki kişi ani ve hızlı hareket ediyor",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:07",
+          "event": "forklift ani hızlanarak ilerliyor ve ışıkları açıldı",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Tespit edilen olaylar ani hareketler ve forkliftin hızlanmasıdır; herhangi bir yangın, patlama, yaralanma veya ciddi tehlike belirtisi bulunmamaktadır. Risk düzeyi, görüntüdeki bilgilere dayalı olarak düşüktür.",
+      "actions": [
+        {
+          "action": "Güvenlik personeli, sol üstteki kişinin ani hareketini gözlemleyerek, bu kişinin normal faaliyetlerinden sapıp olup olmadığına bakılmalıdır.",
+          "priority": "Düşük",
+          "rationale": "Ani hareket, potansiyel bir anomali olabilir; ancak görüntüde herhangi bir tehlike belirtisi yoktur."
+        },
+        {
+          "action": "Forklift sürücüsüne ulaşarak, ani hızlanma nedeni ve ışıkların açılıp açılmadığına dair bilgi alınmalıdır.",
+          "priority": "Düşük",
+          "rationale": "Forkliftin ani hareketi, operasyonel bir hata olabilir; bu nedenle sürücüye doğrulama yapılmalıdır."
+        },
+        {
+          "action": "Kamera kayıtları, olayların tamamını kapsayan bir aralığa kadar geriye dönük olarak incelenmelidir.",
+          "priority": "Orta",
+          "rationale": "Olayların bağlamını anlamak için daha geniş bir zaman dilimi gözden geçirilmelidir; bu, gelecekteki benzer olayları önlemek için önemlidir."
+        },
+        {
+          "action": "Güvenlik operatörüne, bu tür ani hareketler ve forklift davranışları için bir raporlama sistemi kurulmalıdır.",
+          "priority": "Orta",
+          "rationale": "Tekrarlayan anomali durumları, sistemsel bir gözlem ve müdahale mekanizması gerektirir; bu nedenle bir raporlama sistemi oluşturulmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr15.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 10.2,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay olmadığı için öncelikli bir eylem gerekmez, ancak düzenli kontrol devam etmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr28.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 5,
+      "latency_s": 10.6,
+      "summary": "Video süresince herhangi bir olay veya anormal durum tespit edilmedi. Görüntülerde herhangi bir tehlike, hareket, kaza veya güvenlik ihlali gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntüde herhangi bir tehlike veya anormal durum bulunmadığından, risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüyü tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir eylem gerekmez."
+        },
+        {
+          "action": "Sistemdeki güvenlik alarmlarını kontrol et ve aktif olup olmadığını doğrula.",
+          "priority": "Düşük",
+          "rationale": "Görüntüde herhangi bir olay yoksa, sistemdeki alarmların yanlış çalışıp çalışmadığını kontrol etmek rutin bir güvenlik prosedürüdür."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr36.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": true,
+      "triggered": [],
+      "duration_s": 4,
+      "latency_s": 14.8,
+      "summary": "Forkliftin yanında duran kişi, araç yolunu keserek sürücüyü durdurma zorunda bırakıyor. Bu durum, araç sürüşünü engelleyen bir anomali olarak kaydediliyor.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Forkliftin yanında duran kişi, araç yolunu kesiyor",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:03",
+          "event": "Forklift sürücüsü, yola giren kişi nedeniyle yavaşlatıyor",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Görüntüde fiziksel bir kaza veya yaralanma gibi ciddi tehlike yoktur. Anomali, sürücünün yavaşlamasıyla sınırlı kalıyor ve hemen müdahale gerektirmiyor.",
+      "actions": [
+        {
+          "action": "Güvenlik personeli, olay alanına yönlendirilerek durumu gözlemlemesi istenmelidir.",
+          "priority": "Orta",
+          "rationale": "Kişinin araç yolunu kesmesi, potansiyel bir güvenlik riski oluşturabilir; gözlemleme ile durumun tekrarlanıp tekrarlanmadığı belirlenmelidir."
+        },
+        {
+          "action": "Forklift sürücüsüne, yolun kesilmesi durumunda durma ve durumu rapor etme talimatı verilmelidir.",
+          "priority": "Orta",
+          "rationale": "Sürücünün yavaşlaması, diğer çalışanların güvenliğini tehdit edebilir; bu nedenle sürücüye açık talimat verilmesi gerekir."
+        },
+        {
+          "action": "Kamera kayıtları, olaydan sonra incelemeye alınmalı ve güvenlik protokollerine uygun olarak raporlanmalıdır.",
+          "priority": "Düşük",
+          "rationale": "Anomali tekrarlanabilir; kayıtlarla geçmişteki benzer durumlar analiz edilerek önlemler geliştirilebilir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr45.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 3,
+      "latency_s": 8.8,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay olmadığı için öncelikli bir eylem gerekmez, ancak düzenli kontrol devam etmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Opened_Panel_Cover/2_te12.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 10.0,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay olmadığı için öncelikli bir eylem gerekmez, ancak düzenli kontrol devam etmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr101.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 7,
+      "latency_s": 10.0,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, yetkisiz giriş veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay olmadığı için öncelikli bir eylem gerekmez, ancak düzenli kontrol devam etmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr126.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 12,
+      "latency_s": 13.5,
+      "summary": "Video süresince herhangi bir olay veya anormal durum tespit edilmedi. Görüntülerde normal ve beklenen aktivite gözlemlenmiştir. Operatörün dikkatli izlemesi ve düzenli kontrolü devam etmelidir.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza, tehlikeli davranış veya anormal durum bulunmamaktadır. Ortam sakin ve beklenen normale uygun.",
+      "actions": [
+        {
+          "action": "Görüntüleri düzenli aralıklarla kontrol etmek için otomatik alarm sistemiyle uyumlu bir izleme protokülü uygulamak.",
+          "priority": "Düşük",
+          "rationale": "Normal aktivite devam ediyorsa, düzenli kontrollerin devam etmesi güvenlik standartlarını korur."
+        },
+        {
+          "action": "Kamera kayıtlarını 12 saatlik aralıklarla arşivlemek ve analiz etmek.",
+          "priority": "Düşük",
+          "rationale": "Görüntülerde herhangi bir anormalite olmamasına rağmen, geçmiş verilerin analizi gelecekteki riskleri tespit etmek için önemlidir."
+        },
+        {
+          "action": "Operatörün günlük raporlama formunu doldurarak sisteminin çalışmasını doğrulamak.",
+          "priority": "Orta",
+          "rationale": "Raporlama, sistemdeki herhangi bir değişiklik veya potansiyel sorunun erken tespit edilmesini sağlar."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr128.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 3,
+      "latency_s": 8.9,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, hareket, anomali veya riskli durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza, saldırı veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir kontrol gerekmez."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr53.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 5,
+      "latency_s": 9.4,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay olmadığı için öncelikli bir eylem gerekli değildir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_te11.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 7,
+      "latency_s": 10.0,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, yetkisiz giriş veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir eylem gerekmez, ancak düzenli kontrol devam etmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr110.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 9,
+      "latency_s": 10.1,
+      "summary": "Video süresince herhangi bir olay veya anormal durum tespit edilmedi. Görüntülerde herhangi bir tehlike, hareket, kaza veya güvenlik ihlali gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum bulunmadığı için genel risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anki video normal görünüyor ancak düzenli kontrol, gelecekteki potansiyel riskleri yakalamada önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr128.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 10.5,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay olmadığı için öncelikli bir eylem gerekmez, ancak düzenli kontrol devam etmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr176.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 14,
+      "latency_s": 20.4,
+      "summary": "00:13'te bir kişi ani şekilde yere düşerek hareketsiz kalmıştır. Görüntüde bu olayın sonraki anlarda devamı veya başka bir olay gözlemlenmemiştir.",
+      "events": [
+        {
+          "time": "00:13",
+          "event": "Kişi ani şekilde yere düşüyor ve hareketsiz kalıyor",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Kişinin ani şekilde yere düşmesi ve hareketsiz kalması, ciddi bir sağlık acil durumu olabileceği için yüksek risk seviyesi gerektirir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz kalmış ve ani düşme gözlemlenmiştir; bu durum ciddi bir sağlık sorunu olabilir."
+        },
+        {
+          "action": "Yerel güvenlik personeli, kişinin etrafını kontrol ederek çevreye müdahale engeli koymalıdır.",
+          "priority": "Yüksek",
+          "rationale": "Kişinin durumu belirsiz olduğu için çevreye müdahale engeli koymak, diğer kişilerin zarar görmemesini sağlar."
+        },
+        {
+          "action": "Kamera kayıtlarını ve olayı kaydetmeyi unutmayın; bu, acil müdahale sonrası değerlendirme için gereklidir.",
+          "priority": "Orta",
+          "rationale": "Olayı kaydetmek, sağlık ekibinin müdahale sürecini takip etmesini ve gerekirse soruşturma yapmasını sağlar."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr178.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 14,
+      "latency_s": 11.9,
+      "summary": "Görüntüde herhangi bir olay veya anormal durum tespit edilmedi. Sistemdeki tüm sahneler normal ve beklenen davranışları göstermektedir.",
+      "events": [],
+      "risk_rationale": "Görüntüde herhangi bir tehlike, kaza, güvenlik ihlali veya anormal aktivite gözlemlenmemiştir.",
+      "actions": [
+        {
+          "action": "Görüntüyü 10 saniye aralıklarla tekrar kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Sistemdeki herhangi bir değişiklik veya gecikme için düzenli kontrol yapılmalıdır."
+        },
+        {
+          "action": "Güvenlik protokollerini gözden geçir.",
+          "priority": "Düşük",
+          "rationale": "Normal durumlar da güvenlik standartlarının korunması için düzenli denetimler yapılmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Unauthorized_Intervention/1_te10.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 11,
+      "latency_s": 12.7,
+      "summary": "Video süresince herhangi bir olay veya anormal durum tespit edilmedi. Görüntülerde herhangi bir tehlike, hareket, kaza veya güvenlik ihlali gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntüde herhangi bir tehlike veya anormal durum bulunmadığı için genel risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir kontrol gerekmez."
+        },
+        {
+          "action": "Sistemdeki alarmlar ve sensörlerin çalıştığından emin ol.",
+          "priority": "Orta",
+          "rationale": "Görüntüde herhangi bir olay yoksa, sistemdeki diğer güvenlik cihazlarının düzgün çalıştığından emin olmak önemlidir."
+        },
+        {
+          "action": "Operasyonun devam ettiğini doğrulamak için bir operatörle iletişim kur.",
+          "priority": "Düşük",
+          "rationale": "Görüntüde herhangi bir olay yoksa, operasyonun devam ettiğini doğrulamak için bir operatörle iletişim kurmak güvenli bir uygulamadır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr61.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 11.3,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, gizli giriş veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmedi. Ortam sakin ve beklenen normale uygun.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olaylar varsa daha fazla zaman vermek için tekrar kontrol edilmelidir."
+        },
+        {
+          "action": "Sistemdeki alarm ve uyarı sistemlerini kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olaylar varsa sistemdeki alarmlar aktif olabilir; kontrol edilmesi gerekir."
+        },
+        {
+          "action": "Güvenlik personeline rapor ver.",
+          "priority": "Düşük",
+          "rationale": "Olaylar varsa güvenlik personeline rapor verilmelidir; ancak şu anda herhangi bir olay yok."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr67.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 10.0,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anki video içerisinde herhangi bir olay olmadığı için tekrar inceleme düşük öncelikli bir eylemdir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr7.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 7,
+      "latency_s": 13.1,
+      "summary": "00:00'da makine başında hareketsiz kalan kişi tespit edildi. Bu durum, operatörün hemen müdahale etmesi gereken bir anomali olarak değerlendirilmelidir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Makine başında hareketsiz kalan kişi",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Hareketsiz kalan kişi, ciddi bir kaza veya sağlık sorunu olabileceği için dikkatli bir şekilde kontrol edilmelidir. Ancak video süresi kısa ve sadece bir anı yakaladığı için henüz tehlike seviyesi en yüksek değil.",
+      "actions": [
+        {
+          "action": "Hareketsiz kalan kişiyi hemen kontrol etmek için güvenlik personeli yönlendirilmeli.",
+          "priority": "Yüksek",
+          "rationale": "Hareketsiz kalma, yaralanma veya makine ile ilgili bir kazaya işaret olabilir; hemen müdahale gerekir."
+        },
+        {
+          "action": "Makinenin durumu ve çevresi kontrol edilmeli.",
+          "priority": "Orta",
+          "rationale": "Makineye temas eden veya etkilenen bir durum olup olmadığı belirlenmelidir."
+        },
+        {
+          "action": "Kamera kaydıyla ilgili sahne, güvenlik loglarına kaydedilmeli.",
+          "priority": "Düşük",
+          "rationale": "Gelecekteki incelemelerde ve sorumluluk belirlemelerinde referans olması için kaydedilmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr81.mp4",
+      "category": "Anomali",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": false,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 8,
+      "latency_s": 16.1,
+      "summary": "00:07'de siyah tişört giyen bir kişi zemine düşerek hareketsiz kaldı. Görüntüdeki olaylar arasında bağlantı yoktur ve sadece bu tek olay gözlemlenmiştir.",
+      "events": [
+        {
+          "time": "00:07",
+          "event": "Siyahtıshört giyen kişi zemine düşerek hareketsiz kaldı",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Kişi zemine düşerek hareketsiz kaldı ve bu durum sağlık açısından ciddi bir risk oluşturabilir; acil müdahale gerekebilir.",
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz kalmış ve sağlık durumu belirsiz; acil müdahale gerekli olabilir."
+        },
+        {
+          "action": "Olay yerine güvenlik görevlisini yönlendirin.",
+          "priority": "Yüksek",
+          "rationale": "Güvenlik görevlisi, durumu kontrol ederek müdahaleyi destekleyebilir ve çevreyi koruyabilir."
+        },
+        {
+          "action": "Kamera kayıtlarını muhafaza edin ve olayı raporlayın.",
+          "priority": "Orta",
+          "rationale": "Olayı belgelemek, sonraki incelemelerde ve gerekirse sorumluluk belirlemede önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Authorized_Intervention/5_te1.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 7,
+      "latency_s": 9.6,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Herhangi bir olay tespit edilmediği için tekrar kontrol yapılması önerilir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Authorized_Intervention/5_te12.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 11.8,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, gizli giriş veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmedi. Ortam sakin ve beklenen normale uygun.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olaylar varsa belki daha sonra ortaya çıkar; şu anda herhangi bir müdahale gerekmez."
+        },
+        {
+          "action": "Kamera sistemini kontrol et ve arızalı olup olmadığını doğrula.",
+          "priority": "Orta",
+          "rationale": "Görüntülerde herhangi bir olay yoksa, sistemde teknik bir sorun olup olmadığını kontrol etmek güvenliği sağlar."
+        },
+        {
+          "action": "Güvenlik protokollerini gözden geçir ve rutin denetimlerde bu tür boş görüntülerin tekrarlanıp tekrarlanmadığını not et.",
+          "priority": "Düşük",
+          "rationale": "Bu tür boş görüntülerin tekrarlanması, sistemde bir sorun olabileceği anlamına gelir; ancak şu anda herhangi bir tehlike yok."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Authorized_Intervention/5_te14.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 10.5,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, gizli giriş veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmedi. Ortam sakin ve beklenen normale uygun.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olaylar varsa belirtilen sürelerde tekrar kontrol edilmelidir."
+        },
+        {
+          "action": "Güvenlik sistemlerini kontrol et ve herhangi bir uyarı alındığında hemen müdahale et.",
+          "priority": "Orta",
+          "rationale": "Sistemlerin düzgün çalıştığından emin olmak için düzenli kontrol yapılmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Authorized_Intervention/5_tr19.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 11.3,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, yetkisiz giriş veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmedi. Ortam sakin ve beklenen normale uygun.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki video parçasını kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olaylar varsa erken tespit için düzenli kontrol yapılması gerekir."
+        },
+        {
+          "action": "Sistemdeki alarm ve uyarı sistemlerini kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olay tespit edilmediğinden sistemlerin düzgün çalışıp çalışmadığına dikkat edilmelidir."
+        },
+        {
+          "action": "Güvenlik operatörüne bildirim vererek bekletme durumunu onaylat.",
+          "priority": "Düşük",
+          "rationale": "Operatörün bilgilendirilmesi, sistemdeki durumun sürekli takip edilmesini sağlar."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Authorized_Intervention/5_tr20.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 11.5,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, gizli giriş veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmedi. Ortam sakin ve beklenen normale uygun.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olaylar sadece bu video süresince gözlemlenmedi; daha fazla zaman dilimi kontrol edilmelidir."
+        },
+        {
+          "action": "Kamera sistemini kontrol et ve arızalı olup olmadığını doğrula.",
+          "priority": "Düşük",
+          "rationale": "Görüntülerde herhangi bir olay yoksa, kamera sisteminin düzgün çalıştığından emin olmak için kontrol edilmelidir."
+        },
+        {
+          "action": "Güvenlik protokollerini gözden geçir.",
+          "priority": "Düşük",
+          "rationale": "Herhangi bir olay olmadığı için, güvenlik protokollerinin uygulanıp uygulanmadığına dair bir değerlendirme yapılmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Closed_Panel_Cover/6_te10.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 2,
+      "latency_s": 10.9,
+      "summary": "Görüntüde herhangi bir olay tespit edilmedi. Sistemdeki tüm sahneler normal ve beklenen davranışları göstermektedir. Güvenlik operatörüne herhangi bir müdahale gerektiren durum yoktur.",
+      "events": [],
+      "risk_rationale": "Görüntüde herhangi bir tehlike, kaza, tehlikeli davranış veya anormal durum tespit edilmedi. Ortam sakin ve beklenen normale uygun.",
+      "actions": [
+        {
+          "action": "Görüntüyü 10 saniye geriye alarak tekrar incele.",
+          "priority": "Düşük",
+          "rationale": "Olay tespit edilmediğinden, belki de bir anlık geçici durumun kaçırılması ihtimali var."
+        },
+        {
+          "action": "Kamera sistemini kontrol et ve bağlantıyı doğrula.",
+          "priority": "Düşük",
+          "rationale": "Görüntüde herhangi bir olay yoksa, sistemde teknik bir arıza olup olmadığını kontrol etmek güvenli bir önlemdir."
+        },
+        {
+          "action": "Operasyonun devam eden sahnesini 30 saniye öncesine kadar izle.",
+          "priority": "Düşük",
+          "rationale": "Olay tespit edilmediğinden, önceki sahnelerde belki de bir uyarı veya anormal durum geçtiğinden emin olmak için geniş bir zaman aralığına bakılmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Closed_Panel_Cover/6_te12.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 15.2,
+      "summary": "Video, zeminde sabit kalmış bir metal nesne ve ardından yere düşmüş hareketsiz bir kişi göstermektedir. Her iki durum da ayrı sahnelerde ve birbirine doğrudan bağlanmamıştır. Her ikisi de güvenlik açısından dikkat çekici olmakla birlikte, anında tehdit oluşturmamaktadır.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Zeminde yerde sabit kalmış bir metal nesne var",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        },
+        {
+          "time": "00:10",
+          "event": "Yere düşmüş hareketsiz kişi",
+          "severity": "Düşük",
+          "category": "Sağlık",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Görüntüde herhangi bir acil durum, yangın, patlama veya silah kullanımı gibi kritik tehdit belirtilmemiştir. Hareketsiz kişi ve metal nesne, her ikisi de doğrudan bir tehlike oluşturmamakta ve müdahale gerektiren acil bir durum değildir.",
+      "actions": [
+        {
+          "action": "Hareketsiz kişiyi kontrol etmek için güvenlik personeli veya sağlık ekibi çağrılmalıdır.",
+          "priority": "Orta",
+          "rationale": "Hareketsiz bir kişi, sağlık açısından risk taşıyabilir; bu nedenle en kısa sürede müdahale edilmelidir."
+        },
+        {
+          "action": "Zemindeki metal nesnenin nedeni ve etkileri belirlenmelidir.",
+          "priority": "Düşük",
+          "rationale": "Metal nesnenin nereden geldiğini ve ne işe yaradığını anlamak, potansiyel bir tehlike olup olmadığını belirlemek için gerekli olabilir."
+        },
+        {
+          "action": "Kamera kayıtları ve çevredeki diğer güvenlik sistemleri kontrol edilmelidir.",
+          "priority": "Orta",
+          "rationale": "Diğer güvenlik sistemleriyle uyumlu bir analiz yapmak, olayların tekrarlanmasını veya başka bir riski önleme açısından önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr17.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 17.9,
+      "summary": "İşçi ani bir hareketle yere eğildi, kendini tutarak dengede durdu ve yavaşça dizlerini kıvırdı. Bu hareket, düşme sonrası kurtarma veya dengesizlik sonucu oluşan bir tepki gibi görünüyor. Görüntüde başka bir olay veya tehlike belirtilmemiş.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "İşçi ani hareketle yere eğildi, kendini tutarak dengede durdu ve yavaşça dizlerini kıvırdırdı; düşme sonrası kurtarma hareketi gibi görünüyor",
+          "severity": "Düşük",
+          "category": "Kaza",
+          "region": null
+        }
+      ],
+      "risk_rationale": "İşçi düşme sonrası kendini tutabildi ve ciddi bir yaralanma veya tehlike belirtisi yok. Hareket, kaza sonrası kurtarma veya dengesizlik tepkisi olarak değerlendirilebilir.",
+      "actions": [
+        {
+          "action": "İşçinin durumunu gözlemlemeye devam et.",
+          "priority": "Düşük",
+          "rationale": "İşçi kendini tutabildi ve ciddi bir yaralanma belirtisi yok. Ancak, durumun devam edip edemediğini izlemek güvenli olur."
+        },
+        {
+          "action": "İşçinin yakınlarında bir sağlık personeli veya destek ekipleri olup olmadığını kontrol et.",
+          "priority": "Orta",
+          "rationale": "İşçi ani bir hareketle yere eğildiğinden, hafif bir yaralanma veya dengesizlik sonucu oluşan bir durum olabilir. Sağlık destekinin hazır olması riski azaltır."
+        },
+        {
+          "action": "İşçinin hareketlerini izleyen bir güvenlik operatörüne bildir.",
+          "priority": "Orta",
+          "rationale": "İşçi ani bir hareketle yere eğildiğinden, bu durumun tekrarlanma veya daha ciddi bir olaya yol açma ihtimali var. Operatörün bilgilendirilmesi, durumun takip edilmesini sağlar."
+        },
+        {
+          "action": "İşçinin bulunduğu alanda güvenlik önlemlerinin uygulanıp uygulanmadığını kontrol et.",
+          "priority": "Düşük",
+          "rationale": "İşçi ani bir hareketle yere eğildiğinden, bu durumun bir güvenlik ihlali veya ortamda bir tehlike sonucu oluştuğu düşünülebilir. Ortamın güvenliğini kontrol etmek, gelecekte benzer olayların önlenmesini sağlar."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr8.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 4,
+      "latency_s": 11.9,
+      "summary": "Video süresince herhangi bir olay veya anormal durum tespit edilmedi. Görüntülerde herhangi bir tehlike, hareket, kaza veya güvenlik ihlali gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum bulunmadığından genel risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar inceleyerek, özellikle son 2 saniyede herhangi bir değişiklik olup olmadığını kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olaylar sadece 4 saniye boyunca gözlemlenmiş olup, bu süre içinde herhangi bir değişiklik olup olmadığına dikkat edilmelidir."
+        },
+        {
+          "action": "Kamera ayarlarını kontrol ederek, görüntü kalitesinin ve algılama aralığının doğru olduğundan emin ol.",
+          "priority": "Düşük",
+          "rationale": "Görüntülerde herhangi bir olay olmadığı için kamera sisteminin düzgün çalıştığından emin olmak, gelecekteki tespitlerde güvenilirlik sağlar."
+        },
+        {
+          "action": "Güvenlik protokollerine göre, bu videoyu kayıtlı olarak sakla ve gerektiğinde raporla.",
+          "priority": "Düşük",
+          "rationale": "Her video kaydı, güvenlik tarihinin bir parçasıdır ve belki de gelecekte bir analizde kullanılabilecek veri olabilir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr9.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 3,
+      "latency_s": 8.8,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir değerlendirme gerekmez."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Carrying/7_tr15.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 2,
+      "latency_s": 10.9,
+      "summary": "Görüntüde herhangi bir olay tespit edilmedi. Sistemdeki güvenlik kamerası, belirtilen 2 saniyelik süre içinde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntüde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Kamera sisteminin çalışmasını ve kayıtların bütünlüğünü kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Görüntüde herhangi bir olay yoksa, sistemdeki teknik sorunlar veya kayıtların bozulması riski göz önünde bulundurulmalıdır."
+        },
+        {
+          "action": "Güvenlik operatörüne bildirim vererek, sisteminin sürekli izlenmesi sağlanmalıdır.",
+          "priority": "Düşük",
+          "rationale": "Herhangi bir olay olmamasına rağmen, güvenlik operatörünün sistemi sürekli izlemesi gerekmektedir."
+        },
+        {
+          "action": "Kamera görüş alanının ve aydınlatma durumunun kontrol edilmesi önerilir.",
+          "priority": "Düşük",
+          "rationale": "Görüntüde herhangi bir olay yoksa, kamera görüş alanının ve aydınlatmanın yeterli olup olmadığı kontrol edilmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Carrying/7_tr18.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 12,
+      "latency_s": 17.3,
+      "summary": "00:03'te forklift hızlanırken işçi ani kalktı ve geriye eğildi. Bu hareket, forkliftin işçiye yakın geçmesiyle ilişkilidir ve potansiyel bir kaza riski oluşturur.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Forklift hızlanıp işçiye yakın geçerken işçi ani kalkar ve geriye eğilir",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "İşçi ani hareketle forkliftin geçişine tepki vermiş olup, fiziksel temas veya darbe riski mevcuttur. Ancak anında yaralanma veya ciddi hasar gözlenmemiş olup, kritik bir tehdit değil.",
+      "actions": [
+        {
+          "action": "İşçi ve forkliftin bulunduğu bölgeyi kontrol ederek, forkliftin hızı ve işçi hareketiyle ilgili güvenlik protokollerinin uygulanıp uygulanmadığını incele.",
+          "priority": "Orta",
+          "rationale": "İşçi ani hareketi, forkliftin hızı veya operatörün dikkat eksikliği gibi nedenlerle oluşmuş olabilir; bu nedenlerin tespiti, benzer olayların tekrarlamasını engellemek için kritiktir."
+        },
+        {
+          "action": "İşçiye güvenlik eğitimi ve forklift operatörüne hız kontrolü konusunda tekrarlı hatırlatma yap.",
+          "priority": "Orta",
+          "rationale": "İşçi ani hareketi, güvenlik kurallarına uymadığı veya uyarlanmamış bir tepki olabilir; eğitim ve hatırlatma, benzer durumları önleyebilir."
+        },
+        {
+          "action": "Kamera kayıtlarını inceleyerek, forkliftin geçiş anındaki hız ve işçi hareketinin nedenini belirle.",
+          "priority": "Orta",
+          "rationale": "Olayın nedenini belirlemek, gelecekte benzer olayların tekrarlamasını engellemek için gerekli olan teknik ve operasyonel düzeltmeleri planlamak için temeldir."
+        },
+        {
+          "action": "İşçiye ve forklift operatörüne anında bir uyarı vererek, olay sonrası güvenlik protokollerine uygun bir değerlendirme yap.",
+          "priority": "Düşük",
+          "rationale": "Anında değerlendirme, iş güvenliği açısından önemli olup, olay sonrası riskin tekrarlanmasını önlemek için gerekli adımları almak için yeterlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Carrying/7_tr2.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 9,
+      "latency_s": 11.7,
+      "summary": "Video süresince herhangi bir olay veya anormal durum tespit edilmedi. Görüntüler, normal ve beklenen aktiviteyi yansıtmaktadır.",
+      "events": [],
+      "risk_rationale": "Görüntüde herhangi bir tehlike, kaza, güvenlik ihlali veya anormal davranış gözlemlenmemiştir.",
+      "actions": [
+        {
+          "action": "Görüntüyü 10 saniye aralıklarla tekrar kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Süreçte herhangi bir değişiklik olup olmadığını doğrulamak için düzenli gözlem yapılması önerilir."
+        },
+        {
+          "action": "Sistemdeki diğer kamera akışlarını kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Sadece bu kameradan değil, tüm sistemdeki kamera akışlarının normal çalışıp çalışmadığına bakılmalıdır."
+        },
+        {
+          "action": "Güvenlik protokollerine uygun olarak kayıt tutulup, raporlanmalıdır.",
+          "priority": "Düşük",
+          "rationale": "Normal bir durumda da güvenlik protokollerine uygun olarak kayıt tutulması, süreçteki tutarlılığı ve sorumlulukları sağlar."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Carrying/7_tr3.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 9,
+      "latency_s": 10.8,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, güvenlik ihlali veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmedi. Ortam sakin ve beklenen normale uygun.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki video parçasını kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olaylar varsa belirginleşebilir; tekrar kontrol edilmesi güvenliği artırır."
+        },
+        {
+          "action": "Güvenlik protokollerine uygun olarak kayıt sistemiyle bu videoyu arşivle.",
+          "priority": "Düşük",
+          "rationale": "Normallerin kaydedilmesi, gelecekteki analizlerde referans olması açısından önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Carrying/7_tr5.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 7,
+      "latency_s": 11.4,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar inceleyerek herhangi bir gözlemlenmemiş detayı kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olaylar varsa belirlemek için tekrar kontrol edilmelidir."
+        },
+        {
+          "action": "Kamera ayarlarını kontrol ederek görüntü kalitesinin korunmasını sağla.",
+          "priority": "Düşük",
+          "rationale": "Görüntü kalitesi, tespit edilecek potansiyel olaylar için kritiktir."
+        },
+        {
+          "action": "Sistemdeki diğer kamera kanallarını kontrol et ve eş zamanlı olarak izle.",
+          "priority": "Düşük",
+          "rationale": "Geniş bir alan izlemesi, potansiyel tehditleri erken tespit etmek için önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Walkway/4_te16.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": null,
+      "triggered": [
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 7,
+      "latency_s": 18.1,
+      "summary": "Ortamda yoğun duman oluştu ve görüş alanını kısmakta; bu durum güvenlik riski oluşturuyor. Dumanın kaynağı veya nedeni belirsiz ancak hemen müdahale gerektiren bir tehlike olarak değerlendirilmelidir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Ortamda yoğun duman oluştu, görüş alanını kısmakta ve tehlike sinyali oluşturuyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Yoğun duman, görüşü tamamen engelleyebilir ve yangın, patlama veya kimyasal sızıntı gibi ciddi tehlikelerin belirtisi olabilir; bu nedenle en yüksek risk seviyesi uygulanmalıdır.",
+      "actions": [
+        {
+          "action": "Hemen acil müdahale ekibi ve yangın söndürme ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Yoğun duman, hemen müdahale gerektiren bir tehlike olarak değerlendirilmekte; müdahale gecikirse ciddi hasar veya yaralanma riski var."
+        },
+        {
+          "action": "Tesisin tüm giriş-çıkış kapılarını kontrol edip, gerekirse kapatın.",
+          "priority": "Yüksek",
+          "rationale": "Dumanın yayılmasını önlemek ve diğer personelin tehlikede kalmasını engellemek için fiziksel engelleme gereklidir."
+        },
+        {
+          "action": "Güvenlik personeline dumanın kaynağına ulaşmak için güvenli bir yoldan ilerlemelerini sağlayın.",
+          "priority": "Orta",
+          "rationale": "Dumanın kaynağı belirsiz olduğu için, personelin güvenli bir şekilde hareket edebilmesi için yönlendirme ve destek gerekir."
+        },
+        {
+          "action": "Kamera sistemini ve diğer sensörleri kontrol edip, dumanın yayılmasını izleyin.",
+          "priority": "Orta",
+          "rationale": "Dumanın yayılmasını izlemek, müdahale stratejisinin etkinliğini artırmak ve yeni tehlikeleri tespit etmek için kritiktir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Walkway/4_te19.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 15,
+      "latency_s": 13.3,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, hareket, anomali veya riskli durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza, saldırı veya anormal durum tespit edilmediği için genel risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir kontrol gerekmez."
+        },
+        {
+          "action": "Kamera sistemini kontrol et ve arızalı olup olmadığını doğrula.",
+          "priority": "Düşük",
+          "rationale": "Görüntülerde herhangi bir olay yoksa, kamera sisteminin düzgün çalıştığından emin olmak için kontrol edilmelidir."
+        },
+        {
+          "action": "Operasyonel protokollere göre rutin kontrolü yap.",
+          "priority": "Düşük",
+          "rationale": "Herhangi bir olay olmadığı için, güvenlik operatörüne rutin kontrol yapması önerilir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Walkway/4_tr13.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 9.8,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, yetkisiz giriş veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir kontrol gerekmez."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Walkway/4_tr23.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 8,
+      "latency_s": 16.2,
+      "summary": "Makinanın önünde yoğun duman yayılıyor. Bu durum, makineye ait bir arıza veya iç mekanında bir yangın başlangıcı olabilir. Dumanın yoğunluğu, hava akışının engellenmesi veya yanma sürecinin başlaması gibi tehlikeli bir durumun göstergesi olabilir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Makinanın önünde yoğun duman yayılıyor",
+          "severity": "Düşük",
+          "category": "Güvenlik",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Yalnızca bir duman yayılımı tespit edildi ve bu, yangın veya patlama gibi kritik olaya işaret etmez; ancak dumanın yoğunluğu, hava akışının bozulması veya bir arızanın belirtisi olabilir. Bu nedenle risk Orta olarak değerlendirilir.",
+      "actions": [
+        {
+          "action": "Makineyi hemen durdurun ve çevreyi dumanla kaplı alanlardan uzaklaştırın.",
+          "priority": "Yüksek",
+          "rationale": "Duman, hava akışını bozabilir ve operatörlerin solunum sistemlerini etkileyebilir. Hemen durdurulması, tehlikeleri azaltır."
+        },
+        {
+          "action": "Dumanın kaynağına ulaşmak için güvenli bir yoldan yaklaşın ve dumanın nedenini belirleyin.",
+          "priority": "Orta",
+          "rationale": "Dumanın nedeni, makine arızası, elektriksel bir sorun veya küçük bir yangın olabilir. Nedeni belirlemek, uygun müdahaleyi sağlar."
+        },
+        {
+          "action": "Güvenlik ekiplerine ve acil müdahale ekibine haber verin.",
+          "priority": "Orta",
+          "rationale": "Dumanın yoğunluğu, acil müdahale gerektirebilir. Ekibin bilgilendirilmesi, hızlı ve uygun müdahaleyi sağlar."
+        },
+        {
+          "action": "Dumanın yayıldığı alana giriş yasaklanmalı ve çevredeki kişilerden uzak durmaları sağlanmalı.",
+          "priority": "Düşük",
+          "rationale": "Duman, solunum yollarını etkileyebilir. Alana giriş yasaklanması, kişilerin güvenliğini sağlar."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_defense/Normal/Safe_Walkway/4_tr35.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 8,
+      "latency_s": 10.8,
+      "summary": "Video süresince herhangi bir olay veya anormal durum tespit edilmedi. Görüntülerde herhangi bir tehlike, hareket, kaza veya güvenlik ihlali gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum bulunmadığı için risk düzeyi düşüktür.",
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir kontrol gerekmez."
+        },
+        {
+          "action": "Kamera sistemini kontrol et ve düzgün çalışıp çalışmadığını doğrula.",
+          "priority": "Orta",
+          "rationale": "Görüntülerde herhangi bir olay yoksa, sistemde teknik bir arıza olup olmadığını kontrol etmek güvenliği sağlar."
+        }
+      ]
+    }
+  ]
+}

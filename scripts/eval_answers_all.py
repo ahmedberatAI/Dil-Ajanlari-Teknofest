@@ -52,6 +52,11 @@ def main():
             continue
         rows = []
         for cat in sorted(os.listdir(d)):
+            # '_' ile baslayan klasorler KARANTINA/METADATA (or. _deprecated_frozen_fall — K8'de
+            # ayiklanan donmus-PNG klipler). Kategori DEGILDIR; alinirsa bilinmeyen kategori
+            # is_anomaly=True sayilip anomali paydasina sizar.
+            if cat.startswith("_"):
+                continue
             cdir = os.path.join(d, cat)
             if not os.path.isdir(cdir):
                 continue

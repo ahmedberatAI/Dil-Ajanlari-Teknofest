@@ -6,7 +6,10 @@ gecersiz kilinabilir. Ornek:  DILAJAN_VLLM_PORT=8001
 from __future__ import annotations
 
 import os
+import threading
+from contextlib import contextmanager
 from pathlib import Path
+from typing import Any, Dict, Iterator
 
 from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -161,6 +164,91 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+# ---------------------------------------------------------------------------
+# K2 — ISTEK-KAPSAMLI KONFIG (istek izolasyonu)
+# ---------------------------------------------------------------------------
+# SORUN: app.analyze() her istekte MODUL-GLOBAL `settings`i yaziyordu
+# (facility_rules/restricted_zones/detect_vehicles/vehicle_zones/detect_crowd).
+# Eszamanli iki analiz veya coklu-kullanici (DILAJAN_SHARE / DILAJAN_HOST=0.0.0.0)
+# durumunda A isteginin tesis-kurali B'nin analizine SIZIYORDU; ayrica degerler
+# analiz bitince temizlenmedigi icin bir sonraki isteme de tasiniyordu.
+#
+# NEDEN CONTEXTVAR DEGIL (secenek (a) REDDEDILDI):
+#   perceive dugumu segmentleri `ThreadPoolExecutor` ile PARALEL isliyor ve
+#   `settings.facility_rules` / `restricted_zones` / `detect_*` okumalari
+#   _analyze_one_segment icinde, yani ISCI THREAD'lerde gerceklesiyor.
+#   contextvars isci thread'lere OTOMATIK TASINMAZ (ThreadPoolExecutor
+#   submit ederken context kopyalamaz) -> override worker'da GORUNMEZ,
+#   operatorun girdigi tesis kurallari SESSIZCE DUSER. Bu, yarisdan daha kotu
+#   (fonksiyonel gerileme) olurdu ve duzeltmesi graph.py'yi degistirmeyi
+#   gerektirirdi (bizim sahiplendigimiz dosya degil).
+#
+# SECILEN COZUM (b, daha az invaziv): global mutasyon bir "kapi" ile korunur ve
+# eski degerler try/finally ile GERI YUKLENIR. Ayni anda yalniz TEK istek
+# istek-kapsamli alanlari degistirebilir; digerleri sirasini bekler. Tam
+# proses-ici izolasyon degildir ama sizinti/yaris riskini kaldirir ve
+# graph.py/detector.py'nin `settings.<alan>` okumasini HIC BOZMAZ.
+#
+# NEDEN Lock DEGIL de Semaphore: analyze() bir GENERATOR'dur ve kapi `yield`
+# uzerinden tutulur. Gradio/anyio bir jeneratorun ardisik `__next__` cagrilarini
+# FARKLI worker thread'lerde kosturabilir; threading.Lock/RLock sahiplik-baglidir
+# ve baska bir thread'den release edilirse RuntimeError verir. Semaphore'un
+# sahiplik kavrami yoktur -> thread'ler arasi guvenli acquire/release.
+_CONFIG_GATE = threading.BoundedSemaphore(1)
+
+#: Istek basina (UI formundan) degistirilebilen alanlar — belgeleme/dogrulama amacli.
+REQUEST_SCOPED_FIELDS = (
+    "facility_rules",
+    "restricted_zones",
+    "detect_vehicles",
+    "vehicle_zones",
+    "detect_crowd",
+    "crowd_min_persons",
+)
+
+
+@contextmanager
+def request_config(**overrides: Any) -> Iterator[Settings]:
+    """Istek suresince `settings` uzerinde gecici override uygular (istek izolasyonu).
+
+    Kullanim::
+
+        with request_config(facility_rules="...", detect_crowd=True):
+            ...  # graph/detector `settings.facility_rules` okumaya DEVAM eder
+
+    Davranis:
+      * Blok boyunca kapi (semaphore) tutulur -> ikinci bir istek, birincisi
+        bitene kadar istek-kapsamli alanlari EZEMEZ.
+      * Cikista (normal, hata veya GeneratorExit) ESKI degerler geri yuklenir,
+        yani ayarlar bir sonraki isteme sizmaz.
+      * Bilinmeyen alan adlari SESSIZCE yok sayilir (fail-open; UI sozlesmesi
+        degisirse analiz cokmesin).
+      * `overrides` bos olsa bile kapi tutulur (davranis tekdüze kalir).
+    """
+    fields = getattr(Settings, "model_fields", None) or {}
+    clean: Dict[str, Any] = {k: v for k, v in overrides.items() if k in fields}
+    _CONFIG_GATE.acquire()
+    previous: Dict[str, Any] = {}
+    try:
+        for key, value in clean.items():
+            try:
+                previous[key] = getattr(settings, key)
+                setattr(settings, key, value)
+            except Exception:  # fail-open: tek alan uygulanamazsa analiz surer
+                previous.pop(key, None)
+        yield settings
+    finally:
+        for key, value in previous.items():
+            try:
+                setattr(settings, key, value)
+            except Exception:
+                pass
+        try:
+            _CONFIG_GATE.release()
+        except ValueError:  # cift-release (teorik) -> sessiz gec
+            pass
 
 
 def apply_cuda_env() -> None:

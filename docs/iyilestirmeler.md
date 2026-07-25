@@ -103,13 +103,17 @@ Düşme tespitini iyileştirmek için severity-kalibrasyona **düşme/sağlık t
 Normal FP bozulmadı.
 
 **Çetin-negatif robustluk stres testi (9 yangın-renkli ama yangın-olmayan FIRESENSE testneg):**
-**%0 yanlış-pozitif** (9/9 risk=Düşük) — yangın detektörlerini kandırmak için tasarlanmış adversaryel
-sahnelerde bile yanlış alarm vermiyor.
+**gözlenen yanlış-pozitif yok — 0/9 (%95 üst sınır %30)**; 9 klibin 9'unda da risk=Düşük.
+Yangın detektörlerini kandırmak için tasarlanmış adversaryel sahnelerde yanlış alarm görmedik.
+*(K15 düzeltmesi: burada eskiden "%0 yanlış-pozitif" yazıyordu. 0/9 gözlem "sıfır" demek değildir —
+gerçek oran %30'a kadar çıkabilir. Bkz. `docs/olcum_durustlugu.md` §0.)*
 
-**Sonuç:** Senaryoya-uygun, görsel olarak net olaylarda sistem **kusursuz** (recall/risk/kategori %100,
-FP %0). UCF'deki kategori-tanıma zayıflığı **veri artefaktıydı** (grainy + senaryo-dışı), sistem kusuru
-değil. İki bağlamlı hikaye güçlü: bozuk/senaryo-dışı veride bile %96 recall (dayanıklılık),
-senaryo verisinde %100 + sıfır yanlış-alarm (adversaryel dahil). (Not: endüstriyel setin "güvensiz"
+**Sonuç:** Senaryoya-uygun, görsel olarak net olaylarda sistem tavana yakın (recall 18/18 [%82–%100];
+risk ve kategori aynı sette tam; normalde gözlenen FP yok). UCF'deki kategori-tanıma zayıflığı büyük
+ölçüde **veri artefaktıydı** (grenli + senaryo-dışı). İki bağlamlı hikâye: bozuk/senaryo-dışı veride
+tespit yüksek (44/48 [%80–%97]) — dayanıklılık; senaryo verisinde tavan + gözlenen yanlış alarm yok
+(adversaryel dâhil). *(K15: "kusursuz" ve "%100/%0" mutlak ifadeleri kaldırıldı — bu örneklem
+boyutunda savunulamıyorlar.)* (Not: endüstriyel setin "güvensiz"
 sınıfları tesise-özgü *politika ihlalleri* — VLM sahneyi net görüyor ama "ihlal"i kurallar olmadan
 yargılayamıyor; bunlar yüksek-res *normal/demo* footage olarak kullanıldı. NVIDIA PhysicalAI (1080p
 forklift+yangın) denendi ama sentetik olaylar çok ince → tespit edilmiyor (dramatik-kolay/ince-zor örüntüsü).
@@ -262,19 +266,19 @@ dramatik olaylarda mükemmeliz + ince/politika için dağıtım-zamanı hook'lar
 
 Subagent ile jüri-hizalı kapsamlı karne tasarlandı; daha önce **hiç ölçülmeyen** zorunlu çıktılar için
 yeni judge'lar eklendi (`benchmark/holistic.py`): M1 aksiyon kalitesi, M2 agentic dispatch doğruluğu,
-M3 JSON şema uyumu, M4 risk gerekçe kalitesi. **Karne (temsili set, Qwen3-VL):**
+M3 JSON şema uyumu, M4 risk gerekçe kalitesi. **Karne (temsili set, Qwen3-VL) — o günkü hâliyle:**
 
-| Eksen | Ölçüm | Sonuç |
-|---|---|---|
-| İşlevsellik | Olay tespiti (recall) | senaryo %100 · holistik %83 |
-| İşlevsellik | Özet kalitesi (LLM-judge) | **4.98/5** |
-| İşlevsellik | **Aksiyon kalitesi (M1)** | **4.71/5** (yeni — güçlü) |
-| İşlevsellik | **Risk gerekçe (M4)** | **5.0/5** (yeni — güçlü) |
-| İşlevsellik | **JSON şema uyumu (M3)** | %89 → **%100** (zaman normalizasyonu, aşağıda) |
-| Otonomi | **Agentic dispatch (M2)** | **%78** (anomali→fonk %83, normal→yanlış-tetik-yok %67) |
-| Otonomi | Diyalog robustluğu | 5.0/5 |
-| Teknik | **Hata toleransı (G4)** | **%100 zarif** (bozuk/boş/siyah/kısa video çökmüyor) |
-| Teknik | Gecikme | ~1.6 s/vsn |
+| Eksen | Ölçüm | Sonuç (tarihsel) | K15 notu |
+|---|---|---|---|
+| İşlevsellik | Olay tespiti (recall) | senaryo %100 · holistik %83 | 18/18 · 9 klipte 7–8/9 |
+| İşlevsellik | Özet kalitesi (LLM-judge) | 4.98/5 | **self-judge — döngüsel**; bağımsız kanonik 4.62 |
+| İşlevsellik | Aksiyon kalitesi (M1) | 4.71/5 | bağımsız kanonik **4.74** (`independent_scores.json`) |
+| İşlevsellik | Risk gerekçe (M4) | 5.0/5 | bağımsız kanonik 5.00 — **std 0, tavan-doygun** |
+| İşlevsellik | JSON şema uyumu (M3) | %89 → **%100** | zaman normalizasyonu sonrası ihlal gözlenmedi |
+| Otonomi | Agentic dispatch (M2) | %78 | **14/18 [%55–%91]** (anomali 10/12, normal 4/6) |
+| Otonomi | Diyalog robustluğu | 5.0/5 | n = 7 tek-tur + 4 çok-tur; hakem std 0 |
+| Teknik | Hata toleransı (G4) | "%100 zarif" | 4/4 bozuk/boş/siyah/kısa video çökmedi — **n=4** |
+| Teknik | Gecikme | ~1.6 s/vsn | kanonik: **0.86 s/vsn** ort (n=6, loglu) |
 
 **Bulgu:** En pahalı sanılan boşluklar (aksiyon, risk gerekçe) ölçülünce **çok güçlü** çıktı (veri değil
 ölçüm eksikmiş). **Kapatılan gap'ler:** (1) **JSON uyumu %89→%100** — `_normalize_time` ile olay zaman
@@ -317,17 +321,23 @@ düşme recall %67→artır, GitHub'a düzenli commit + `BilisimVadisi2026` topi
   (tek-sefer döngü-muhafızı). Ajanin "tekrar bakayim" kararini temsil eder. Net/güçlü vakalarda (Kritik/
   Düşük) tetiklenmez → düşük regresyon riski; yalnız belirsiz bandı işler. Config `adaptive_reexamine`.
 
-## 4. Güncel KPI (varsayılan: **Qwen3-VL-8B-FP8 + öz-doğrulama + grounding**)
+## 4. KPI anlık görüntüsü — **TARİHSEL** (varsayılan: Qwen3-VL-8B-FP8 + öz-doğrulama + grounding)
+
+> ⛔ **BU BÖLÜM ARTIK GÜNCEL DEĞİLDİR — kanonik değerler için
+> [`docs/olcum_durustlugu.md`](olcum_durustlugu.md)'ye bakın.** Aşağıdaki tablolar o günkü hâliyle
+> korunuyor (deney günlüğü olarak) ama raporlama hijyeni açısından **iki kusur içeriyor:**
+> (a) n ≤ 48'de ondalıklı yüzde ve `±std` bandı — bağımsız birim 18 klip, tek klip %5.6 oynatır;
+> (b) "%0" mutlak ifadeleri — 0/9 gözlemin %95 üst sınırı %30'dur. Doğru biçimleri §23'te.
 
 **A) Senaryo-uyumlu set (yangın + düşme + gerçek normal — şartname domaini), 11 koşu ortalaması:**
 
-| Metrik | Qwen3-VL+verify (ort ± std) |
-|---|---|
-| Anomali recall (yangın + düşme) | **%99 ± 2** [94–100] |
-| Risk kalibrasyonu (≥ Yüksek) | **%95 ± 8** |
-| Kategori eşleşme | **%94 ± 9** (yangın %100, düşme yüksek) |
-| Normal operasyonel-FP (herhangi olay/tetik) | ~**%8** (dispatch kapısı ile) |
-| Adversaryel (yangın-renkli negatif) FP | **%0** (9/9) |
+| Metrik | Qwen3-VL+verify (o günkü raporlama) | Kanonik biçim |
+|---|---|---|
+| Anomali recall (yangın + düşme) | %99 ± 2 [94–100] | **18/18 [%82–%100]**, en kötü koşu 17/18 [%74–%99] |
+| Risk kalibrasyonu (≥ Yüksek) | %95 ± 8 | koşu başına 17–18/18 |
+| Kategori eşleşme | %94 ± 9 | koşu başına 17–18/18 |
+| Normal operasyonel-FP (herhangi olay/tetik) | ~%8 (dispatch kapısı ile) | **4/12 [%14–%61]** (koşuya göre 2–4/12) |
+| Adversaryel (yangın-renkli negatif) FP | %0 (9/9) | **0/9 — gözlenen FP yok, %95 üst sınır %30** |
 
 > Rakamlar `benchmark/aggregate.py` ile **çoklu koşudan ortalama±std** (tek-çekiliş "%100" değil). Küçük
 > setler → varyans bandı esastır. "Normal-FP %0" eski iddiası dar-eşik artefaktıydı; dürüst op-FP ~%8.
@@ -358,10 +368,16 @@ düşme recall %67→artır, GitHub'a düzenli commit + `BilisimVadisi2026` topi
 - Düşük çözünürlüklü grainy CCTV'de **ince suç-türü tanıma bir girdi-tavanıdır**; gerçek dağıtımda daha
   yüksek çözünürlüklü kamera veya uzman dedektör (yangın/duman, nesne, ses) ile aşılabilir.
 - **Değerlendirme verisi, ölçülen başarıyı belirler:** senaryo-uyumlu, görsel olarak net olaylarda
-  (yangın/duman) sistem %100 recall/risk/kategori + %0 FP veriyor. UCF'deki düşük kategori-skoru bir
-  sistem kusuru değil, grainy + senaryo-dışı verinin artefaktıydı. Şartname domainine uygun veriyle
-  ölçmek hem gerçek başarıyı hem rapor rakamlarını dürüstçe yükseltti.
-- Her değişiklik baseline'a karşı ölçüldü; yüksek recall + sıfır yanlış-pozitif önceliklendirildi.
+  (yangın/duman) sistem tavana yakın çalışıyor (recall 18/18, normalde gözlenen FP yok). UCF'deki
+  düşük kategori-skoru büyük ölçüde grenli + senaryo-dışı verinin artefaktıdır. Şartname domainine
+  uygun veriyle ölçmek gerçek başarıyı görünür kıldı.
+  **Ama bu argümanın ters yüzü de doğru ve onu da yazıyoruz:** kolay veri seçerek yüksek rakam
+  üretmek mümkündür. Bu yüzden zor setleri (grenli UCF, adversaryel negatifler) de raporluyoruz
+  ve setlerimizin kusurlarını (çözünürlük confound'u, alt-küme sızıntısı) açıkça listeliyoruz —
+  bkz. `docs/olcum_durustlugu.md` §6.
+- Her değişiklik baseline'a karşı ölçüldü; yüksek recall + düşük dar-yanlış-pozitif önceliklendirildi.
+  "Sıfır yanlış-pozitif" iddiası kullanılmıyor: gözlenen FP yokluğu, küçük örneklemde sıfır oran
+  anlamına gelmez (0/9 → %95 üst sınır %30).
 
 ## 6. "En ciddi 5 zayıflık" — dürüst teşhis + çözüm (2026-06-22)
 Sistemin dürüst dezavantaj analizinde öne çıkan 5 ciddi sorun teker teker, ölçümle çözüldü.
@@ -374,9 +390,14 @@ puanlanıyordu → döngüsel, şişkin skor riski.
 aile** bir judge (Google **Gemma-3-12B-it-FP8**) ile yeniden puanlama (`benchmark/judge_independent.py`
 + `gen_dialogue.py`; iki-faz: Qwen3-VL üretir → swap → Gemma puanlar). Aya-Expanse daha iyi Türkçe ama
 CC-BY-NC lisansı yarışmaya uygun değil → Gemma seçildi (izinli, Blackwell-kanıtlı).
-**Sonuç (self-judge → bağımsız Gemma):** Özet 4.98 → **4.64±0.53** (n=90), Aksiyon 4.71 → **4.69±0.47**,
-Risk-gerekçe 5.0 → **4.92±0.46**, Diyalog tek/çok-tur 5.0 → **5.00/5.00**. Özet skoru bir miktar şişmiş
-ama bağımsız judge'la bile **4.64–5.0 = gerçekten yüksek**; skorlar artık güvenilir.
+**Sonuç (self-judge → bağımsız Gemma):** Özet 4.98 → 4.64±0.53, Aksiyon 4.71 → 4.69±0.47,
+Risk-gerekçe 5.0 → 4.92±0.46, Diyalog tek/çok-tur 5.0 → 5.00/5.00. Özet skoru self-judge'da
+bir miktar şişmiş; bağımsız hakemle de yüksek kalıyor.
+
+> ⚠️ **K15:** Bu tur ara bir koşudur ve **artefaktı korunmamıştır.** Kanonik değerler kayıtlı
+> `benchmark/results/independent_scores.json`'dan gelir: **özet 4.62 ± 0.53 · aksiyon 4.74 ± 0.44 ·
+> risk 5.00 ± 0.00**. Ayrıca buradaki "n=90" **bağımsız gözlem sayısı değildir** — 30 klip × 3 eksen
+> (pseudo-replikasyon); güven aralığı n=30 üzerinden okunmalıdır. Bkz. `olcum_durustlugu.md` §1.
 
 ### E3 — Gerçek düşme recall'ı %67 (3'te 1 kaçıyor)
 **Teşhis (`scripts/probe_clip.py`):** Model düşmeyi GÖRÜYOR ama W1/W5 muhafazakârlığı yüzünden onu
@@ -456,9 +477,18 @@ Dürüst dezavantaj listesindeki "ölçüm/genelleme" (G6-G8) ve "mimari/teknik"
 ### G6 — Minik eval seti → büyük-n + dürüst varyans
 **Çözüm:** (a) `scripts/get_ucf_many.py` ile **64-klip** set (`data/eval_big`, 48 anomali/8 kategori + 16 normal);
 (b) `benchmark/aggregate.py` ile TÜM koşular mean±std + aralık raporlanır (varyans artık gizlenmiyor).
-**Sonuç:** Büyük-n (n=48 anomali) recall **%92** (kararlı tek tahmin). Konsolide varyans: Senaryo (16 koşu)
-recall **%99±2** [94–100]; UCF-grainy (13 koşu) **%86±12** [58–100]; GMDCSA düşme (5 koşu) **%80±11**.
-Dürüst mesaj: in-domain kararlı; grainy-OOD model doğal olarak daha değişken (n büyüdükçe daralıyor: 92%@n48).
+**Sonuç:** n=48 anomalide recall **44/48 [%80–%97]** (en iyi kayıtlı koşu; diğer iki koşu 42/48 [%75–%94]).
+Konsolide varyans: senaryo recall koşu başına 18/18 ya da 17/18; GMDCSA düşme 8/9 civarı.
+Dürüst mesaj: in-domain kararlı; grenli-OOD doğal olarak daha değişken.
+
+> ⚠️ **K9/K15 DÜZELTMESİ — bu bölümün özgün iddiası geri çekildi.** Burada `eval_big` "bağımsız
+> büyük-n doğrulaması" olarak sunulmuştu. **Doğru değildi:** `data/eval`, `data/eval_big`'in
+> **%100 alt kümesiydi** (31/31 MD5 birebir aynı) — yani küçük seti büyük setle "doğrulamak"
+> aynı klipleri iki kez ölçmekti. Düzeltme olarak `eval_big` ayrık `data/eval_tune` (31) ve
+> `data/eval_holdout` (32) alt-kümelerine bölündü (kesişim = 0). **Yukarıdaki rakamlar bu
+> bölünmeden öncedir**; temiz holdout ölçümü henüz koşulmamıştır ve bir miktar iyimser olmaları
+> beklenmelidir. Ayrıca "%99±2" gibi ondalıklı ifadeler n=18'de anlamsız olduğu için `k/n`+GA
+> biçimine çevrilmiştir. Bkz. `docs/olcum_durustlugu.md` §2 ve §6.9.
 
 ### G7 — Gerçek-dünya/jüri-videosu robustluğu
 **Çözüm:** (a) **Zarif bozulma** doğrulandı — bozuk/boş/var-olmayan video `ingest`'te çökmeden 0-segment +
@@ -739,10 +769,23 @@ hiçbir yerel kaldıraç (zoom/CLIP×2/poz-şiddet/silah) aşamıyor. Literatür
 
 **DÜRÜST DEĞER AÇISI — AKSİYON-recall (`scripts/action_recall.py`):** UCF Shooting/Fighting/Assault'ı ayrı etiketler
 ama grenli görüntüde GÖRSEL OLARAK aynılar; bir güvenlik karar-destek ajanı için asıl ölçüt **doğru GÜVENLİK-TEPKİSİ**
-(şiddet/mülk/kaza/yangın), ince alt-etiket değil. Süper-sınıf değerlendirmesi:
-**TESPİT %96 · AKSİYON %73 · TANIMA %46.** Shooting: TANIMA %0 ama AKSİYON %67 (atışı "şiddetli saldırı Yüksek"
-diyor = doğru tepki+dispatch). Yani modelin gerçek kullanım-faydası %46 değil **%73 (tepki) / %96 (alarm)**;
-%46 hem grenli'de imkânsız hem güvenlik-amacıyla aşırı-katı bir alt-etiket ayrımını ölçüyor.
+(şiddet/mülk/kaza/yangın), ince alt-etiket değil. Shooting: TANIMA sıfır ama AKSİYON büyük ölçüde doğru
+(atışı "şiddetli saldırı / Yüksek" diyor = doğru tepki + dispatch). Yani modelin gerçek kullanım-faydası
+en katı alt-etiket skoru değil, tepki ve alarm seviyeleridir.
+
+> ⚠️ **K9/K15 DÜZELTMESİ — bu ölçümün paydası yanlıştı.** Süper-sınıf değerlendirmesi "81 suç klibi"
+> üzerinden **%96 / %73 / %46** olarak raporlanmıştı. `data/eval`, `data/eval_big`'in alt kümesi olduğu için
+> **27 klip iki kez sayılmıştı**; bağımsız klip sayısı **51**'dir. Mükerrerler atılıp aynı betikler yeniden
+> koşuldu — **kanonik değerler:**
+>
+> | Seviye | Eski (81 ölçüm) | **Kanonik (51 bağımsız klip)** | Wilson %95 GA |
+> |---|---|---|---|
+> | TESPİT | %96 (78/81) | **49/51** | [%87, %99] |
+> | AKSİYON | %73 (59/81) | **36/51** | [%57, %81] |
+> | TANIMA | %46 (37/81) | **22/51** | [%31, %57] |
+>
+> Kategori kırılımı (n=6/kategori) **gösterge amaçlıdır, iddia değildir**: 3/6 için GA ≈ [%19, %81].
+> Bkz. `docs/olcum_durustlugu.md` §3.
 
 **Gerçek yol (dürüst):** TANIMA'yı yükseltmenin tek yolu daha iyi GİRDİ (dağıtımda kamera çözünürlüğü) veya kurumun
 kendi verisiyle domain ince-ayarı — yerel hızlı-fix değil. Şartname-domaini yüksek-res veride tanıma zaten ~%100.
@@ -823,9 +866,15 @@ throughput 3.7→**4.2 video/dk (+13.5%)**, hızlanma 1.70→**1.95×**; **VRAM 
 3 örnek klip (yangın/düşme/kaza) doğru + garble yok (V1 blok-hash'e mm-hash dahil → #20261 yok). **TUTULDU (default açık).**
 
 **Round 1 — serving concurrency flag'leri (gpu-mem-util 0.85→0.90 + max-num-seqs 32, accuracy-nötr): UYGULANDI.**
-Ölçüldü (prefix→R1): sıralı x4 27.9→24.9s/video (−11%), eş-zamanlı x4 14.3→**12.9s/video (−10%)**, throughput
-4.2→**4.6 video/dk**, tepe VRAM 21→22.5GB (OOM yok). **Kümülatif (baseline→R1): x4 throughput 3.7→4.6 (+24%),
-eş-zamanlı 16.3→12.9s/video (−21%).** TUTULDU.
+Oturum-içi ölçüm (prefix→R1): sıralı x4 27.9→24.9s/video (−11%), eş-zamanlı x4 14.3→12.9s/video (−10%),
+throughput 4.2→4.6 video/dk, tepe VRAM 21→22.5GB (OOM yok). Ayar TUTULDU.
+
+> ⚠️ **K15 DÜZELTMESİ — bu turun rakamları manşetten çıkarıldı.** Round 1 ölçümü için
+> `benchmark/results/` altında **kayıtlı log artefaktı yok** (baseline ve prefix-cache turlarının
+> logları var: `bench_perf_baseline_20260625.log`, `bench_perf_prefixcache_20260625.log`).
+> Kanıtlanamayan rakamı manşette tutmuyoruz. **Kanonik throughput iddiası: +13.5% (3.7 → 4.2 video/dk)**,
+> iki log dosyasıyla doğrulanabilir. Round 1'in ek kazancı gerçek olabilir; `scripts/bench_performance.py`
+> yeniden koşulup log kaydedilene kadar iddia edilmez.
 
 **fp8-KV-cache: DENENDI → REDDEDILDI (ortam).** `--kv-cache-dtype fp8` bu Blackwell/WSL kısmi-CUDA-toolkit
 ortamında FlashInfer JIT kernel'ini linkleyemedi (`collect2: ld error`; flashinfer-sampler de aynı sebeple kapalı).
@@ -839,10 +888,13 @@ teyit (`config.batch_verify`, `graph._verify_events_batch`). **Ölçüldü:** ç
 değişir) ve **2/4 klipte risk düştü** (batch-prompt per-event'ten daha sert olabilir). Accuracy kanıtlanmadığı için
 **default KAPALI** (latency-öncelikli dağıtımda opt-in). Discipline: latency için accuracy'yi kanıtsız riske atma.
 
-**ÖZET — kümülatif performans kazanımı (default açık olanlar):** prefix-caching + serving-flags (gpu0.90+seqs32):
-eş-zamanlı x4 throughput **3.7→4.6 video/dk (+24%)**, eş-zamanlı gecikme **16.3→12.9s/video (−21%)**, tek-akış
-gecikme ort 0.93→0.86 sn/vsn; **VRAM 22.5/24GB (OOM yok), accuracy birebir korundu.** fp8-KV ortam-reddi,
-batch-verify opt-in. §4 ⚠️ → ölçülü ✅. Araçlar: `scripts/{bench_performance,ab_batchverify}.py`; 2 subagent raporu.
+**ÖZET — kümülatif performans kazanımı (default açık olanlar), KAYITLI LOGA DAYALI:**
+prefix-caching ile eş-zamanlı x4 throughput **3.7→4.2 video/dk (+13.5%)**, eş-zamanlı gecikme
+**16.3→14.3 s/video (−12%)**, sıralı→x4 hızlanma 1.70→1.95×, tek-akış gecikme ort **0.93→0.86 sn/vsn (−8%)**;
+VRAM ~21/24 GB (OOM yok), accuracy korundu. Serving-flag turunun ek kazancı **logsuz olduğu için
+manşetten çıkarıldı** (yukarıdaki kutu). fp8-KV ortam-reddi, batch-verify opt-in.
+Kanıt: `benchmark/results/bench_perf_{baseline,prefixcache}_20260625.log`.
+Araçlar: `scripts/{bench_performance,ab_batchverify}.py`; 2 subagent raporu.
 
 ---
 
@@ -939,8 +991,11 @@ tam entegrasyon + A/B planlarıyla roadmap'e yazıldı. Kaynaklar: 4 subagent ra
 
 **UYGULANDI (ölçüldü + commit):**
 - **D13 / P1 — Belge dürüstlüğü:** README/sunum_iskeleti/architecture/sartname_uyum'daki eski sayılar güncel
-  kaynak-doğrulukla hizalandı. En riskli: "normal-FP %0" → dar-FP ~%0 / **op-FP ~%8–10 (dürüst)**; Qwen2.5→Qwen3-VL;
-  3.2×→+24%; diyalog 4.33→5.0. 3-seviyeli recall (TESPİT %96/AKSİYON %73/TANIMA %46) README+sunuma eklendi. (§16 optik-riski kapatıldı.)
+  kaynak-doğrulukla hizalandı. En riskli: "normal-FP %0" → dar-FP / **op-FP ayrımı (dürüst)**; Qwen2.5→Qwen3-VL;
+  diyalog 4.33→5.0. 3-seviyeli recall README+sunuma eklendi. (§16 optik-riski kapatıldı.)
+  *(Bu turda yapılan "3.2×→+24%" güncellemesi sonradan **geri alındı** — §19'daki kutuya bakınız: kayıtlı log
+  olmadığı için kanonik değer +13.5%'tir. Aynı şekilde 3-seviyeli recall'ın %96/%73/%46 hâli mükerrer klip
+  içeriyordu; kanonik hâli 49/51 · 36/51 · 22/51'dir — §23.)*
 - **D14 / C#1+B#2 — Görünür-kıl:** `AnalysisResult.decision_trace` (finalize trace'i taşır) → UI "Ajan Karar Günlüğü"
   + JSON. `build_context`'e **ALGI GÜVENİ** (grounded, çözünürlükten) + karar-izi; CHAT_SYSTEM "ne kadar eminsin/neden"
   sorularında bunlara dayanır. Additive (recall değişmez). Offline doğrulandı.
@@ -981,3 +1036,61 @@ bilgi-tavanı YOLO'yu da vuruyor → güvenilmez sinyalle gerçek olay düşürm
 vermedi (EVS pipeline-dilüsyon + davranış-sapması; kural-motoru grenli-YOLO-tavanı). İkisi de **çalışır+gated** halde
 repo'da (yüksek-res / describe-dominant senaryolarda opt-in). Bu, "yeni mimari = otomatik kazanç değil; ortamda ölç"
 disiplininin bir başka kanıtı — tip-tavanımız gibi, **çözüm girdi-kalitesinde, mimaride değil.**
+
+---
+
+## §23 — D18: Raporlama hijyeni + ölçüm dürüstlüğü denetimi (K15/K16 + K6/K8/K9/K10 beyanları)
+
+Dış bir denetim, **sistemin kendisinden çok raporlamasında** 17 kusur çıkardı. Bu bölüm belge
+tarafındaki düzeltmeleri kaydeder. Kanonik değerlerin tek doğruluk kaynağı artık
+[`docs/olcum_durustlugu.md`](olcum_durustlugu.md)'dir; README, `performans_raporu.md`,
+`sartname_uyum.md`, `sunum_iskeleti.md`, `demo_script.md` ve bu günlük ona hizalanmıştır.
+
+### K15 — Raporlama hijyeni (uygulandı)
+| Kusur | Düzeltme |
+|---|---|
+| n ≤ 48'de ondalıklı yüzde ("%98.7", "%99±2") | Her oran **`k/n` + Wilson %95 GA**; `benchmark/stats_utils.pct_decimals()` ondalığı kodda sınırlar |
+| "n=90 / n=72 / n=54" bağımsız gözlem gibi sunuluyordu | **30 klip × 3 eksen** / **18 klip × 4 eksen** / **18 klip × 3 eksen** olarak açıldı (pseudo-replikasyon uyarısı) |
+| "%0 yanlış-pozitif" | "gözlenen yanlış-pozitif yok (0/9; %95 üst sınır %30)" — tüm belgelerde |
+| Kategori-bazlı tablolar iddia gibi okunuyordu | "n=6/kategori, GA ≈ [%19, %81] — **gösterge amaçlı, iddia değil**" etiketi eklendi |
+| Diyalog "5.00/5" tek başına | **n = 7 tek-tur + 4 çok-tur; hakem std = 0 → tavan-doygunluğu** uyarısı eklendi |
+| Aksiyon kalitesi 4.66/4.69/4.71/4.74/4.83 arasında kayıyordu | **Tek kanonik değer 4.74** (kayıtlı artefakt `independent_scores.json`); özet **4.62**. Artefaktın hızlı-mod kolundan geldiği açıkça yazıldı |
+| Throughput "+24% / 4.6 video-dk" | **Kayıtlı log yok → geri çekildi.** Kanonik: **+13.5% (3.7→4.2 video/dk)**, iki log dosyasıyla doğrulanır (§19 kutusu) |
+| "eval_big bağımsız büyük-n doğrulaması" | **Geri çekildi** — `eval ⊂ eval_big` (§G6 kutusu) |
+| 3-seviyeli recall %96/%73/%46 (81 ölçüm) | Mükerrer klipler atıldı → **49/51 · 36/51 · 22/51** (§16 kutusu) |
+
+### K16 — Çözünürlük–etiket confound'u (beyan edildi)
+`ffprobe` ile ölçüldü: `eval_big` anomalilerinin **48/48'i 320×240**, normallerinin 8/16'sı 1080p;
+`eval_scenario`'da **tek bir 1080p anomali klibi yok**, normallerin 8/12'si 1080p. Yani "anomali"
+etiketi ile "düşük çözünürlük" birlikte hareket ediyor ve kararın ne kadarının olay içeriğinden,
+ne kadarının görüntü kalitesi ipucundan geldiğini **mevcut setlerle ayrıştıramıyoruz.** Bu bir
+sınırlılık olarak `olcum_durustlugu.md` §6.8 ve `veri_kaynaklari.md` §3.2'ye yazıldı.
+
+### K6 — Doküman-kod çelişkisi (kapatıldı)
+`architecture.md` "her düğüm try/except ile sarılıdır" diyordu ama diyagramda **koşullu `reexamine`
+düğümü yoktu** ve bazı düğümlerin dış gövdesi sarılı değildi. Kod tarafı ayrı olarak düzeltildi
+(altı düğümün tamamı sarılı; `finalize` hata alsa bile sözleşmeyi bozmayan bir sonuç döndürüyor).
+Belge tarafında: mermaid diyagramına **`route_after_perceive` koşullu kenarı + `reexamine` düğümü**
+eklendi, ASCII özeti güncellendi, hata-toleransı ifadesi **iki katmanlı** (düğüm-seviyesi try/except
++ segment-içi fail-open) olarak doğru kuruldu.
+
+### K8/K9/K10 — Veri beyanları (belge tarafı)
+- **Envanter:** "262 video" → **182 benzersiz video (MD5)**; ölçüme giren **108 benzersiz klip / 39.4 dk**
+  (2026-07-25 denetimi; yeniden-üretim komutu `veri_kaynaklari.md` §1'de).
+- **`Normal_Videos_936` ≡ `_937`** (aynı MD5) → normal-FP paydaları **7 ve 15**.
+- **Donmuş-PNG düşme klipleri:** kusur belgelendi; kodda giderildi (gerçek GMDCSA + URFD videolarıyla
+  değiştirildi). **Ama:** yeni klipler `falls_real` + `falls_surveillance` ile birebir aynı → bağımsız
+  kanıt eklemiyor; ayrıca **senaryo-seti rakamları eski kompozisyona ait, yeniden ölçülmeli.**
+- **Lisans dürüstlüğü:** UCF-Crime'ın **CC olmadığı** (akademik/araştırma) ve kliplerin **üçüncü-taraf
+  HF aynasından** çekildiği açıkça yazıldı. Eskişehir seti için Mendeley API'si CC BY diyor ama
+  **makalede CC BY-NC geçme ihtimaline karşı "teslimden önce teyit edilecek"** notu eklendi.
+
+### Yeni: "Ölçüm Sınırlarımız" bölümü
+README'ye ve `olcum_durustlugu.md` §6'ya eklendi: küçük-n/varyans · gevşek recall tanımı
+(">=1 herhangi olay") · **kalite hakeminin videoyu görmemesi** (iç tutarlılık ≠ dayanaklılık) ·
+**gece/IR/termal sıfır kapsam** · hedef domainde pozitif eksikliği · forklift için gerçek açık veri
+olmaması · çözünürlük confound'u · `eval ⊂ eval_big` · tek donanım/tek değerlendirici.
+
+**Neden bu bölüm projeyi güçlendirir:** jüri bir zayıflığı bizden önce bulursa savunmadayız;
+biz bulup ölçer ve yayınlarsak metodoloji puanı alırız. Bu turda kendi rakamlarımızın üçünü
+(3-seviyeli recall, throughput, büyük-n bağımsızlığı) **kendi denetimimizle aşağı çektik.**

@@ -1,21 +1,38 @@
 """LangGraph ajan grafigi.
 
-Akis:  ingest -> perceive -> reason -> act -> finalize
+GERCEK AKIS (kosullu kenar dahil):
 
-- ingest   : videoyu zaman damgali kare segmentlerine ayirir
-- perceive : her segmenti VLM ile analiz eder, olaylari toplar (coklu-adim algi)
-- reason   : olaylar uzerinden Turkce ozet + risk + aksiyon onerileri uretir
-- act      : tespit edilen olaylara gore mock operasyonel fonksiyonlari DINAMIK
-             secip cagirir (native tool-calling = ajanin araclari)
-- finalize : AnalysisResult'i birlestirir
+    START -> ingest -> perceive -->[route_after_perceive]--> reexamine --> reason -> act -> finalize -> END
+                                        \\__________________________________/
+                                          (belirsiz "Orta" olay yoksa dogrudan reason)
 
-Her dugum hata toleranslidir; bir adim hata verirse akis cokmek yerine devam eder.
+- ingest     : videoyu zaman damgali kare segmentlerine ayirir (kareler onceden verilmisse
+               DECODE-ONCE yolu: yeniden decode etmez)
+- perceive   : her segmenti VLM ile analiz eder, olaylari toplar (coklu-adim algi, paralel)
+- route_after_perceive : KOSULLU KENAR — belirsiz (Orta) olay varsa `reexamine`, yoksa `reason`.
+               `settings.adaptive_reexamine` kapaliysa veya bir kez yeniden-incelendiyse `reason`.
+- reexamine  : (kosullu/opsiyonel dugum) belirsiz olaylari odakli sorguyla yeniden degerlendirir
+               (RUTIN -> Dusuk, CIDDI -> Yuksek); dongu muhafizi `state["reexamined"]`
+- reason     : olaylar uzerinden Turkce ozet + risk + aksiyon onerileri uretir
+- act        : tespit edilen olaylara gore mock operasyonel fonksiyonlari DINAMIK
+               secip cagirir (native tool-calling = ajanin araclari)
+- finalize   : AnalysisResult'i birlestirir
+
+HATA TOLERANSI (K6): ALTI dugumun (ingest, perceive, reexamine, reason, act, finalize) dis
+govdesi de try/except ile sarilidir; bir adim hata verirse akis cokmek yerine karar-izine
+(trace) not dusup guvenli varsayilanla devam eder.
+
+ESZAMANLILIK (K1): `act()` operasyonel cagri kaydini modul-globali yerine BAGLAM-YEREL
+kayittan (mock_functions.get_log) + kendi YEREL listesinden toplar. Boylece
+`analyze_video(n_samples>1)` grafigi paralel kostururken kosularin kayitlari karismaz.
 """
 from __future__ import annotations
 
+import datetime
+import difflib
 import re
 from concurrent.futures import ThreadPoolExecutor
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from langgraph.graph import END, START, StateGraph
 
@@ -23,7 +40,7 @@ from dilajan import prompts
 from dilajan.agent.state import AgentState
 from dilajan.config import settings
 from dilajan.llm_client import VLMClient
-from dilajan.mock_functions import ALL_TOOLS, OPERATION_LOG, TOOL_REGISTRY, reset_log
+from dilajan.mock_functions import ALL_TOOLS, TOOL_REGISTRY, get_log, reset_log
 from dilajan.schema import (
     Action,
     AnalysisResult,
@@ -676,23 +693,28 @@ def perceive(state: AgentState) -> dict:
     event_consistency_n>1 ise her segment N kez algılanır ve olaylar çoğunluk-oyuyla süzülür
     (halüsinasyon-azaltma). vLLM eszamanli istekleri batch'ledigi icin paralel calisir."""
     trace = state.get("trace", [])
-    vlm = _get_vlm()
-    segments = list(state.get("segments", []))
     events: List[Event] = []
-    if segments:
-        N = max(1, settings.event_consistency_n)
-        analyze = ((lambda s: _segment_consistent_events(vlm, s, N)) if N > 1
-                   else (lambda s: _analyze_one_segment(vlm, s)))
-        workers = max(1, min(len(segments), settings.max_parallel_segments))
-        with ThreadPoolExecutor(max_workers=workers) as pool:
-            for evs, note in pool.map(analyze, segments):
-                events.extend(evs)
-                if note:
-                    trace.append(note)
-        events.sort(key=lambda e: e.time)
-        n_raw = len(events)
-        events = _dedupe_events(events)
-        trace.append(f"perceive: {len(events)} olay ({n_raw} ham, {len(segments)} segment, {workers} paralel)")
+    # K6: dugum-seviyesi hata toleransi — VLM/istemci/segment isleme cokerse akis durmaz,
+    # o ana kadar toplanan olaylarla (veya bos listeyle) devam eder.
+    try:
+        vlm = _get_vlm()
+        segments = list(state.get("segments", []))
+        if segments:
+            N = max(1, settings.event_consistency_n)
+            analyze = ((lambda s: _segment_consistent_events(vlm, s, N)) if N > 1
+                       else (lambda s: _analyze_one_segment(vlm, s)))
+            workers = max(1, min(len(segments), settings.max_parallel_segments))
+            with ThreadPoolExecutor(max_workers=workers) as pool:
+                for evs, note in pool.map(analyze, segments):
+                    events.extend(evs)
+                    if note:
+                        trace.append(note)
+            events.sort(key=lambda e: e.time)
+            n_raw = len(events)
+            events = _dedupe_events(events)
+            trace.append(f"perceive: {len(events)} olay ({n_raw} ham, {len(segments)} segment, {workers} paralel)")
+    except Exception as ex:
+        trace.append(f"perceive: dugum hatasi (toleransli devam, {len(events)} olay korundu): {ex}")
     return {"events": events, "trace": trace}
 
 
@@ -724,35 +746,41 @@ def reexamine(state: AgentState) -> dict:
     RUTIN -> Düşük (FP azalt), CIDDI -> Yüksek (ince gerçek olayi yakala), BELIRSIZ -> korur."""
     trace = state.get("trace", [])
     events = list(state.get("events", []))
-    segments = state.get("segments", [])
-    vlm = _get_vlm()
-    n_up = n_down = 0
-    new_events: List[Event] = []
-    for ev in events:
-        if _SEV_ORD.get(ev.severity, 0) != _SEV_ORD[Severity.ORTA]:
-            new_events.append(ev)
-            continue
-        t = _secs(ev.time)
-        seg = next((s for s in segments if _secs(s.start_str) <= t <= _secs(s.end_str)), None)
-        if seg is None:
-            new_events.append(ev)
-            continue
-        try:
-            ans = (vlm.analyze_frames(seg.frames, _REEX_PROMPT.format(event=ev.event),
-                                      temperature=0.0, max_tokens=20) or "").upper()
-        except Exception:
-            new_events.append(ev)
-            continue
-        if "RUTIN" in ans:
-            new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
-                                    severity=Severity.DUSUK, category=ev.category, bbox=ev.bbox, region=ev.region))
-            n_down += 1
-        elif "CIDDI" in ans:
-            new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
-                                    severity=Severity.YUKSEK, category=ev.category, bbox=ev.bbox, region=ev.region))
-            n_up += 1
-        else:
-            new_events.append(ev)
+    # K6: dugum-seviyesi hata toleransi — yeniden-inceleme cokerse olaylar OLDUGU GIBI korunur
+    # (guvenli varsayilan: severity'ye dokunma), akis reason'a devam eder.
+    try:
+        segments = state.get("segments", [])
+        vlm = _get_vlm()
+        n_up = n_down = 0
+        new_events: List[Event] = []
+        for ev in events:
+            if _SEV_ORD.get(ev.severity, 0) != _SEV_ORD[Severity.ORTA]:
+                new_events.append(ev)
+                continue
+            t = _secs(ev.time)
+            seg = next((s for s in segments if _secs(s.start_str) <= t <= _secs(s.end_str)), None)
+            if seg is None:
+                new_events.append(ev)
+                continue
+            try:
+                ans = (vlm.analyze_frames(seg.frames, _REEX_PROMPT.format(event=ev.event),
+                                          temperature=0.0, max_tokens=20) or "").upper()
+            except Exception:
+                new_events.append(ev)
+                continue
+            if "RUTIN" in ans:
+                new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
+                                        severity=Severity.DUSUK, category=ev.category, bbox=ev.bbox, region=ev.region))
+                n_down += 1
+            elif "CIDDI" in ans:
+                new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
+                                        severity=Severity.YUKSEK, category=ev.category, bbox=ev.bbox, region=ev.region))
+                n_up += 1
+            else:
+                new_events.append(ev)
+    except Exception as ex:
+        trace.append(f"reexamine: dugum hatasi (toleransli devam, olaylar degistirilmedi): {ex}")
+        return {"events": events, "reexamined": True, "trace": trace}
     trace.append(f"reexamine: belirsiz olaylar yeniden-incelendi (↑{n_up} ciddi, ↓{n_down} rutin)")
     return {"events": new_events, "reexamined": True, "trace": trace}
 
@@ -846,17 +874,223 @@ def reason(state: AgentState) -> dict:
     return {"summary": summary, "risk": risk, "actions": actions, "trace": trace}
 
 
+# --- K3: argüman onarimi (sessiz dusen dispatch'i onler) ---
+# Modelin urettigi argüman ADLARI aracin imzasindan sapabilir ("konum" yerine "yer" gibi).
+# Pydantic dogrulama hatasi verince cagri SESSIZCE dusuyordu; asagidaki katman argümanlari
+# onarip TEK KEZ yeniden dener, basarisiz olursa karar-izine NET uyari yazar.
+
+# Argüman adi -> anlamsal "slot". Es-anlamli isim eslesmesi ve eksik-argüman varsayilani
+# ayni tablodan turer (or. "yer"/"lokasyon" -> konum slotu -> hedef argüman "konum").
+_ARG_SLOT_HINTS = (
+    ("konum", ("konum", "yer", "alan", "bolge", "bölge", "lokasyon", "mahal", "saha", "location")),
+    ("severity", ("aciliyet", "risk", "oncelik", "öncelik", "seviye", "onem", "önem",
+                  "severity", "priority", "urgency")),
+    ("ekipman", ("ekipman", "makine", "cihaz", "arac", "araç", "equipment", "machine")),
+    ("metin", ("sebep", "neden", "ozet", "özet", "mesaj", "aciklama", "açiklama", "not",
+               "detay", "bilgi", "olay", "durum", "message", "reason", "summary")),
+)
+
+
+def _arg_slot(name: str) -> Optional[str]:
+    """Bir argüman adinin anlamsal slotunu dondurur (bulunamazsa None)."""
+    n = (name or "").strip().lower()
+    if not n:
+        return None
+    for slot, keys in _ARG_SLOT_HINTS:
+        if any(k in n for k in keys):
+            return slot
+    return None
+
+
+def _tool_arg_spec(fn) -> Tuple[List[str], List[str]]:
+    """Arac icin (tum argüman adlari, ZORUNLU argüman adlari) dondurur.
+    Sema okunamazsa tum adlar zorunlu sayilir (toleransli/fail-open)."""
+    try:
+        names = list(fn.args.keys())
+    except Exception:
+        return [], []
+    required = list(names)
+    try:
+        schema = fn.args_schema.model_json_schema()
+        req = schema.get("required")
+        if isinstance(req, list):
+            required = [n for n in names if n in req]
+    except Exception:
+        pass
+    return names, required
+
+
+def _dispatch_context(events: List[Event], risk: Optional[RiskAssessment]) -> Dict[str, str]:
+    """Eksik argümani doldurmak icin olay baglami (konum / severity / serbest metin / ekipman)."""
+    top = max(events, key=lambda e: _SEV_ORD.get(e.severity, 0)) if events else None
+    sev = (top.severity.value if top else
+           (risk.level.value if risk else Severity.ORTA.value))
+    return {
+        "konum": (top.region if (top and top.region) else "Bilinmiyor"),
+        "severity": sev,
+        "metin": (top.event if top else "Tespit edilen güvenlik olayi"),
+        "ekipman": "Bilinmeyen ekipman",
+    }
+
+
+def _stringify(value) -> str:
+    """Arac imzalari `str` bekliyor; model sayi/liste/sozluk verirse metne cevirir."""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, (list, tuple, set)):
+        return ", ".join(str(v) for v in value)
+    return str(value)
+
+
+def _repair_args(fn, raw_args, ctx: Dict[str, str]) -> Tuple[dict, List[str]]:
+    """Model argümanlarini aracin BEKLEDIGI imzaya onarir. (onarilmis_args, duzeltme_notlari) doner.
+
+    Sira: (1) birebir ad eslesmesi, (2) anlamsal es-anlamli eslesme ("yer"->"konum"),
+    (3) yakin-isim/yazim-hatasi eslesmesi (difflib), (4) tek-fazla<->tek-eksik konumsal esleme,
+    (5) fazladan anahtarlari at, (6) hala eksik ZORUNLU argümani baglamdan makul varsayilanla doldur.
+    """
+    names, required = _tool_arg_spec(fn)
+    src = dict(raw_args or {})
+    if not names:  # sema okunamadi -> oldugu gibi dene
+        return src, []
+    fixes: List[str] = []
+    fixed: dict = {}
+
+    # (1) birebir (buyuk/kucuk harf + bosluk toleransli)
+    lowered = {str(k).strip().lower(): k for k in src}
+    for n in names:
+        k = lowered.get(n.lower())
+        if k is not None:
+            fixed[n] = src.pop(k)
+    remaining = [n for n in names if n not in fixed]
+
+    # (2) anlamsal es-anlamli eslesme
+    for k in list(src.keys()):
+        if not remaining:
+            break
+        slot = _arg_slot(str(k))
+        if slot is None:
+            continue
+        target = next((r for r in remaining if _arg_slot(r) == slot), None)
+        if target:
+            fixed[target] = src.pop(k)
+            remaining.remove(target)
+            fixes.append(f"'{k}'->'{target}' (anlamsal)")
+
+    # (3) yakin-isim (yazim hatasi) eslesmesi
+    for k in list(src.keys()):
+        if not remaining:
+            break
+        m = difflib.get_close_matches(str(k).strip().lower(), [r.lower() for r in remaining],
+                                      n=1, cutoff=0.6)
+        if m:
+            target = next(r for r in remaining if r.lower() == m[0])
+            fixed[target] = src.pop(k)
+            remaining.remove(target)
+            fixes.append(f"'{k}'->'{target}' (yakin-isim)")
+
+    # (4) tek fazla anahtar <-> tek eksik argüman: konumsal esle
+    if len(src) == 1 and len(remaining) == 1:
+        k = next(iter(src))
+        target = remaining[0]
+        fixed[target] = src.pop(k)
+        remaining.remove(target)
+        fixes.append(f"'{k}'->'{target}' (konumsal)")
+
+    # (5) kalan fazladan anahtarlar atilir (pydantic 'extra' hatasini onler)
+    for k in src:
+        fixes.append(f"fazladan '{k}' atildi")
+
+    # (6) eksik zorunlu argümanlar -> olay baglamindan makul varsayilan
+    for n in required:
+        v = fixed.get(n)
+        if v is None or (isinstance(v, str) and not v.strip()):
+            slot = _arg_slot(n) or "metin"
+            fixed[n] = ctx.get(slot) or "Bilinmiyor"
+            fixes.append(f"eksik '{n}' varsayilanla dolduruldu ('{fixed[n]}')")
+
+    return {k: _stringify(v) for k, v in fixed.items()}, fixes
+
+
+def _resolve_tool(name: str):
+    """Arac adini cozer; birebir yoksa YAKIN-ISIM eslesmesi dener (model 'saglik_ekibi_gonder'
+    gibi yakin ama yanlis bir ad uretirse cagri sessizce dusmesin). (arac, cozulen_ad) doner."""
+    fn = TOOL_REGISTRY.get(name)
+    if fn is not None:
+        return fn, name
+    if not name:
+        return None, name
+    m = difflib.get_close_matches(name.strip().lower(),
+                                  [n.lower() for n in TOOL_REGISTRY], n=1, cutoff=0.75)
+    if m:
+        real = next(n for n in TOOL_REGISTRY if n.lower() == m[0])
+        return TOOL_REGISTRY[real], real
+    return None, name
+
+
+def _as_args_dict(args) -> dict:
+    """Model argümanlari sozluk yerine JSON metni verirse cozer; cozulemezse bos sozluk."""
+    if isinstance(args, dict):
+        return args
+    if isinstance(args, str) and args.strip():
+        try:
+            parsed = extract_json(args)
+            if isinstance(parsed, dict):
+                return parsed
+        except Exception:
+            pass
+    return {}
+
+
+def _invoke_tool(fn, name: str, args: dict, ctx: Dict[str, str],
+                 call_log: List[dict], trace: List[str]) -> bool:
+    """Araci cagirir; pydantic/argüman hatasinda ONARIP TEK KEZ yeniden dener.
+
+    Basarili cagrinin kaydini `call_log`'a ekler (K1: modul-globali degil, act()'e ozel
+    YEREL liste -> paralel kosularda karisma yok). Kalici basarisizlikta trace'e NET uyari yazar.
+    True/False = cagri gerceklesti mi.
+    """
+    before = len(get_log())  # baglam-yerel kaydin bu cagridan onceki uzunlugu
+
+    def _capture(result) -> bool:
+        entries = list(get_log())[before:]
+        if entries:
+            call_log.extend(entries)
+        else:  # savunmaci: kayit gorulemedi -> cagri yine de kayit disi kalmasin
+            call_log.append({"function": name, "args": dict(args), "result": _stringify(result),
+                             "ts": datetime.datetime.now().strftime("%H:%M:%S")})
+        return True
+
+    try:
+        return _capture(fn.invoke(args))
+    except Exception as ex:
+        fixed, fixes = _repair_args(fn, args, ctx)
+        if fixed == args and not fixes:
+            trace.append(f"act: UYARI — '{name}' çağrisi basarisiz ve onarilacak argüman "
+                         f"bulunamadi; OPERASYONEL ÇAĞRI YAPILAMADI. args={args}, hata={ex}")
+            return False
+        try:
+            ok = _capture(fn.invoke(fixed))
+            trace.append(f"act: '{name}' argümanlari onarildi [{'; '.join(fixes) or 'yeniden deneme'}] "
+                         f"-> çağri basarili (ilk hata: {ex})")
+            return ok
+        except Exception as ex2:
+            trace.append(f"act: UYARI — '{name}' çağrisi ONARIMA RAĞMEN basarisiz, OPERASYONEL "
+                         f"ÇAĞRI YAPILAMADI. ham_args={args}, onarilmis={fixed}, hata={ex2}")
+            return False
+
+
 def act(state: AgentState) -> dict:
     """Tespit edilen olaylara gore mock operasyonel fonksiyonlari dinamik cagirir."""
     trace = state.get("trace", [])
-    reset_log()
+    reset_log()  # K1: BAGLAM-YEREL kayit (yeni liste atanir; paralel kosular etkilenmez)
     events = state.get("events", [])
     risk = state.get("risk")
 
     # Dispatch kapisi: operasyonel fonksiyonlar (saglik/guvenlik/acil-durdurma) YALNIZCA gercek
     # yuksek-risk sinyalinde tetiklenir. Normaldeki "Orta" severity halusinasyonlari bos yere
     # ekip cagirmasin -> operasyonel yanlis-pozitif (alarm yorgunlugu) kesilir. (Juri konsensusu)
-    max_ev = max((_SEV_ORD[e.severity] for e in events), default=0)
+    max_ev = max((_SEV_ORD.get(e.severity, 0) for e in events), default=0)
     risk_ord = _SEV_ORD.get(risk.level, 0) if risk else 0
     # Dispatch sinyali: normalde grounded olay-severity VEYA risk. AMA risk_recall_bias acikken risk
     # recall-yanli sisirilmis olabilir -> dispatch'i YALNIZ grounded olay-severity'ye bagla (biased-risk
@@ -868,54 +1102,78 @@ def act(state: AgentState) -> dict:
         trace.append("act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)")
         return {"triggered_functions": [], "action_log": [], "trace": trace}
 
-    vlm = _get_vlm()
-    risk_line = f"{risk.level.value} - {risk.rationale}" if risk else "Belirsiz"
-    instr = prompts.ACTION_DISPATCH_INSTRUCTION.format(
-        tools=_tools_description(),
-        risk=risk_line,
-        events_block=_events_block(events),
-    )
-    messages = [
-        {"role": "system", "content": prompts.SYSTEM_PERSONA},
-        {"role": "user", "content": instr},
-    ]
     # Model cagrilacak fonksiyonlari JSON olarak secer; her birini ilgili mock
     # fonksiyona (LangChain @tool) dispatch ederiz (model-tabanli dinamik secim).
+    # K1: cagri kayitlari bu act() cagrisina OZEL yerel listede toplanir -> paralel
+    # kosularda (n_samples>1) baska bir kosunun kayitlari buraya karisamaz.
+    call_log: List[dict] = []
+    ctx = _dispatch_context(events, risk)  # K3: eksik argüman icin olay baglami
     try:
+        vlm = _get_vlm()
+        risk_line = f"{risk.level.value} - {risk.rationale}" if risk else "Belirsiz"
+        instr = prompts.ACTION_DISPATCH_INSTRUCTION.format(
+            tools=_tools_description(),
+            risk=risk_line,
+            events_block=_events_block(events),
+        )
+        messages = [
+            {"role": "system", "content": prompts.SYSTEM_PERSONA},
+            {"role": "user", "content": instr},
+        ]
         raw = vlm.chat(messages, temperature=0.1, max_tokens=600)
         data = extract_json(raw)
         for call in data.get("calls", []):
             name = str(call.get("function", "")).strip()
-            args = call.get("args", {}) or {}
-            fn = TOOL_REGISTRY.get(name)
+            args = _as_args_dict(call.get("args", {}) or {})
+            fn, resolved = _resolve_tool(name)
             if fn is None:
-                trace.append(f"act: bilinmeyen fonksiyon atlandi: {name}")
+                trace.append(f"act: UYARI — bilinmeyen fonksiyon atlandi: '{name}' "
+                             f"(kayitli araclar: {list(TOOL_REGISTRY)})")
                 continue
-            try:
-                fn.invoke(args)
-            except Exception as ex:
-                trace.append(f"act: {name} çağrisi hatasi: {ex}")
+            if resolved != name:
+                trace.append(f"act: bilinmeyen '{name}' -> yakin-isim '{resolved}' olarak çözüldü")
+            _invoke_tool(fn, resolved, args, ctx, call_log, trace)
     except Exception as ex:
         trace.append(f"act: aksiyon seçimi hatasi: {ex}")
 
-    triggered = [entry["function"] for entry in OPERATION_LOG]
+    triggered = [str(entry.get("function", "")) for entry in call_log]
     trace.append(f"act: {len(triggered)} operasyonel fonksiyon çağrildi: {triggered}")
-    return {"triggered_functions": triggered, "action_log": list(OPERATION_LOG), "trace": trace}
+    return {"triggered_functions": triggered, "action_log": call_log, "trace": trace}
 
 
 def finalize(state: AgentState) -> dict:
-    info = state.get("video_info")
-    result = AnalysisResult(
-        summary=state.get("summary", ""),
-        events=state.get("events", []),
-        risk=state.get("risk") or RiskAssessment(level=Severity.DUSUK, rationale="Olay yok."),
-        actions=state.get("actions", []),
-        video_duration=info.duration_str if info else None,
-        triggered_functions=state.get("triggered_functions", []),
-        action_log=state.get("action_log", []),
-        decision_trace=state.get("trace", []),
-    )
-    return {"result": result}
+    trace = state.get("trace", [])
+    # K6: dugum-seviyesi hata toleransi. finalize'in `result` DONDURMEMESI cagirani (analyze_video)
+    # KeyError ile cokertir; bu yuzden hata halinde en azindan GUVENLI bir AnalysisResult uretilir.
+    try:
+        info = state.get("video_info")
+        result = AnalysisResult(
+            summary=state.get("summary", ""),
+            events=state.get("events", []),
+            risk=state.get("risk") or RiskAssessment(level=Severity.DUSUK, rationale="Olay yok."),
+            actions=state.get("actions", []),
+            video_duration=info.duration_str if info else None,
+            triggered_functions=state.get("triggered_functions", []),
+            action_log=state.get("action_log", []),
+            decision_trace=state.get("trace", []),
+        )
+        return {"result": result}
+    except Exception as ex:
+        trace = list(trace) + [f"finalize: dugum hatasi (guvenli varsayilan sonuç uretildi): {ex}"]
+        try:
+            return {"result": AnalysisResult(
+                summary=str(state.get("summary", "") or "Sonuç birleştirilemedi (finalize hatasi)."),
+                events=[],
+                risk=RiskAssessment(level=Severity.ORTA,
+                                    rationale="Sonuç birleştirilemedi; operatör manuel teyidi önerilir."),
+                actions=[],
+                decision_trace=trace,
+            )}
+        except Exception:  # son care: sozlesme bozulmasin diye None yerine minimum sonuc
+            return {"result": AnalysisResult(
+                summary="Sonuç birleştirilemedi.",
+                risk=RiskAssessment(level=Severity.ORTA, rationale="Bilinmiyor."),
+            )}
 
 
 def build_graph():

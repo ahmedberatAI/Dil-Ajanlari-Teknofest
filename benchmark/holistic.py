@@ -7,6 +7,14 @@ Kapatilan boşluklar:
   M3 JSON sema uyumu                 M4 risk gerekce kalitesi (LLM-judge)
   + mevcut: tespit, risk-seviyesi, ozet kalitesi (judge), gecikme.
 
+!!! K11 — OLCUM SINIRI (RAPORLARKEN MUTLAKA BELIRT) !!!
+Buradaki LLM-judge eksenleri (M1 aksiyon kalitesi, M4 risk gerekcesi, ozet kalitesi)
+IC TUTARLILIK olcer, videoya DAYANAKLILIK DEGIL: hakeme sistemin KENDI ciktilari verilir,
+klibin gercek etiketi/kareleri verilmez. Uydurulmus ama kendi icinde tutarli bir cikti
+tam puan alabilir. OBJEKTIF eksenler (M2 dispatch dogrulugu, M3 JSON sema uyumu, tespit,
+risk-seviyesi, gecikme) dataset etiketine/semaya karsi olculur -> bunlar dayanaklidir.
+Dayanakli ozet/aksiyon olcumu icin: benchmark/judge_independent.py (etiket-dayanakli mod).
+
 Kullanim:  python benchmark/holistic.py
 """
 from __future__ import annotations

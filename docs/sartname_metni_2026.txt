@@ -1,0 +1,602 @@
+
+===== SAYFA 1 =====
+ 
+ 0 
+ 
+ 
+ 
+ 
+TÜRKÇE YAPAY 
+ZEKA DİL 
+AJANLARI 
+YARIŞMASI 
+TEKNİK 
+ŞARTNAMESİ 
+(3.Senaryo) 
+ 
+===== SAYFA 2 =====
+ 
+ 1 
+İÇİNDEKİLER 
+ 
+İÇİNDEKİLER ..................................................................................................................................... 1 
+1. GİRİŞ ........................................................................................................................................ 2 
+2. AMAÇ ....................................................................................................................................... 2 
+3. PROBLEM TANIMI ............................................................................................................... 3 
+Senaryo ................................ ................................................................ ................................ ..... 3 
+4. TEMEL BEKLENTİLER ....................................................................................................... 4 
+5. MOCK FONKSİYON ÖRNEKLERİ .................................................................................... 7 
+6. TESLİM EDİLMESİ GEREKENLER .................................................................................. 7 
+7. DEĞERLENDİRME KRİTERLERİ ..................................................................................... 8 
+8. YARIŞMA TAKVİMİ ............................................................................................................. 9 
+9. YARIŞMA KATILIM ŞARTLARI ...................................................................................... 10 
+10. PROJE BİLGİLERİ SUNUMLARI .................................................................................... 12 
+11. YARIŞMA SUNUMLARI ..................................................................................................... 12 
+12. PUANLAMA SİSTEMİ......................................................................................................... 13 
+13. ÖDÜLLER .............................................................................................................................. 14 
+14. İLETİŞİM ............................................................................................................................... 14 
+15. GENEL KURALLAR ............................................................................................................ 15 
+16. ETİK KURALLAR ................................................................................................................ 15 
+16.1. EK ETİK KURALLAR VE İLETİŞİM İLKELERİ .......................................................... 15 
+17. SORUMLULUK BEYANI .................................................................................................... 17 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+===== SAYFA 3 =====
+ 
+ 2 
+1. GİRİŞ 
+ 
+TEKNOFEST Kapsamında Bilişim Vadisi yürütücülüğünde, günümüzde savunma sanayi, 
+güvenlik sistemleri ve saha operasyonları gibi alanlarda kullanılan kamera sistemleri, sürekli 
+ve yüksek hacimli video verisi üretmektedir. Bu verilerin manuel olarak analiz edilmesi hem 
+zaman açısından maliyetlidir hem de insan hatasına açıktır. 
+Son yıllarda gelişen büyük dil modelleri (LLM) , görüntü/video anlayabilen multimodal 
+modeller ve yüksek performanslı model servisleme altyapıları (örneğin vLLM) sayesinde video 
+verisinin otomatik olarak analiz edilmesi, anlamlandırılması ve karar destek çıktıları üretilmesi 
+mümkün hale gelmiştir. 
+Bu yarışma, katılımcıların video tabanlı verilerden anlam çıkarabilen, Türkçe dilinde açıklama 
+ve öneriler üretebilen, tamamen yerel ortamda çalışan ve operasyonel k arar destek sağlayan 
+yapay zekâ sistemleri geliştirmelerini hedeflemektedir. 
+ 
+ 
+2. AMAÇ 
+ 
+Bu yarışmanın temel amacı: 
+• Video verisini analiz edebilen yapay zekâ sistemlerinin geliştirilmesini teşvik etmek  
+• Multimodal (video + metin) yapay zekâ uygulamalarının yaygınlaştırılmasını 
+sağlamak  
+• vLLM gibi yerel model servisleme altyapılarının etkin kullanımını artırmak  
+• Katılımcıların gerçek dünya problemlerine yönelik çözüm üretme yetkinliklerini 
+geliştirmek  
+• Operasyonel karar destek sistemlerinin ya pay zekâ ile nasıl güçlendirilebileceğini 
+göstermek  
+• Türkçe doğal dil üretimi ve özetleme yeteneklerinin ileri seviyede kullanılmasını 
+sağlamak 
+ 
+ 
+ 
+===== SAYFA 4 =====
+ 
+ 3 
+3. PROBLEM TANIMI  
+ 
+Katılımcılar, savunma sanayi tesisleri veya saha operasyonları için kullanılabilecek bir video 
+analiz ve karar destek sistemi geliştireceklerdir.  
+Geliştirilecek sistem aşağıdaki gereksinimleri karşılamalıdır: 
+• Sistem video girdisi almalı ve video içeriğini analiz etmelidir. 
+• Video içerisindeki olayları, kişiler ve riskli durumları tespit etmelidir. 
+• Kritik anları zaman bilgisi ile belirlemelidir. 
+• Video içeriğinin kısa ve anlaşılır Türkçe özetini üretmelidir. 
+• Olaylara göre operatöre aksiyon önerileri sunmalıdır. 
+• Çıktılar yapılandırılmış formatta (örneğin JSON) üretilebilmelidir. 
+Sistem ayrıca: 
+• Offline ve yerel ortamda çalışmalıdır. 
+• Dış API veya kapalı servis bağımlılığı olmamalıdır. 
+• vLLM veya benzeri yerel model servisleme altyapısı kullanmalıdır. 
+Senaryo 
+ 
+Operasyon sahasında bir video sisteme yüklenir. Sistemden şu çıktılar beklenir: 
+• Olayların zaman damgası ile listelenmesi, 
+• Genel video özeti, 
+• Risk değerlendirmesi, 
+• Aksiyon önerileri, 
+Örnek: 
+• 00:15 — Forklift devrilmesi  
+• 00:20 — Yerde hareketsiz kişi  
+• 00:35 — Personel toplanması  
+ 
+ 
+===== SAYFA 5 =====
+ 
+ 4 
+Sonuç: 
+• Olası iş kazası  
+• Yüksek yaralanma riski  
+• Öneriler: sağlık ekibi, güvenlik, kayıt 
+ 
+4. TEMEL BEKLENTİLER 
+ 
+Yarışma kapsamında geliştirilecek sistemlerin yalnızca temel bir video işleme pipeline’ı 
+sunması yeterli görülmemekte; bunun ötesinde, video içeriğini anlayan, yorumlayan ve karar 
+destek çıktıları üreten bütünleşik bir yapay zekâ çözümü ortaya koyması beklenmektedir. Bu 
+doğrultuda aşağıdaki teknik ve işlevsel beklentiler esas alınacaktır: 
+Çoklu Ortam (Multimodal) Anlama Yeteneği:  Sistem, video verisini yalnızca kare bazlı 
+analiz etmekle sınırlı kalmamalı; sahne bütünlüğünü, zamansal ilişkileri ve olay akışını 
+anlayabilmelidir. Video içerisindeki nesneler, kişiler, hareketler ve olayl ar bağlamsal olarak 
+yorumlanmalı ve anlamlı bir bütün halinde ele alınmalıdır.  
+Olay Tespiti ve Anlamsal Yorumlama: Tespit edilen olaylar yalnızca tanımlanmakla 
+kalmamalı; olayın türü, önemi ve olası etkileri değerlendirilmelidir.  
+Sistem, düşük seviyeli algı (object detection vb.) ile yüksek seviyeli çıkarım (olay yorumlama) 
+arasında bir köprü kurabilmelidir. 
+Zamansal Farkındalık ve Kritik An Analizi:  Video içerisindeki olaylar zaman bilgisi ile 
+birlikte sunulmalı ve özellikle kritik anlar (anomaliler, kazalar, riskli durumlar vb.) açık şekilde 
+vurgulanmalıdır.Sistem, olayların başlangıç, gelişim ve sonuç süreçlerini ayırt edebilmelidir. 
+Türkçe Doğal Dil Üretimi ve Özetleme: Sistem tarafından üretilen çıktılar, açık, anlaşılır ve 
+bağlama uygun Türkçe ile ifade edilmelidir.  
+Özetler: 
+• Gereksiz detaydan arındırılmış,  
+• Operatörün hızlı karar almasını destekleyecek şekilde yapılandırılmış,  
+• Anlam bütünlüğü korunmuş şekilde sunulmalıdır.  
+===== SAYFA 6 =====
+ 
+ 5 
+ 
+Aksiyon Önerisi ve Karar Destek Mekanizması: Geliştirilen çözüm yalnızca analiz yapan bir 
+sistem değil, aynı zamanda bir karar destek sistemi olmalıdır. 
+Bu kapsamda sistem: 
+• Tespit edilen olaylara göre risk değerlendirmesi yapmalı,  
+• Operatöre uygulanabilir ve anlamlı aksiyon önerileri sunmalı,  
+• Önerilerini bağlam ile tutarlı şekilde üretmelidir.  
+Yapılandırılmış ve Açıklanabilir Çıktı: Üretimi Sistem çıktıları hem insan tarafından okunabilir 
+hem de makine tarafından işlenebilir formatta sunulmalıdır. 
+Bu kapsamda: 
+• JSON benzeri yapılandırılmış çıktı zorunludur  
+• Olaylar, zaman damgaları, risk seviyeleri ve aksiyon önerileri açık şekilde 
+ayrıştırılmalıdır  
+• Sistem çıktıları mümkün olduğunca açıklanabilir olmalıdır  
+Yerel Çalışma ve Bağımsızlık: Geliştirilen sistemin tamamen yerel ortamda çalışması 
+zorunludur. 
+• Harici API, kapalı servis veya bulut bağımlılığı kabul edilmez  
+• Tüm model ve bileşenler lokal olarak çalıştırılmalıdır  
+• Bu yaklaşım, sistemin güvenilirliğini ve sürdürülebilirliğini artırmayı hedefler  
+Model Servisleme ve Altyapı Yönetimi: Kullanılan yapay zekâ modellerinin servislenmesi 
+için vLLM veya benzeri yüksek performanslı yerel servisleme altyapıları tercih edilmelidir. 
+Sistem: 
+• Düşük gecikme ile çıktı üretebilmeli  
+• Kaynak kullanımını optimize edebilmeli  
+• Gerçek zamanlı veya gerçeğe yakın senaryolarda çalışabilecek şekilde tasarlanmalıdır  
+Performans, Ölçeklenebilirlik ve Verimlilik: Geliştirilen çözüm, yalnızca doğruluk değil aynı 
+zamanda performans açısından da değerlendirilir. 
+Bu kapsamda: 
+===== SAYFA 7 =====
+ 
+ 6 
+• Video işleme süresi  
+• Model inference süresi  
+• Bellek ve donanım kullanımı  
+• Yüksek hacimli veri altında sistem davranışı  
+önemli değerlendirme kriterleri arasındadır. 
+ 
+Ölçümleme ve KPI Tanımlama: Katılımcılar, geliştirdikleri sistemin başarısını ölçmek için 
+kendi metriklerini tanımlamalıdır. 
+Bu metrikler örneğin: 
+• Olay tespit doğruluğu  
+• Özet kalitesi  
+• Aksiyon önerisi doğruluğu  
+• Kritik olay yakalama oranı  
+• İşlem süresi  
+gibi ölçütleri içerebilir. Tanımlanan metrikler, demo ve raporlarda açık şekilde sunulmalıdır. 
+Minimum Statik Yapı ve Akıllı Pipeline Tasarımı: Sistem, sabit kurallara dayalı basit bir 
+pipeline yerine: 
+• Dinamik analiz yapabilen  
+• Bağlama göre farklı çıktılar üretebilen  
+• Model tabanlı karar mekanizmaları içeren bir mimariye sahip olmalıdır. 
+Statik, yalnızca kural tabanlı çözümler düşük puanlanacaktır. 
+ 
+Açık Kaynak ve Şeffaflık Geliştirilen sistem: 
+• Açık kaynak teknolojiler kullanılarak geliştirilmelidir  
+• Tekrar üretilebilir olmalıdır  
+• Kurulum ve çalıştırma süreçleri açık şekilde dokümante edilmelidir. 
+ 
+ 
+ 
+===== SAYFA 8 =====
+ 
+ 7 
+5. MOCK FONKSİYON ÖRNEKLERİ 
+ 
+Örnek Senaryo:  
+ 
+JSON 
+{ 
+  "summary": "Videoda forklift kazası ve yaralanma riski gözlenmiştir.", 
+  "events": [ 
+    {"time": "00:15", "event": "Forklift devrildi"}, 
+    {"time": "00:20", "event": "Yerde hareketsiz kişi"} 
+  ], 
+  "risk": "Yüksek", 
+  "actions": [ 
+    "Sağlık ekibini çağır", 
+    "Alanı güvenlik altına al" 
+  ] 
+} 
+ 
+6. TESLİM EDİLMESİ GEREKENLER 
+ 
+Çalışan Proje Kodu:  Geliştirilen sistemin tüm kaynak kodları (agent, mock fonksiyonlar, 
+arayüz kodu,  benchmark kodu vb.). Kodun çalıştırılması için gerekli kurulum adımları 
+(gereksinimler, çevre değişkenleri vb.) net bir şekilde belirtilmelidir. 
+ 
+Demo Videosu:  Geliştirilen sistemin, seçilen senaryoları ve zorlu koşulları (örn: bağlam 
+değişimi denemesi) nasıl yönettiğini gösteren maksimum 10 dakikalık bir video. Sesli etkileşim 
+(varsa) veya metin tabanlı etkileşim net olarak gösterilmelidir 
+ 
+Proje Dokümantasyonu: 
+• Sistem mimarisinin genel bir özeti ve diagramı. 
+• Kullanılan agentic framework ve LLM'ler. 
+• İmplemente edilen senaryolar ve mock fonksiyonlar. 
+• Projenin çalıştırılması için adım adım talimatlar (kurulum, çalıştırma). 
+• Karşılaşılan zorluklar ve bu zorluklara getirilen çözümler. 
+• Eklenen ek özellikler veya senaryolar (varsa). 
+• Ölçümleme sonuçları 
+• Ölçekleme noktasında gerekli ihtiyaçlar 
+Sunum Materyali: Jüriye yapılacak canlı veya kayıttan sunum için kullanılacak slaytlar (PDF 
+ve PPTX formatında). 
+===== SAYFA 9 =====
+ 
+ 8 
+7. DEĞERLENDİRME KRİTERLERİ 
+ 
+Projeler aşağıdaki kriterlere göre değerlendirilecektir: 
+ 
+Fonksiyonellik ve Senaryo Kapsamı (%35): 
+• Belirtilen senaryoların ne kadarının ve ne kadar eksiksiz (uçtan uca) 
+• implemente edildiği.  
+• Mock fonksiyonların ajanın araçları olarak başarıyla kullanılması. 
+• Sistemin kararlı çalışması. 
+ 
+Teknik İmplementasyon ve Mimari (%35): 
+• Agentic çözümlerin temel bileşenlerinin (agent, tools, memory, prompt engineering) 
+etkin kullanımı.  
+• Yukarıdaki zorlu koşulların (dinamik araç seçimi, bağlam yö netimi, çok adımlı karar 
+zincirleri, hata işleme) ne kadar iyi ele alındığı.  
+• Kod kalitesi, okunabilirlik ve modülerlik.  
+• Mock sistem entegrasyonunun başarısı. 
+ 
+Otonomi ve Zeka (%20): 
+• Ajanın müşteri niyetini anlama ve akıl yürütme (reasoning) yeteneği. 
+• Diyalog sırasında inisiyatif alma ve doğru soruları sorma. 
+• Beklenmedik durumlara (bağlam değişimi, hatalar) karşı ajanın tepkisi. 
+• Diyalogun doğal ve insansı bir akışta ilerlemesi. 
+ 
+Yenilikçilik ve Yaratıcılık (%10): 
+• Ek senaryoların implementasyonu veya mevcut senaryoların derinleştirilmesi. 
+• Beklentinin ötesinde ek özelliklerin entegrasyonu. 
+• Mimari veya implementasyonda özgün yaklaşımlar. 
+• Sunumun ve dokümantasyonun kalitesi. 
+ 
+ 
+ 
+===== SAYFA 10 =====
+ 
+ 9 
+8. YARIŞMA TAKVİMİ 
+ 
+Yarışmanın aşamalarına ilişkin tahmini takvim aşağıdaki tabloda sunulmuştur. Tarihlerde 
+ihtiyaç duyulması halinde değişiklik yapılabilir; her durumda güncel takvim TEKNOFEST 
+resmî web sitesi üzerinden duyurulur. 
+Tablo 1: Yarışma Takvimi 
+Açıklama Yarışma Takvimi 
+Başvuru Başlangıcı 12 Haziran  
+Son Başvuru Tarihi 12 Temmuz 
+Ön Değerlendirme Sunumu Son 
+Teslimi 12 Temmuz 
+Ön Değerlendirme Sonuçlarının 
+Açıklanması 17 Temmuz  
+Teknik Değerlendirme Sınavı 21 Temmuz 
+Finalistlerin Açıklanması 24 Temmuz 
+Kick Off 27 Temmuz 
+Yarışma Çevrimiçi Süreci 27 Temmuz – 26 Ağustos 
+FİNAL AĞUSTOS 
+TEKNOFEST Şanlıurfa 30 Eylül – 4 Ekim 
+ 
+ 
+Yarışma sürecinde finale kalan takımlara, geliştirdikleri projelere yönelik teknik ve yönetsel 
+danışmanlık sunmak üzere alanında deneyimli mentorlar atanacaktır. Mentorluk programı, 
+takımların proje ilerleme takip aşamasında düzenli geri bildirim almasını ve final 
+değerlendirmesine en olgun haliyle ulaşmasını desteklemek amacıyla yapılandırılmıştır. 
+ 
+===== SAYFA 11 =====
+ 
+ 10 
+9. YARIŞMA KATILIM ŞARTLARI 
+ 
+• Yarışmacılar başvuru formunu doldururken girdikleri tüm bilgilerin doğru olduğunu 
+kabul eder. 
+• Katılımcılar, başvuru sürecinde; kendil erini, takım arkadaşlarını ve proje fikirlerini 
+anlatan bir sunum hazırlamak zorundadır. Söz konusu takım tanıtım sunumu 
+zorunludur. 
+• Yarışmaya, Türkiye ve yurt dışında öğrenim gören  18 yaşından büyük tüm lise (Açık 
+Öğretim dahil) ve üniversite öğrencileri (Lisans, Ön lisans, Yüksek Lisans, Doktora ve 
+Açık Öğretim dahil) ve mezunlar katılabilir. 
+• Yarışmaya katılım, takım halinde olmalıdır. Takımlar 4 üyeden oluşacak şekilde 
+oluşturulmalıdır. 
+• Başvurular, ilgili tarihe kadar www.t3kys.com başvuru sistemi üzerinden çevrim içi 
+olarak yapılmalıdır. 
+• Başvuru tarihleri arasında takım kaptanı / danışman sistem üzerinden kaydolur. Eğer 
+varsa danışman ve / veya takım kaptanı / takım üyelerinin kaydını doğru ve eksiksiz 
+olarak sisteme yapar ve varsa danışman ve üyelerin e postalarına davet gönderir. Davet 
+gönderilen üye başvuru sistemine giriş yaparak “Takım Bilgilerim” kısmından gelen 
+daveti kabul eder ve kayıt tamamlanır. Aksi durumda kayıt tamamlanmış olmaz. 
+• Takım oluşturma işlemini tamamlayan yarışmacıların projesine uygun senaryoya 
+başvuru yapması gerekmektedir. 
+• Yarışma kapsamında gerekli tüm süreçler (Başvuru, talep edildiği takdirde rapor alımı 
+ve sonuçları, üye ekleme / çıkarma işlemleri vb.) KYS sistemi üzerinden yapılmaktadır. 
+Takımların KYS sistemi üzerinden süreçlerini takip etmesi gerekmektedir. 
+• Yarışma süreci boyunca KYS üzerinden başvuru yapma, rapor yükleme, form 
+doldurma işlemleri Takım kaptanı ve / veya danışmanın yetkisi dahilinde olup yarışma 
+süreçleri bu kişiler üzerinden yürütülmektedir. 
+• Derece alan takımlarımız Şanlıurfa’da gerçekleşecek TEKNOFEST ödül törenine 
+katılacaktır. 
+===== SAYFA 12 =====
+ 
+ 11 
+• Türkçe Doğal Dil İşleme projesinde aktif olarak görev alan kişiler, danışmanlar, 
+akademisyenler ve ilgili akademisyenlerin öğrencileri yarışmaya katılamaz. 
+• Yarışma kapsamında hazırlanacak sunumda takım üyelerinin tamamının proje 
+kapsamında görev tanımları yapılmalıdır. 
+• Yarışma süresince geliştirilecek kodların, veri kümelerinin ve diğer bileşenlerin 
+GitHub’da erişilebilir biçimde Açık Kaynak herhangi bir lisans ile (Apache, MIT, GNU 
+vb.) paylaşımı zorunludur. Bu bağlamda tüm yarışmacılar projeleri ile ilgili gerekli 
+dokümantasyonu yapmak zorundadır. ( https://choosealicense.com/icenses/ ) 
+• Yarışmacılar, Türkçe Doğal Dil İşle me ile ilgili yaptıkları çalışmaları Platform ile  
+paylaşmalıdır. 
+• Yarışmacılar proje geliştirme süresince projenin bağımlı olduğu ücretli herhangi bir 
+yazılım kullanamaz. 
+• Yarışma süresince, yarışmacılar projeleri kapsamında üçüncü taraflardan hizmet ya da 
+ürün satın alamaz ve kullanamaz. 
+• Yarışmacılar, mevcut durumda üzerinde çalıştıkları projeleri yarışmaya sunamaz. 
+Yarışma kapsamında geliştirilecek projeler yalnızca yarışma dönemi içerisinde 
+hazırlanmalı olup, önceden tamamlanmış veya hâlihazırda devam etmekte olan projeler 
+yarışmaya dâhil edilemez. Başvuru dosyası Turnitin’e yüklenecek olup, uluslararası 
+standartta intihal oranları dikkate alınacaktır (bu kapsamda benzerlik kontrolleri çeşitli 
+yazılım ve uygulamalar üzerinden yapılacaktır). Ayrıca, önceki y arışmalarda 
+sunulan projelerin üzerine  geliştirme yapılması da uygun değildir. Son 2 yıl 
+içerisinde üst üste Türkçe  Doğal Dil İşleme yarışmasında dereceye girerek ödül 
+almış takımların  üyeleri yarışmaya aynı proje ve fikirle başvuramaz ve bu 
+başvurular tespit edildiğinde kabul edilmeyecektir. 
+• Yarışmacılar başvuru sürecinde hangi senaryoya başvuru yapacaklarını belirtmelidir. 
+• Yarışmaya katılan herkes, GitHub üzerinde açık kaynak olarak paylaşacakları tüm 
+kaynak kodların, veri kümelerin ve diğer bileşenlerin,  yarışma bitiş tarihinde Apache 
+lisansı (Apache License 2.0) ile lisanslanarak Türkiye Açık Kaynak Platformu GitHub 
+hesabında paylaşılacağını kabul eder. 
+===== SAYFA 13 =====
+ 
+ 12 
+10.  PROJE BİLGİLERİ SUNUMLARI 
+ 
+• Yarışmamız ... 2026 tarihinde sona erecektir. Bu nedenle hem Türkçe Doğal Dil İşleme 
+Senaryosu kapsamında hazırlanan senaryo üzerinde çalışan yarışmacılar ... 2026 tarihi 
+saat 23:59’a kadar projelerine ait tüm dokümanlarını, bilgilendirmelerini GitHub’a  
+“BilisimVadisi2026” etiketi ile yüklemeleri gerekmektedir. GitHub üzer indeki kod 
+deposu, kaynak kodların yanı sıra (1) projenin çalıştırılması için gerekli tüm 
+bağlılıkların eksiksiz bir listesini, (2) projenin çalıştırılması için izlenecek tüm adımları 
+ve (3) kullanılan veri setinin indirilebileceği herkese açık bir bağlant ısını içermelidir. 
+Söz konusu yükleme işlemi gerçekleştirilirken “Türkiye Açık Kaynak Platformu”nun 
+da etiketlenmesi gerekmektedir. 
+• Proje kapsamında yapılan geliştirmelerin, yarışmaya sunulacak projeye ait 
+tanımlamasının yapılması ve en az haftalık olarak güncellemelerin sisteme yüklemesi 
+zorunludur (GitHub üzerinden create an organization yaparak proje tanımı yapılabilir). 
+• Yukarıda belirtilen tarihte proje dosyası yüklenmediği takdirde projeler 
+değerlendirmeye alınmayacaktır. 
+• Github’a yüklenen proje ler, sunum gününe kadar mentorlar ve jüri üyeleri tarafından 
+değerlendirilmektedir. Bu nedenle yükleme işleminin bahsi geçen tarihe kadar 
+gerçekleştirilmesi önem arz etmektedir. 
+• GitHub proje yükleme sürecinde  “BilisimVadisi2026” etiketi kullanılarak yüklem e 
+yapılmalıdır. Ayrıca ekip halinde başvuran kişiler mutlaka ekip adlarını da eklemelidir. 
+11.  YARIŞMA SUNUMLARI 
+ 
+• Yarışma sunumları kısmı, proje geliştiren ekipler için geçerlidir. 
+• Yarışmanın son 24 saati fiziki ortamda gerçekleştirilecektir. Bu kapsamda, tüm 
+ekiplerin paylaşılacak olan tarih ve saatte Bilişim Vadisi Kocaeli Kampüsü'nde fiziken 
+hazır bulunmaları gerekmektedir. 
+• Projeler, fiziki ortamda değerlendirilecektir. Değerlendirme süreci, planlanıp 
+yarışmacılarla paylaşılacaktır. 
+• Yukarıda bahsi geçen paylaşılacak olan tarihte ekipler, jüri ve mentorlere tüm üyeleri 
+ile birlikte sunumlarını yapacaktır. 
+===== SAYFA 14 =====
+ 
+ 13 
+ 
+• Sunum formatının nasıl olması gerektiği ile ilgili yarışmacılara yarışma süresi 
+içerisinde sunum başlıklarını içeren  bir bilgilendirme maili gönderilecektir. Burada 
+belirlenen başlıklara sadık kalınması gerekmektedir. Her ekip, hazırladıkları sunumları 
+istedikleri formatta sunabilir. 
+• Sunum esnasında, geliştirilen proje ile ilgili bir demo gösterimi yapılması zorunludur.  
+Bu kapsamda, sunum sırasında herhangi bir aksaklık yaşanmaması adına, projeye ek 
+olarak bir proje demo videosunun da hazırlanması gerekmektedir. Sunum süresi 4 
+dakika, demo videosu süresi ise 1 dakika olacaktır. (İki farklı jüri grubu tarafından 
+değerlendirme yapılabilir) 
+• Katılımcılar, jüri ve mentor heyetine yaptıkları sunumu GitHub hesaplarına da 
+yüklemek zorundadır. 
+• Yarışmacıların jüri ve mentor üyelerine yapacakları sunumlar çevrimiçi ortamda kayıt 
+altına alınacaktır. Konu ile ilgili olarak ilgili KVKK metni web sitesinde mevcuttur. 
+ 
+ 
+12.  PUANLAMA SİSTEMİ 
+ 
+100’lük sistem üzerinden puanlama yapılacaktır. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+===== SAYFA 15 =====
+ 
+ 14 
+13.  ÖDÜLLER 
+ 
+Dereceye giren takımlara aşağıdaki tabloda yer alan ödüller takdim edilir. 
+Tablo 2: Ödül Miktarları 
+Derece Ödül Miktarları 
+1. Takım 120.000 TL 
+2. Takım 100.000 TL 
+3. Takım 80.000 TL 
+*Yukarıda belirtilen ö dül miktarları takıma verilecek olup yürütücü kurum tarafından takım üyelerine eşit 
+bölüştürülerek iletim sağlanacaktır. 
+14.  İLETİŞİM 
+ 
+Yarışma hakkında sorular için TEKNOFEST web sitesinde Türkçe Yapay Zeka Ajanları  
+Yarışması sayfasından yarışmanın grubuna katılabilirsiniz. Bu grubun aktif olarak takip 
+edilmesi ve her takımdan en az 1 kişinin üye olarak bu gruptaki duyuruları, soru ve cev apları 
+takip etmesi yarışmacıların sorumluluğundadır. Belirtilen e -posta grubunun takip edilmemesi 
+sonucunda doğacak takımların güncel bilgilendirmelere ulaşamama durumundan 
+TEKNOFEST Yarışmalar Komitesi sorumlu değildir. Yarışmanın organizasyonel bölümler i 
+ile ilgili soruların iletisim@teknofest.org e-posta adresi üzerinden iletilmesi gereklidir. 
+Sorularınızın yukarıda doğru kanallar üzerinden iletilmesi, sorulan sorulara hızlı dönüş 
+yapılabilmesi açısından önem arz etmektedir. 
+ 
+Yarışmaya ilişkin sorular, görüşler ve teknik destek talepleri için aşağıdaki iletişim kanalları 
+kullanılabilir: 
+• TEKNOFEST resmi web sitesi: https://www.teknofest.org 
+• TEKNOFEST resmi sosyal medya hesapları üzerinden duyurular 
+Düzenleyici kurum, takımlara güncel bilgilendirmeleri başvuru sırasında bildirilen e -posta 
+adresleri ve TEKNOFEST resmi iletişim kanalları üzerinden iletecektir. Takımların, başvuru 
+===== SAYFA 16 =====
+ 
+ 15 
+sistemindeki iletişim bilgilerini güncel tutması ve duyuruları düzenli olarak takip etmesi kendi 
+sorumluluğundadır. Bilgilendirme mesajlarının okunmamış olması, takımları yarışma 
+kurallarına uyma yükümlülüğünden kurtarmaz. 
+ 
+15.  GENEL KURALLAR 
+ 
+Bu şartnamede yer almayan tüm hususlarda TEKNOFEST Genel Yarışma Kuralları geçerlidir. 
+İlgili kurallar bütününe aşağıdaki bağlantı üzerinden erişilebilir: 
+TEKNOFEST Genel Yarışma Kuralları Kitapçığı 
+Genel Yarışma Kuralları ile bu şartname arasında çelişki bulunması durumunda, TEKNOFEST 
+Genel Yarışma Kuralları esas alınır. 
+16.  ETİK KURALLAR 
+ 
+Yarışmaya katılan tüm takımlar, TEKNOFEST Etik Kuralları’na uymakla yükümlüdür. Etik 
+kuralların tamamına aşağıdaki bağlantı üzerinden erişilebilir: 
+TEKNOFEST Etik Kuralları Kitapçığı 
+ 
+16.1. Ek Etik Kurallar ve İletişim İlkeleri 
+ 
+TEKNOFEST Etik Kuralları’na ek olarak, Türkçe Doğal Dil İşleme Yarışması katılımcılarının 
+aşağıdaki kurallara da titizlikle uyması beklenmektedir. 
+Davranış Beklentileri 
+ 
+• Tüm takım üyelerinin ve danışmanların, yarışma boyunca diğer takımlara, jüri 
+üyelerine, mentorlara ve organizasyon ekibine karşı saygılı, kapsayıcı ve yapıcı bir 
+tutum sergilemesi esastır. 
+• Geri bildirim verirken ve alırken nezaket kurallarına uyulmalı; eleştiriler kişisel değil, 
+projeye ilişkin ve yapıcı olmalıdır. 
+• Takımlar, geliştirdikleri sistemlerin Türkçe konuşan tüm bireyler için adil, kapsayıcı ve 
+yanlılıktan arındırılmış olmasına özen göstermekle yükümlüdür. 
+ 
+===== SAYFA 17 =====
+ 
+ 16 
+Yasaklı Davranışlar 
+ 
+• Başkasına ait projelerin, kod parçalarının veya akademik çalışmaların kaynak 
+gösterilmeden kendi çalışmasıymış gibi sunulması (intihal) kesinlikle yasaktır. 
+• Veri sahteciliği, sonuçların manipülasyonu, jüriyi yanıltıcı bilgi sunumu ve 
+değerlendirme süreçlerini etkileme amacıyla yapılan tüm girişimler etik ihlal kabul 
+edilir. 
+• Yarışma değerlendirmelerini etkilemek amacıyla jüri üyeleri, hakemler veya 
+organizasyon görevlileriyle uygunsuz iletişim kurulması yasaktır. 
+• Diğer takımların verilerine, kodlarına veya sistemlerine yetkisiz erişim, kopyalama 
+veya zarar verme girişimleri ağır etik ihlal sayılır. 
+ 
+ 
+ 
+Sosyal Medya Kuralları 
+ 
+• Takımlar, yarışma süresince yaptıkları sosyal medya paylaşımlarında TEKNOFEST 
+kurumsal kimliğine ve diğer takımlara saygılı bir dil kullanmakla yükümlüdür. 
+• Yarışma sürecinde elde edilen ve düzenleyici kurum tarafından gizli olarak işaretlenen 
+veriler, senaryolar veya değerlendirme sonuçlarının ifşa edilmesi kesinlikle yasaktır. 
+ 
+Organizasyon ekibi, yukarıda belirtilen kurallara aykırı davranış sergileyen katılımcılar 
+hakkında uyarı verme, puan indirimi uygulama veya yarışmadan diskalifiye etme dahil olmak 
+üzere gerekli tüm işlemleri yapma hakkını saklı tutar. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+===== SAYFA 18 =====
+ 
+ 17 
+17.  SORUMLULUK BEYANI 
+ 
+İşbu şartname, Türkçe Yapay Zeka Ajanları  Yarışması’nın genel çerçevesini ve katılım 
+kurallarını belirlemek amacıyla hazırlanmıştır. Yarışmaya başvuran tüm takımlar, şartnamenin 
+tüm hükümlerini ve eklerini okumuş, anlamış ve kabul etmiş sayılır. Yarışma süreci boyunca 
+takımların kendi sağlık, güv enlik, ulaşım, konaklama ve kişisel eşya sorumlulukları ile 
+yarışmaya getirdikleri donanımın güvenliği kendilerine aittir. 
+Takımların geliştirdikleri sistemlerin üçüncü taraf haklarına, kişisel verilerin korunması 
+mevzuatına ve fikri mülkiyet hukukuna uygu n olması yükümlülüğü, takımların kendisine 
+aittir.  
+Mücbir sebepler, salgın hastalık, doğal afet, kamu otoritelerinin kararları veya benzeri 
+olağanüstü hâller nedeniyle yarışmanın takvimi, formatı veya yapılma biçimi değiştirilebilir; 
+gerekli görülmesi hâl inde yarışma çevrim içi ortama taşınabilir veya ileri bir tarihe 
+ertelenebilir. Bu tür değişikliklerden doğacak hiçbir maddi veya manevi zarar talebi 
+düzenleyici kurum tarafından karşılanmaz. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+===== SAYFA 19 =====
+ 
+ 18 
+ 
+ 
+ 
+ 
+ 
