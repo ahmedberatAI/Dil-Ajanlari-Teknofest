@@ -111,6 +111,12 @@ def evaluate_clip(path: str, category: str) -> dict:
             for e in res.events
         ],
         "risk_rationale": res.risk.rationale,
+        # Politika hakemligi TESHISI (yalniz 'policy'/'act: politika' satirlari): B1 kolunda
+        # beklenen kazanc cikmazsa hatanin ESLESTIRICIDE mi, CEKINCE kapisinda mi, KANIT
+        # dogrulamasinda mi oldugu TEK KOSUDAN okunur. facility_policy bos iken bu liste
+        # BOS kalir -> arsivlenmis kosularla karsilastirma etkilenmez (yalnizca EK alan).
+        "policy_trace": [t for t in (res.decision_trace or [])
+                         if t.startswith("policy") or t.startswith("act: politika")],
         "actions": [
             {"action": a.action, "priority": a.priority.value, "rationale": a.rationale}
             for a in res.actions

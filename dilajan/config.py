@@ -124,6 +124,30 @@ class Settings(BaseSettings):
                                     # Deterministik (VLM zone-reasoning guvenilmez); opt-in (bos=kapali).
     adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)
 
+    # --- Politika hakemligi (policy_gate) — BEYAN-BAGLI ONEM DERECESI (kusur #2) ---
+    # SORUN (olculdu): model politika-ihlalini GORUYOR ve DOGRU ADLANDIRIYOR ama ONEM DERECESINI
+    # dusuk veriyor (47 tespitin 34'u severity=Dusuk) -> risk tabani Dusuk -> sevk kapisi acilmiyor.
+    # Prompt-seviyesi severity talimati DENENDI, BASARISIZ (10/100, McNemar p=0.267).
+    # COZUM: severity operatorun BEYANINDAN gelir; olay<->kural eslesmesi MODEL ile (anlamsal) yapilir.
+    facility_policy: str = ""       # ANA ANAHTAR. BOS = TAM NO-OP (LLM cagrisi yok, olay kopyalanmaz,
+                                    # karar-izine satir bile eklenmez -> K2 bir bayrak sozune degil,
+                                    # policy_gate'in ILK SATIRINDAKI erken-donuse dayanir).
+                                    # NEDEN facility_rules'tan AYRI: facility_rules perceive promptuna
+                                    # HARFIYEN enjekte ediliyor (graph.py _analyze_one_segment /
+                                    # _perceive_single_pass); o metne dokunmak ALGI yolunu ve A/B
+                                    # karsilastirmasini kirletir. Satir basina bir kural:
+                                    #   <ihlal tanimi> [| <uygun gorunum>] [| Düşük|Orta|Yüksek|Kritik] [| sevk]
+    policy_default_severity: str = "Yüksek"  # kuralda onem etiketi yoksa BEYAN varsayilani
+    policy_accept_hedged: bool = False   # True: cekinceli ("olasi/supheli/veya") metinler de yukseltilir.
+                                         # Varsayilan KAPALI -> yanlis-pozitif butcesi kazanctan onceliklidir.
+    policy_max_rules: int = 8            # ayristirilacak azami kural maddesi
+    policy_max_escalations: int = 4      # video basina azami severity yukseltmesi (butce)
+    policy_dispatch: bool = False        # K3 YAPISAL GARANTISI: politika kaynakli yukseltme SEVK yoluna
+                                         # ULASMAZ (normal_dispatch_fp cebirsel olarak DEGISMEZ).
+                                         # True + kural satirinda 'sevk' etiketi -> sevk de acilir (B2 kolu).
+    policy_verify_frames: bool = False   # OPT-IN kacis: yukseltmeyi karsitsal 2/2 GORSEL teyide baglar
+                                         # (fail-closed). FP/gecikme profili OLCULMEMISTIR -> varsayilan KAPALI.
+
     # --- Hizli-kazanim dedektor senaryolari (opt-in; deterministik YOLO/geometri -> grenli-guvenli) ---
     detect_vehicles: bool = False   # YOLO ile arac (araba/kamyon/otobüs/motosiklet) tespiti. Araclar iri/kaba-sinif
                                     # oldugundan grenli CCTV'de kisiden GUVENILIR. vehicle_zones set ise ihlal uretir.
@@ -206,6 +230,10 @@ REQUEST_SCOPED_FIELDS = (
     "vehicle_zones",
     "detect_crowd",
     "crowd_min_persons",
+    # Politika hakemligi: tesis politikasi (onem derecesi beyani) ve sevk yetkisi de
+    # ISTEK-KAPSAMLIDIR (bir operatorun beyani digerinin analizine sizmamali).
+    "facility_policy",
+    "policy_dispatch",
 )
 
 

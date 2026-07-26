@@ -202,6 +202,49 @@ Her fonksiyonu en fazla bir kez çağir. Tüm argümanlari Türkçe doldur.
 YALNIZCA şu JSON formatinda yanit ver (başka metin yok):
 {{"calls": [{{"function": "fonksiyon_adi", "args": {{"arg": "değer"}}}}]}}"""
 
+# --- 3b) Politika hakemligi (policy_gate; video basina TEK, GORUNTUSUZ cagri) ---
+# Modelden ONEM/CIDDIYET DERECESI ISTENMEZ — severity onun cikti-uzayinda YOKTUR.
+# (Prompt-seviyesi severity talimati bu projede olculdu ve BASARISIZ: McNemar p=0.267.)
+# Model YALNIZCA anlamsal eslesme yapar; onem derecesi operatorun BEYANINDAN gelir.
+# ORNEKLER BILINCLI OLARAK SOYUTTUR (yer tutucu "X"): kodda/promptta tesise-ozgu TEK bir
+# terim gecmez -> "statik kural tabanli cozum" denetimine karsi grep ile dogrulanabilir.
+# SIRA prefix-cache dostudur: sabit rubrik basta, degisken gozlem listesi sonda.
+POLICY_ADJUDICATE_INSTRUCTION = """Tesis yönetiminin BEYAN ETTİĞİ politika maddeleri ile bir video \
+analizinden çikan gözlemleri karşilaştiracaksin.
+
+GÖREVİN TEK ŞEY: her gözlemin, aşağidaki maddelerden hangisini İHLAL ettiğini belirlemek. \
+ÖNEM/CİDDİYET DERECESİ BELİRLEMEYECEKSİN — önem derecesini tesis yönetimi zaten belirlemiştir; \
+senden istenmiyor, verme.
+
+Her gözlem için üç alan üret:
+  kural : R1..Rn arasindan TEK madde; hiçbir maddeyle ilgili değilse R0
+  karar : IHLAL | UYGUN | BELIRSIZ
+  kanit : gözlem metninden BİREBİR KOPYALANMIŞ, ihlali gösteren kisa ifade (yoksa boş birak)
+
+KARAR KURALLARI:
+- Gözlem, maddenin YASAKLADIĞI/önlemeye çaliştiği durumu tarif ediyorsa -> IHLAL
+- Gözlem AYNI KONUDA ama maddenin GEREKTİRDİĞİ (uygun) hâli tarif ediyorsa -> UYGUN
+- Gözlem hiçbir maddeyle ilgili değilse -> kural R0, karar UYGUN
+- Emin değilsen -> BELIRSIZ. Zorlama, tahmin etme.
+- KANIT UYDURMA: yalnizca gözlem metninde GEÇEN kelimeleri kopyala. Metinde ihlali gösteren \
+ifade yoksa R0 ver.
+
+ÖRNEKLER (soyut; "X" bir yer tutucudur):
+  Madde R1: "X bölgesine girmek yasaktir" (uygun görünüm: X bölgesinin dişinda kalmak)
+    "Kişi X bölgesine girdi"            -> {{"kural":"R1","karar":"IHLAL","kanit":"X bölgesine girdi"}}
+    "Kişi X bölgesinin dişinda kaldi"   -> {{"kural":"R1","karar":"UYGUN","kanit":""}}
+    "Kişi X bölgesine girmiş olabilir"  -> {{"kural":"R1","karar":"BELIRSIZ","kanit":""}}
+    "Yerde bir nesne duruyor"           -> {{"kural":"R0","karar":"UYGUN","kanit":""}}
+
+POLİTİKA MADDELERİ (tesis yönetiminin beyani):
+{rules_block}
+
+GÖZLEMLER (numarali):
+{observations}
+
+YALNIZCA şu JSON formatinda yanit ver (başka metin yok):
+{{"sonuc":[{{"no":1,"kural":"R3","karar":"IHLAL","kanit":"..."}}]}}"""
+
 # --- Diyalog/soru-cevap (Gradio sohbet) ---
 CHAT_SYSTEM = (
     "Sen bir güvenlik/savunma tesisi operasyon merkezinde görevli, video analizine dayalı "

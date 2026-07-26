@@ -2,25 +2,29 @@
 
 GERCEK AKIS (kosullu kenar dahil):
 
-    START -> ingest -> perceive -->[route_after_perceive]--> reexamine --> reason -> act -> finalize -> END
-                                        \\__________________________________/
-                                          (belirsiz "Orta" olay yoksa dogrudan reason)
+    START -> ingest -> perceive -->[route_after_perceive]--> reexamine --> policy_gate -> reason
+                                        \\_______________________________/       |
+                                          (belirsiz "Orta" olay yoksa dogrudan)   -> act -> finalize -> END
 
 - ingest     : videoyu zaman damgali kare segmentlerine ayirir (kareler onceden verilmisse
                DECODE-ONCE yolu: yeniden decode etmez)
 - perceive   : her segmenti VLM ile analiz eder, olaylari toplar (coklu-adim algi, paralel)
-- route_after_perceive : KOSULLU KENAR — belirsiz (Orta) olay varsa `reexamine`, yoksa `reason`.
-               `settings.adaptive_reexamine` kapaliysa veya bir kez yeniden-incelendiyse `reason`.
+- route_after_perceive : KOSULLU KENAR — belirsiz (Orta) olay varsa `reexamine`, yoksa dogrudan
+               `policy_gate`. `settings.adaptive_reexamine` kapaliysa veya bir kez
+               yeniden-incelendiyse yine `policy_gate`.
 - reexamine  : (kosullu/opsiyonel dugum) belirsiz olaylari odakli sorguyla yeniden degerlendirir
                (RUTIN -> Dusuk, CIDDI -> Yuksek); dongu muhafizi `state["reexamined"]`
+- policy_gate: POLITIKA HAKEMLIGI — olaylari operatorun BEYAN ETTIGI kural maddeleriyle anlamsal
+               esler ve beyan edilen onem derecesine TEK-YONLU yukseltir. `facility_policy`
+               bos ise TAM NO-OP (bkz. dilajan/policy.py).
 - reason     : olaylar uzerinden Turkce ozet + risk + aksiyon onerileri uretir
 - act        : tespit edilen olaylara gore mock operasyonel fonksiyonlari DINAMIK
                secip cagirir (native tool-calling = ajanin araclari)
 - finalize   : AnalysisResult'i birlestirir
 
-HATA TOLERANSI (K6): ALTI dugumun (ingest, perceive, reexamine, reason, act, finalize) dis
-govdesi de try/except ile sarilidir; bir adim hata verirse akis cokmek yerine karar-izine
-(trace) not dusup guvenli varsayilanla devam eder.
+HATA TOLERANSI (K6): YEDI dugumun (ingest, perceive, reexamine, policy_gate, reason, act,
+finalize) dis govdesi de try/except ile sarilidir; bir adim hata verirse akis cokmek yerine
+karar-izine (trace) not dusup guvenli varsayilanla devam eder.
 
 ESZAMANLILIK (K1): `act()` operasyonel cagri kaydini modul-globali yerine BAGLAM-YEREL
 kayittan (mock_functions.get_log) + kendi YEREL listesinden toplar. Boylece
@@ -36,7 +40,7 @@ from typing import Dict, List, Optional, Tuple
 
 from langgraph.graph import END, START, StateGraph
 
-from dilajan import prompts
+from dilajan import policy, prompts
 from dilajan.agent.state import AgentState
 from dilajan.config import settings
 from dilajan.llm_client import VLMClient
@@ -62,6 +66,26 @@ def _get_vlm() -> VLMClient:
     if _vlm is None:
         _vlm = VLMClient()
     return _vlm
+
+
+class PolicyAgentState(AgentState, total=False):
+    """`AgentState`in politika-hakemligi (policy_gate) kanallariyla genisletilmis hali.
+
+    NEDEN BURADA TANIMLI: LangGraph, bir dugumun DONDURDUGU ama durum semasinda BULUNMAYAN
+    anahtarlari SESSIZCE DUSURUR (bu ortamda olculdu) — yani yeni alanlar gercek bir KANAL
+    olarak tanimlanmadikca policy_gate -> reason -> act zinciri sessizce kopar. Genisletme
+    tamamen ADDITIVE'dir (mevcut alanlarin hicbiri degismez); davranissal olarak alanlari
+    `agent/state.py`ye eklemekle ozdestir, yalnizca bu degisiklikte o dosyaya dokunulmamistir.
+    """
+
+    #: Politika kaynakli severity yukseltmelerinin kaydi (aciklanabilirlik + sevk cebiri).
+    policy_escalations: List[dict]
+    #: Yukseltme OLMASAYDI olusacak en yuksek olay-severity ordinali (sevk cebirinin 1. terimi).
+    policy_max_intrinsic: int
+    #: Risk esigi YALNIZ politika yukseltmesiyle mi asildi (sevk cebirinin 3. terim maskesi).
+    risk_from_policy_only: bool
+    #: `reexamine`in GORSEL olarak "RUTIN" dedigi olay anahtarlari (politika bunlari aday almaz).
+    reexamine_routine: List[str]
 
 
 def _tools_description() -> str:
@@ -741,11 +765,16 @@ _REEX_PROMPT = (
 )
 
 
-def reexamine(state: AgentState) -> dict:
+def reexamine(state: PolicyAgentState) -> dict:
     """Belirsiz (Orta) olaylari segment kareleriyle odakli yeniden-degerlendirir:
-    RUTIN -> Düşük (FP azalt), CIDDI -> Yüksek (ince gerçek olayi yakala), BELIRSIZ -> korur."""
+    RUTIN -> Düşük (FP azalt), CIDDI -> Yüksek (ince gerçek olayi yakala), BELIRSIZ -> korur.
+
+    Ayrica "RUTIN" denen olaylarin anahtarlarini `reexamine_routine`e yazar: politika hakemligi
+    (policy_gate) bu olaylari ADAY ALMAZ, boylece operator beyani, GORSEL olarak zaten rutin
+    bulunmus bir olayi sessizce yukseltemez (bedava yanlis-pozitif kapisi)."""
     trace = state.get("trace", [])
     events = list(state.get("events", []))
+    routine: List[str] = list(state.get("reexamine_routine", []) or [])
     # K6: dugum-seviyesi hata toleransi — yeniden-inceleme cokerse olaylar OLDUGU GIBI korunur
     # (guvenli varsayilan: severity'ye dokunma), akis reason'a devam eder.
     try:
@@ -771,6 +800,7 @@ def reexamine(state: AgentState) -> dict:
             if "RUTIN" in ans:
                 new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
                                         severity=Severity.DUSUK, category=ev.category, bbox=ev.bbox, region=ev.region))
+                routine.append(policy.event_key(ev))
                 n_down += 1
             elif "CIDDI" in ans:
                 new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
@@ -780,12 +810,89 @@ def reexamine(state: AgentState) -> dict:
                 new_events.append(ev)
     except Exception as ex:
         trace.append(f"reexamine: dugum hatasi (toleransli devam, olaylar degistirilmedi): {ex}")
-        return {"events": events, "reexamined": True, "trace": trace}
+        return {"events": events, "reexamined": True, "trace": trace,
+                "reexamine_routine": routine}
     trace.append(f"reexamine: belirsiz olaylar yeniden-incelendi (↑{n_up} ciddi, ↓{n_down} rutin)")
-    return {"events": new_events, "reexamined": True, "trace": trace}
+    return {"events": new_events, "reexamined": True, "trace": trace,
+            "reexamine_routine": routine}
 
 
-def reason(state: AgentState) -> dict:
+def _frames_at(segments, time_str: str):
+    """Bir zaman damgasini iceren segmentin karelerini dondurur (yoksa None)."""
+    t = _secs(time_str)
+    seg = next((s for s in segments if _secs(s.start_str) <= t <= _secs(s.end_str)), None)
+    return getattr(seg, "frames", None) if seg is not None else None
+
+
+def policy_gate(state: PolicyAgentState) -> dict:
+    """POLITIKA HAKEMLIGI — beyan-bagli onem derecesi (kusur #2 cozumu).
+
+    Video basina TEK ve GORUNTUSUZ bir LLM cagrisiyla aday olaylari operatorun BEYAN ETTIGI
+    kural maddelerine karsi uc-degerli (IHLAL/UYGUN/BELIRSIZ) siniflandirir; dort deterministik
+    kapiyi gecen olayin severity'sini kuralin BEYAN EDILEN seviyesine TEK-YONLU yukseltir.
+    Risk zincire kendiliginden akar (reason'daki risk tabani); SEVK ise ayri ve varsayilan
+    KAPALI bir kapidan gecer (settings.policy_dispatch).
+
+    K2 (GERI-UYUM): `settings.facility_policy` bos ise TAM NO-OP — ilk satirda `return {}`.
+    Model cagrisi yapilmaz, olay kopyalanmaz, karar-izine SATIR BILE eklenmez.
+    K6 (FAIL-OPEN): her ariza modunda olaylar DEGISTIRILMEDEN gecer, akis reason'a devam eder.
+    """
+    events = state.get("events", [])
+    if not (settings.facility_policy or "").strip() or not events:
+        return {}  # <-- K2: tam no-op (bayrak sozune degil, BU SATIRA dayanir)
+    trace = state.get("trace", [])
+    try:
+        rules = policy.parse_policy(
+            settings.facility_policy,
+            _to_severity(settings.policy_default_severity),
+            settings.policy_max_rules,
+        )
+        if not rules:
+            trace.append("policy: beyan edilen politikadan gecerli kural cikarilamadi "
+                         "(madde cok kisa/bos olabilir) -> yukseltme yok")
+            return {"trace": trace}
+        routine = set(state.get("reexamine_routine", []) or [])
+        cands = policy.candidates(events, rules, routine)
+        if not cands:
+            trace.append("policy: aday olay yok (hepsi zaten beyan seviyesinde, Normal kategorili "
+                         "veya reexamine 'RUTIN' demis) -> model cagrisi YAPILMADI")
+            return {"trace": trace}
+        trace.append("policy: " + policy.rules_summary(rules))  # K5: kural tablosu AYNEN karar-izine
+        raw = _get_vlm().chat(
+            [{"role": "system", "content": prompts.SYSTEM_PERSONA},
+             {"role": "user", "content": policy.build_prompt(rules, cands)}],
+            temperature=0.0, max_tokens=400,  # GORUNTUSUZ + video basina TEK cagri
+        )
+        verdicts = policy.parse_verdicts(raw, len(cands), {r.rid for r in rules})
+        adj = policy.adjudicate(
+            events, cands, verdicts, rules,
+            accept_hedged=settings.policy_accept_hedged,
+            max_esc=settings.policy_max_escalations,
+        )
+        if settings.policy_verify_frames and adj.records:  # OPT-IN, varsayilan KAPALI
+            segments = state.get("segments", []) or []
+            adj = policy.verify_with_frames(
+                _get_vlm(), lambda t: _frames_at(segments, t), adj, rules)
+        trace.extend(adj.trace)  # K5: her yukseltme/red NEDENIYLE yazildi
+        st = adj.stats
+        trace.append(
+            f"policy: {st.get('aday', 0)} aday, {st.get('yukseltme', 0)} yukseltme, "
+            f"{st.get('red', 0)} red (kapsam {st.get('red_kapsam', 0)}, kanit {st.get('red_kanit', 0)}, "
+            f"cekince {st.get('red_cekince', 0)}, tavan {st.get('red_tavan', 0)}, "
+            f"butce {st.get('red_butce', 0)}, karar-yok {st.get('karar_yok', 0)}); "
+            f"karar dagilimi IHLAL {st.get('ihlal', 0)}/UYGUN {st.get('uygun', 0)}/"
+            f"BELIRSIZ {st.get('belirsiz', 0)}/R0 {st.get('r0', 0)}; "
+            f"sevk yolu {'ACIK' if settings.policy_dispatch else 'KAPALI'} "
+            f"(policy_dispatch={settings.policy_dispatch})"
+        )
+        return {"events": adj.events, "policy_escalations": adj.records,
+                "policy_max_intrinsic": adj.max_intrinsic_ord, "trace": trace}
+    except Exception as ex:  # FAIL-OPEN: mevcut davranisa coker
+        trace.append(f"policy_gate: dugum hatasi (toleransli devam, olaylar degistirilmedi): {ex}")
+        return {"trace": trace}
+
+
+def reason(state: PolicyAgentState) -> dict:
     trace = state.get("trace", [])
     vlm = _get_vlm()
     events = state.get("events", [])
@@ -832,6 +939,10 @@ def reason(state: AgentState) -> dict:
     except Exception as ex:
         trace.append(f"reason: hata: {ex}")
 
+    # MODELIN KENDI risk yargisi (taban/yukseltme uygulanmadan ONCE) — politika kaynakli
+    # risk artisini modelin kendi yargisindan ayirt etmek icin gerekli (act sevk cebiri).
+    model_risk_ord = _SEV_ORD.get(risk.level, 0)
+
     # Risk tabani (guardrail): gercek tehdidi dusuk gostermeyi onle.
     # Risk, tespit edilen en yuksek olay severity'sinden dusuk olamaz.
     if events:
@@ -849,6 +960,41 @@ def reason(state: AgentState) -> dict:
                 trace.append(f"reason: risk-recall-bias {risk.level.value}->Yüksek (tehlike-olay Orta+)")
                 risk = RiskAssessment(level=Severity.YUKSEK, rationale=risk.rationale)
 
+    # --- POLITIKA HAKEMLIGI: sevk maskesi + confirm-then-act aksiyonlari (K3/K5) ---
+    # Risk TABANI politika yukseltmesini otomatik olarak risk'e tasir (istenen: risk kalibrasyonu).
+    # Ancak act()'teki sevk kapisinin IKINCI terimi de risk'e bagli oldugu icin, maskelenmezse
+    # politika yukseltmesi SESSIZCE operasyonel cagri tetiklerdi. Asagidaki bayrak bu sizintiyi kapatir.
+    risk_from_policy_only = False
+    try:  # K6: bu katman hicbir kosulda reason'i cokertmemeli
+        _recs = state.get("policy_escalations") or []
+        _max_intr = state.get("policy_max_intrinsic")
+        if _max_intr is None:
+            _max_intr = policy.intrinsic_max_ord(events)
+        risk_from_policy_only = bool(_recs) and _max_intr < _SEV_ORD[Severity.YUKSEK] \
+            and model_risk_ord < _SEV_ORD[Severity.YUKSEK]
+        if risk_from_policy_only:
+            # ikinci (yedek) tasima yolu: kanal dusse bile act() bayragi risk nesnesinden okur
+            risk = risk.model_copy(update={"policy_only": True})
+            trace.append("policy: risk esigi YALNIZ operator beyanindan geldi -> operatore YUKSEK "
+                         "risk gosterilir ancak otomatik SEVK sinyali maskelendi "
+                         "(policy_dispatch kapisi)")
+        _seen_rid: set = set()
+        for _r in _recs:  # her yukseltilmis kural icin TEK confirm-then-act onerisi
+            _rid = str(_r.get("kural", ""))
+            if _rid in _seen_rid:
+                continue
+            _seen_rid.add(_rid)
+            _kural = str(_r.get("kural_metni", "") or "")
+            _kural = _kural if len(_kural) <= 60 else _kural[:57] + "..."
+            actions.append(Action(
+                action=f"{_rid} politika ihlali ({_kural}) — operatör teyidi sonrası ekip sevki",
+                priority=_to_severity(str(_r.get("yeni", ""))),
+                rationale=f"[{_r.get('time')}] {_r.get('event')} — tesis yönetiminin beyan ettiği "
+                          f"{_rid} maddesiyle eşleşti (kanıt: \"{_r.get('kanit')}\").",
+            ))
+    except Exception as _ex:  # FAIL-OPEN (maske ZATEN hesaplandiysa korunur)
+        trace.append(f"policy: reason katmani hatasi (toleransli devam): {_ex}")
+
     # VL-Calibration (grounded algi-guveni): VLM self-report asiri-ozguvenli (olculdu: grenli'de bile "dusuk"
     # demez) -> algi-guvenini OBJEKTIF cozunurlukten turet. Dusuk-res ise operatore manuel-teyit ADVISORY ekle.
     # Girdi-tavanini (grenli'de sessiz dusuk-puanlama) DURUST operator-uyarisina + puanlanan-otonomi davranisina cevirir.
@@ -864,14 +1010,18 @@ def reason(state: AgentState) -> dict:
     # G12 dil-safligi guard: Turkce-disi karakter sizdiysa ozet/gerekce/aksiyonlari duzelt (temizse no-op)
     if _has_foreign(summary) or _has_foreign(risk.rationale) or any(_has_foreign(a.action) for a in actions):
         summary = _purify(vlm, summary)
-        risk = RiskAssessment(level=risk.level, rationale=_purify(vlm, risk.rationale))
+        # model_copy: seviye + (varsa) `policy_only` yedek bayragi KORUNUR. Yeniden-kurma
+        # (`RiskAssessment(level=..., rationale=...)`) bu ek oznitelig SESSIZCE dusuruyordu ->
+        # act()'teki yedek maske yolu bu dalda olu kaliyordu.
+        risk = risk.model_copy(update={"rationale": _purify(vlm, risk.rationale)})
         actions = [Action(action=_purify(vlm, a.action), priority=a.priority,
                           rationale=(_purify(vlm, a.rationale) if a.rationale else a.rationale))
                    for a in actions]
         trace.append("reason: dil-safligi guard uygulandi (Türkçe-disi karakter düzeltildi)")
 
     trace.append(f"reason: risk={risk.level.value}, {len(actions)} aksiyon önerisi")
-    return {"summary": summary, "risk": risk, "actions": actions, "trace": trace}
+    return {"summary": summary, "risk": risk, "actions": actions, "trace": trace,
+            "risk_from_policy_only": risk_from_policy_only}
 
 
 # --- K3: argüman onarimi (sessiz dusen dispatch'i onler) ---
@@ -1080,7 +1230,7 @@ def _invoke_tool(fn, name: str, args: dict, ctx: Dict[str, str],
             return False
 
 
-def act(state: AgentState) -> dict:
+def act(state: PolicyAgentState) -> dict:
     """Tespit edilen olaylara gore mock operasyonel fonksiyonlari dinamik cagirir."""
     trace = state.get("trace", [])
     reset_log()  # K1: BAGLAM-YEREL kayit (yeni liste atanir; paralel kosular etkilenmez)
@@ -1096,9 +1246,37 @@ def act(state: AgentState) -> dict:
     # recall-yanli sisirilmis olabilir -> dispatch'i YALNIZ grounded olay-severity'ye bagla (biased-risk
     # operatore Yuksek FLAG verir ama sahte operasyonel-cagri YAPMAZ). Boylece bias risk-kalibrasyonu
     # yukseltirken dispatch HASSAS kalir (Agent-C: recall-yanli alarm + hassas dispatch).
-    dispatch_signal = (max_ev >= _SEV_ORD[Severity.YUKSEK]) or (
-        risk_ord >= _SEV_ORD[Severity.YUKSEK] and not settings.risk_recall_bias)
+    #
+    # POLITIKA HAKEMLIGI (K3 YAPISAL GARANTISI) — UC TERIMLI KAPI:
+    #   1) max_intrinsic : politika yukseltmesi OLMASAYDI ki en yuksek olay-severity
+    #                      (yani sevk YALNIZ modelin kendi grounded yargisiyla acilir)
+    #   2) esc_sevk      : operator hem kural satirinda 'sevk' yetkisi verdiyse HEM DE
+    #                      policy_dispatch=True ise politika yukseltmesi sevke yetkilidir (B2 kolu)
+    #   3) risk terimi   : risk esigi YALNIZ politika yukseltmesiyle asildiysa MASKELENIR
+    #                      (risk tabani severity'yi risk'e tasidigi icin tek basina 1. terimi
+    #                       maskelemek YETMEZ; bu maske olmadan policy_dispatch=False yalan olurdu)
+    # BOS POLITIKADA CEBIRSEL INDIRGEME (birim testle assert edilir):
+    #   recs=[] -> max_intrinsic==max_ev, esc_sevk=False, policy_only=False
+    #   => (max_ev>=3) or False or (risk_ord>=3 and not risk_recall_bias and not False)
+    #   == (max_ev>=3) or (risk_ord>=3 and not risk_recall_bias)      [eski satirin AYNISI]
+    recs = state.get("policy_escalations") or []
+    max_intrinsic = state.get("policy_max_intrinsic")
+    if max_intrinsic is None:  # kanal yoksa olaylarin policy_prev alanindan turet (ayni deger)
+        max_intrinsic = policy.intrinsic_max_ord(events)
+    esc_sevk = bool(recs) and settings.policy_dispatch and any(r.get("sevk") for r in recs)
+    policy_only = bool(state.get("risk_from_policy_only", False)) or bool(
+        getattr(risk, "policy_only", False))
+    dispatch_signal = (
+        (max_intrinsic >= _SEV_ORD[Severity.YUKSEK])
+        or (esc_sevk and max_ev >= _SEV_ORD[Severity.YUKSEK])
+        or (risk_ord >= _SEV_ORD[Severity.YUKSEK] and not settings.risk_recall_bias
+            and not policy_only)
+    )
     if not events or not dispatch_signal:
+        if recs:
+            trace.append(f"act: politika yukseltmesi var ({len(recs)}) ancak SEVK yolu kapali "
+                         f"(policy_dispatch={settings.policy_dispatch}, sevk-yetkili kural="
+                         f"{any(r.get('sevk') for r in recs)}); operatör teyidi önerisi aksiyonlarda")
         trace.append("act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)")
         return {"triggered_functions": [], "action_log": [], "trace": trace}
 
@@ -1177,20 +1355,27 @@ def finalize(state: AgentState) -> dict:
 
 
 def build_graph():
-    g = StateGraph(AgentState)
+    g = StateGraph(PolicyAgentState)
     g.add_node("ingest", ingest)
     g.add_node("perceive", perceive)
     g.add_node("reexamine", reexamine)
+    g.add_node("policy_gate", policy_gate)
     g.add_node("reason", reason)
     g.add_node("act", act)
     g.add_node("finalize", finalize)
 
     g.add_edge(START, "ingest")
     g.add_edge("ingest", "perceive")
-    # Koşullu kenar (adaptif otonomi): belirsiz olay varsa yeniden-incele, yoksa reason
+    # Koşullu kenar (adaptif otonomi): belirsiz olay varsa yeniden-incele, yoksa policy_gate.
+    # route_after_perceive'in DONUS DEGERLERI DEGISMEDI; yalnizca eslesme tablosu yonlendirir.
+    # SIRA GEREKCESI: (1) reexamine "Orta" olaylari ASAGI cekebiliyor -> hakemlik ondan SONRA
+    # calisir ki yukseltme geri alinmasin ve rutin bulunan olaylar aday olmasin; (2) _dedupe_events
+    # sonrasi aday sayisi kucuk (video basina TEK cagri yeter); (3) policy_gate MUTASYON
+    # ZINCIRININ SONU -> policy_ref/policy_prev alanlari sonraki Event(...) kurulumlarinda dusmez.
     g.add_conditional_edges("perceive", route_after_perceive,
-                            {"reexamine": "reexamine", "reason": "reason"})
-    g.add_edge("reexamine", "reason")
+                            {"reexamine": "reexamine", "reason": "policy_gate"})
+    g.add_edge("reexamine", "policy_gate")
+    g.add_edge("policy_gate", "reason")
     g.add_edge("reason", "act")
     g.add_edge("act", "finalize")
     g.add_edge("finalize", END)

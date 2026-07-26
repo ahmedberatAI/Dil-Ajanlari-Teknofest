@@ -176,6 +176,79 @@ Denetimde tespit edilen "istatistiksel güç yok" kusuru bu ölçümle **fiilen 
 
 ---
 
+---
+
+## 2.6 ❌ DENENDİ ve BAŞARISIZ: Politika Hakemliği (`facility_policy`) — negatif sonuç
+
+**Hedef:** Kusur #2 (risk yükseltme). Ölçülmüştü ki model politika ihlalini *görüyor ve doğru
+adlandırıyor* ama `severity=Düşük` veriyor (47 tespitin 34'ü). Prompt'a severity talimatı
+yazmanın çalışmadığı da kanıtlanmıştı (p=0.267), bu yüzden **kod tarafında** bir çözüm denendi.
+
+**Uygulanan mekanizma (`dilajan/policy.py` + `policy_gate` düğümü):** Operatör satır başına
+bir kural beyan eder (`<ihlal> | <uygun görünüm> | <önem>`); video başına tek anlamsal
+sınıflandırma çağrısıyla tespit edilen olaylar kurallarla eşlenir; eşleşirse severity
+**operatörün beyan ettiği** seviyeye tek-yönlü yükselir. Dört kapı: kapsam, kanıt-alıntısı
+doğrulama, çekince filtresi, bütçe. Ana anahtar `facility_policy` **boşsa tam no-op**.
+
+**Ölçüm (n=100 anomali + 100 normal, eşleştirilmiş McNemar):**
+
+| Metrik | Politika YOK | Politika VAR | p_exact | Kabul kapısı |
+|---|---|---|---|---|
+| Risk kalibrasyonu | 10/100 | 14/100 | **0.48** | ≥20/100 & p<0.05 → ❌ **GEÇİLEMEDİ** |
+| Kategori | 33/100 | 36/100 | 0.69 | değişmemeliydi |
+| Recall | 47/100 | 50/100 | 0.72 | değişmemeliydi |
+| Normal risk=Düşük | 84/100 | 79/100 | 0.33 | ≥79 → sınırda |
+
+Sonuç dosyası: `eval_20260726_192353.json`
+
+### KÖK NEDEN — model açık-küme kural eşleştirmesi yapamıyor
+
+Mekanizma **mekanik olarak doğru çalıştı** (91 klipte devreye girdi, kapılar işledi, izler temiz).
+Sorun modelin **yargısında**: 7 yükseltmenin **7'si de R3'e** ("pano kapakları kapalı tutulur")
+eşleşti. R1/R2/R4'e **sıfır** eşleşme.
+
+```
+"makinelerin etrafında yoğun duman oluştu"          → R3 (pano kapağı)  ❌
+"Merdivenin altında motorlu araba benzeri nesne"    → R3                ❌
+"Merkezde yerde hareketsiz bir nesne var"           → R3                ❌
+"İşçi, yere bırakılmış metal parça üzerine basmış"  → R3                ❌
+```
+
+En çarpıcısı: *"Forklift aşırı yük taşıyor"* olayı, tam karşılığı olan **R4 (aşırı yük
+kuralı) ile hiç eşleşmedi**. 7 yükseltmenin 3'ü **normal** klipte (yanlış yükseltme).
+
+Bu, tasarım denetiminin **önceden uyardığı** yapısal riskin gerçekleşmesidir:
+> *"Dört kapı UYDURMA DAYANAĞA karşı korur, YANLIŞ YARGIYA karşı korumaz. Model bir adaya
+> İHLAL deyip kanıtı olay metninden sadık kopyalarsa hiçbir kapı ayırt edemez."*
+
+**Ders:** 8B model, *açık-küme kural eşleştirme* ("bu 4 kuraldan hangisi ihlal edildi?")
+görevini yapamıyor. Bu, prompt-severity denemesiyle (p=0.267) **aynı sınıf** başarısızlıktır:
+model bu yargı görevinde güvenilir değil. Kapılar uydurma kanıtı eler, ama **yanlış ama
+sadık-alıntılı** yargıyı elemez.
+
+### İKİNCİ BULGU — ölçüm zaten güvenilmez (kusur #8 önkoşul)
+
+Mekanizmanın **dokunmadığı** metrikler oynadı: recall'da 14 klip düştü, 17 klip yükseldi
+(net +3). Bu sızıntı değil, **koşu-arası stokastik gürültü**. Yani mevcut kurulumda
+**±15 kliplik salınım** var ve 5–10 puanlık bir etki **ölçülemez**.
+
+> **Sonuç: Kusur #2'nin herhangi bir çözümü, kusur #8 (determinizm) giderilmeden
+> doğrulanamaz.** #8 bir "iyileştirme" değil, #2'nin **ölçüm önkoşuludur**.
+
+### DURUM ve gelecek yol
+- Mekanizma **varsayılan KAPALI** (`facility_policy=""` → tam no-op, 0 model çağrısı).
+  Hiçbir mevcut rakamı etkilemez; regresyon testleriyle kanıtlandı.
+- Kod, testleri (66 kontrol) ve izlenebilirliğiyle **korunuyor** — çünkü hata mekanizmada
+  değil, modelin eşleştirme yargısında.
+- **Denenecek düzeltme (yapılmadı):** (a) kuralın KENDİ metninden türetilen sözcüksel çapa
+  (R3'ün kelimeleri "duman"/"forklift" ile örtüşmediği için o eşleşmeler baştan reddedilir;
+  koda sabit terim eklenmez), (b) açık-küme seçim yerine **kural başına ikili soru**
+  ("bu olay R4'ü ihlal ediyor mu? evet/hayır").
+- **Sıralama kararı:** önce #8 (determinizm) ve #9 (gece kapsamı), sonra #2'ye ölçülebilir
+  zeminde dönülecek.
+
+---
+
 ## 3. Bu ölçümlerden çıkan net konumlandırma
 
 **Sistem güçlü:** görsel olarak belirgin olaylarda (yangın, düşme, kaza) —
