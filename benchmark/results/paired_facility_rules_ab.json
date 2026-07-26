@@ -1,0 +1,632 @@
+{
+  "meta": {
+    "file_a": "benchmark/results/eval_20260726_002608.json",
+    "file_b": "benchmark/results/eval_20260726_003531.json",
+    "label_a": "kurallar KAPALI",
+    "label_b": "kurallar ACIK",
+    "n_pairs": 40,
+    "n_anomaly_pairs": 20,
+    "n_normal_pairs": 20,
+    "n_only_a": 0,
+    "n_only_b": 0,
+    "alpha": 0.05,
+    "project_n": 100,
+    "test": "McNemar exact (iki-yonlu binom, p=0.5)",
+    "diff_ci": "Newcombe 1998 Method 10 (paired Wilson square-and-add, phi-corrected)"
+  },
+  "metrics": {
+    "recall": {
+      "n_pairs": 20,
+      "both": 3,
+      "only_a": 2,
+      "only_b": 8,
+      "neither": 7,
+      "b": 2,
+      "c": 8,
+      "rate_a": {
+        "k": 5,
+        "n": 20,
+        "p": 0.25,
+        "ci_low": 0.1119,
+        "ci_high": 0.4687,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "rate_b": {
+        "k": 11,
+        "n": 20,
+        "p": 0.55,
+        "ci_low": 0.3421,
+        "ci_high": 0.7418,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "diff_b_minus_a": 0.3,
+      "diff_ci_low": 0.0071,
+      "diff_ci_high": 0.5298,
+      "diff_ci_method": "newcombe1998-method10 (paired wilson square-and-add, phi-corrected)",
+      "diff_ci_level": 0.95,
+      "phi": 0.058,
+      "p_exact": 0.109375,
+      "p_method": "mcnemar exact binom(n=b+c, p=0.5), iki-yonlu",
+      "chi2_cc": 2.5,
+      "p_chi2_cc": 0.113846,
+      "alpha": 0.05,
+      "significant": false,
+      "direction": "B daha iyi",
+      "subset": "anomali",
+      "label": "Anomali RECALL",
+      "definition": "klipte >=1 olay tespit edildi (n_events>0)",
+      "flipped_only_a": [
+        "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr176.mp4",
+        "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr7.mp4"
+      ],
+      "flipped_only_b": [
+        "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr15.mp4",
+        "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr45.mp4",
+        "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr101.mp4",
+        "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr126.mp4",
+        "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr128.mp4",
+        "data/eval_defense/Anomali/Safe_Walkway_Violation/0_te11.mp4",
+        "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr128.mp4",
+        "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr67.mp4"
+      ],
+      "ci_excludes_zero": true,
+      "ci_test_disagree": true
+    },
+    "cat_match": {
+      "n_pairs": 20,
+      "both": 2,
+      "only_a": 0,
+      "only_b": 5,
+      "neither": 13,
+      "b": 0,
+      "c": 5,
+      "rate_a": {
+        "k": 2,
+        "n": 20,
+        "p": 0.1,
+        "ci_low": 0.0279,
+        "ci_high": 0.301,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "rate_b": {
+        "k": 7,
+        "n": 20,
+        "p": 0.35,
+        "ci_low": 0.1812,
+        "ci_high": 0.5671,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "diff_b_minus_a": 0.25,
+      "diff_ci_low": 0.0549,
+      "diff_ci_high": 0.4453,
+      "diff_ci_method": "newcombe1998-method10 (paired wilson square-and-add, phi-corrected)",
+      "diff_ci_level": 0.95,
+      "phi": 0.4543,
+      "p_exact": 0.0625,
+      "p_method": "mcnemar exact binom(n=b+c, p=0.5), iki-yonlu",
+      "chi2_cc": 3.2,
+      "p_chi2_cc": 0.073638,
+      "alpha": 0.05,
+      "significant": false,
+      "direction": "B daha iyi",
+      "subset": "anomali",
+      "label": "Kategori eslesme",
+      "definition": "olay metni beklenen anahtar kelimelerden birini iceriyor",
+      "flipped_only_a": [],
+      "flipped_only_b": [
+        "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr15.mp4",
+        "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr45.mp4",
+        "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr126.mp4",
+        "data/eval_defense/Anomali/Safe_Walkway_Violation/0_te11.mp4",
+        "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr81.mp4"
+      ],
+      "ci_excludes_zero": true,
+      "ci_test_disagree": true
+    },
+    "risk_cal_anom": {
+      "n_pairs": 20,
+      "both": 0,
+      "only_a": 2,
+      "only_b": 1,
+      "neither": 17,
+      "b": 2,
+      "c": 1,
+      "rate_a": {
+        "k": 2,
+        "n": 20,
+        "p": 0.1,
+        "ci_low": 0.0279,
+        "ci_high": 0.301,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "rate_b": {
+        "k": 1,
+        "n": 20,
+        "p": 0.05,
+        "ci_low": 0.0089,
+        "ci_high": 0.2361,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "diff_b_minus_a": -0.05,
+      "diff_ci_low": -0.2583,
+      "diff_ci_high": 0.1547,
+      "diff_ci_method": "newcombe1998-method10 (paired wilson square-and-add, phi-corrected)",
+      "diff_ci_level": 0.95,
+      "phi": -0.0765,
+      "p_exact": 1.0,
+      "p_method": "mcnemar exact binom(n=b+c, p=0.5), iki-yonlu",
+      "chi2_cc": 0.0,
+      "p_chi2_cc": 1.0,
+      "alpha": 0.05,
+      "significant": false,
+      "direction": "A daha iyi",
+      "subset": "anomali",
+      "label": "Risk kalibrasyonu",
+      "definition": "risk seviyesi >= Yuksek (risk_ord>=3)",
+      "flipped_only_a": [
+        "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr176.mp4",
+        "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr81.mp4"
+      ],
+      "flipped_only_b": [
+        "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr15.mp4"
+      ],
+      "ci_excludes_zero": false,
+      "ci_test_disagree": false
+    },
+    "anom_dispatch": {
+      "n_pairs": 20,
+      "both": 0,
+      "only_a": 2,
+      "only_b": 1,
+      "neither": 17,
+      "b": 2,
+      "c": 1,
+      "rate_a": {
+        "k": 2,
+        "n": 20,
+        "p": 0.1,
+        "ci_low": 0.0279,
+        "ci_high": 0.301,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "rate_b": {
+        "k": 1,
+        "n": 20,
+        "p": 0.05,
+        "ci_low": 0.0089,
+        "ci_high": 0.2361,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "diff_b_minus_a": -0.05,
+      "diff_ci_low": -0.2583,
+      "diff_ci_high": 0.1547,
+      "diff_ci_method": "newcombe1998-method10 (paired wilson square-and-add, phi-corrected)",
+      "diff_ci_level": 0.95,
+      "phi": -0.0765,
+      "p_exact": 1.0,
+      "p_method": "mcnemar exact binom(n=b+c, p=0.5), iki-yonlu",
+      "chi2_cc": 0.0,
+      "p_chi2_cc": 1.0,
+      "alpha": 0.05,
+      "significant": false,
+      "direction": "A daha iyi",
+      "subset": "anomali",
+      "label": "Operasyonel tetik",
+      "definition": "anomalide >=1 arac/fonksiyon tetiklendi (dogru sevk)",
+      "flipped_only_a": [
+        "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr176.mp4",
+        "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr81.mp4"
+      ],
+      "flipped_only_b": [
+        "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr15.mp4"
+      ],
+      "ci_excludes_zero": false,
+      "ci_test_disagree": false
+    },
+    "normal_no_dispatch": {
+      "n_pairs": 20,
+      "both": 17,
+      "only_a": 2,
+      "only_b": 0,
+      "neither": 1,
+      "b": 2,
+      "c": 0,
+      "rate_a": {
+        "k": 19,
+        "n": 20,
+        "p": 0.95,
+        "ci_low": 0.7639,
+        "ci_high": 0.9911,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "rate_b": {
+        "k": 17,
+        "n": 20,
+        "p": 0.85,
+        "ci_low": 0.6396,
+        "ci_high": 0.9476,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "diff_b_minus_a": -0.1,
+      "diff_ci_low": -0.2911,
+      "diff_ci_high": 0.056,
+      "diff_ci_method": "newcombe1998-method10 (paired wilson square-and-add, phi-corrected)",
+      "diff_ci_level": 0.95,
+      "phi": 0.5461,
+      "p_exact": 0.5,
+      "p_method": "mcnemar exact binom(n=b+c, p=0.5), iki-yonlu",
+      "chi2_cc": 0.5,
+      "p_chi2_cc": 0.4795,
+      "alpha": 0.05,
+      "significant": false,
+      "direction": "A daha iyi",
+      "subset": "normal",
+      "label": "Sevk FP yok",
+      "definition": "normal klipte HIC arac/fonksiyon tetiklenmedi",
+      "flipped_only_a": [
+        "data/eval_defense/Normal/Safe_Carrying/7_tr15.mp4",
+        "data/eval_defense/Normal/Safe_Walkway/4_tr23.mp4"
+      ],
+      "flipped_only_b": [],
+      "ci_excludes_zero": false,
+      "ci_test_disagree": false
+    },
+    "normal_no_op_fp": {
+      "n_pairs": 20,
+      "both": 12,
+      "only_a": 3,
+      "only_b": 1,
+      "neither": 4,
+      "b": 3,
+      "c": 1,
+      "rate_a": {
+        "k": 15,
+        "n": 20,
+        "p": 0.75,
+        "ci_low": 0.5313,
+        "ci_high": 0.8881,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "rate_b": {
+        "k": 13,
+        "n": 20,
+        "p": 0.65,
+        "ci_low": 0.4329,
+        "ci_high": 0.8188,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "diff_b_minus_a": -0.1,
+      "diff_ci_low": -0.2832,
+      "diff_ci_high": 0.09,
+      "diff_ci_method": "newcombe1998-method10 (paired wilson square-and-add, phi-corrected)",
+      "diff_ci_level": 0.95,
+      "phi": 0.5447,
+      "p_exact": 0.625,
+      "p_method": "mcnemar exact binom(n=b+c, p=0.5), iki-yonlu",
+      "chi2_cc": 0.25,
+      "p_chi2_cc": 0.617075,
+      "alpha": 0.05,
+      "significant": false,
+      "direction": "A daha iyi",
+      "subset": "normal",
+      "label": "Operasyonel FP yok",
+      "definition": "normal klipte ne olay ne tetik var (n_events==0 ve tetik yok)",
+      "flipped_only_a": [
+        "data/eval_defense/Normal/Safe_Carrying/7_tr15.mp4",
+        "data/eval_defense/Normal/Safe_Carrying/7_tr2.mp4",
+        "data/eval_defense/Normal/Safe_Walkway/4_tr35.mp4"
+      ],
+      "flipped_only_b": [
+        "data/eval_defense/Normal/Closed_Panel_Cover/6_tr17.mp4"
+      ],
+      "ci_excludes_zero": false,
+      "ci_test_disagree": false
+    },
+    "normal_no_strict_fp": {
+      "n_pairs": 20,
+      "both": 17,
+      "only_a": 2,
+      "only_b": 0,
+      "neither": 1,
+      "b": 2,
+      "c": 0,
+      "rate_a": {
+        "k": 19,
+        "n": 20,
+        "p": 0.95,
+        "ci_low": 0.7639,
+        "ci_high": 0.9911,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "rate_b": {
+        "k": 17,
+        "n": 20,
+        "p": 0.85,
+        "ci_low": 0.6396,
+        "ci_high": 0.9476,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "diff_b_minus_a": -0.1,
+      "diff_ci_low": -0.2911,
+      "diff_ci_high": 0.056,
+      "diff_ci_method": "newcombe1998-method10 (paired wilson square-and-add, phi-corrected)",
+      "diff_ci_level": 0.95,
+      "phi": 0.5461,
+      "p_exact": 0.5,
+      "p_method": "mcnemar exact binom(n=b+c, p=0.5), iki-yonlu",
+      "chi2_cc": 0.5,
+      "p_chi2_cc": 0.4795,
+      "alpha": 0.05,
+      "significant": false,
+      "direction": "A daha iyi",
+      "subset": "normal",
+      "label": "Dar FP yok",
+      "definition": "normal klipte Yuksek/Kritik olay YOK ve risk < Yuksek",
+      "flipped_only_a": [
+        "data/eval_defense/Normal/Safe_Carrying/7_tr15.mp4",
+        "data/eval_defense/Normal/Safe_Walkway/4_tr23.mp4"
+      ],
+      "flipped_only_b": [],
+      "ci_excludes_zero": false,
+      "ci_test_disagree": false
+    },
+    "risk_cal_norm": {
+      "n_pairs": 20,
+      "both": 16,
+      "only_a": 1,
+      "only_b": 0,
+      "neither": 3,
+      "b": 1,
+      "c": 0,
+      "rate_a": {
+        "k": 17,
+        "n": 20,
+        "p": 0.85,
+        "ci_low": 0.6396,
+        "ci_high": 0.9476,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "rate_b": {
+        "k": 16,
+        "n": 20,
+        "p": 0.8,
+        "ci_low": 0.584,
+        "ci_high": 0.9193,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "diff_b_minus_a": -0.05,
+      "diff_ci_low": -0.1941,
+      "diff_ci_high": 0.0778,
+      "diff_ci_method": "newcombe1998-method10 (paired wilson square-and-add, phi-corrected)",
+      "diff_ci_level": 0.95,
+      "phi": 0.8402,
+      "p_exact": 1.0,
+      "p_method": "mcnemar exact binom(n=b+c, p=0.5), iki-yonlu",
+      "chi2_cc": 0.0,
+      "p_chi2_cc": 1.0,
+      "alpha": 0.05,
+      "significant": false,
+      "direction": "A daha iyi",
+      "subset": "normal",
+      "label": "Normal risk=Dusuk",
+      "definition": "normal klipte risk seviyesi <= Dusuk (risk_ord<=1)",
+      "flipped_only_a": [
+        "data/eval_defense/Normal/Safe_Carrying/7_tr15.mp4"
+      ],
+      "flipped_only_b": [],
+      "ci_excludes_zero": false,
+      "ci_test_disagree": false
+    }
+  },
+  "power": {
+    "recall": {
+      "observed": {
+        "b": 2,
+        "c": 8,
+        "n": 20,
+        "p_exact": 0.109375,
+        "significant": false
+      },
+      "p_disagree": 0.5,
+      "ratio_c_over_b": 4.0,
+      "power_at_n_obs": 0.3671,
+      "scaled": {
+        "b": 10,
+        "c": 40,
+        "n": 100,
+        "p_exact": 2.3861331676755526e-05,
+        "significant": true
+      },
+      "power_at_n_target": 0.9928,
+      "required_n_power80": 46,
+      "required_n_power80_analytic": 42,
+      "alpha": 0.05,
+      "note": "olceklenmis p, 'ayni oruntu n_target'te birebir tekrarlanirsa' senaryosudur; belirsizligi guc satirlari tasir"
+    },
+    "cat_match": {
+      "observed": {
+        "b": 0,
+        "c": 5,
+        "n": 20,
+        "p_exact": 0.0625,
+        "significant": false
+      },
+      "p_disagree": 0.25,
+      "ratio_c_over_b": "inf",
+      "power_at_n_obs": 0.3828,
+      "scaled": {
+        "b": 0,
+        "c": 25,
+        "n": 100,
+        "p_exact": 5.960464477539063e-08,
+        "significant": true
+      },
+      "power_at_n_target": 1.0,
+      "required_n_power80": 31,
+      "required_n_power80_analytic": 29,
+      "alpha": 0.05,
+      "note": "olceklenmis p, 'ayni oruntu n_target'te birebir tekrarlanirsa' senaryosudur; belirsizligi guc satirlari tasir"
+    },
+    "risk_cal_anom": {
+      "observed": {
+        "b": 2,
+        "c": 1,
+        "n": 20,
+        "p_exact": 1.0,
+        "significant": false
+      },
+      "p_disagree": 0.15,
+      "ratio_c_over_b": 0.5,
+      "power_at_n_obs": 0.0054,
+      "scaled": {
+        "b": 10,
+        "c": 5,
+        "n": 100,
+        "p_exact": 0.3017578125,
+        "significant": false
+      },
+      "power_at_n_target": 0.1783,
+      "required_n_power80": 498,
+      "required_n_power80_analytic": 469,
+      "alpha": 0.05,
+      "note": "olceklenmis p, 'ayni oruntu n_target'te birebir tekrarlanirsa' senaryosudur; belirsizligi guc satirlari tasir"
+    },
+    "anom_dispatch": {
+      "observed": {
+        "b": 2,
+        "c": 1,
+        "n": 20,
+        "p_exact": 1.0,
+        "significant": false
+      },
+      "p_disagree": 0.15,
+      "ratio_c_over_b": 0.5,
+      "power_at_n_obs": 0.0054,
+      "scaled": {
+        "b": 10,
+        "c": 5,
+        "n": 100,
+        "p_exact": 0.3017578125,
+        "significant": false
+      },
+      "power_at_n_target": 0.1783,
+      "required_n_power80": 498,
+      "required_n_power80_analytic": 469,
+      "alpha": 0.05,
+      "note": "olceklenmis p, 'ayni oruntu n_target'te birebir tekrarlanirsa' senaryosudur; belirsizligi guc satirlari tasir"
+    },
+    "normal_no_dispatch": {
+      "observed": {
+        "b": 2,
+        "c": 0,
+        "n": 20,
+        "p_exact": 0.5,
+        "significant": false
+      },
+      "p_disagree": 0.1,
+      "ratio_c_over_b": 0.0,
+      "power_at_n_obs": 0.0113,
+      "scaled": {
+        "b": 10,
+        "c": 0,
+        "n": 100,
+        "p_exact": 0.001953125,
+        "significant": true
+      },
+      "power_at_n_target": 0.9424,
+      "required_n_power80": 78,
+      "required_n_power80_analytic": 77,
+      "alpha": 0.05,
+      "note": "olceklenmis p, 'ayni oruntu n_target'te birebir tekrarlanirsa' senaryosudur; belirsizligi guc satirlari tasir"
+    },
+    "normal_no_op_fp": {
+      "observed": {
+        "b": 3,
+        "c": 1,
+        "n": 20,
+        "p_exact": 0.625,
+        "significant": false
+      },
+      "p_disagree": 0.2,
+      "ratio_c_over_b": 0.333,
+      "power_at_n_obs": 0.0318,
+      "scaled": {
+        "b": 15,
+        "c": 5,
+        "n": 100,
+        "p_exact": 0.04138946533203125,
+        "significant": true
+      },
+      "power_at_n_target": 0.5444,
+      "required_n_power80": 168,
+      "required_n_power80_analytic": 155,
+      "alpha": 0.05,
+      "note": "olceklenmis p, 'ayni oruntu n_target'te birebir tekrarlanirsa' senaryosudur; belirsizligi guc satirlari tasir"
+    },
+    "normal_no_strict_fp": {
+      "observed": {
+        "b": 2,
+        "c": 0,
+        "n": 20,
+        "p_exact": 0.5,
+        "significant": false
+      },
+      "p_disagree": 0.1,
+      "ratio_c_over_b": 0.0,
+      "power_at_n_obs": 0.0113,
+      "scaled": {
+        "b": 10,
+        "c": 0,
+        "n": 100,
+        "p_exact": 0.001953125,
+        "significant": true
+      },
+      "power_at_n_target": 0.9424,
+      "required_n_power80": 78,
+      "required_n_power80_analytic": 77,
+      "alpha": 0.05,
+      "note": "olceklenmis p, 'ayni oruntu n_target'te birebir tekrarlanirsa' senaryosudur; belirsizligi guc satirlari tasir"
+    },
+    "risk_cal_norm": {
+      "observed": {
+        "b": 1,
+        "c": 0,
+        "n": 20,
+        "p_exact": 1.0,
+        "significant": false
+      },
+      "p_disagree": 0.05,
+      "ratio_c_over_b": 0.0,
+      "power_at_n_obs": 0.0003,
+      "scaled": {
+        "b": 5,
+        "c": 0,
+        "n": 100,
+        "p_exact": 0.0625,
+        "significant": false
+      },
+      "power_at_n_target": 0.384,
+      "required_n_power80": 157,
+      "required_n_power80_analytic": 155,
+      "alpha": 0.05,
+      "note": "olceklenmis p, 'ayni oruntu n_target'te birebir tekrarlanirsa' senaryosudur; belirsizligi guc satirlari tasir"
+    }
+  },
+  "warnings": []
+}

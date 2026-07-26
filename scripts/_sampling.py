@@ -23,6 +23,7 @@ COZUM: sabit tohumlu (seed) rastgele orneklem.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import random
 import zlib
@@ -118,6 +119,70 @@ def sample_paths(
     return [p for _, p in sample_clips(items, n, label, smallest=False, seed=seed)]
 
 
+def pool_fingerprint(paths: Iterable[str]) -> str:
+    """Aday HAVUZUNUN icerige bagli kisa parmak izi: ``"<sayi>:<sha1_12>"``.
+
+    NEDEN GEREKLI: sabit tohumlu orneklem yalnizca HAVUZ AYNI KALDIGI SURECE ayni
+    secimi verir. Havuz diskteki dosyalardan kuruldugu icin (indirme surerken)
+    buyuyebilir -> ayni komut farkli secim verebilir. Parmak izi manifest'e
+    yazilirsa "ayni tohum + ayni havuz -> ayni secim" iddiasi SONRADAN
+    dogrulanabilir; havuz degistiyse bu da gorulur.
+
+    Yalnizca dosya ADLARI kullanilir (dizin yolu degil) -> kaynak dizin
+    tasinsa/yeniden adlandirilsa bile parmak izi ayni kalir.
+    """
+    names = sorted(os.path.basename(p) for p in paths)
+    digest = hashlib.sha1("\n".join(names).encode("utf-8")).hexdigest()
+    return f"{len(names)}:{digest[:12]}"
+
+
+def sample_paths_pinned(
+    paths: Iterable[str],
+    n: int,
+    label: str,
+    *,
+    pinned: Iterable[str] = (),
+    exclude: Iterable[str] = (),
+    seed: int | None = None,
+) -> list[str]:
+    """ZORUNLU uyeleri koruyarak deterministik orneklem (BUYUYEN setler icin).
+
+    Bir degerlendirme seti buyutuldugunde (or. 40 -> 200 klip) yeni set eski setin
+    UST KUMESI olmalidir; aksi halde eski olcum yeni setle KARSILASTIRILAMAZ.
+    ``random.sample`` bunu garanti etmez: ``sample(pool, 5)`` sonucu
+    ``sample(pool, 25)`` sonucunun onegi DEGILDIR (ustelik havuz da buyumus olur).
+    Cozum: eski secimi ``pinned`` ile SABITLE, kalan kotayi rastgele doldur.
+
+    Args:
+        paths: aday yollar.
+        n: hedef buyukluk. ``<=0`` -> ``exclude`` disindaki HER SEY (+ pinned).
+        label: tohum turetme etiketi (sinif/kategori adi).
+        pinned: her zaman sete girecek DOSYA ADLARI (basename). Kota assa bile
+            ATILMAZ -> ust kume ozelligi korunur.
+        exclude: rastgele doldurmada KULLANILMAYACAK dosya adlari (or. baska
+            degerlendirme setlerine sizmis klipler). ``pinned`` bunu EZER
+            (eski setin surekliligi, sizinti temizliginden once gelir; cagiran
+            taraf isterse sizintili adi ``pinned``'den kendisi cikarir).
+        seed: temel tohum (None -> EVAL_SEED / DEFAULT_SEED).
+
+    Returns:
+        Yola gore sirali secim listesi.
+    """
+    pool = sorted(set(paths))
+    pin = {os.path.basename(x) for x in pinned}
+    exc = {os.path.basename(x) for x in exclude}
+    must = [p for p in pool if os.path.basename(p) in pin]
+    must_set = set(must)
+    rest = [p for p in pool if p not in must_set and os.path.basename(p) not in exc]
+    if n <= 0:
+        return sorted(must + rest)
+    need = n - len(must)
+    if need <= 0:
+        # Sabitlenmis uyeler kotayi doldurdu/asti -> hicbirini atmiyoruz (ust kume korunur).
+        return sorted(must)
+    return sorted(must + sample_paths(rest, need, label, seed=seed))
+
+
 def add_sampling_args(ap: argparse.ArgumentParser) -> argparse.ArgumentParser:
     """Indirici betiklere ortak ``--smallest / --list / --seed`` bayraklarini ekler."""
     ap.add_argument(
@@ -201,7 +266,51 @@ def _selftest() -> int:
         outs.add(r.stdout.strip())
     check(f"label_seed PYTHONHASHSEED'den bagimsiz ({outs})", len(outs) == 1)
 
-    # 9) env_str bos degeri varsayilana cevirir
+    # --- sample_paths_pinned / pool_fingerprint (buyuyen set destegi) ---
+    paths = [p for _s, p in pool]
+
+    # 9) sabitlenen uyeler HER ZAMAN sette
+    pin = ["clip003.mp4", "clip017.mp4", "clip041.mp4"]
+    sel = sample_paths_pinned(paths, 10, "Kategori", pinned=pin, seed=2026)
+    check("pinned uyeler sette", all(any(os.path.basename(p) == b for p in sel) for b in pin)
+          and len(sel) == 10)
+
+    # 10) UST KUME ozelligi: kucuk secim, buyuk secimin ALT KUMESI olur
+    kucuk = sample_paths_pinned(paths[:20], 5, "Kategori", seed=2026)
+    buyuk = sample_paths_pinned(paths, 25, "Kategori",
+                                pinned=[os.path.basename(p) for p in kucuk], seed=2026)
+    check("pinned ile buyuk set kucugun UST KUMESI", set(kucuk).issubset(set(buyuk))
+          and len(buyuk) == 25)
+
+    # 11) ayni tohum + ayni havuz -> ayni secim (tekrar uretilebilirlik)
+    check("pinned secim tekrar uretilebilir",
+          sample_paths_pinned(paths, 25, "Kategori", pinned=pin, seed=2026)
+          == sample_paths_pinned(paths, 25, "Kategori", pinned=pin, seed=2026))
+
+    # 12) exclude edilenler rastgele doldurmaya GIRMEZ (pinned haric)
+    exc = [os.path.basename(p) for p in paths[:40]]
+    sel2 = sample_paths_pinned(paths, 8, "Kategori", exclude=exc, seed=2026)
+    check("exclude edilenler secilmez", all(os.path.basename(p) not in exc for p in sel2))
+    sel3 = sample_paths_pinned(paths, 8, "Kategori", pinned=["clip000.mp4"], exclude=exc, seed=2026)
+    check("pinned exclude'u ezer", any(os.path.basename(p) == "clip000.mp4" for p in sel3))
+
+    # 13) pinned kotadan fazlaysa hicbiri atilmaz (ust kume > kota)
+    check("pinned kotayi asarsa atilmaz",
+          len(sample_paths_pinned(paths, 2, "K", pinned=pin, seed=2026)) == len(pin))
+
+    # 14) n<=0 -> exclude disindaki her sey
+    check("n<=0 exclude disindaki hepsini verir",
+          len(sample_paths_pinned(paths, 0, "K", exclude=exc)) == len(paths) - len(exc))
+
+    # 15) pool_fingerprint: sira bagimsiz, icerige duyarli
+    fp1 = pool_fingerprint(paths)
+    paths_shuf = paths[:]
+    _r.Random(5).shuffle(paths_shuf)
+    check("pool_fingerprint sira bagimsiz", pool_fingerprint(paths_shuf) == fp1)
+    check("pool_fingerprint icerige duyarli", pool_fingerprint(paths[:-1]) != fp1)
+    check("pool_fingerprint sayi oneki dogru", fp1.startswith(f"{len(paths)}:"))
+
+    # 16) env_str bos degeri varsayilana cevirir
     os.environ["_TEST_EMPTY"] = ""
     check("env_str bos degeri varsayilana cevirir", env_str("_TEST_EMPTY", "vars") == "vars")
     os.environ["_TEST_EMPTY"] = "  "

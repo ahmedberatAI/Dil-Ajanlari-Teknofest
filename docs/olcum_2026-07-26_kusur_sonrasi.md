@@ -106,6 +106,76 @@ Bu, `facility_rules` ile birlikte risk-eşiği ayarının gerektiğini gösteriy
 
 ---
 
+---
+
+## 2.5 ⭐ n=200 KESİN A/B — `facility_rules` kazancı İSTATİSTİKSEL OLARAK KANITLANDI
+
+Mendeley setinin **tamamı indirildi** (691 klip / 9.4 GB) ve `eval_defense`
+**40 → 200 klibe** çıkarıldı: **100 anomali (class0-3) + 100 normal (class4-7)**,
+sınıf başına 25, tabakalı + deterministik (seed=2026), 200/200 benzersiz MD5.
+Eski 40-klip set hem `data/eval_defense_v1` olarak donduruldu hem de yeni setin
+**üst kümesi** (40/40 sabitlendi) → eski ölçüm karşılaştırılabilir kaldı.
+
+Sonuç dosyaları: `eval_20260726_162613.json` (kapalı) · `eval_20260726_171601.json` (açık)
+Test: `benchmark/paired_test.py` — McNemar **exact**, iki-yönlü; fark GA'sı Newcombe (1998) Method 10.
+
+### ANOMALİ klipler (eşleşen n=100)
+
+| Metrik | Kapalı | Açık | b | c | fark (GA) | p_exact | karar |
+|---|---|---|---|---|---|---|---|
+| **recall** | 20/100 | **47/100** | 8 | 35 | **+%27 [+%15, +%38]** | **4.19e-05** | ✅ **ANLAMLI** |
+| **kategori adlandırma** | 9/100 | **33/100** | 3 | 27 | **+%24 [+%14, +%34]** | **8.43e-06** | ✅ **ANLAMLI** |
+| risk kalibrasyonu | 5/100 | 10/100 | 4 | 9 | +%5 [-%2, +%13] | 0.267 | — |
+| doğru sevk | 5/100 | 10/100 | 4 | 9 | +%5 [-%2, +%13] | 0.267 | — |
+
+### NORMAL klipler (eşleşen n=100) — maliyet tarafı
+
+| Metrik | Kapalı | Açık | fark (GA) | p_exact | karar |
+|---|---|---|---|---|---|
+| yanlış operasyonel tetik YOK | 96/100 | 92/100 | -%4 [-%10, +%0] | 0.125 | — (kapı tuttu) |
+| dar-FP YOK | 96/100 | 92/100 | -%4 [-%10, +%0] | 0.125 | — |
+| **operasyonel-FP YOK** | 83/100 | **65/100** | **-%18 [-%28, -%8]** | **0.0014** | ⚠️ **ANLAMLI (kötü)** |
+| normal risk=Düşük | 90/100 | 84/100 | -%6 [-%14, +%2] | 0.210 | — |
+
+### Yorum — üç net sonuç
+
+**1. HİPOTEZ DOĞRULANDI (asıl kazanım).** n=20'de yön tutarlı ama anlamsız olan örüntü
+(8-2, p=0.109), n=100'de **35-8**'e çıktı ve **p=4.19e-05**'e ulaştı. Kategori adlandırma
+için **27-3, p=8.43e-06**. Yani:
+
+> *`facility_rules` kural enjeksiyonu, hedef-domain politika ihlallerinde recall'ı
+> %20'den %47'ye (+%27, GA [+%15, +%38]) ve doğru olay adlandırmayı %9'dan %33'e
+> (+%24, GA [+%14, +%34]) çıkarır. Her iki kazanç da p<0.0001 düzeyinde anlamlıdır.*
+
+Bu, projenin mimari tercihinin (saf model yerine model + tesise-özgü kural katmanı)
+**ölçülmüş kanıtıdır** — artık n=1 sanity testi değil.
+
+**2. HİPOTEZ ÇÜRÜTÜLDÜ (dürüst negatif sonuç).** Kural metnine bilinçli olarak
+*"bu ihlaller iş kazası riski taşıdığı için en az YÜKSEK önem derecesi verilmelidir"*
+cümlesi eklendi. Buna rağmen risk kalibrasyonu %5 → %10 (p=0.267, **anlamsız**).
+**Sonuç: prompt'a severity talimatı yazmak riski yükseltmiyor.** Model ihlali görüyor,
+"olay" olarak yazıyor, ama ciddiyet derecesini yükseltmiyor. Risk yükseltme
+prompt katmanında değil, **kod tarafında** (severity kalibrasyonu / risk tabanı)
+çözülmesi gereken bir iş olarak kalıyor.
+
+**3. MALİYET ÖLÇÜLDÜ ve sınırı belli.** Operasyonel-FP anlamlı biçimde kötüleşti
+(%83 → %65 "temiz", p=0.0014): kural açıkken normal kliplerde de daha çok "olay"
+işaretleniyor. **AMA kritik olan şu:** dar-FP ve yanlış *operasyonel tetik*
+istatistiksel olarak **bozulmadı** (96→92, p=0.125). Yani şiddet kapısı görevini
+yapmaya devam ediyor — kural enjeksiyonu operatöre daha fazla *gürültü* getiriyor,
+sahte *ekip sevkiyatı* getirmiyor. Dağıtımda kabul edilebilir bir takas.
+
+### Güç kazancı (n=20 → n=200)
+| | n=20 | n=200 |
+|---|---|---|
+| recall GA genişliği | %40 puan | **%16 puan** |
+| recall p | 0.109 (anlamsız) | **4.19e-05** |
+| kategori p | 0.063 (anlamsız) | **8.43e-06** |
+
+Denetimde tespit edilen "istatistiksel güç yok" kusuru bu ölçümle **fiilen giderildi**.
+
+---
+
 ## 3. Bu ölçümlerden çıkan net konumlandırma
 
 **Sistem güçlü:** görsel olarak belirgin olaylarda (yangın, düşme, kaza) —
@@ -115,6 +185,19 @@ gerçek videoda **%96 tespit / %96 kategori**, sıfır yanlış operasyonel teti
 kuralla %55. Bu alanda **otonom alarm olarak kullanılmamalıdır**;
 operatör-destek ve kayıt-triyajı olarak kullanılmalıdır.
 
-**Sonraki adım (ölçülü):** Mendeley setindeki kalan 651 klibi indirip
-`eval_defense`'i ~200 klibe çıkarmak. n=200'de McNemar gücü, gözlenen
-8-2 örüntüsünü p<0.05'e taşımaya yeter; bugün taşımıyor.
+**✅ YAPILDI:** Mendeley setinin tamamı (691 klip / 9.4 GB) indirildi ve `eval_defense`
+200 klibe çıkarıldı; A/B n=100 anomali ile yeniden koşuldu. Sonuç: kural enjeksiyonu
+kazancı **p<0.0001** düzeyinde kanıtlandı (bkz. §2.5). Beklenti doğrulandı.
+
+**Sonraki adımlar (kalan iş):**
+1. **Risk yükseltme kod tarafında çözülmeli** — §2.5'te kanıtlandı ki prompt'a
+   "en az Yüksek önem ver" yazmak çalışmıyor (p=0.267). Politika-ihlali kategorileri
+   için `_calibrate_severity` / risk-tabanı katmanına deterministik bir yükseltme
+   gerekiyor (tesis kuralı eşleşmesi → severity tabanı).
+2. **Operasyonel-FP'yi düşürmek** — kural açıkken %35'e çıkıyor (p=0.0014). Dar-FP ve
+   dispatch bozulmadığı için acil değil, ama operatör gürültüsü olarak iyileştirilmeli.
+3. Gece/IR/termal kapsam hâlâ **sıfır**.
+4. `data/industrial` içinde kaynak-kaynaklı **26 mükerrer grup** var (aynı video
+   `class0` ve `class1` altında; 691 dosya = 658 benzersiz içerik). eval_defense
+   seçimine sızmadı (200/200 benzersiz MD5) ama kaynak veri setinin bilinen bir
+   etiket belirsizliği olarak belgelenmiştir.
