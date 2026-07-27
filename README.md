@@ -102,6 +102,21 @@ python benchmark/evaluate.py
 python scripts/make_test_video.py
 ```
 
+### Takım üyeleri — modeli kendi makinenizde çalıştıramıyorsanız
+GPU'suz / WSL'siz makinelerden **kaptanın makinesindeki modele ağ üzerinden** bağlanabilirsiniz
+(kod değişikliği gerekmez; dış API/bulut kullanılmadığı için **"tamamen yerel"** kuralına uyar):
+
+```bash
+# Kaptan (WSL, GPU'lu makine)
+DILAJAN_VLLM_HOST=0.0.0.0 python serve_vllm.py
+
+# Üye (GPU gerekmez)
+DILAJAN_VLLM_HOST=192.168.1.102 python app.py
+```
+> WSL2 varsayılan olarak NAT ağı kullanır → LAN'dan erişim için kaptanın makinesinde ek bir
+> ağ adımı gerekir. Adım adım kurulum, GPU'suz katkı listesi ve hata çözümleri →
+> [**`docs/takim_kurulum.md`**](docs/takim_kurulum.md)
+
 ## Çıktı Formatı
 
 ```json
@@ -283,6 +298,7 @@ requirements-lock.txt   tam sürüm kilidi (pip freeze)
   **Güncel varsayılan: Qwen3-VL-8B-FP8 + öz-doğrulama + mekânsal grounding** (7B precision-yedek/ablation).
 
 ## Dokümanlar & Teslimatlar
+- **Takım kurulum & çalışma rehberi (GPU'suz üyeler için)** → [`docs/takim_kurulum.md`](docs/takim_kurulum.md)
 - Mimari → [`docs/architecture.md`](docs/architecture.md)
 - **Ölçüm dürüstlüğü: kanonik değerler + ölçüm sınırlarımız** → [`docs/olcum_durustlugu.md`](docs/olcum_durustlugu.md)
 - Veri envanteri, lisanslar, bilinen veri kusurları → [`docs/veri_kaynaklari.md`](docs/veri_kaynaklari.md)

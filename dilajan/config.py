@@ -11,7 +11,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Dict, Iterator
 
-from pydantic import model_validator
+from pydantic import Field, model_validator
+from pydantic.aliases import AliasChoices
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -164,9 +165,32 @@ class Settings(BaseSettings):
     fast_mode: bool = False
     single_pass_perceive: bool = False  # algida TEK VLM cagrisi (describe+extract birlesik)
 
+    # --- MOCK (modelsiz) mod — GPU/vLLM OLMADAN pipeline + arayuz ---
+    # VARSAYILAN KAPALI. Acikken `VLMClient` HICBIR AG CAGRISI YAPMAZ; yerine prompt turunu
+    # taniyip DETERMINISTIK sahte yanit uretir (bkz. dilajan/llm_client.py "MOCK MOTORU").
+    # AMAC: GPU'su/WSL'i olmayan takim uyeleri arayuzu ve LangGraph akisini uctan uca gorebilsin.
+    # DURUSTLUK: uretilen ozet "[MOCK]" ile damgalanir ve ilk kullanimda stderr'e buyuk uyari basilir;
+    #            bu ciktilar OLCUM/BENCHMARK icin KULLANILAMAZ (bkz. llm_client.MOCK_TAG).
+    # Env: DILAJAN_MOCK=1  (geriye-uyum icin DILAJAN_MOCK_MODE=1 de kabul edilir)
+    mock_mode: bool = Field(
+        default=False,
+        validation_alias=AliasChoices("DILAJAN_MOCK", "DILAJAN_MOCK_MODE"),
+        description="Modelsiz (sahte, deterministik) yanit modu — yalniz demo/gelistirme icin",
+    )
+
     @model_validator(mode="after")
     def _apply_fast_profile(self):
-        """fast_mode acikken dusuk-gecikme profilini uygular (acik daha-dusuk override'lar korunur)."""
+        """fast_mode acikken dusuk-gecikme profilini uygular (acik daha-dusuk override'lar korunur).
+
+        Ayrica mock_mode acikken CUDA gerektiren TEK varsayilan-ACIK dedektor yolu kapatilir:
+        `verify_pose_falls` YOLO-poz modelini `device="cuda"` ile cagirir (dilajan/detector.py).
+        Mock modun hedef kitlesi GPU'su OLMAYAN makinelerdir; orada bu cagri fail-open ile
+        ABSTAIN dondurur ama her segmentte gereksiz ultralytics yuklemesi/gecikmesi olusur.
+        Diger dedektor bayraklari (use_detector / semantic_plausibility / detect_* ) ZATEN
+        varsayilan KAPALI oldugu icin dokunulmaz — operator acikca acarsa fail-open calisir.
+        """
+        if self.mock_mode:
+            self.verify_pose_falls = False
         if self.fast_mode:
             self.single_pass_perceive = True
             self.verify_events = False
