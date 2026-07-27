@@ -1,0 +1,2690 @@
+{
+ "_aciklama": "DilAjanlari turev degerlendirme setleri manifesti. Her klip DOSYA duzeyinde kaynagina ve lisansina baglanir. 'dagitim' alani: evet = HF deposuna girer; kosullu = lisans celiskisi cozulunce girer; hayir = ASLA girmez, yerelde kurucu betikle uretilir.",
+ "surum": 1,
+ "uretim_zamani_utc": "2026-07-27T11:00:04+00:00",
+ "uretici": "scripts/hf_dataset_pull.py --make-manifest",
+ "md5_var": true,
+ "hf_repo_yer_tutucu": "<HF_KULLANICI>/dilajanlari-eval",
+ "yarisma_notu": "HF bu projede YALNIZCA veri/agirlik INDIRMEK icin kullanilir. HF Inference API / Endpoints / Spaces ile MODEL CALISTIRMAK yarisma kurallarinca YASAKTIR ve kullanilmamaktadir; cikarim %100 yerel vLLM sunucusunda kosar.",
+ "lisans_fail_closed": "Kaynagi cozulemeyen dosya 'BILINMIYOR' isaretlenir ve dagitilamaz sayilir.",
+ "kaynaklar": {
+  "FIRESENSE": {
+   "lisans": "CC BY 4.0",
+   "dagitim": "evet",
+   "link": "https://zenodo.org/records/836749",
+   "atif": "FIRESENSE database of videos for flame and smoke detection (Zenodo 836749)",
+   "betik": "python scripts/get_firesense.py",
+   "not": "CC BY 4.0 -> atifla yeniden dagitilabilir."
+  },
+  "GMDCSA-24": {
+   "lisans": "CC BY 4.0",
+   "dagitim": "evet",
+   "link": "https://github.com/ekramalam/GMDCSA24-A-Dataset-for-Human-Fall-Detection-in-Videos",
+   "atif": "GMDCSA-24: A Dataset for Human Fall Detection in Videos",
+   "betik": "python scripts/get_gmdcsa.py",
+   "not": "CC BY 4.0 -> atifla yeniden dagitilabilir."
+  },
+  "Eskisehir": {
+   "lisans": "CELISKILI: Mendeley API = CC BY 4.0, Data in Brief makalesi = CC BY-NC",
+   "dagitim": "kosullu",
+   "link": "https://data.mendeley.com/datasets/xjmtb22pff/1",
+   "atif": "Eskisehir uretim tesisi guvenli/guvensiz davranis seti (DOI 10.17632/xjmtb22pff.1)",
+   "betik": "python scripts/get_industrial.py  &&  python scripts/build_defense_eval.py",
+   "not": "MUHAFAZAKAR okuma benimsendi (data/eval_defense/MANIFEST.json ile ayni): CC BY-NC 4.0 -> TICARI KULLANIM YOK, atif ZORUNLU. Yeniden dagitim ancak celiski makale metninden teyit edildikten ve depo karti NC sartini acikca yazdiktan sonra yapilmalidir."
+  },
+  "URFD": {
+   "lisans": "Akademik/arastirma izni (CC DEGIL)",
+   "dagitim": "hayir",
+   "link": "http://fenix.ur.edu.pl/~mkepski/ds/uf.html",
+   "atif": "UR Fall Detection Dataset (Kepski & Kwolek)",
+   "betik": "python scripts/get_urfd_overhead.py",
+   "not": "Yeniden dagitim izni yok -> HF deposuna KONULMAZ, betikle yerelde kurulur."
+  },
+  "UCF-Crime": {
+   "lisans": "Akademik/arastirma (CC DEGIL)",
+   "dagitim": "hayir",
+   "link": "https://www.crcv.ucf.edu/projects/real-world/",
+   "atif": "UCF-Crime (Sultani et al., CVPR 2018)",
+   "betik": "python scripts/get_ucf_many.py",
+   "not": "Yeniden dagitim izni yok -> HF deposuna ASLA KONULMAZ. Ayrica kliplerimiz ucuncu-taraf bir HF aynasindan cekiliyor; bu bilinen bir kirilganliktir (bkz. docs/veri_kaynaklari.md)."
+  },
+  "Simuletic": {
+   "lisans": "CC BY 4.0",
+   "dagitim": "evet",
+   "link": "https://huggingface.co/datasets/Simuletic/CCTV_Incident_Dataset_Fall_Lying_Down_Detection",
+   "atif": "Simuletic CCTV Incident Dataset",
+   "betik": "python scripts/get_lying.py",
+   "not": "Lisans acik ama klipler DONMUS tek kare -> karantinada, olcume girmez, dagitilmaz."
+  },
+  "DilAjanlari": {
+   "lisans": "Apache-2.0 (bu projenin kendi uretimi)",
+   "dagitim": "evet",
+   "link": "https://github.com/ahmedberatAI/Dil-Ajanlari-Teknofest",
+   "atif": "DilAjanlari / TEKNOFEST TYDA",
+   "betik": null,
+   "not": "Bozuk/bos/siyah dayaniklilik klipleri — bizim urettigimiz, serbest."
+  },
+  "BILINMIYOR": {
+   "lisans": "cozulemedi",
+   "dagitim": "hayir",
+   "link": null,
+   "atif": null,
+   "betik": null,
+   "not": "Kaynagi cozulemeyen dosya FAIL-CLOSED ile dagitilamaz sayilir."
+  }
+ },
+ "setler": {
+  "eval_defense": {
+   "aciklama": "Hedef-domain (Eskisehir uretim tesisi) tabakali set, 1080p, 100 anomali + 100 normal.",
+   "kurucu_betikler": [
+    "python scripts/get_industrial.py",
+    "python scripts/build_defense_eval.py"
+   ],
+   "dosya_listesi_var": true,
+   "klip": 200,
+   "bayt": 2565436331,
+   "kaynak_dagilimi": {
+    "Eskisehir": 200
+   },
+   "dagitilabilir_klip": 0,
+   "kosullu_klip": 200,
+   "kapali_klip": 0,
+   "dosyalar": [
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te1.mp4",
+     "bayt": 24506317,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "5a5cd87d340a714b7141f5ff34b42853"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te2.mp4",
+     "bayt": 27570762,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "88b5d00ea1e6529bb64bec2cfbcbe6a5"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te3.mp4",
+     "bayt": 17262081,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "98435c6a2ca4f668c5d8289b82ecdab1"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te7.mp4",
+     "bayt": 9916088,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d72dfcd8d11a22c0d6d24ca803ebe360"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr10.mp4",
+     "bayt": 25800607,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "33b8edc5ba8fff16f4bc95aa3fcf7df3"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr11.mp4",
+     "bayt": 24318209,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "a3afdbb4b68bdcb3f28b708a72b2587e"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr15.mp4",
+     "bayt": 26564293,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "3c72d30fd6033b0942052d6ce369af7c"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr16.mp4",
+     "bayt": 25386847,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "50e089f722f153b5db310379b94cbe68"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr24.mp4",
+     "bayt": 13357999,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "8f21f42f0c811902531a83531597f160"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr25.mp4",
+     "bayt": 13907825,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "060062299ec2e6f0a578de7c67313811"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr27.mp4",
+     "bayt": 11533656,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "f90b510c164b39c85923caef35e1372c"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr28.mp4",
+     "bayt": 12317493,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "38a53316f834d53834d8d136e0db5ba6"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr30.mp4",
+     "bayt": 11884419,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "47214cd2df174273371a22d4037e8f3b"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr31.mp4",
+     "bayt": 11558291,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "ea2b886873803725f72bcf8f7b9e0fe0"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr33.mp4",
+     "bayt": 12235915,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "107ca3e729a90462ce3f36b232d42771"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr36.mp4",
+     "bayt": 9683731,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "dbb1d09c76068207312c862c7fbfa511"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr37.mp4",
+     "bayt": 9624823,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "b077bf735129cc30b38c74446af8b0de"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr38.mp4",
+     "bayt": 9570296,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "f374b2c7b40299215e04e03a512fd6bd"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr41.mp4",
+     "bayt": 9409286,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "3aa2770d36f1745051b6e540f2f97025"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr42.mp4",
+     "bayt": 10275035,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "9d18cef77cc5f05534ae6dab5d0f73d4"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr43.mp4",
+     "bayt": 8198792,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "39a10158c26a5b4a3e20fd6ad48779ca"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr45.mp4",
+     "bayt": 7182718,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "5189b670108b337213e5541ace0ff911"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr47.mp4",
+     "bayt": 7482995,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "964aca15e907a961f86900feb24690e7"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr5.mp4",
+     "bayt": 28108117,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c1b9f8ba790cad2da2e4e4eafaf5ec13"
+    },
+    {
+     "yol": "eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr9.mp4",
+     "bayt": 25046888,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "1509a5538f9fe7694c7b17157078f2f0"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_te12.mp4",
+     "bayt": 3276638,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "8ead0382552dee029bc2dad9da4dbb9c"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_te13.mp4",
+     "bayt": 6182901,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "55368d10330be149901db724b6bf76f9"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_te6.mp4",
+     "bayt": 12755832,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d759f18e74d2ad41f162250aa9a1f9a2"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr101.mp4",
+     "bayt": 12355821,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d7fb68adb8738ac633e3b2bcdc6d3463"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr104.mp4",
+     "bayt": 13396844,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "b6109b1d6165c251fc4d3e7f7285e0eb"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr112.mp4",
+     "bayt": 13627647,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "602baf17a337dc755fe275aa7750c4f6"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr118.mp4",
+     "bayt": 15400230,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "329934596d18a76f763505eee43e5ef0"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr119.mp4",
+     "bayt": 16489281,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "0efe6f32229fe28dd47bd6ca1e4758de"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr12.mp4",
+     "bayt": 8137269,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d8514ed7118aa4b37343e46fd8c94116"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr126.mp4",
+     "bayt": 21709417,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "0d902336d7bf5c8d5a5cf8a4d89ffcce"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr128.mp4",
+     "bayt": 5042547,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "343e292b1bf7114bc3caf9b7220c5223"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr16.mp4",
+     "bayt": 7924701,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "6c24032308403ec29f2cc30dc3d95042"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr17.mp4",
+     "bayt": 7228742,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "9d71a718bf43990f59c511d5b453e9b0"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr18.mp4",
+     "bayt": 6925560,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "de2068af05c7fe6d8be755b61d2d9b3a"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr19.mp4",
+     "bayt": 8150306,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "7cc1c90e7bd92d9424eeb3959ed0b284"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr35.mp4",
+     "bayt": 10086156,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "682d8d66fa4530bacda3dfd36e462bb0"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr40.mp4",
+     "bayt": 8744623,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "fbfc4ad9c1c6925670c81413eb73a14a"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr52.mp4",
+     "bayt": 8834907,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "8ef3f437ab5ec0ed338a983f9d8c17b7"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr53.mp4",
+     "bayt": 10376987,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "8e8bc52a2da7e94606e6a7059f22e0db"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr54.mp4",
+     "bayt": 8475749,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "a226c9b19f779f607ee1e1426d873be9"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr58.mp4",
+     "bayt": 9024999,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "824231050e697a65b4650ea16d870371"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr62.mp4",
+     "bayt": 9073661,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "b37331ee879910bce4fddcbee9bda94b"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr63.mp4",
+     "bayt": 9641928,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "23b5b9ee8b52b2b22cea66cea1a55f78"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr66.mp4",
+     "bayt": 10269008,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "49089c085a9ec5a5e8619fcdddda97e2"
+    },
+    {
+     "yol": "eval_defense/Anomali/Opened_Panel_Cover/2_tr72.mp4",
+     "bayt": 11490126,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "5715beada34022c62eba777a0f9d8fe9"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_te11.mp4",
+     "bayt": 13004617,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "41c84b6d2dae28c70f26803ce2a3a865"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_te22.mp4",
+     "bayt": 8233347,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "b597c1e257d15b93e014c7326ab9d7a0"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_te31.mp4",
+     "bayt": 26846612,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "a5f596d37816f8058f563f8231523bf2"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr100.mp4",
+     "bayt": 14633315,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d958e5c3acb62c6c726bad1ff8141c83"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr104.mp4",
+     "bayt": 14521835,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "bde7da21db7133bffc5993dc224e7bc9"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr108.mp4",
+     "bayt": 18407437,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "9003eeb5a048d8b531309e4f82544bf8"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr11.mp4",
+     "bayt": 29149989,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "5a2bb33426f6f2b175da978062147191"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr110.mp4",
+     "bayt": 17099392,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "e4ea0bb5ac36ee2278325e1bc81dc570"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr113.mp4",
+     "bayt": 16583180,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "09dbe1a45daf3ed4b995f9e79038e8b9"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr123.mp4",
+     "bayt": 5719678,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "2174c424c99b225e48571615f4e11b42"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr128.mp4",
+     "bayt": 3021735,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "4f03223fc9d83b8e14ed4a6e0d88490b"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr13.mp4",
+     "bayt": 29023562,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "2b9f49cda349af1a532478fc93c34f6b"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr135.mp4",
+     "bayt": 6804066,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "051412f9a264f14d721f6489e02ee692"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr149.mp4",
+     "bayt": 20055600,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "86f14ea064e65d91f59dee210f1a301e"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr171.mp4",
+     "bayt": 24093596,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "a434dfe3f4d9f1b95dbbdea77392aade"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr176.mp4",
+     "bayt": 25439169,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "1b3720478c7e09671f758acd9ab44911"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr177.mp4",
+     "bayt": 25940920,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "6a282eb6a5f8f4245904cea883066809"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr178.mp4",
+     "bayt": 25939407,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "7a1bca0c2166e5998e3f73945ff921ed"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr40.mp4",
+     "bayt": 8862541,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "e4d2c095c093907e6a9f153b757cb41b"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr44.mp4",
+     "bayt": 8109917,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "46eeced226e0dd0a3200739e80ac29cd"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr59.mp4",
+     "bayt": 13403197,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "b68715ae501b9007b39e3ddf1dd02c1f"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr72.mp4",
+     "bayt": 13971419,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "92314d5eed8db6f382e1b42dc7b972d3"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr79.mp4",
+     "bayt": 14290098,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "627c78fb0048ecaa5460cde0ae45ecbb"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr84.mp4",
+     "bayt": 13830695,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "295d752ac479d065270de160f7cae53d"
+    },
+    {
+     "yol": "eval_defense/Anomali/Safe_Walkway_Violation/0_tr95.mp4",
+     "bayt": 15475362,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "760403f109dea2f6fc9c0cb5f2ecf2e4"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_te10.mp4",
+     "bayt": 19883612,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "17edffdba46e183c6a40380b16c0c5ee"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_te3.mp4",
+     "bayt": 27365437,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "494ee8fc25b1ba5513af953f7986ebf7"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_te4.mp4",
+     "bayt": 24710832,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "52a263a9d5a2c9e52173aa0819098a48"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_te5.mp4",
+     "bayt": 24657510,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "5a168249c1dd54d3622e2d5e55620d48"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr18.mp4",
+     "bayt": 13315428,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "92f806fc6bb04caa1e570527b0f7b4a4"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr2.mp4",
+     "bayt": 14439019,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "5304dbbf58720346a760ca3b91097415"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr22.mp4",
+     "bayt": 32559183,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "ed8b8d66e59bbdfb38bf0cfec04a569a"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr25.mp4",
+     "bayt": 32867051,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "589aea627d60177c57b71effd76509db"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr28.mp4",
+     "bayt": 27872413,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d800d588975556510d2bd0f36d006820"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr33.mp4",
+     "bayt": 24740662,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c322cfee889922087e972dd548345aac"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr35.mp4",
+     "bayt": 24501858,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "0f2f62a8af5393e2e1e2efbdab3326cf"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr38.mp4",
+     "bayt": 22522963,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "b0576e9c1f83ecaa12b85ab5c08859c2"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr42.mp4",
+     "bayt": 19694740,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "6f4fc4d7221e10b523a9627149b0be2a"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr50.mp4",
+     "bayt": 22538662,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "bdfc850bd51dc22107afeb07faa45726"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr61.mp4",
+     "bayt": 3116192,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "838e170f78f8642e322ab4a1723f1eea"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr62.mp4",
+     "bayt": 4686165,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c0d57a61f77b0c8ba1801604043a50d8"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr63.mp4",
+     "bayt": 5637493,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "0a1fdbb87fb6618c9f67d3b4906485bb"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr67.mp4",
+     "bayt": 5477884,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "3eb31e22649133b52447f7a7c7932968"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr7.mp4",
+     "bayt": 13380512,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "002e429f8db41e1333f70c4dda4bd4da"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr76.mp4",
+     "bayt": 15891541,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "1b38ead7f591cdcc0c0d5d8984bc4832"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr77.mp4",
+     "bayt": 15884090,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "bc812ed127cc3345d5a1a10fc5401900"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr81.mp4",
+     "bayt": 15061228,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "86ee6edfa357571f3fd8d08e20866339"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr84.mp4",
+     "bayt": 12932694,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "7d44a6cced9045b3ff09624e5ccf1792"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr87.mp4",
+     "bayt": 14106558,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "6336a4e91268e58a7b02799cae8a01da"
+    },
+    {
+     "yol": "eval_defense/Anomali/Unauthorized_Intervention/1_tr88.mp4",
+     "bayt": 14645366,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "4e352601eaa6ae3048303ac37d9fea92"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te1.mp4",
+     "bayt": 12384656,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "0ed4cfc7dbde4dff8cb8468c0b4ba180"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te11.mp4",
+     "bayt": 10117769,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "5ea081644d15701434d724651e7f0499"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te12.mp4",
+     "bayt": 5446207,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "6e13e553e14b2bfdc646a9e58587db98"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te13.mp4",
+     "bayt": 5432185,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "bb9a0242117d9b4353967b7d50b777a8"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te14.mp4",
+     "bayt": 5488449,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "eca5adfcf5d22744d1fe8b67278e04d3"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te15.mp4",
+     "bayt": 27617294,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "2c82c4176e74a1a5bb7dda1b1a7480e1"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te2.mp4",
+     "bayt": 14124725,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "6f83b02e6a1b4e873a2d3298f0754873"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te5.mp4",
+     "bayt": 27209586,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "7ac76ebab0da37e57c136027afc0d3aa"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te6.mp4",
+     "bayt": 28009658,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "659b6adb67b75da00b455f802806d9f8"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te7.mp4",
+     "bayt": 14746031,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "60d4360a7ed1e278066ce16a17acf513"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_te8.mp4",
+     "bayt": 16355357,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "f65bc6b111cdacb13ec1a2b98f3afa77"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr10.mp4",
+     "bayt": 15587294,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "0d52293345d5badf4773072b0c98874a"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr11.mp4",
+     "bayt": 7514418,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "a2bbb1072a4a9b646c905854b4dc520d"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr12.mp4",
+     "bayt": 8803262,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "bfbaed3e3c9bc4b605a82155d0d2242e"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr13.mp4",
+     "bayt": 10213477,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "1a54da26d09331548a3169af8d7a8106"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr15.mp4",
+     "bayt": 21406354,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "ba2b7e807d35a89dce0a2fd48d4c53fe"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr16.mp4",
+     "bayt": 16771978,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d8dcfb25a54d34427cc51aa4b7a1eb38"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr19.mp4",
+     "bayt": 4946801,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "57e671d54901ec4f0c70e51480c83e4b"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr20.mp4",
+     "bayt": 6628508,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c5f6f924ebdad165d81706422cb8aa08"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr22.mp4",
+     "bayt": 27291642,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "91ed58b32a723476408f236ace6d55da"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr3.mp4",
+     "bayt": 14554615,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "67a22fb9c429139f0ea0af3d3a522e65"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr4.mp4",
+     "bayt": 15160379,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "458750ef5c8fbe5da69186fd95364e35"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr5.mp4",
+     "bayt": 24343337,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "bfd3656c111d3fe598958c97fedb7ca0"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr6.mp4",
+     "bayt": 24473765,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "af6a82e85f040d5234cf9206e8199ff6"
+    },
+    {
+     "yol": "eval_defense/Normal/Authorized_Intervention/5_tr8.mp4",
+     "bayt": 16259160,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "2327f3abed467777ba06624d53ff230f"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te10.mp4",
+     "bayt": 3308650,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "46ca10950b4afd2953d2b571d3a8bd90"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te11.mp4",
+     "bayt": 5908475,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "57a5232d731330f8dbb29b3724e1446d"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te12.mp4",
+     "bayt": 2979560,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "15d57923db934727f7e78044438a23a7"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te13.mp4",
+     "bayt": 10689888,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "760de03f777f0da104f6741ab378acf9"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te2.mp4",
+     "bayt": 14782527,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "8f8a8da4766454157ae62db1c078bf47"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te3.mp4",
+     "bayt": 6655865,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "9521524027481860fafd1fda6170abb4"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te4.mp4",
+     "bayt": 6358610,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "aef2bc4c4f781f481a2554bfc98221ae"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te5.mp4",
+     "bayt": 7069743,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "72aa728f865a1a3d15c525d6a9b786fd"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te6.mp4",
+     "bayt": 7243751,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "63a5525b6115a996480e12e05971cde6"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te7.mp4",
+     "bayt": 4758636,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "036819fc638cd65f15db3436c986b88b"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te8.mp4",
+     "bayt": 8890505,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "1853fe330905752f9f52d587e3954e96"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_te9.mp4",
+     "bayt": 8433507,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "f28c2602c6c63e266081373a56281c3d"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr1.mp4",
+     "bayt": 16011336,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "a1aa92de151bc6f8989228d8bd77a504"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr11.mp4",
+     "bayt": 6901494,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "e2aa38ea925048eaae9aca66f1a5eda4"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr12.mp4",
+     "bayt": 8639069,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "eb6e1e8f510b342f8472b5c8c8e6494e"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr14.mp4",
+     "bayt": 4208404,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "87003272b86cb297573344aeef7a2af5"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr16.mp4",
+     "bayt": 5180128,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "501df2ef6f891060ac6c0a2b683f9d51"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr17.mp4",
+     "bayt": 5921280,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "44531482e3f65d9672e8c42503e405bb"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr18.mp4",
+     "bayt": 13329703,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d8fafbae8bf4d4fbe670303f56b49c05"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr19.mp4",
+     "bayt": 13377791,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "73b43ba706a2307775522a6ea4f443a1"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr4.mp4",
+     "bayt": 8299651,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "4ce9995d772ccb1a48db3b8891f46f10"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr5.mp4",
+     "bayt": 7895219,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "578d44c40d269ddb19bb2c2f3b5d7886"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr6.mp4",
+     "bayt": 11819798,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c53e4b4dd353dc3b11a735933a81dee7"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr8.mp4",
+     "bayt": 7245164,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d3eba9fc133e3aa9fd1254c3286e0552"
+    },
+    {
+     "yol": "eval_defense/Normal/Closed_Panel_Cover/6_tr9.mp4",
+     "bayt": 7759505,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "46c2902dec6af451f064179078ab8413"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_te1.mp4",
+     "bayt": 4458655,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "a7bb7dce031e18599c8f8a68f42ac40b"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_te2.mp4",
+     "bayt": 3592468,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "727400d94f6afe17edaa8a4e2ca3b29c"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_te3.mp4",
+     "bayt": 2440216,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "85d87f47b7163d3717f64348cb516b1f"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_te4.mp4",
+     "bayt": 2396553,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "f018a5c92a0ebf7ba6ddedb84c4b6a7e"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_te6.mp4",
+     "bayt": 6273180,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "3a21c1be3c1f04ea6764453e78191956"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_te7.mp4",
+     "bayt": 6123406,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "83ab9fdf7e9415df0ec7d86f5444d728"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_te8.mp4",
+     "bayt": 6234955,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "696423ef9cbbad373b0e3d8909a794a8"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr1.mp4",
+     "bayt": 5780534,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "7c959429b82d68fc5116571ac33a0793"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr11.mp4",
+     "bayt": 2956468,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "6c33a9e22175b7041226cd2e626b1751"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr12.mp4",
+     "bayt": 2824701,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "707ece9a9a7ce144a0e7083de2091cd8"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr13.mp4",
+     "bayt": 2847117,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "53145bc63438521b57b67a666b13e40e"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr14.mp4",
+     "bayt": 2344987,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "ba0c9138dd0115f9c78b90b05b124acc"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr15.mp4",
+     "bayt": 1591226,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "12a83546d0e9d97f6630f35e7f293ddf"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr16.mp4",
+     "bayt": 1864654,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "cb79308e05c9f7225fbe5a328c6e0c4d"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr18.mp4",
+     "bayt": 7009450,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c404d3bc94daa2745d820f5235b2be1c"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr2.mp4",
+     "bayt": 5286674,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "bb4c3f5aa37ed215169ecbc209ac452b"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr20.mp4",
+     "bayt": 5760010,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "3a524ccdcaa9c477adc0356ff1552830"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr21.mp4",
+     "bayt": 6384758,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "3b83487daa2cbe97871d42e7c2126dc4"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr22.mp4",
+     "bayt": 6680959,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "071eb2ac9a5a7385650d7b0590447d2b"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr3.mp4",
+     "bayt": 5153396,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "5131f534ddd3d43d4be37c2d0372ac3f"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr4.mp4",
+     "bayt": 4545049,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "b3a9fbbbd2a0cd000664d6d5f1d152ad"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr5.mp4",
+     "bayt": 4469854,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "6c06ef79c100ed3403c0f1cff8709ed1"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr7.mp4",
+     "bayt": 4853309,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c7b008f6299077b90d391a6dca331519"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr8.mp4",
+     "bayt": 3494447,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "bc002f7a31e0eef4c2807e3870a590b0"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Carrying/7_tr9.mp4",
+     "bayt": 3355445,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c6df49fa7f868f2cf200bf3efb5d1e80"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_te1.mp4",
+     "bayt": 13209619,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "9569f45e9b8e92b4aed401d826f55825"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_te15.mp4",
+     "bayt": 15241360,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "8a63144a5fb9caf21f86e4ea9e5a7bdc"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_te16.mp4",
+     "bayt": 13922304,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "3c2f8f50f018a256566cdb6c2237cf86"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_te19.mp4",
+     "bayt": 28558205,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "81929dbc3ba4bd0f3ac98cfb8522d7ec"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_te6.mp4",
+     "bayt": 5016344,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "e23e02367ca83b199073ee537597a981"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr11.mp4",
+     "bayt": 5094510,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "899cc324042a56a875d57daf2e81e010"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr12.mp4",
+     "bayt": 7044150,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "bdf92ecd2021d98086c947776c8deef2"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr13.mp4",
+     "bayt": 3240413,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "81ba82aa12eea30503c40dc9a6d733b0"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr15.mp4",
+     "bayt": 4490936,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "489b1aade520c43d54bcdbcc824cedcc"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr18.mp4",
+     "bayt": 21348794,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "ec2bf937b41a035c574cefa4679a8505"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr22.mp4",
+     "bayt": 22321746,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "8c805020a02faf710951fcba5f4feea3"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr23.mp4",
+     "bayt": 15289073,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "f49707a2e3da0abbb858c9b245f19e2c"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr29.mp4",
+     "bayt": 19080033,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "608bdd396e72e643df1cec2d564ec95e"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr3.mp4",
+     "bayt": 6742439,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "23c839d44943479f6b28dd3b0cf7ad96"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr31.mp4",
+     "bayt": 7199308,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "3a86f07a96b22ed0bb773efd719b5fb9"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr33.mp4",
+     "bayt": 18399650,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "91bb1c449d6d94fcbb5efe5b9cfb1690"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr35.mp4",
+     "bayt": 15668015,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "9d7a03c710e82afbc8f80a21620993d5"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr37.mp4",
+     "bayt": 24117708,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "541495e45b5766bca6aa8c978f6711a2"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr40.mp4",
+     "bayt": 15330783,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d24888caf4e616f17fd8bb09a06118a4"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr41.mp4",
+     "bayt": 14197178,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "08673c943d1904ef95a1dfad653e619e"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr45.mp4",
+     "bayt": 12601391,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "d5d717f95d4a6995568a628087e32c37"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr47.mp4",
+     "bayt": 29010935,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "1bf8c79a1b79fe8ea029918217bd768f"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr49.mp4",
+     "bayt": 14235764,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c0abd2e7165073a73db6384fb3c4bc11"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr7.mp4",
+     "bayt": 14224247,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "16408b74bca52ee99b3719767118d73b"
+    },
+    {
+     "yol": "eval_defense/Normal/Safe_Walkway/4_tr8.mp4",
+     "bayt": 14298647,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "e842aaf2181089bc77b15d5d30904ac8"
+    }
+   ]
+  },
+  "eval_scenario": {
+   "aciklama": "Senaryo seti: Fire (FIRESENSE) + Fall (GMDCSA + URFD) + Normal (Eskisehir + UCF).",
+   "kurucu_betikler": [
+    "python scripts/get_firesense.py",
+    "python scripts/get_gmdcsa.py",
+    "python scripts/get_urfd_overhead.py",
+    "python scripts/build_scenario_eval.py"
+   ],
+   "dosya_listesi_var": true,
+   "klip": 37,
+   "bayt": 182017458,
+   "kaynak_dagilimi": {
+    "Eskisehir": 8,
+    "FIRESENSE": 10,
+    "GMDCSA-24": 9,
+    "UCF-Crime": 4,
+    "URFD": 6
+   },
+   "dagitilabilir_klip": 19,
+   "kosullu_klip": 8,
+   "kapali_klip": 10,
+   "dosyalar": [
+    {
+     "yol": "eval_scenario/Fall/Subject1_fall01.mp4",
+     "bayt": 6891695,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "1db78bb626ebc91bdc32b20763363747"
+    },
+    {
+     "yol": "eval_scenario/Fall/Subject1_fall02.mp4",
+     "bayt": 6422328,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "28e746cee9c3b4b542802cadbc7e62e1"
+    },
+    {
+     "yol": "eval_scenario/Fall/Subject1_fall03.mp4",
+     "bayt": 6030324,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "04422ec43603ad44885ef02ff24480c5"
+    },
+    {
+     "yol": "eval_scenario/Fall/Subject2_fall01.mp4",
+     "bayt": 6472725,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "edf9c6053c7e3adddfd88ff01f964659"
+    },
+    {
+     "yol": "eval_scenario/Fall/Subject2_fall02.mp4",
+     "bayt": 8595129,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "8b2176b0b31add67192232387457aa03"
+    },
+    {
+     "yol": "eval_scenario/Fall/Subject2_fall03.mp4",
+     "bayt": 7202590,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "59d65a2baf8fdecc2f5456167c72e160"
+    },
+    {
+     "yol": "eval_scenario/Fall/Subject3_fall01.mp4",
+     "bayt": 4135599,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "1725d602006158b0328152c364b88f10"
+    },
+    {
+     "yol": "eval_scenario/Fall/Subject3_fall02.mp4",
+     "bayt": 6999116,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "12fd0e6b5bd68a73cec91867a8523671"
+    },
+    {
+     "yol": "eval_scenario/Fall/Subject3_fall03.mp4",
+     "bayt": 5753609,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "95edea6d1a2a1d313ee136c537a8d932"
+    },
+    {
+     "yol": "eval_scenario/Fall/urfd_fall01.mp4",
+     "bayt": 575787,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "4f674512481792882d87a265e952ed7d"
+    },
+    {
+     "yol": "eval_scenario/Fall/urfd_fall02.mp4",
+     "bayt": 680200,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "0942e17d6381cfb035930ca86a277244"
+    },
+    {
+     "yol": "eval_scenario/Fall/urfd_fall03.mp4",
+     "bayt": 1144913,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "e35c66181c114f32fbfef4926ce8e7c4"
+    },
+    {
+     "yol": "eval_scenario/Fall/urfd_fall04.mp4",
+     "bayt": 610974,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "e0e3d13ca421434ff8a7249bf2f1f01b"
+    },
+    {
+     "yol": "eval_scenario/Fall/urfd_fall05.mp4",
+     "bayt": 544769,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "91026edf3af32568eb8d0966d7e3560f"
+    },
+    {
+     "yol": "eval_scenario/Fall/urfd_fall06.mp4",
+     "bayt": 416475,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "320f60b7b5f6bc6ab9e0dc80ce0b114e"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo1.868.avi",
+     "bayt": 3003620,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "b3bcb4817a6fbdcc8e6824f306c7c6dd"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo10.869.avi",
+     "bayt": 761570,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "6cd4c82dd03f9db67470b8c90833473d"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo11.870.avi",
+     "bayt": 660282,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "c370ac2c52f07c441b7050ac1264ff4e"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo2.871.avi",
+     "bayt": 2144924,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "44df879c33b3b8a18fbe1fd15bf328f7"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo3.872.avi",
+     "bayt": 1634956,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "b97636c31b25f46fdeff3a9ddd9a0989"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo4.873.avi",
+     "bayt": 6393934,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "037cb9fcc7a163feca598291f56442dd"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo5.874.avi",
+     "bayt": 9240580,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "36c3d7fd9ec1213995332a72b5cec707"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo6.875.avi",
+     "bayt": 2616020,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "0979345496b04b9b48f85c0dd3017a1a"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo7.876.avi",
+     "bayt": 6133760,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "8dd1aea3388e294872dbbac9b4507581"
+    },
+    {
+     "yol": "eval_scenario/Fire/posVideo8.877.avi",
+     "bayt": 10811130,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "3a64cf926d9a0f0feae89efac84cd836"
+    },
+    {
+     "yol": "eval_scenario/Normal/4_tr13.mp4",
+     "bayt": 3240413,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "81ba82aa12eea30503c40dc9a6d733b0"
+    },
+    {
+     "yol": "eval_scenario/Normal/5_te1.mp4",
+     "bayt": 12384656,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "0ed4cfc7dbde4dff8cb8468c0b4ba180"
+    },
+    {
+     "yol": "eval_scenario/Normal/5_te12.mp4",
+     "bayt": 5446207,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "6e13e553e14b2bfdc646a9e58587db98"
+    },
+    {
+     "yol": "eval_scenario/Normal/5_te14.mp4",
+     "bayt": 5488449,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "eca5adfcf5d22744d1fe8b67278e04d3"
+    },
+    {
+     "yol": "eval_scenario/Normal/5_tr19.mp4",
+     "bayt": 4946801,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "57e671d54901ec4f0c70e51480c83e4b"
+    },
+    {
+     "yol": "eval_scenario/Normal/5_tr20.mp4",
+     "bayt": 6628508,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "c5f6f924ebdad165d81706422cb8aa08"
+    },
+    {
+     "yol": "eval_scenario/Normal/6_te12.mp4",
+     "bayt": 2979560,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "15d57923db934727f7e78044438a23a7"
+    },
+    {
+     "yol": "eval_scenario/Normal/7_tr15.mp4",
+     "bayt": 1591226,
+     "kaynak": "Eskisehir",
+     "dagitim": "kosullu",
+     "md5": "12a83546d0e9d97f6630f35e7f293ddf"
+    },
+    {
+     "yol": "eval_scenario/Normal/Normal_Videos_926_x264.mp4",
+     "bayt": 10210838,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "810575fec288ce50c5f268f586b83bf6"
+    },
+    {
+     "yol": "eval_scenario/Normal/Normal_Videos_928_x264.mp4",
+     "bayt": 7760987,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "54de0f8c801061f333514c096f07db4c"
+    },
+    {
+     "yol": "eval_scenario/Normal/Normal_Videos_929_x264.mp4",
+     "bayt": 3559854,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "8ad4f24efcfe85c28770bc98b8dea7fa"
+    },
+    {
+     "yol": "eval_scenario/Normal/Normal_Videos_932_x264.mp4",
+     "bayt": 11902950,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "b12e913d26db7caf0f2ddea969c82e1d"
+    }
+   ]
+  },
+  "eval_stress": {
+   "aciklama": "Cetin negatifler: yangin-renkli ama yangin OLMAYAN sahneler (FIRESENSE neg).",
+   "kurucu_betikler": [
+    "python scripts/get_firesense.py"
+   ],
+   "dosya_listesi_var": true,
+   "klip": 9,
+   "bayt": 66873292,
+   "kaynak_dagilimi": {
+    "FIRESENSE": 9
+   },
+   "dagitilabilir_klip": 9,
+   "kosullu_klip": 0,
+   "kapali_klip": 0,
+   "dosyalar": [
+    {
+     "yol": "eval_stress/Normal/testneg01.807.avi",
+     "bayt": 1964874,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "bc4f4328a36ad3f027453a7474f4c8e4"
+    },
+    {
+     "yol": "eval_stress/Normal/testneg02.808.avi",
+     "bayt": 3721216,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "752945888744768b636b514bfa36998a"
+    },
+    {
+     "yol": "eval_stress/Normal/testneg03.809.avi",
+     "bayt": 18626768,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "77520b7cc94974dd7e2d285497d73067"
+    },
+    {
+     "yol": "eval_stress/Normal/testneg04.810.avi",
+     "bayt": 17379642,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "e8b62522b26ba1e5885d37c45195696f"
+    },
+    {
+     "yol": "eval_stress/Normal/testneg05.811.avi",
+     "bayt": 2424460,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "e87ec264f3d515458cbd8ffcf492a32c"
+    },
+    {
+     "yol": "eval_stress/Normal/testneg06.812.avi",
+     "bayt": 2308066,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "bbe17312edc6d1d0b77bd83d74d50e02"
+    },
+    {
+     "yol": "eval_stress/Normal/testneg07.813.avi",
+     "bayt": 7125058,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "f5db4ce8fc62e8ea56f42fe3f04e2956"
+    },
+    {
+     "yol": "eval_stress/Normal/testneg08.814.avi",
+     "bayt": 6756794,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "797558948531f89fea89f381f3f3b9ea"
+    },
+    {
+     "yol": "eval_stress/Normal/testneg09.815.avi",
+     "bayt": 6566414,
+     "kaynak": "FIRESENSE",
+     "dagitim": "evet",
+     "md5": "a5089cb92483ebfb52e44fa61893ec42"
+    }
+   ]
+  },
+  "falls_real": {
+   "aciklama": "GMDCSA-24 gercek dusme (Fall) + gunluk yasam (Normal) videolari.",
+   "kurucu_betikler": [
+    "python scripts/get_gmdcsa.py"
+   ],
+   "dosya_listesi_var": true,
+   "klip": 15,
+   "bayt": 114968407,
+   "kaynak_dagilimi": {
+    "GMDCSA-24": 15
+   },
+   "dagitilabilir_klip": 15,
+   "kosullu_klip": 0,
+   "kapali_klip": 0,
+   "dosyalar": [
+    {
+     "yol": "falls_real/Fall/Subject1_fall01.mp4",
+     "bayt": 6891695,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "1db78bb626ebc91bdc32b20763363747"
+    },
+    {
+     "yol": "falls_real/Fall/Subject1_fall02.mp4",
+     "bayt": 6422328,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "28e746cee9c3b4b542802cadbc7e62e1"
+    },
+    {
+     "yol": "falls_real/Fall/Subject1_fall03.mp4",
+     "bayt": 6030324,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "04422ec43603ad44885ef02ff24480c5"
+    },
+    {
+     "yol": "falls_real/Fall/Subject2_fall01.mp4",
+     "bayt": 6472725,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "edf9c6053c7e3adddfd88ff01f964659"
+    },
+    {
+     "yol": "falls_real/Fall/Subject2_fall02.mp4",
+     "bayt": 8595129,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "8b2176b0b31add67192232387457aa03"
+    },
+    {
+     "yol": "falls_real/Fall/Subject2_fall03.mp4",
+     "bayt": 7202590,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "59d65a2baf8fdecc2f5456167c72e160"
+    },
+    {
+     "yol": "falls_real/Fall/Subject3_fall01.mp4",
+     "bayt": 4135599,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "1725d602006158b0328152c364b88f10"
+    },
+    {
+     "yol": "falls_real/Fall/Subject3_fall02.mp4",
+     "bayt": 6999116,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "12fd0e6b5bd68a73cec91867a8523671"
+    },
+    {
+     "yol": "falls_real/Fall/Subject3_fall03.mp4",
+     "bayt": 5753609,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "95edea6d1a2a1d313ee136c537a8d932"
+    },
+    {
+     "yol": "falls_real/Normal/Subject1_adl01.mp4",
+     "bayt": 8013673,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "2e52c844d65380c1b59b60dc59a03813"
+    },
+    {
+     "yol": "falls_real/Normal/Subject1_adl02.mp4",
+     "bayt": 6670980,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "790f8c4fdce06217320d91d83af417f5"
+    },
+    {
+     "yol": "falls_real/Normal/Subject2_adl01.mp4",
+     "bayt": 11622498,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "d0890cf1e575e0dd03bd66486a878612"
+    },
+    {
+     "yol": "falls_real/Normal/Subject2_adl02.mp4",
+     "bayt": 11856629,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "bda1187861c8a155f243fa10c081a3fe"
+    },
+    {
+     "yol": "falls_real/Normal/Subject3_adl01.mp4",
+     "bayt": 8915311,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "22ab3177404bb945e4b26e13284e6be2"
+    },
+    {
+     "yol": "falls_real/Normal/Subject3_adl02.mp4",
+     "bayt": 9386201,
+     "kaynak": "GMDCSA-24",
+     "dagitim": "evet",
+     "md5": "572d09d8e613008d09f3a91c79bf8da3"
+    }
+   ]
+  },
+  "falls_surveillance": {
+   "aciklama": "URFD tavan/gozetim acili dusme klipleri.",
+   "kurucu_betikler": [
+    "python scripts/get_urfd_overhead.py"
+   ],
+   "dosya_listesi_var": true,
+   "klip": 6,
+   "bayt": 3973118,
+   "kaynak_dagilimi": {
+    "URFD": 6
+   },
+   "dagitilabilir_klip": 0,
+   "kosullu_klip": 0,
+   "kapali_klip": 6,
+   "dosyalar": [
+    {
+     "yol": "falls_surveillance/Fall/urfd_fall01.mp4",
+     "bayt": 575787,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "4f674512481792882d87a265e952ed7d"
+    },
+    {
+     "yol": "falls_surveillance/Fall/urfd_fall02.mp4",
+     "bayt": 680200,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "0942e17d6381cfb035930ca86a277244"
+    },
+    {
+     "yol": "falls_surveillance/Fall/urfd_fall03.mp4",
+     "bayt": 1144913,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "e35c66181c114f32fbfef4926ce8e7c4"
+    },
+    {
+     "yol": "falls_surveillance/Fall/urfd_fall04.mp4",
+     "bayt": 610974,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "e0e3d13ca421434ff8a7249bf2f1f01b"
+    },
+    {
+     "yol": "falls_surveillance/Fall/urfd_fall05.mp4",
+     "bayt": 544769,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "91026edf3af32568eb8d0966d7e3560f"
+    },
+    {
+     "yol": "falls_surveillance/Fall/urfd_fall06.mp4",
+     "bayt": 416475,
+     "kaynak": "URFD",
+     "dagitim": "hayir",
+     "md5": "320f60b7b5f6bc6ab9e0dc80ce0b114e"
+    }
+   ]
+  },
+  "robust": {
+   "aciklama": "Dayaniklilik testi: bozuk / bos / siyah / minik klipler (bizim uretimimiz).",
+   "kurucu_betikler": [],
+   "dosya_listesi_var": true,
+   "klip": 4,
+   "bayt": 4070,
+   "kaynak_dagilimi": {
+    "DilAjanlari": 4
+   },
+   "dagitilabilir_klip": 4,
+   "kosullu_klip": 0,
+   "kapali_klip": 0,
+   "dosyalar": [
+    {
+     "yol": "robust/black.mp4",
+     "bayt": 2243,
+     "kaynak": "DilAjanlari",
+     "dagitim": "evet",
+     "md5": "226819dcb5a578fd36d619ccc53780b4"
+    },
+    {
+     "yol": "robust/corrupt.mp4",
+     "bayt": 18,
+     "kaynak": "DilAjanlari",
+     "dagitim": "evet",
+     "md5": "68bb3b46a41345714f58c0c01d3bce0f"
+    },
+    {
+     "yol": "robust/empty.mp4",
+     "bayt": 0,
+     "kaynak": "DilAjanlari",
+     "dagitim": "evet",
+     "md5": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+     "yol": "robust/tiny.mp4",
+     "bayt": 1809,
+     "kaynak": "DilAjanlari",
+     "dagitim": "evet",
+     "md5": "d5e3fb907f2ba8798de58a03cd8d07ef"
+    }
+   ]
+  },
+  "eval_tune": {
+   "aciklama": "UCF-Crime eval_big'in AYAR yarisi (31 klip).",
+   "kurucu_betikler": [
+    "python scripts/get_ucf_many.py",
+    "python scripts/split_eval_big.py"
+   ],
+   "dosya_listesi_var": true,
+   "klip": 31,
+   "bayt": 121055481,
+   "kaynak_dagilimi": {
+    "UCF-Crime": 31
+   },
+   "dagitilabilir_klip": 0,
+   "kosullu_klip": 0,
+   "kapali_klip": 31,
+   "dosyalar": [
+    {
+     "yol": "eval_tune/Abuse/Abuse021_x264.mp4",
+     "bayt": 6298482,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "6ae95021cb893c759904feeb1b50e969"
+    },
+    {
+     "yol": "eval_tune/Abuse/Abuse023_x264.mp4",
+     "bayt": 6819565,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "0cb894bfd11c47d6ec0c77d28c6bd3a6"
+    },
+    {
+     "yol": "eval_tune/Abuse/Abuse029_x264.mp4",
+     "bayt": 1605302,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "a5913f9451aadb7a0fe6d020a324467d"
+    },
+    {
+     "yol": "eval_tune/Assault/Assault018_x264.mp4",
+     "bayt": 1060732,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "883f43bdd87e20cdc08bcc7a20074bda"
+    },
+    {
+     "yol": "eval_tune/Assault/Assault024_x264.mp4",
+     "bayt": 4011669,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "b7d81a73d7f101787b304a60fb237d45"
+    },
+    {
+     "yol": "eval_tune/Assault/Assault039_x264.mp4",
+     "bayt": 2026758,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "cf80a25d2c54fc4d1a5898366b678e72"
+    },
+    {
+     "yol": "eval_tune/Burglary/Burglary043_x264.mp4",
+     "bayt": 2115062,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "a0dae7a8fb57b7122f7e585daf78d56c"
+    },
+    {
+     "yol": "eval_tune/Burglary/Burglary054_x264.mp4",
+     "bayt": 2147615,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "5158d6071587fc323244afb9ce7e9817"
+    },
+    {
+     "yol": "eval_tune/Burglary/Burglary097_x264.mp4",
+     "bayt": 2103414,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "5fa7f9defcaf3bec2c6dd28242593e28"
+    },
+    {
+     "yol": "eval_tune/Explosion/Explosion034_x264.mp4",
+     "bayt": 1055613,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "df9a26a13f11bdb7d6143083ae7b043f"
+    },
+    {
+     "yol": "eval_tune/Explosion/Explosion048_x264.mp4",
+     "bayt": 3382338,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "056672bea01ad8aa0adebfb06faf8fa2"
+    },
+    {
+     "yol": "eval_tune/Explosion/Explosion050_x264.mp4",
+     "bayt": 1922144,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "14fd36a65a7f9aba88dbaa82979a2030"
+    },
+    {
+     "yol": "eval_tune/Fighting/Fighting005_x264.mp4",
+     "bayt": 8534771,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "ae606ba17e80adb51131e1a2d644b7c9"
+    },
+    {
+     "yol": "eval_tune/Fighting/Fighting033_x264.mp4",
+     "bayt": 8078251,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "dee9c20ec31a5e5211885207e9e44dc3"
+    },
+    {
+     "yol": "eval_tune/Fighting/Fighting035_x264.mp4",
+     "bayt": 6793254,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "f5ec9dd22d4c6eb68bd9b59e0607fa39"
+    },
+    {
+     "yol": "eval_tune/Normal/5_tr19.mp4",
+     "bayt": 4946801,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "57e671d54901ec4f0c70e51480c83e4b"
+    },
+    {
+     "yol": "eval_tune/Normal/6_tr9.mp4",
+     "bayt": 7759505,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "46c2902dec6af451f064179078ab8413"
+    },
+    {
+     "yol": "eval_tune/Normal/7_tr15.mp4",
+     "bayt": 1591226,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "12a83546d0e9d97f6630f35e7f293ddf"
+    },
+    {
+     "yol": "eval_tune/Normal/Normal_Videos_928_x264.mp4",
+     "bayt": 7760987,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "54de0f8c801061f333514c096f07db4c"
+    },
+    {
+     "yol": "eval_tune/Normal/Normal_Videos_929_x264.mp4",
+     "bayt": 3559854,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "8ad4f24efcfe85c28770bc98b8dea7fa"
+    },
+    {
+     "yol": "eval_tune/Normal/Normal_Videos_936_x264.mp4",
+     "bayt": 9998888,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "88800dc18af0bc29d05aa74656b638bf"
+    },
+    {
+     "yol": "eval_tune/Normal/Normal_Videos_943_x264.mp4",
+     "bayt": 8388120,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "4daf6da27c26a143816a5f3ed5edf833"
+    },
+    {
+     "yol": "eval_tune/RoadAccidents/RoadAccidents027_x264.mp4",
+     "bayt": 792646,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "a7c9ddce57a2d6e1b2b2fb9815972a83"
+    },
+    {
+     "yol": "eval_tune/RoadAccidents/RoadAccidents065_x264.mp4",
+     "bayt": 1055745,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "45b92790f2b9c2c0081c0e40c37d4f69"
+    },
+    {
+     "yol": "eval_tune/RoadAccidents/RoadAccidents129_x264.mp4",
+     "bayt": 1100382,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "9d80eefb09a7d0539d50a5e3b5479794"
+    },
+    {
+     "yol": "eval_tune/Shooting/Shooting037_x264.mp4",
+     "bayt": 978276,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "a82f4f77277538a818b9012ec147c4a0"
+    },
+    {
+     "yol": "eval_tune/Shooting/Shooting039_x264.mp4",
+     "bayt": 4995682,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "d792af2397956723c93096fedc182651"
+    },
+    {
+     "yol": "eval_tune/Shooting/Shooting044_x264.mp4",
+     "bayt": 2656996,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "a6cf454b98d2c78143d1d9d9f0c97c6d"
+    },
+    {
+     "yol": "eval_tune/Vandalism/Vandalism006_x264.mp4",
+     "bayt": 2851411,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "0b320b9efab54237fac44cf005eda89c"
+    },
+    {
+     "yol": "eval_tune/Vandalism/Vandalism026_x264.mp4",
+     "bayt": 2801880,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "eb9eff19245ea7eec43ebd7c72b1cd41"
+    },
+    {
+     "yol": "eval_tune/Vandalism/Vandalism032_x264.mp4",
+     "bayt": 1862112,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "3b6b91c10ebbad7a9c63c747e64e536a"
+    }
+   ]
+  },
+  "eval_holdout": {
+   "aciklama": "UCF-Crime eval_big'in DOKUNULMAZ yarisi (32 klip) — yalnizca son olcum.",
+   "kurucu_betikler": [
+    "python scripts/get_ucf_many.py",
+    "python scripts/split_eval_big.py"
+   ],
+   "dosya_listesi_var": true,
+   "klip": 32,
+   "bayt": 131342430,
+   "kaynak_dagilimi": {
+    "UCF-Crime": 32
+   },
+   "dagitilabilir_klip": 0,
+   "kosullu_klip": 0,
+   "kapali_klip": 32,
+   "dosyalar": [
+    {
+     "yol": "eval_holdout/Abuse/Abuse005_x264.mp4",
+     "bayt": 6250495,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "cc1cc5aba1d32c66768d04573f9437e9"
+    },
+    {
+     "yol": "eval_holdout/Abuse/Abuse014_x264.mp4",
+     "bayt": 6987750,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "72eb8a15e93b5035ff0c6eb86a0b9450"
+    },
+    {
+     "yol": "eval_holdout/Abuse/Abuse018_x264.mp4",
+     "bayt": 7253522,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "39a9d27a9bbe8977a26e15df81d8df26"
+    },
+    {
+     "yol": "eval_holdout/Assault/Assault020_x264.mp4",
+     "bayt": 3912419,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "92aca6c602e14fa281d1d9a6724da668"
+    },
+    {
+     "yol": "eval_holdout/Assault/Assault038_x264.mp4",
+     "bayt": 1139915,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "fb409165eaaf3d0d4cafa406c78c748e"
+    },
+    {
+     "yol": "eval_holdout/Assault/Assault051_x264.mp4",
+     "bayt": 4273777,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "a590d59640b4799f48f353474494093d"
+    },
+    {
+     "yol": "eval_holdout/Burglary/Burglary059_x264.mp4",
+     "bayt": 1942766,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "ec0de7216c7ce4ef0a5944b43e0f8678"
+    },
+    {
+     "yol": "eval_holdout/Burglary/Burglary078_x264.mp4",
+     "bayt": 1377843,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "55e24949b7757c0dec6554e762c8a50f"
+    },
+    {
+     "yol": "eval_holdout/Burglary/Burglary081_x264.mp4",
+     "bayt": 1038787,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "56e50abce5daa1daaa93e86953081b4a"
+    },
+    {
+     "yol": "eval_holdout/Explosion/Explosion001_x264.mp4",
+     "bayt": 1187504,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "490fd73778cae2dee1ca92032c6778df"
+    },
+    {
+     "yol": "eval_holdout/Explosion/Explosion019_x264.mp4",
+     "bayt": 3053230,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "066e4db1f6925c2e3c4766fe0da1cda3"
+    },
+    {
+     "yol": "eval_holdout/Explosion/Explosion044_x264.mp4",
+     "bayt": 4384042,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "87e46efde567965fad003cbeb408500e"
+    },
+    {
+     "yol": "eval_holdout/Fighting/Fighting018_x264.mp4",
+     "bayt": 5519077,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "f5bbc1750a19fc858516e0999b006acb"
+    },
+    {
+     "yol": "eval_holdout/Fighting/Fighting023_x264.mp4",
+     "bayt": 3445440,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "b480e13610636e5440636327ffa78d8f"
+    },
+    {
+     "yol": "eval_holdout/Fighting/Fighting038_x264.mp4",
+     "bayt": 6099419,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "da6b27dbc0e016e47638d6a4f025f505"
+    },
+    {
+     "yol": "eval_holdout/Normal/4_tr13.mp4",
+     "bayt": 3240413,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "81ba82aa12eea30503c40dc9a6d733b0"
+    },
+    {
+     "yol": "eval_holdout/Normal/6_te10.mp4",
+     "bayt": 3308650,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "46ca10950b4afd2953d2b571d3a8bd90"
+    },
+    {
+     "yol": "eval_holdout/Normal/6_te12.mp4",
+     "bayt": 2979560,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "15d57923db934727f7e78044438a23a7"
+    },
+    {
+     "yol": "eval_holdout/Normal/6_tr17.mp4",
+     "bayt": 5921280,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "44531482e3f65d9672e8c42503e405bb"
+    },
+    {
+     "yol": "eval_holdout/Normal/6_tr8.mp4",
+     "bayt": 7245164,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "d3eba9fc133e3aa9fd1254c3286e0552"
+    },
+    {
+     "yol": "eval_holdout/Normal/Normal_Videos_926_x264.mp4",
+     "bayt": 10210838,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "810575fec288ce50c5f268f586b83bf6"
+    },
+    {
+     "yol": "eval_holdout/Normal/Normal_Videos_932_x264.mp4",
+     "bayt": 11902950,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "b12e913d26db7caf0f2ddea969c82e1d"
+    },
+    {
+     "yol": "eval_holdout/Normal/Normal_Videos_939_x264.mp4",
+     "bayt": 4792457,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "33cfba23fa7317021cab7d64d0437995"
+    },
+    {
+     "yol": "eval_holdout/RoadAccidents/RoadAccidents021_x264.mp4",
+     "bayt": 914178,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "a0b5354ef5166bd3842722fee92b33a2"
+    },
+    {
+     "yol": "eval_holdout/RoadAccidents/RoadAccidents069_x264.mp4",
+     "bayt": 1234489,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "e71142939b5dede35b1cb9484e244309"
+    },
+    {
+     "yol": "eval_holdout/RoadAccidents/RoadAccidents134_x264.mp4",
+     "bayt": 1304570,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "1b96152d4897a6829621dda6ad13b865"
+    },
+    {
+     "yol": "eval_holdout/Shooting/Shooting001_x264.mp4",
+     "bayt": 2198741,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "d22f1b81f594187765b788ed88ad2254"
+    },
+    {
+     "yol": "eval_holdout/Shooting/Shooting023_x264.mp4",
+     "bayt": 2545500,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "1b767d6b26a7d277065b224b0e2eb05e"
+    },
+    {
+     "yol": "eval_holdout/Shooting/Shooting030_x264.mp4",
+     "bayt": 4894079,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "249d81ce7b7453f5a4148109330b2565"
+    },
+    {
+     "yol": "eval_holdout/Vandalism/Vandalism014_x264.mp4",
+     "bayt": 3448045,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "f7fd87688aa813e2db3d8f38c44bbc10"
+    },
+    {
+     "yol": "eval_holdout/Vandalism/Vandalism027_x264.mp4",
+     "bayt": 3983372,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "e71539c66e7f17339cd1e28e69cc716f"
+    },
+    {
+     "yol": "eval_holdout/Vandalism/Vandalism039_x264.mp4",
+     "bayt": 3352158,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "d23102beab675097d7574be49e51b841"
+    }
+   ]
+  },
+  "e2_vehicle": {
+   "aciklama": "UCF RoadAccidents — arac/kalabalik (E2) kaniti.",
+   "kurucu_betikler": [
+    "python scripts/get_vehicle_accidents.py"
+   ],
+   "dosya_listesi_var": true,
+   "klip": 9,
+   "bayt": 11150294,
+   "kaynak_dagilimi": {
+    "UCF-Crime": 9
+   },
+   "dagitilabilir_klip": 0,
+   "kosullu_klip": 0,
+   "kapali_klip": 9,
+   "dosyalar": [
+    {
+     "yol": "e2_vehicle/RoadAccidents/RoadAccidents021_x264.mp4",
+     "bayt": 914178,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "a0b5354ef5166bd3842722fee92b33a2"
+    },
+    {
+     "yol": "e2_vehicle/RoadAccidents/RoadAccidents027_x264.mp4",
+     "bayt": 792646,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "a7c9ddce57a2d6e1b2b2fb9815972a83"
+    },
+    {
+     "yol": "e2_vehicle/RoadAccidents/RoadAccidents035_x264.mp4",
+     "bayt": 1677407,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "4fe9430ffcd99b101c6a22c1a89beab1"
+    },
+    {
+     "yol": "e2_vehicle/RoadAccidents/RoadAccidents043_x264.mp4",
+     "bayt": 1491745,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "3dabd667b17f92c9611d441f474487ad"
+    },
+    {
+     "yol": "e2_vehicle/RoadAccidents/RoadAccidents065_x264.mp4",
+     "bayt": 1055745,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "45b92790f2b9c2c0081c0e40c37d4f69"
+    },
+    {
+     "yol": "e2_vehicle/RoadAccidents/RoadAccidents069_x264.mp4",
+     "bayt": 1234489,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "e71142939b5dede35b1cb9484e244309"
+    },
+    {
+     "yol": "e2_vehicle/RoadAccidents/RoadAccidents128_x264.mp4",
+     "bayt": 1579132,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "7b3d076caaf1ead84de1376cb53985c3"
+    },
+    {
+     "yol": "e2_vehicle/RoadAccidents/RoadAccidents129_x264.mp4",
+     "bayt": 1100382,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "9d80eefb09a7d0539d50a5e3b5479794"
+    },
+    {
+     "yol": "e2_vehicle/RoadAccidents/RoadAccidents134_x264.mp4",
+     "bayt": 1304570,
+     "kaynak": "UCF-Crime",
+     "dagitim": "hayir",
+     "md5": "1b96152d4897a6829621dda6ad13b865"
+    }
+   ]
+  },
+  "eval": {
+   "aciklama": "ESKI kucuk UCF seti — eval_big'in %100 alt kumesi, bagimsiz kanit DEGIL.",
+   "kurucu_betikler": [
+    "python scripts/build_eval_set.py",
+    "python scripts/get_normal_clips.py"
+   ],
+   "dosya_listesi_var": false,
+   "klip": 32,
+   "bayt": 124583748,
+   "kaynak_dagilimi": {
+    "UCF-Crime": 32
+   },
+   "dagitilabilir_klip": 0,
+   "kosullu_klip": 0,
+   "kapali_klip": 32
+  },
+  "eval_big": {
+   "aciklama": "UCF-Crime buyuk set (63 benzersiz) — tune/holdout bunun ayrik bolunmesidir.",
+   "kurucu_betikler": [
+    "python scripts/get_ucf_many.py"
+   ],
+   "dosya_listesi_var": false,
+   "klip": 64,
+   "bayt": 311599797,
+   "kaynak_dagilimi": {
+    "UCF-Crime": 64
+   },
+   "dagitilabilir_klip": 0,
+   "kosullu_klip": 0,
+   "kapali_klip": 64
+  },
+  "industrial": {
+   "aciklama": "Eskisehir KAYNAK HAVUZU (691 klip, ~9.4 GB). Dagitilmaz: indirici zaten paralel ceker.",
+   "kurucu_betikler": [
+    "python scripts/get_industrial.py"
+   ],
+   "dosya_listesi_var": false,
+   "klip": 691,
+   "bayt": 9999951582,
+   "kaynak_dagilimi": {
+    "Eskisehir": 691
+   },
+   "dagitilabilir_klip": 0,
+   "kosullu_klip": 691,
+   "kapali_klip": 0
+  }
+ },
+ "toplam": {
+  "klip": 1130,
+  "bayt": 13632956008
+ }
+}

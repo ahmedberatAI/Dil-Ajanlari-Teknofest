@@ -10,6 +10,9 @@
 > DILAJAN_VLLM_HOST=<kaptanin-lan-ip> python app.py
 > ```
 > Bu **kod değişikliği gerektirmez** (doğrulandı: `dilajan/config.py` → `base_url`).
+>
+> **İkinci 30 saniye — veri:** `git pull` **kodu getirir, veriyi getirmez** (`data/` 14 GB ve
+> `.gitignore`'da). Çoğu iş için **veriye hiç ihtiyacın yok** → [VERIYI ALMA](#veriyi-alma--kim-hangi-veriye-ihtiyaç-duyar).
 
 ---
 
@@ -21,6 +24,9 @@
 5. [GPU olmadan katkı listesi](#5-gpu-olmadan-katkı-listesi-boşta-kalma)
 6. [Sık karşılaşılan hatalar](#6-sık-karşılaşılan-hatalar-ve-çözümleri)
 7. [Bu rehberde ne doğrulandı, ne doğrulanmadı](#7-bu-rehberde-ne-doğrulandı-ne-doğrulanmadı)
+
+**Ayrıca (YOL 3'ten hemen sonra):**
+[**VERIYI ALMA** — kim hangi veriye ihtiyaç duyar?](#veriyi-alma--kim-hangi-veriye-ihtiyaç-duyar)
 
 ---
 
@@ -372,6 +378,182 @@ DILAJAN_FAST_MODE=1 python app.py          # tek-gecisli algi, daha az/kucuk kar
 
 ---
 
+## VERIYI ALMA — kim hangi veriye ihtiyaç duyar?
+
+> **Önce bunu oku:** `git pull` **kodu getirir, veriyi getirmez.** `data/` dizini 14 GB'dır ve
+> `.gitignore`'dadır — bilerek. Depoya video koymuyoruz (lisans + boyut).
+> **İyi haber:** yapacağın işlerin çoğu **hiç veri istemiyor.**
+
+### Adım 0 — Gerçekten veriye ihtiyacın var mı?
+
+| Ne yapacaksın | İhtiyacın olan veri | Komut |
+|---|---|---|
+| Arayüz / CSS / panel geliştirme, pipeline okuma, birim testi | **HİÇBİRİ** | `DILAJAN_MOCK=1 python app.py` |
+| Testleri koşmak (`tests/`, `benchmark/*self*`) | **HİÇBİRİ** (sahte VLM istemcisi) | [Bölüm 5.1](#51-testler--her-prdan-önce-hepsi-saniyeler-sürer) |
+| "Bir video verip çıktıyı göreyim" | **1 klip** (~5–20 MB) | `python scripts/get_ucf_clip.py RoadAccidents` |
+| Yangın/düşme senaryosunu denemek | **Küçük set** (~180 MB) | `python scripts/get_firesense.py` · `python scripts/get_gmdcsa.py` |
+| **Benchmark / resmî ölçüm koşmak** | **Tam set** (~3–14 GB) | aşağıdaki tablo |
+
+**Vakit kaybetme:** ilk iki satırdaysan bu bölümün geri kalanını okumana gerek yok.
+Resmî ölçüm zaten **kaptanın makinesinde** koşulur (bkz. [`docs/olcum_durustlugu.md`](olcum_durustlugu.md)).
+
+### Adım 1 — Ne var, nereden gelir? (ağ gerekmez)
+
+```bash
+python scripts/hf_dataset_pull.py --list
+```
+Bu komut **hiçbir şey indirmez**; `hf_manifest.json`'u okuyup her set için
+*"HF'den mi gelir, yoksa hangi betikle mi kurulur"* sorusunu yanıtlar ve
+**zaten diskinde ne olduğunu** gösterir.
+
+Setler **lisansa göre üçe ayrılır** — bu ayrım keyfî değil, zorunludur:
+
+| Set | Klip | Kaynak | HF deposundan gelir mi? |
+|---|---|---|---|
+| `data/eval_stress` | 9 | FIRESENSE (CC BY 4.0) | ✅ evet |
+| `data/falls_real` | 15 | GMDCSA-24 (CC BY 4.0) | ✅ evet |
+| `data/robust` | 4 | kendi ürettiğimiz | ✅ evet |
+| `data/eval_scenario` | 37 | **karışık** | ⚠️ **19/37**'si gelir (Fire + GMDCSA düşmeler) |
+| `data/eval_defense` | 200 | Eskişehir/Mendeley | ⛔ hayır — **lisans çelişkisi**, aşağı bkz. |
+| `data/falls_surveillance` | 6 | URFD (akademik) | ⛔ hayır |
+| `data/eval_tune`, `eval_holdout`, `e2_vehicle` | 31 + 32 + 9 | **UCF-Crime** (CC değil) | ⛔ **asla** |
+
+> **`eval_scenario` neden kısmi geliyor?** İçinde dört ayrı kaynak var:
+> `Fall/` = 9 GMDCSA (CC BY ✅) + 6 URFD (akademik ⛔),
+> `Normal/` = 8 Eskişehir (çelişkili ⚠️) + 4 UCF-Crime (⛔).
+> Bu yüzden lisans kararı **set düzeyinde değil, DOSYA düzeyinde** verilir.
+> Seti tamamlamak için kurucu betiklerini koşman gerekir (araç sana söyler).
+
+### Adım 2 — HF deposundan çekme (tek komut)
+
+> **Depo henüz yayınlanmadı.** Yayınlandığında adı takıma duyurulacak; o zamana kadar
+> aşağıdaki komut sana **ne yapman gerektiğini söyleyip** düzgünce çıkar (çökmez).
+
+```bash
+pip install "huggingface_hub>=0.34"
+
+# 1) Once ne olacagini gor (indirme YOK)
+python scripts/hf_dataset_pull.py --repo KULLANICI/dilajanlari-eval --dry-run
+
+# 2) Indir (varsayilan: dagitilabilir tum setler)
+python scripts/hf_dataset_pull.py --repo KULLANICI/dilajanlari-eval
+
+# 3) Secmeli indirme
+python scripts/hf_dataset_pull.py --repo KULLANICI/dilajanlari-eval --sets eval_stress,falls_real
+```
+```powershell
+# Windows PowerShell — depo adini kalici yap, her seferinde --repo yazma
+$env:DILAJAN_HF_REPO = "KULLANICI/dilajanlari-eval"
+python scripts/hf_dataset_pull.py
+```
+
+**Davranış (fiilen doğrulandı):**
+- Zaten var olan ve **MD5'i tutan** dosyalar **atlanır** — komutu tekrar tekrar koşmak güvenlidir.
+- Yarım kalan indirme **kaldığı yerden** sürer; `Ctrl+C` veri kaybettirmez.
+- Bir dosya patlarsa **iş durmaz** (fail-open), sonunda hangi dosyanın başarısız olduğu raporlanır.
+- İndirme bittiğinde **bütünlük doğrulaması otomatik koşar**; eksik/bozuk varsa çıkış kodu `6`.
+
+### Adım 3 — HF'de OLMAYAN setler (UCF-Crime, URFD, Eskişehir)
+
+Bu setler lisans gereği **hiçbir zaman** HF deposuna konmaz. Araç bunları
+manifest'te görür, "HF'de yok" der ve **doğru kurucu betiği** önerir — betik adını
+ezberlemene gerek yok, `--list` sana söyler. Referans:
+
+```bash
+# UCF-Crime turevleri (eval_tune + eval_holdout: once buyuk seti indir, sonra ayrik bol)
+python scripts/get_ucf_many.py
+python scripts/split_eval_big.py
+
+# UCF RoadAccidents (arac/kalabalik E2 kaniti)
+python scripts/get_vehicle_accidents.py
+
+# URFD tavan-acili dusmeler
+python scripts/get_urfd_overhead.py
+
+# Eskisehir tesis seti: once 9.4 GB havuz, sonra 200 kliplik degerlendirme seti
+python scripts/get_industrial.py
+python scripts/build_defense_eval.py
+
+# Senaryo setini tamamla (Fire + Fall + Normal bir araya getirilir)
+python scripts/get_firesense.py
+python scripts/get_gmdcsa.py
+python scripts/build_scenario_eval.py
+```
+
+> ⛔ **UCF-Crime'ı hiçbir yere yeniden yüklemeyin.** Akademik/araştırma kullanımı için
+> sunulur, Creative Commons **değildir**. Aynısı URFD için de geçerlidir.
+>
+> ⚠️ **Eskişehir/Mendeley seti (`eval_defense`, `industrial`) — çözülmemiş lisans çelişkisi.**
+> Mendeley genel API'si **CC BY 4.0** diyor (2026-07-27'de tekrar okundu, hâlâ öyle diyor),
+> ilgili *Data in Brief* makalesinde **CC BY-NC** geçtiği biliniyor. **Muhafazakâr okumayı**
+> benimsedik: **CC BY-NC** (ticari kullanım yok, atıf zorunlu) — yani çelişki makale
+> metninden teyit edilene kadar bu klipler **yeniden dağıtılmaz**. Araç bunları
+> varsayılan olarak dışarıda tutar; teyit gelirse `--include-conditional` bayrağı açar.
+> Bu, en büyük setimizin (2.4 GB, 200 klip) HF'den **gelmeyeceği** anlamına gelir —
+> `get_industrial.py` zaten paralel indirdiği için pratik kayıp küçüktür.
+
+### Adım 4 — Doğrulama (ağ gerekmez, her zaman koşulabilir)
+
+```bash
+# Yerel dosyalari manifest MD5'leri ile karsilastir
+python scripts/hf_dataset_pull.py --verify
+
+# Yerelde kurdugun (HF disi) setleri de dogrula — UCF/URFD/Eskisehir dahil
+python scripts/hf_dataset_pull.py --verify --verify-all
+
+# Aracin kendi mantigini test et (veri de ag da GEREKMEZ)
+python scripts/hf_dataset_pull.py --selftest        # -> "TUM SELFTESTLER GECTI"
+```
+Çıkış kodu `0` = her şey yerinde · `6` = eksik/bozuk dosya var (araç hangisi olduğunu yazar).
+Bozuk dosya için aynı komutu `--force` ile tekrarla.
+
+**Bu neden önemli:** jüri benchmark'ı birebir yeniden koşabilsin diye her klibin MD5'i
+`hf_manifest.json` içinde kayıtlıdır. Senin diskindeki `eval_stress` ile kaptanınki
+**aynı dosyalar mı**, tek komutla kanıtlanır.
+
+### Kaptan için: manifest üretme ve yayınlama
+
+```bash
+# Manifest'i yeniden uret (data/ degistiginde)
+python scripts/hf_dataset_pull.py --make-manifest
+
+# Yukleme komutlarini GOR — bu betik hicbir sey YUKLEMEZ, yalnizca metin basar
+python scripts/hf_dataset_pull.py --upload-plan --repo KULLANICI/dilajanlari-eval
+```
+`--upload-plan` hangi klibin neden dışarıda kaldığını tek tek gösterir ve karışık lisanslı
+klasörler için **toplu yükleme yapma** uyarısı verir. Yükleme dışa açık bir işlemdir;
+komutları **kaptan kendisi**, çıktıyı gözden geçirdikten sonra çalıştırır.
+
+**Manifest hangi dosyadan okunur?** Araç şu sırayla bakar; ilk bulduğunu kullanır ve
+hangisini kullandığını çıktının ilk satırında yazar:
+
+| Sıra | Yol | Ne zaman olur |
+|---|---|---|
+| 1 | `--manifest <yol>` | elle verirsen |
+| 2 | `data/hf_manifest.json` | **paketleyici araç** yazdıysa veya HF'den indiyse |
+| 3 | `data/_hf/hf_manifest.json` | ayrı bir dizine indirdiysen |
+| 4 | `hf_manifest.json` (proje kökü) | `git pull` ile gelen kopya — **çoğu üyede bu** |
+
+Paketleyici tarafın manifest biçimi farklıysa **otomatik uyarlanır**; o manifestteki
+"bu klip pakete girdi/girmedi" kararı **bizim kural motorumuzun önüne geçer** (paketleyen
+taraf, depoda ne olduğunu bilen taraftır).
+
+### 🏁 Yarışma kuralı notu — HF neden serbest?
+
+> **KRİTİK AYRIM:**
+> - HF'i **model ÇALIŞTIRMAK** için kullanmak **YASAK** — Inference API, Inference Endpoints,
+>   Spaces: hepsi "harici API / bulut" sayılır. **Kullanmıyoruz.**
+> - HF'i **VERİ DAĞITMAK** ve **MODEL AĞIRLIĞI İNDİRMEK** için kullanmak **SERBEST** — indirilen
+>   şey diske iner, çıkarım **%100 yerelde**, bizim vLLM sunucumuzda koşar.
+>
+> `scripts/hf_dataset_pull.py` yalnızca dosya indirir; **hiçbir model çağrısı yapmaz.**
+> Model ağırlığı da (`Qwen3-VL-8B-Instruct-FP8`) aynı mantıkla HF'den indirilir ve
+> yerelde çalışır — bu, README'deki kurulum adımlarının zaten yaptığı şeydir.
+> Ayrıca bu yayın, şartnamenin *"veri setinin indirilebileceği herkese açık bağlantı"*
+> şartını da güçlendirir.
+
+---
+
 ## 5. GPU olmadan katkı listesi (boşta kalma!)
 
 Aşağıdaki her komut **GPU'suz ve model sunucusu kapalıyken** çalışır ve **bu rehber yazılırken
@@ -419,15 +601,19 @@ python app.py                                                   # arayuz acilir,
 ### 5.5 Ağ gerektiren ama GPU gerektirmeyen işler
 
 ```bash
-python scripts/get_ucf_many.py          # veri seti indiriciler
+python scripts/hf_dataset_pull.py --list   # ONCE BUNU: hangi set nereden gelir, sende ne var
+python scripts/get_ucf_many.py             # veri seti indiriciler
 python scripts/get_firesense.py
 python scripts/get_industrial.py
-python scripts/build_scenario_eval.py   # degerlendirme setleri kurar
+python scripts/build_scenario_eval.py      # degerlendirme setleri kurar
 python scripts/build_defense_eval.py
 ```
 > Bunlar GPU istemez ama **internet + disk** ister ve dakikalar sürebilir; indirme boyutunu
 > takıma haber ver. *(Bu rehber yazılırken indirme yapılmadı — komut biçimi doğrulandı,
 > çalıştırılmadı.)*
+>
+> Hangisini koşacağını `hf_dataset_pull.py --list` sana söyler; ezberlemene gerek yok
+> → [VERIYI ALMA](#veriyi-alma--kim-hangi-veriye-ihtiyaç-duyar).
 
 ### 5.6 Kod okumaya/yazmaya açık, tamamen deterministik modüller
 
@@ -532,6 +718,37 @@ Projenin ölçüm-dürüstlüğü kuralı bu rehber için de geçerlidir.
 - `app.build_ui()` model sunucusu **kapalıyken** kuruldu
 - WSL2'nin **NAT** modunda olduğu ölçüldü (WSL `172.23.191.136` ↔ Windows `192.168.1.102`)
 - İstemci yolunun `vllm` import etmediği (kod incelemesi)
+
+**✅ [VERIYI ALMA](#veriyi-alma--kim-hangi-veriye-ihtiyaç-duyar) bölümü için fiilen koşuldu (2026-07-27):**
+- `hf_dataset_pull.py --make-manifest` → **1130 klip / 13.63 GB** tarandı, MD5'leri hesaplandı,
+  `hf_manifest.json` üretildi (16.0 sn)
+- `--list`, `--verify`, `--verify --verify-all`, `--upload-plan`, `--selftest`, `--help` → hepsi koştu
+- `--verify` gerçek veri üzerinde: **47 dağıtılabilir klip** MD5 uyumlu, 0 eksik, 0 bozuk;
+  `--verify-all` ile `eval_scenario` (37) + `falls_surveillance` (6) + `e2_vehicle` (9) da temiz
+- **Bozuk/eksik dosya tespiti kanıtlandı:** kasten bozulmuş bir manifest ile koşuldu →
+  `bozuk=1 eksik=1`, çıkış kodu `6` (yani doğrulama sessizce "geçti" demiyor)
+- **Var olmayan depo:** `--repo ahmedberatAI/dilajanlari-eval-YOK-2026 --dry-run` →
+  ağa gerçekten çıktı, `RepositoryNotFoundError` yakalandı, 5 maddelik yönlendirme bastı,
+  çıkış kodu `4` (çökme yok)
+- **Yer tutucu depo adı:** `--repo` verilmeden çalıştırıldığında yardım metni + çıkış kodu `2`
+- **CWD bağımsızlığı:** tüm komutlar `/tmp` içinden koşuldu, proje kökünü doğru buldu
+- `--selftest` → **33/33 GEÇTİ**; içinde: karışık lisanslı setlerin dosya-düzeyi sınıflandırması,
+  "bilinmeyen kaynak = dağıtılamaz" (fail-closed), MD5 tutan dosyanın atlanması,
+  tutmayanın yeniden indirilmesi, tek dosya hatasının işi çökertmemesi ve
+  **paketleyici manifest biçiminin uyarlanması**
+- Mendeley genel API'si **salt-okunur** sorgulandı: hâlâ **CC BY** bildiriyor → çelişki
+  *devam ediyor*, bu yüzden Eskişehir klipleri varsayılan olarak dağıtım dışı
+
+**⚠️ [VERIYI ALMA](#veriyi-alma--kim-hangi-veriye-ihtiyaç-duyar) bölümünde doğrulanmadı:**
+- **HF deposundan gerçek indirme.** Depo **henüz yayınlanmadı** ve bu teslimde
+  **hiçbir şey yüklenmedi** (yükleme dışa açık bir işlemdir → kaptanın onayı gerekir).
+  İndirme mantığı yalnızca **sahte `hf_hub_download`** ile test edildi; gerçek ağ üzerinden
+  uçtan uca indirme **yapılmamıştır**.
+- `--upload-plan` çıktısındaki `hf upload` komutları **çalıştırılmadı**, yalnızca üretildi.
+- `hf_manifest.json` **bu makinedeki** `data/` dizininin fotoğrafıdır. Setler değişirse
+  `--make-manifest` yeniden koşulmalıdır; yoksa `--verify` yanlış "eksik" raporlar.
+- Bölümdeki indirici betikler (`get_ucf_many.py`, `get_industrial.py`, …) bu turda
+  **yeniden koşulmadı** — komut biçimleri repodaki dosyalardan doğrulandı, çıktıları değil.
 
 **⚠️ Doğrulanmadı (iki makine + açık GPU gerektirir):**
 - Gerçek bir üye makinesinden kaptanın sunucusuna **uçtan uca LAN bağlantısı**
