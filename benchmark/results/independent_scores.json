@@ -1,28 +1,483 @@
 {
   "judge_model": "RedHatAI/gemma-3-12b-it-FP8-dynamic",
+  "gorsel_dayanak": false,
+  "metrik_aileleri": {
+    "DAYANAKLI": "DAYANAKLI (grounded) — klibin BILINEN dataset etiketine karsi olculur",
+    "IC_TUTARLILIK": "IC-TUTARLILIK (self-consistency) — sistemin KENDI olay listesine karsi olculur; VIDEOYA DAYANAKLI DEGILDIR",
+    "GORSEL": "kapali"
+  },
+  "uyari": "IC-TUTARLILIK skorlari sistemin videoyu DOGRU anladigini KANITLAMAZ; yalnizca kendi ciktisiyla celismedigini gosterir. Dis gecerlilik icin DAYANAKLI bloguna bakilmalidir.",
+  "OLGUSAL DAYANAKLILIK": {
+    "mean": 4.38,
+    "std": 1.14,
+    "n_klip": 37,
+    "n_eksen": 1,
+    "n_altskor": 37,
+    "metrik_turu": "DAYANAKLI (grounded) — klibin BILINEN dataset etiketine karsi olculur",
+    "not": "n_altskor = n_klip x n_eksen; guven araligi n_klip uzerinden okunmalidir (pseudo-replikasyon)",
+    "etiketle_celiski": {
+      "k": 3,
+      "n": 37,
+      "p": 0.0811,
+      "ci_low": 0.028,
+      "ci_high": 0.213,
+      "ci_method": "wilson",
+      "ci_level": 0.95
+    },
+    "uydurma_ayrinti": {
+      "k": 10,
+      "n": 37,
+      "p": 0.2703,
+      "ci_low": 0.154,
+      "ci_high": 0.4298,
+      "ci_method": "wilson",
+      "ci_level": 0.95
+    },
+    "kategori_bazli": {
+      "Fall": {
+        "mean": 4.4,
+        "std": 1.12,
+        "n_klip": 15,
+        "n_eksen": 1,
+        "n_altskor": 15,
+        "metrik_turu": "DAYANAKLI (grounded) — klibin BILINEN dataset etiketine karsi olculur",
+        "not": "n_altskor = n_klip x n_eksen; guven araligi n_klip uzerinden okunmalidir (pseudo-replikasyon)"
+      },
+      "Fire": {
+        "mean": 4.7,
+        "std": 0.67,
+        "n_klip": 10,
+        "n_eksen": 1,
+        "n_altskor": 10,
+        "metrik_turu": "DAYANAKLI (grounded) — klibin BILINEN dataset etiketine karsi olculur",
+        "not": "n_altskor = n_klip x n_eksen; guven araligi n_klip uzerinden okunmalidir (pseudo-replikasyon)"
+      },
+      "Normal": {
+        "mean": 4.08,
+        "std": 1.44,
+        "n_klip": 12,
+        "n_eksen": 1,
+        "n_altskor": 12,
+        "metrik_turu": "DAYANAKLI (grounded) — klibin BILINEN dataset etiketine karsi olculur",
+        "not": "n_altskor = n_klip x n_eksen; guven araligi n_klip uzerinden okunmalidir (pseudo-replikasyon)"
+      }
+    }
+  },
+  "dayanakli_detay": [
+    {
+      "path": "data/eval_scenario/Fall/Subject1_fall01.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 4.0,
+      "celiski": false,
+      "uydurma": true,
+      "gerekce": "Ozet, 'acil sağlık müdahale gerektiren ciddi bir kaza' gibi etikette bulunmayan bir yorum eklemiş."
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject1_fall02.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yere dusmesi ve yerde hareketsiz kalmasi' olayini dogru tanimliyor ve etiketteki bilgiyi asmiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject1_fall03.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 4.0,
+      "celiski": false,
+      "uydurma": true,
+      "gerekce": "Sandalyeden dusme olayi dogru tanimli, ancak 'müdahale veya acil durum belirtisi gözlemlenmedi' ve 'tehlike veya yayılma riski yok' gibi ek bilgiler etikette yer almayan uydurma detaylar."
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject2_fall01.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 4.0,
+      "celiski": false,
+      "uydurma": true,
+      "gerekce": "Olay doğru tanımlanmış ancak 'acil müdahale gerekli' ve 'yaralanma varlığı belirsizdir' gibi etikette bulunmayan somut detaylar eklenmiş."
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject2_fall02.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yere dusmesi ve yerde hareketsiz kalmasi' olayini dogru tanimliyor ve etiketteki bilgiyi asmiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject2_fall03.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 1.0,
+      "celiski": true,
+      "uydurma": false,
+      "gerekce": "Sistem, 'Fall' etiketli klipte herhangi bir olay tespit etmediğini iddia ederek etiketteki olayı tamamen kaçırıyor ve etiketiyle doğrudan çelişiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject3_fall01.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etiketteki 'yere dusme ve hareketsiz kalma' olayini dogru tanimliyor ve etikette yer almayan somut detaylar eklemiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject3_fall02.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 3.0,
+      "celiski": false,
+      "uydurma": true,
+      "gerekce": "Olay dışışıır, ancak 'yataşa dışme' ifadesi etikette belirtilen 'yere dışme ve yerde hareketsiz kalma' ile tam olarak uyuşlmuyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject3_fall03.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yere dusmesi ve yerde hareketsiz kalmasi' olayini dogru tanimliyor ve etiketteki bilgilerle celisiyor veya uydurma detay icermiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall01.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etiketteki 'yere düşme ve hareketsiz kalma' olayını doğru tanımlıyor ve etiketteki bilgilerle çelişen veya desteklenmeyen somut ayrıntılar içermiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall02.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yere dusmesi ve yerde hareketsiz kalmasi' olayini 'sandalyeden dusmesi' ile dogru tanimliyor ve etiketteki 'anomali' durumunu destekliyor; somut uydurma detay yok."
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall03.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yere düşme ve yerde hareketsiz kalma' olayını doğru tanımlıyor ve etiketteki bilgilerle çelişen veya desteklenmeyen somut ayrıntılar içermiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall04.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etiketteki 'yere dusmesi ve yerde hareketsiz kalmasi' olayini dogru tanimliyor ve etiketteki bilgiyi asan somut ayrintilar eklemiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall05.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etiketteki 'yere dusmesi ve yerde hareketsiz kalmasi' olayini dogru tanimliyor ve etiketteki bilgiyi asan somut detaylar eklemiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall06.mp4",
+      "kategori": "Fall",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yere dusme' olayini dogru tanimliyor ve etiketteki 'hareketsiz kalma' durumunu ima ediyor. Olayin nedenini veya sonrasini belirtmemesi, etiketteki bilgi eksikligini yansitir, uydurma degil."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo1.868.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 4.0,
+      "celiski": false,
+      "uydurma": true,
+      "gerekce": "Ozet, yangının varlığını ve yayılmasını doğru tanımlıyor ancak 'bir cisim veya kişi ani hareketle yere düşmüş' ifadesi etikette belirtilen olayla doğrudan ilişkili değil ve somut bir detay ekliyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo10.869.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'Fire' etiketindeki yangın olayını doğru tanımlıyor ve etikette belirtilmeyen somut ayrıntılar eklemiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo11.870.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yangın' etiketini doğru tanımlıyor ve etikette belirtilen olayı destekliyor, somut bir uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo2.871.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yangın' etiketli klipte yangının varlığını doğru bir şekilde belirtiyor ve etiketteki olayı destekleyen somut ayrıntılar eklemiyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo3.872.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yangın' etiketini doğru tanımlıyor ve etikette belirtilen olayı destekliyor, somut ayrıntı uydurmuyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo4.873.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yangın' etiketli klipte yangın olayını doğru tanımlıyor ve etiketteki bilgileri aşırı yorumlamıyor."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo5.874.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'alevler' olayını doğru tanımlıyor ve etiketteki 'yangın' sınıfıyla tam olarak uyumlu. Somut bir uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo6.875.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 3.0,
+      "celiski": false,
+      "uydurma": true,
+      "gerekce": "Kişinin 'kaybolması' etikette belirtilen 'alev' olayının somut bir detayıdır ve klipte böyle bir durumun olup olmadığına dair bir bilgi bulunmamaktadır."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo7.876.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'Fire' etiketli klipte gorulen yangin olayini dogru tanimliyor ve etikette belirtilen olay disinda uydurma somut ayrinti yok."
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo8.877.avi",
+      "kategori": "Fire",
+      "anomali": true,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, 'yangın' etiketini doğru tanımlıyor ve etikette belirtilen olayı destekliyor, somut bir ayrıntı uydurmuyor."
+    },
+    {
+      "path": "data/eval_scenario/Normal/4_tr13.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "eval satiri",
+      "olgusal_dayanaklilik": 1.0,
+      "celiski": true,
+      "uydurma": true,
+      "gerekce": "Etikette 'Normal' ve 'olagan faaliyet' belirtilmesine ragmen, sistem 'yetkisiz giris' ve 'guvenlik onlemlerinin ihlali' gibi kritik olaylar bildirmis ve bu durum etiketi tamamen celiskili hale getirmistir."
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_te1.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etikette belirtilen 'olagan faaliyet, kayda deger hicbir guvenlik olayi yok' durumunu dogru yansitiyor ve herhangi bir celiski veya uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_te12.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etikette belirtilen 'olagan faaliyet, kayda deger hicbir guvenlik olayi yok' durumunu dogru yansitiyor ve herhangi bir celiski veya uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_te14.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etikette belirtilen 'olagan faaliyet, kayda deger hicbir guvenlik olayi yok' durumunu dogru yansitiyor ve herhangi bir celiski veya uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_tr19.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "eval satiri",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etikette belirtilen 'olagan faaliyet, kayda deger hicbir guvenlik olayi yok' durumunu dogru yansitiyor ve herhangi bir celiski veya uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_tr20.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "ground_truth.json",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etikette belirtilen 'olagan faaliyet, kayda deger hicbir guvenlik olayi yok' durumunu dogru bir sekilde yansitiyor ve herhangi bir celiski veya uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Normal/6_te12.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "eval satiri",
+      "olgusal_dayanaklilik": 3.0,
+      "celiski": false,
+      "uydurma": true,
+      "gerekce": "Sistem, 'çarpışma riski' ve 'potansiyel tehlike' gibi etikette bulunmayan somut detaylar eklemiş."
+    },
+    {
+      "path": "data/eval_scenario/Normal/7_tr15.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "eval satiri",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etikette belirtilen 'olagan faaliyet, kayda deger hicbir guvenlik olayi yok' durumunu dogru bir sekilde yansitiyor ve herhangi bir celiski veya uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_926_x264.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "eval satiri",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etikette belirtilen 'olagan faaliyet, kayda deger hicbir guvenlik olayi yok' durumunu dogru yansitiyor ve herhangi bir celiski veya uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_928_x264.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "eval satiri",
+      "olgusal_dayanaklilik": 2.0,
+      "celiski": true,
+      "uydurma": true,
+      "gerekce": "Etiket 'Normal' ve 'olagan faaliyet' belirtirken, sistem 'cocugun fiziksel güvenliğini tehdit eden bir anomali' gibi bir iddia ortaya atıyor ve bu etiketteki durumla çelişiyor."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_929_x264.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "eval satiri",
+      "olgusal_dayanaklilik": 5.0,
+      "celiski": false,
+      "uydurma": false,
+      "gerekce": "Ozet, etikette belirtilen 'olagan faaliyet, kayda deger hicbir guvenlik olayi yok' durumunu dogru bir sekilde yansitiyor ve herhangi bir celiski veya uydurma yok."
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_932_x264.mp4",
+      "kategori": "Normal",
+      "anomali": false,
+      "etiket_kaynagi": "eval satiri",
+      "olgusal_dayanaklilik": 3.0,
+      "celiski": false,
+      "uydurma": true,
+      "gerekce": "Merdiven tırmanma olayının 'dikkat gerektirir' şeklinde yorumlanması ve 'yetkisiz giriş veya anormal bir faaliyet olabileceği' iddiası, 'Normal' etiketiyle çelişir ve etikette bulunmayan bir somut ayrıntıdır."
+    }
+  ],
   "OZET kalitesi": {
-    "mean": 4.62,
-    "std": 0.53,
-    "n": 90
+    "mean": 4.48,
+    "std": 0.63,
+    "n_klip": 37,
+    "n_eksen": 3,
+    "n_altskor": 111,
+    "metrik_turu": "IC-TUTARLILIK (self-consistency) — sistemin KENDI olay listesine karsi olculur; VIDEOYA DAYANAKLI DEGILDIR",
+    "not": "n_altskor = n_klip x n_eksen; guven araligi n_klip uzerinden okunmalidir (pseudo-replikasyon)"
   },
   "AKSIYON kalitesi": {
-    "mean": 4.74,
-    "std": 0.44,
-    "n": 72
+    "mean": 4.59,
+    "std": 0.58,
+    "n_klip": 28,
+    "n_eksen": 4,
+    "n_altskor": 112,
+    "metrik_turu": "IC-TUTARLILIK (self-consistency) — sistemin KENDI olay listesine karsi olculur; VIDEOYA DAYANAKLI DEGILDIR",
+    "not": "n_altskor = n_klip x n_eksen; guven araligi n_klip uzerinden okunmalidir (pseudo-replikasyon)"
   },
   "RISK gerekce": {
-    "mean": 5.0,
-    "std": 0.0,
-    "n": 54
+    "mean": 4.86,
+    "std": 0.47,
+    "n_klip": 28,
+    "n_eksen": 3,
+    "n_altskor": 84,
+    "metrik_turu": "IC-TUTARLILIK (self-consistency) — sistemin KENDI olay listesine karsi olculur; VIDEOYA DAYANAKLI DEGILDIR",
+    "not": "n_altskor = n_klip x n_eksen; guven araligi n_klip uzerinden okunmalidir (pseudo-replikasyon)"
   },
   "DIYALOG tek-tur": {
     "mean": 5.0,
     "std": 0.0,
-    "n": 7
+    "n_klip": 7,
+    "n_eksen": 1,
+    "n_altskor": 7,
+    "metrik_turu": "IC-TUTARLILIK (self-consistency) — sistemin KENDI olay listesine karsi olculur; VIDEOYA DAYANAKLI DEGILDIR",
+    "not": "n_altskor = n_klip x n_eksen; guven araligi n_klip uzerinden okunmalidir (pseudo-replikasyon)"
   },
   "DIYALOG cok-tur": {
     "mean": 5.0,
     "std": 0.0,
-    "n": 4
+    "n_klip": 4,
+    "n_eksen": 1,
+    "n_altskor": 4,
+    "metrik_turu": "IC-TUTARLILIK (self-consistency) — sistemin KENDI olay listesine karsi olculur; VIDEOYA DAYANAKLI DEGILDIR",
+    "not": "n_altskor = n_klip x n_eksen; guven araligi n_klip uzerinden okunmalidir (pseudo-replikasyon)"
   }
 }

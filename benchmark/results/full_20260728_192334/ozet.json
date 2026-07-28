@@ -1,0 +1,68 @@
+{
+  "zaman": "20260728_192334",
+  "adimlar": [
+    {
+      "kimlik": "holdout",
+      "ad": "Olay tespiti — TEMIZ HOLDOUT (UCF, 32 klip)",
+      "sartname": "§3 olay/kisi/riskli durum tespiti + zaman damgasi",
+      "durum": "OK",
+      "cikis_kodu": 0,
+      "sure_sn": 657.2,
+      "log": "holdout.log"
+    },
+    {
+      "kimlik": "senaryo",
+      "ad": "Olay tespiti — SENARYO (yangin/dusme/normal, 37 klip)",
+      "sartname": "§3 tespit · §4 anlamsal yorumlama · kategori adlandirma",
+      "durum": "OK",
+      "cikis_kodu": 0,
+      "sure_sn": 637.6,
+      "log": "senaryo.log"
+    },
+    {
+      "kimlik": "robust",
+      "ad": "Hata toleransi — bozuk/bos/siyah video",
+      "sartname": "§7 kararli calisma · §4 hata isleme",
+      "durum": "OK",
+      "cikis_kodu": 0,
+      "sure_sn": 0.9,
+      "log": "robust.log"
+    },
+    {
+      "kimlik": "holistik",
+      "ad": "Holistik sartname karnesi",
+      "sartname": "§4 aksiyon kalitesi · risk gerekcesi · JSON sema · §5 mock dispatch",
+      "durum": "OK",
+      "cikis_kodu": 0,
+      "sure_sn": 165.0,
+      "log": "holistik.log"
+    },
+    {
+      "kimlik": "diyalog",
+      "ad": "Diyalog yanitlari (otonomi)",
+      "sartname": "§7 niyet anlama · inisiyatif · dogru soru sorma · baglam-degisimi direnci",
+      "durum": "OK",
+      "cikis_kodu": 0,
+      "sure_sn": 21.0,
+      "log": "diyalog.log"
+    },
+    {
+      "kimlik": "performans",
+      "ad": "Performans: gecikme · VRAM · throughput",
+      "sartname": "§4 dusuk gecikme · kaynak optimizasyonu · yuksek hacim",
+      "durum": "OK",
+      "cikis_kodu": 0,
+      "sure_sn": 309.7,
+      "log": "performans.log"
+    },
+    {
+      "kimlik": "hakem",
+      "ad": "BAGIMSIZ hakem (Gemma) — ozet/aksiyon/diyalog kalitesi",
+      "sartname": "§4 Turkce ozet kalitesi · §7 diyalog kalitesi (DAYANAKLI mod, K11)",
+      "durum": "HATA",
+      "cikis_kodu": 1,
+      "sure_sn": 0.5,
+      "log": "hakem.log"
+    }
+  ]
+}

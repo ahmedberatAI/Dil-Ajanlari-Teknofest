@@ -1,0 +1,1949 @@
+{
+  "summary": {
+    "n_anomaly": 25,
+    "n_normal": 12,
+    "recall": 0.96,
+    "risk_cal_anom": 0.88,
+    "cat_match": 0.96,
+    "normal_fp": 0.0,
+    "normal_fp_operational": 0.3333,
+    "normal_dispatch_fp": 0.0,
+    "risk_cal_norm": 0.8333,
+    "latency_median": 17.1,
+    "ci": {
+      "recall": {
+        "k": 24,
+        "n": 25,
+        "p": 0.96,
+        "ci_low": 0.8046,
+        "ci_high": 0.9929,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "risk_cal_anom": {
+        "k": 22,
+        "n": 25,
+        "p": 0.88,
+        "ci_low": 0.7004,
+        "ci_high": 0.9583,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "cat_match": {
+        "k": 24,
+        "n": 25,
+        "p": 0.96,
+        "ci_low": 0.8046,
+        "ci_high": 0.9929,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "normal_fp": {
+        "k": 0,
+        "n": 12,
+        "p": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2425,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "normal_fp_operational": {
+        "k": 4,
+        "n": 12,
+        "p": 0.3333,
+        "ci_low": 0.1381,
+        "ci_high": 0.6094,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "normal_dispatch_fp": {
+        "k": 0,
+        "n": 12,
+        "p": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2425,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "risk_cal_norm": {
+        "k": 10,
+        "n": 12,
+        "p": 0.8333,
+        "ci_low": 0.552,
+        "ci_high": 0.953,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      }
+    },
+    "ci_method": "wilson",
+    "ci_level": 0.95,
+    "per_category_ci": {
+      "Fire": {
+        "recall": {
+          "k": 10,
+          "n": 10,
+          "p": 1.0,
+          "ci_low": 0.7225,
+          "ci_high": 1.0,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        },
+        "cat_match": {
+          "k": 10,
+          "n": 10,
+          "p": 1.0,
+          "ci_low": 0.7225,
+          "ci_high": 1.0,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        }
+      },
+      "Fall": {
+        "recall": {
+          "k": 14,
+          "n": 15,
+          "p": 0.9333,
+          "ci_low": 0.7018,
+          "ci_high": 0.9881,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        },
+        "cat_match": {
+          "k": 14,
+          "n": 15,
+          "p": 0.9333,
+          "ci_low": 0.7018,
+          "ci_high": 0.9881,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        }
+      },
+      "Normal": {
+        "recall": {
+          "k": 4,
+          "n": 12,
+          "p": 0.3333,
+          "ci_low": 0.1381,
+          "ci_high": 0.6094,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        },
+        "cat_match": {
+          "k": 0,
+          "n": 0,
+          "p": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 1.0,
+          "ci_method": "wilson",
+          "ci_level": 0.95
+        }
+      }
+    }
+  },
+  "leak_warning": null,
+  "eval_dir": "data/eval_scenario",
+  "dedup": {
+    "enabled": true,
+    "n_input": 37,
+    "n_unique": 37,
+    "n_skipped": 0,
+    "skipped": []
+  },
+  "rows": [
+    {
+      "path": "data/eval_scenario/Fall/Subject1_fall01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 7,
+      "latency_s": 21.6,
+      "summary": "Bir kişi sandalyeden ani düşmüş ve yere yatmış hale gelmiştir. Hareketsiz kalmıştır; bu durum acil sağlık müdahale gerektiren ciddi bir kaza olarak değerlendirilmelidir.",
+      "events": [
+        {
+          "time": "00:04",
+          "event": "kişi sandalyeden ani düşüyor",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "alt"
+        },
+        {
+          "time": "00:05",
+          "event": "kişi yere yatmış ve hareketsiz",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişinin yere düşmesi ve hareketsiz kalması, yaşam tehdit edici bir sağlık durumu olabileceği için en yüksek risk seviyesi uygulanmalıdır.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Acil sağlık ekibi çağrılmalı.",
+          "priority": "Kritik",
+          "rationale": "Kişinin hareketsiz kalması, ciddi yaralanma veya bilinç kaybı ihtimali taşıdığı için hemen tıbbi müdahale gerekir."
+        },
+        {
+          "action": "Yerel güvenlik personeli, sahneyi korumalı ve çevreye erişimi engellemelidir.",
+          "priority": "Yüksek",
+          "rationale": "Yaralının durumu stabil hale gelene kadar sahneye müdahale edenlerin güvenliği sağlanmalı ve kazanın tekrarlanması engellenmelidir."
+        },
+        {
+          "action": "Kamera kayıtları ve çevresel durumlar kontrol edilmeli.",
+          "priority": "Orta",
+          "rationale": "Kazanın nedeni ve etkilenen alanlar belirlenerek benzer olayların önlenmesi için gerekli önlemler alınmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject1_fall02.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 6,
+      "latency_s": 18.3,
+      "summary": "Bir kişi sandalyeden ani düşerek yere devrilmiş ve hareketsiz kalmıştır. Bu durum, fiziksel bir kaza sonucu oluşmuş olup, kişiye hemen sağlık müdahale edilmesi gerekmektedir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Kişi sandalyeden ani düşüyor",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "alt"
+        },
+        {
+          "time": "00:03",
+          "event": "Kişi yere düştükten sonra hareketsiz kalmış",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişi yere düştükten sonra hareketsiz kalmıştır; bu, ciddi yaralanma veya bilinç kaybı ihtimali taşıdığı için acil sağlık müdahalesi gerektirir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi hemen çağrılmalı ve bölgeye yönlendirilmelidir.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz kalmıştır; bu durumda yaşam tehlikesi olabileceği için en kısa sürede tıbbi müdahale gerekir."
+        },
+        {
+          "action": "Olay yerine güvenlik görevlisi gönderilmeli ve çevreyi korumalıdır.",
+          "priority": "Yüksek",
+          "rationale": "Kişinin durumu belirsiz olduğu için çevreye müdahale edenlerin güvenliği sağlanmalı ve olay alanına erişim sınırlandırılmalıdır."
+        },
+        {
+          "action": "Kamera kayıtları ve çevresel durumlar kontrol edilmeli ve raporlanmalıdır.",
+          "priority": "Orta",
+          "rationale": "Olayın nedeni ve sonucu analiz edilerek benzer olayların önlenmesi için gerekli önlemler alınmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject1_fall03.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 6,
+      "latency_s": 17.2,
+      "summary": "00:03'te sol tarafta bir kişi sandalyeden ani düşmüştür. Görüntüde bu olayın sonraki anlarda herhangi bir müdahale veya acil durum belirtisi gözlemlenmemiştir. Olayın doğrudan bir tehlike veya yayılma riski yoktur.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi sandalyeden ani düşüyor",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "sol"
+        }
+      ],
+      "risk_rationale": "Kişi ani düşme nedeniyle ciddi yaralanma riski taşıyor olabilir; acil müdahale gerektiren bir kaza olduğu için risk Yüksek olarak değerlendirilmiştir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Ani düşme, ciddi yaralanmaları tetikleyebilir; acil müdahale gecikmesi tehlikeli olabilir."
+        },
+        {
+          "action": "Düşen kişinin durumunu gözlemleyen bir operatörün varlığını doğrulayın.",
+          "priority": "Yüksek",
+          "rationale": "Kişinin yaralanıp yaralanmadığını ve acil müdahaleye ihtiyacı olup olmadığını belirlemek için gözlem gerektirir."
+        },
+        {
+          "action": "Düşen kişinin etrafındaki alanın güvenliğini sağlayın.",
+          "priority": "Orta",
+          "rationale": "Kişinin düşme nedeniyle çevredeki eşyaların veya diğer kişilerin etkilenmesi riski varsa, alanın güvenliğini sağlamak gerekir."
+        },
+        {
+          "action": "Olayın kaydedildiği kameranın kaydıyla ilgili güvenlik ekibiyle paylaşın.",
+          "priority": "Düşük",
+          "rationale": "Olayın nedeni ve sonuçları incelenerek benzer olayların önlenmesi için kayıtların paylaşılması faydalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject2_fall01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": true,
+      "triggered": [],
+      "duration_s": 6,
+      "latency_s": 14.8,
+      "summary": "00:03'te bir kişi ani şekilde yere düşmüştür. Görüntüde bu olayın ardından başka bir olay veya etki gözlemlenmemiştir. Kişiye yönelik acil müdahale gerekli olup, çevredeki kişilerin durumu ve yaralanma varlığı belirsizdir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi ani şekilde yere düşmüştür",
+          "severity": "Düşük",
+          "category": "Kaza",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Kişi ani şekilde yere düşmüştür ancak görüntüde yaralanma veya acil durum belirtisi gözlemlenmemiştir. Bu, potansiyel ciddi bir kaza olabileceği için orta düzeyde bir risk oluşturur.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Kişinin durumunu kontrol etmek için yakın çevreye müdahale eden personeli yönlendir.",
+          "priority": "Yüksek",
+          "rationale": "Ani düşme, yaralanma veya sağlık sorunu olabileceği için hemen müdahale gerekir."
+        },
+        {
+          "action": "Güvenlik personeli, düşen kişinin etrafını kontrol ederek çevredeki potansiyel tehlikeleri (örneğin, nesne, kimyasal madde vb.) tespit etsin.",
+          "priority": "Orta",
+          "rationale": "Düşen kişinin yere düşme nedeniyle çevredeki nesnelerin veya ortamın tehlikeli olup olmadığı belirsizdir."
+        },
+        {
+          "action": "Görüntü kaydıyla ilgili güvenlik operatörüne rapor vererek, olayın tekrarlanma riskini değerlendirmek için ekstra gözlem istenmeli.",
+          "priority": "Düşük",
+          "rationale": "Olayın tekrarlanma olasılığına dair bilgi edinmek için kayıtların analiz edilmesi gerekir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject2_fall02.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 8,
+      "latency_s": 18.1,
+      "summary": "00:03–00:04 arasında kişi yere uzanarak hareketsiz kalmıştır. Bu durum, kişiye yönelik bir sağlık acil durumu olabileceği için hemen müdahale edilmelidir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi yere uzandıktan sonra hareketsiz kalıyor",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişinin hareketsiz kalması, ciddi bir sağlık sorunu veya yaralanma ihtimalini göstermektedir. Bu durum acil müdahale gerektiren bir risk olarak değerlendirilmelidir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerine hemen bildirin.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz kalmıştır; bu durum ciddi bir sağlık acil durumu olabilir ve hemen müdahale gerektirir."
+        },
+        {
+          "action": "Yerel güvenlik personeli, kişinin durumunu kontrol ederek çevreyi korumaya çalışın.",
+          "priority": "Yüksek",
+          "rationale": "Kişinin etrafındaki alanın güvenliği sağlanmalı ve müdahale sırasında herhangi bir tehlike oluşmaması için önlem alınmalıdır."
+        },
+        {
+          "action": "Kamera kayıtlarını saklayın ve olayla ilgili tüm detayları raporlayın.",
+          "priority": "Orta",
+          "rationale": "Olayın nedeni ve gelişimi için kayıtların korunması, sonraki incelemelerde ve sorumluluk belirlemede kritik öneme sahiptir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject2_fall03.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": false,
+      "triggered": [],
+      "duration_s": 7,
+      "latency_s": 11.8,
+      "summary": "Görüntüde herhangi bir olay tespit edilmedi. Sistemdeki tüm sahneler normal ve beklenen davranışları göstermektedir. Güvenlik operatörüne herhangi bir müdahale gerekmiyor.",
+      "events": [],
+      "risk_rationale": "Görüntüde herhangi bir tehlike, kaza, tehlikeli davranış veya anormal durum tespit edilmedi. Ortam sakin ve normale uygun.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Görüntüyü 30 saniye öncesine geriye tarayarak kontrol edin.",
+          "priority": "Düşük",
+          "rationale": "Olay tespit edilmediğinden, geçmişte bir sorunun var olup olmadığını doğrulamak için kontrol edilmelidir."
+        },
+        {
+          "action": "Kamera bağlantısını ve sensörlerin çalışmasını kontrol edin.",
+          "priority": "Düşük",
+          "rationale": "Görüntüde herhangi bir olay yoksa, sistemde teknik bir arıza olup olmadığını kontrol etmek gerekir."
+        },
+        {
+          "action": "Operasyon merkezine rapor verin.",
+          "priority": "Düşük",
+          "rationale": "Görüntüde herhangi bir olay olmadığı için, operasyon merkezine rapor verilmesi sisteminin sürekli izlenmesini sağlar."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject3_fall01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 4,
+      "latency_s": 16.3,
+      "summary": "00:02'de bir kişi yere düşmüş ve hareketsiz kalmıştır. Görüntüde bu olayın sonraki anlarda devam etmediği veya müdahale edilmediği görülmektedir. Kişiye müdahale edilmemiş ve durumun ciddiyeti belirsizdir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "kişi yere düşmüş ve hareketsiz kalmış",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişi yere düşmüş ve hareketsiz kalmıştır; bu durum sağlık açısından ciddi bir tehdit oluşturabilir. Müdahale edilmemiş olması, durumun kontrol altına alınmamış olmasının göstergesidir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Hareketsiz kalmış bir kişi için en kısa sürede sağlık müdahalesi gereklidir; ciddi yaralanma veya kalp durması ihtimali var."
+        },
+        {
+          "action": "Olay yerine güvenlik görevlisini yönlendirin.",
+          "priority": "Yüksek",
+          "rationale": "Güvenlik görevlisi, çevreyi kontrol ederek diğer kişilerin etkilenmesini engelleyebilir ve müdahaleyi destekleyebilir."
+        },
+        {
+          "action": "Kamera kayıtlarını saklayın ve olayı yöneticilere bildirin.",
+          "priority": "Orta",
+          "rationale": "Olayı kaydetmek, sonraki incelemelerde ve sorumluluk belirlemede kritik bir kaynaktır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject3_fall02.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 7,
+      "latency_s": 16.4,
+      "summary": "00:03'te kişi yatağa düşmüştür. Bu olay, anında müdahale gerektiren bir kaza olarak değerlendirilmelidir. Görüntüde başka olaylar veya bağlam verisi yoktur.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "Kişi yatağa düşüyor",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi yatağa düşmesi, ciddi yaralanma veya yaşam tehlikesi riski taşıyan bir kaza olabilir. Sağlık durumunun anında değerlendirilmesi gerekmektedir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi yatağa düşmüş ve ciddi bir kaza olduğu için hemen tıbbi müdahale gerekir."
+        },
+        {
+          "action": "Yerel güvenlik personeli, olay yerini korumak ve çevreyi kontrol etmek için görevlendirin.",
+          "priority": "Yüksek",
+          "rationale": "Olay yerinin korunması, müdahaleyi engellemeyecek ve diğer kişilerin zarar görmemesini sağlayacaktır."
+        },
+        {
+          "action": "Kamera kayıtlarını inceleyerek düşme nedenini belirlemeye çalışın.",
+          "priority": "Orta",
+          "rationale": "Nedenin belirlenmesi, benzer olayların önlenmesi için gerekli önlemleri almak için önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/Subject3_fall03.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 6,
+      "latency_s": 17.8,
+      "summary": "00:02'de kişi ani şekilde yere doğru düşmeye başlamıştır. Bu durum, hemen müdahale gerektiren bir kaza olarak değerlendirilmelidir. Görüntüde başka olaylar veya nedenler belirtilmemiş olup, sadece bu tek olay gözlemlenmiştir.",
+      "events": [
+        {
+          "time": "00:02",
+          "event": "Kişi ani şekilde yere doğru düşmeye başlamış",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "alt"
+        }
+      ],
+      "risk_rationale": "Kişi ani şekilde yere düşmesi, ciddi yaralanma veya yaşam tehditi gibi bir durumun belirtisi olabilir. Bu nedenle risk seviyesi Yüksek olarak sınıflandırılmıştır.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Hemen sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi ani şekilde yere düşmüştür; bu durum ciddi yaralanmalar veya yaşam tehdit edebilir."
+        },
+        {
+          "action": "Yerel güvenlik personeli, düşen kişinin etrafını kontrol ederek çevreye herhangi bir tehlike olup olmadığını inceleyin.",
+          "priority": "Yüksek",
+          "rationale": "Düşmenin nedeni veya çevredeki faktörlerin bir tehlike oluşturup oluşturmadığını anlamak için çevreyi kontrol etmek gerekir."
+        },
+        {
+          "action": "Kamera kayıtlarını ve diğer güvenlik sistemlerini inceleyerek düşmenin nedenini belirlemeye çalışın.",
+          "priority": "Orta",
+          "rationale": "Düşmenin nedeni belirlenirse, benzer olayların tekrarlanmasını önlemek için önlemler alınabilir."
+        },
+        {
+          "action": "Düşen kişiye müdahale eden kişilerin güvenliğini sağlayın ve müdahale sırasında herhangi bir tehlike olup olmadığını kontrol edin.",
+          "priority": "Orta",
+          "rationale": "İşçilerin veya müdahale edenlerin güvenliği, olayın kontrol altına alınması için kritiktir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall01.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 11,
+      "latency_s": 18.3,
+      "summary": "00:06-00:10 arasında bir kişi yere düştü ve hareketsiz kaldı. Bu durum, hemen müdahale gerektiren bir sağlık acil durumudur. Görüntüde başka bir olay veya etkileşim gözlemlenmemiş olup, sadece bu tek olay var.",
+      "events": [
+        {
+          "time": "00:06",
+          "event": "Kişi yere düştü ve hareketsiz kaldı",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi yere düştükten sonra hareketsiz kaldı ve bu, ciddi yaralanma veya yaşam tehdidi ihtimali taşıyan bir sağlık acil durumudur. Hemen müdahale edilmemesi durumunda ölümcül sonuçlar doğrultusunda değerlendirilmelidir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Hemen sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz kaldığı için yaşam tehdidi olabilir; en kısa sürede tıbbi müdahale gerekir."
+        },
+        {
+          "action": "Yerel güvenlik personeli, kişinin etrafını kontrol ederek müdahaleye engel olacak her şeyi kaldırın.",
+          "priority": "Yüksek",
+          "rationale": "Kişinin etrafındaki alan güvenli tutulmalı ve müdahale edenlerin erişimini engelleyebilecek bir durum olmamalıdır."
+        },
+        {
+          "action": "Kamera kaydı ve olay zaman damgası ile birlikte olayı üst düzey yetkililere bildirin.",
+          "priority": "Orta",
+          "rationale": "Olayın detaylı kayıtlı olması, sonrası için sorumluluk ve müdahale analizi için gereklidir."
+        },
+        {
+          "action": "Kişinin yere düşmesinin nedenini belirlemek için güvenlik personeli, olay yerini inceleyebilir.",
+          "priority": "Orta",
+          "rationale": "Düşmenin nedeni (kayıp, yaralanma, kaza vb.) belirlenerek tekrarlanmaması için önlemler alınabilir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall02.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 7,
+      "latency_s": 17.4,
+      "summary": "00:04'te merkezdeki sandalyeden bir kişi ani şekilde düşmüştür. Bu olay, görüntüdeki tek ve anlık bir kaza olayıdır; çevrede başka bir olay veya tehlike gözlemlenmemiştir.",
+      "events": [
+        {
+          "time": "00:04",
+          "event": "Kişi sandalyeden ani şekilde düşmüştür",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi ani şekilde düşmüş olup, bu durum ciddi yaralanma veya yaşam tehditi riski taşıyabilir; sağlık durumunun değerlendirilmesi ve acil müdahale yapılması gerekmektedir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Ani düşme, ciddi yaralanma veya bilinç kaybı riski taşıdığından acil tıbbi müdahale gereklidir."
+        },
+        {
+          "action": "Düşen kişinin etrafını güvenli hale getirin ve diğer kişileri uzaklaştırın.",
+          "priority": "Yüksek",
+          "rationale": "Kaza alanına müdahale edenlerin güvenliği ve diğer kişilerin etkilenmemesi için alanın izole edilmesi gerekir."
+        },
+        {
+          "action": "Kaza sahnesini güvenlik kamerası kayıtlarında kaydetmiş olduğunuzdan emin olun ve kayıtları yetkililere iletmeyi unutmayın.",
+          "priority": "Orta",
+          "rationale": "Olayın nedeni ve detayları belirlenebilmesi için kayıtların korunması ve paylaşılması önemlidir."
+        },
+        {
+          "action": "Kaza sonrası bölgeye güvenlik görevlisini yönlendirin.",
+          "priority": "Orta",
+          "rationale": "Güvenlik görevlisi, olay alanını kontrol ederek diğer potansiyel riskleri değerlendirebilir ve gerekli önlemleri alabilir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall03.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 1,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": true,
+      "triggered": [],
+      "duration_s": 14,
+      "latency_s": 16.2,
+      "summary": "00:07'de kişi sandalyeden kayarak yere düştü. 00:10'da ise aynı kişi ani şekilde yere düştü ve hareketsiz kaldı. İki olay da aynı kişiye ait olup, ilk olaydan sonra ikinci olay meydana geldi.",
+      "events": [
+        {
+          "time": "00:07",
+          "event": "kişi sandalyeden kayarak yere düşmüştür",
+          "severity": "Düşük",
+          "category": "Kaza",
+          "region": null
+        },
+        {
+          "time": "00:10",
+          "event": "Kişi ani şekilde yere düştü ve hareketsiz kaldı",
+          "severity": "Düşük",
+          "category": "Sağlık",
+          "region": null
+        }
+      ],
+      "risk_rationale": "İkinci olayda kişi hareketsiz kaldı ve bu, sağlık açısından ciddi bir durum olabilir. İlk olay (kayma) ikinci olay (hareketsizlik) ile doğrudan ilişkili olabilir; ancak görselde yaralanma veya acil durum belirtisi açıkça görülmemiş.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerine bildirim yapın.",
+          "priority": "Yüksek",
+          "rationale": "Kişi hareketsiz kaldı ve bu, sağlık açısından ciddi bir durum olabilir; acil müdahale gerekli olabilir."
+        },
+        {
+          "action": "Olay yerine güvenlik görevlisini yönlendirin.",
+          "priority": "Orta",
+          "rationale": "Güvenlik görevlisi, durumu gözlemleyerek müdahale edebilir ve gerekirse diğer ekipleri çağırabilir."
+        },
+        {
+          "action": "Kamera kayıtlarını inceleyerek olayın nedenini belirleyin.",
+          "priority": "Orta",
+          "rationale": "İlk olaydan sonra ikinci olay meydana geldiğinden, nedeni araştırılarak benzer olayların tekrarlanmasını önlemeye yardımcı olabilir."
+        },
+        {
+          "action": "Kişinin durumu hakkında bilgi almak için çevredeki kişilerden yardım isteyin.",
+          "priority": "Düşük",
+          "rationale": "Kişinin durumu hakkında daha fazla bilgi edinmek, müdahaleyi daha doğru hale getirebilir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall04.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 6,
+      "latency_s": 17.1,
+      "summary": "Bir kişi sandalyeden düşerek yere yatıp hareketsiz kaldı. Bu durum, fiziksel bir kaza sonucu ortaya çıkan acil sağlık durumunu göstermektedir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Kişi sandalyeden düşüyor",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "merkez"
+        },
+        {
+          "time": "00:03",
+          "event": "Kişi yere yatıp hareketsiz kalıyor",
+          "severity": "Kritik",
+          "category": "Sağlık",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi yere yatıp hareketsiz kalması, ciddi yaralanma veya bilinç kaybı ihtimalini barındıran kritik bir sağlık durumudur.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Hareketsiz kalmış kişi için acil tıbbi müdahale gereklidir."
+        },
+        {
+          "action": "Kaza alanını güvenlikle kapalı tutun ve diğer kişileri uzaklaştırın.",
+          "priority": "Yüksek",
+          "rationale": "Yaralının durumunu korumak ve ikinci bir kazaya engel olmak için alan izole edilmelidir."
+        },
+        {
+          "action": "Kaza anını kaydeden güvenlik kamerasını kontrol edin ve kayıtları yetkililere iletebilirsiniz.",
+          "priority": "Orta",
+          "rationale": "Olayla ilgili soruşturma ve güvenlik analizi için kayıtlar gerekli olacaktır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall05.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 10,
+      "latency_s": 16.2,
+      "summary": "00:07'de bir kişi yere düşerek hareketsiz kaldı. Görüntüde bu olayın sonraki anlarda devamı veya başka bir olay gözlemlenmedi. Kişiye yönelik acil müdahale gerekli olabilir.",
+      "events": [
+        {
+          "time": "00:07",
+          "event": "Kişi yere düşerek hareketsiz kaldı",
+          "severity": "Yüksek",
+          "category": "Sağlık",
+          "region": "üst"
+        }
+      ],
+      "risk_rationale": "Kişi yere düşerek hareketsiz kaldı ve bu durum sağlık açısından ciddi bir tehdit oluşturabilir. Hareketsiz kalma, yaralanma veya felç gibi durumları işaret edebilir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi hareketsiz kaldı ve sağlık açısından ciddi bir durum olabilir; en kısa sürede müdahale edilmelidir."
+        },
+        {
+          "action": "Olay yerine güvenlik görevlisini yönlendirin.",
+          "priority": "Yüksek",
+          "rationale": "Güvenlik görevlisi, durumu kontrol ederek çevreyi koruyacak ve müdahaleyi destekleyecek."
+        },
+        {
+          "action": "Olay yerini korumak için çevreye erişimi kısıtlayın.",
+          "priority": "Orta",
+          "rationale": "Kişinin durumu ciddi olabilir; diğer kişilerin yaklaşması tehlikeli olabilir veya müdahaleyi engelleyebilir."
+        },
+        {
+          "action": "Kamera kayıtlarını inceleyerek kişiye ait bilgileri (örneğin kimlik, görev) belirleyin.",
+          "priority": "Orta",
+          "rationale": "Kişinin kimliği ve durumu hakkında bilgi edinmek, müdahaleyi daha etkili hale getirebilir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fall/urfd_fall06.mp4",
+      "category": "Fall",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 3,
+      "risk_ord": 3,
+      "risk_level": "Yüksek",
+      "category_match": true,
+      "triggered": [
+        "saglik_ekibi_yonlendir",
+        "alan_guvenligini_sagla",
+        "olay_kaydi_olustur",
+        "yonetici_bilgilendir"
+      ],
+      "duration_s": 7,
+      "latency_s": 17.7,
+      "summary": "00:03'te kişi ani şekilde yere düştü. Görüntüde bu olayın nedeni veya sonraki gelişim belirgin şekilde gözlemlenmemiş olup, çevrede başka bir olay veya tehdit tespit edilememiştir.",
+      "events": [
+        {
+          "time": "00:03",
+          "event": "kişi ani şekilde yere düştü",
+          "severity": "Yüksek",
+          "category": "Kaza",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kişi ani şekilde yere düştüğü için ciddi bir kaza veya yaralanma ihtimali var; bu durum acil müdahale gerektiren bir tehlike olarak değerlendirilmelidir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Sağlık ekibi veya acil müdahale ekiplerini çağırın.",
+          "priority": "Kritik",
+          "rationale": "Kişi ani yere düştüğü için ciddi yaralanma veya sağlık sorunu olabileceği için en kısa sürede tıbbi müdahale gerekir."
+        },
+        {
+          "action": "Yerel güvenlik personeli, olay yerini korumak ve çevreye erişimi kısıtlamak için harekete geçin.",
+          "priority": "Yüksek",
+          "rationale": "Olayın nedeni belirsiz olduğu için, olay yerine yabancı girişlerin engellenmesi ve güvenliğin sağlanması kritik önem taşır."
+        },
+        {
+          "action": "Olay yerine güvenlik kamerasının kaydını inceleyerek, düşme nedenini belirlemeye çalışın.",
+          "priority": "Orta",
+          "rationale": "Düşmenin nedeni (örneğin, kayma, düşme, elektrik çarpması vb.) belirlenerek, benzer olayların önlenmesi için gerekli önlemler alınabilir."
+        },
+        {
+          "action": "Operasyonel ekiplerden, olay yerine ulaşabilecek bir sağlık ekibi veya acil müdahale ekipleri için yardım isteyin.",
+          "priority": "Yüksek",
+          "rationale": "Görevin doğrultusunda, olay yerine acil müdahale ekiplerinin hızlıca ulaşması, kişinin durumunu kurtarmak için kritik öneme sahiptir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo1.868.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 5,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 29,
+      "latency_s": 27.7,
+      "summary": "Araçta küçük bir alev parçası tespit edildikten sonra yangın hızla yayıldı ve yoğun duman yükseldi. Bu durum, araç içindeki tüm pencerelerden alevlenmeye devam etti. Aynı zamanda, bir cisim veya kişi ani bir hareketle yere düşmüş ve yangın hala merkezde devam ediyor.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "araçta küçük alev parçası",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "alt"
+        },
+        {
+          "time": "00:02",
+          "event": "yangın hızla yayılıyor, duman yükseliyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "alt"
+        },
+        {
+          "time": "00:04",
+          "event": "araçta yoğun duman, tüm pencerelerden alev",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "alt"
+        },
+        {
+          "time": "00:16",
+          "event": "bir cisim veya kişi ani hareketle yere düşmüş",
+          "severity": "Orta",
+          "category": "Kaza",
+          "region": null
+        },
+        {
+          "time": "00:20",
+          "event": "yangın ve duman",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Araçta başlayan yangın hızla yayıldı, yoğun duman ve tüm pencerelerden alevlenme gözlemlendi. Bu, ciddi bir yangın tehlikesi oluşturuyor ve çevredeki kişilerin güvenliği doğrudan tehdit altında.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Yangın söndürme ekiplerini ve acil müdahale ekibini hemen çağırın.",
+          "priority": "Kritik",
+          "rationale": "Yangın hızla yayılıyor ve yoğun duman var; müdahale gecikirse ciddi can kaybı veya hasat riski olabilir."
+        },
+        {
+          "action": "Yerel alanın tüm giriş-çıkışlarını kapatın ve çevreye erişimi engelleyin.",
+          "priority": "Yüksek",
+          "rationale": "Yangın yayılmasını önlemek ve çevredeki kişileri korumak için alanın erişimi kısıtlanmalıdır."
+        },
+        {
+          "action": "Yere düşen cisim veya kişiyi kontrol edin; yaralanma varsa sağlık ekiplerini çağırın.",
+          "priority": "Orta",
+          "rationale": "Ani düşme olayı, yaralanma veya kaza riski taşıyor; sağlık ekiplerinin müdahale etmesi gerekir."
+        },
+        {
+          "action": "Yangın bölgesindeki tüm personeli ve varsa diğer araçları uzaklaştırın.",
+          "priority": "Yüksek",
+          "rationale": "Yangın yayılabilir; personelin ve diğer araçların güvenliği için uzaklaştırılması zorunludur."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (352×288); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo10.869.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 8,
+      "latency_s": 17.3,
+      "summary": "00:00 itibariyle büyük ölçekli bir yangın ve yoğun siyah duman gözlemlenmiştir. Bu durum, hemen müdahale gerektiren bir acil güvenlik olayıdır ve çevredeki alanlara tehlike yayabilir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "büyük ölçekli yangın ve yoğun siyah duman",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "üst"
+        }
+      ],
+      "risk_rationale": "Büyük ölçekli yangın ve yoğun duman, ciddi fiziksel hasar ve insan sağlığı tehditlerine neden olabilir; bu nedenle risk en yüksek seviyede değerlendirilmelidir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Yangın söndürme ekiplerini hemen yönlendir ve müdahaleyi başlat.",
+          "priority": "Kritik",
+          "rationale": "Yangın ve duman, hemen müdahale edilmeden daha büyük hasarlara ve tehlikelere yol açabilir."
+        },
+        {
+          "action": "Tesisin tüm çıkışlarını ve yangın yollarını kontrol ederek, çalışanların güvenli şekilde tahliye edilmesini sağla.",
+          "priority": "Kritik",
+          "rationale": "Duman ve yangın, hava akışını ve erişimi etkileyebilir; tahliye yollarının açık olması hayati önem taşır."
+        },
+        {
+          "action": "Güvenlik personeline, yangın bölgesindeki tüm kişilerin kimliklerini ve konumlarını belirlemek için hemen bilgi topla.",
+          "priority": "Yüksek",
+          "rationale": "Yaralanma veya kaza riski olan kişilerin hemen tespit edilmesi ve sağlık ekiplerine yönlendirilmesi gerekmektedir."
+        },
+        {
+          "action": "Yangın bölgesindeki tüm elektrik ve motor sistemlerini kapat ve yangın yayılmasını engelle.",
+          "priority": "Yüksek",
+          "rationale": "Elektriksel kaynaklar yangını daha da büyütebilir; bu nedenle hemen kesilmelidir."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (400×256); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo11.870.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "guvenlik_ekibi_uyar",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 12,
+      "latency_s": 18.4,
+      "summary": "Ormanda büyük bir yangın mevcut ve iki kişi yangının yakınında bulunuyor. Bu kişiler yangına yakın hareket ediyor; durumun tehlikeli olduğu açık. Yangın ve kişilerin yakınlığı, acil müdahale gerektiren bir güvenlik olayıdır.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Ormanda büyük yangın ve iki kişi yangının yakınında",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "sol"
+        },
+        {
+          "time": "00:10",
+          "event": "ağaçlar arasında yangın, insan figürü yangına yakın hareket ediyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "sol"
+        }
+      ],
+      "risk_rationale": "Yangın ve insan figürlerinin yakınlığı, ciddi yaralanma veya ölüme neden olma potansiyeline sahip olup, müdahale edilmeden tehlikeli bir durum olarak değerlendirilmelidir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Acil yangın ekiplerini çağır ve yangınla ilgili tüm müdahaleleri koordine et.",
+          "priority": "Kritik",
+          "rationale": "Yangın, insanlarla birlikte olduğu için en kısa sürede söndürülmesi gereken bir acil durumdur."
+        },
+        {
+          "action": "Yangın bölgesindeki kişilerin konumunu belirle ve onlara uzaklaştır.",
+          "priority": "Kritik",
+          "rationale": "İnsanların yangınla temas etmesi riski nedeniyle hemen güvenli bir bölgeye alınması gerekmektedir."
+        },
+        {
+          "action": "Güvenlik ekiplerini bölgeye yönlendir ve durumu kontrol altına al.",
+          "priority": "Yüksek",
+          "rationale": "Yangın bölgesindeki kişilerin güvenliğini sağlamak ve potansiyel tehlikeleri yönetmek için güvenlik ekiplerinin varlığı gereklidir."
+        },
+        {
+          "action": "Yangın bölgesindeki tüm yolları kapat ve erişimi engelle.",
+          "priority": "Orta",
+          "rationale": "Yangın yayılmasını önlemek ve diğer kişilerin bölgeye girmesini engellemek için erişimi kontrol altına almak gerekir."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (400×256); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo2.871.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 17,
+      "latency_s": 17.1,
+      "summary": "Mutfakta büyük bir yangın başladı ve bu durum hemen müdahale gerektiriyor. Yangının yayılmasına izin verilmezse çevredeki alanlar ve kişiler için ciddi tehdit oluşturabilir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Mutfakta büyük bir yangın başladı",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Mutfakta büyük bir yangın tespit edildi; bu, çevreye zarar verme, yaralanma veya daha büyük hasar riski taşıyan bir olaydır.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Yangına müdahale ekiplerini hemen yönlendir.",
+          "priority": "Kritik",
+          "rationale": "Yangın kontrol altına alınmazsa hızla yayılabilir ve ciddi hasar veya yaralanmalarla sonuçlanabilir."
+        },
+        {
+          "action": "Mutfak alanını ve çevresini tüm erişimden tamamen izole et.",
+          "priority": "Yüksek",
+          "rationale": "Yangının yayılmasını önlemek için diğer bölgelere erişimin engellenmesi gerekir."
+        },
+        {
+          "action": "Yakın çevredeki kişileri güvenli bir alana tahliye et.",
+          "priority": "Yüksek",
+          "rationale": "Yangınla ilgili tehlike altında olan kişilerin güvenliği öncelikli olmalıdır."
+        },
+        {
+          "action": "Yangın söndürme ekipmanlarını kontrol et ve gerekirse kullan.",
+          "priority": "Orta",
+          "rationale": "Ekipmanların hazır olması, müdahale süresini kısaltır ve yangının büyümesini engeller."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (480×272); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo3.872.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 13,
+      "latency_s": 16.4,
+      "summary": "00:00–00:10 arasında merkezde kontrol dışı büyüyen bir yangın tespit edildi. Yangın, çevresel yapıları tehdit edebilecek şekilde hızla yayılmaktadır.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "kontrol dışı büyüyen yangın",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Yangın kontrol dışı büyüyerek çevreye tehdit oluşturuyor ve anında müdahale edilmezse ciddi hasar veya can kaybına neden olabilir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Yangın söndürme ekiplerini anında yönlendir ve müdahaleyi başlat.",
+          "priority": "Kritik",
+          "rationale": "Yangın kontrol dışı büyüyor; müdahale gecikirse tehlike artar."
+        },
+        {
+          "action": "Tesisin tüm çıkış kapılarını ve yangın yollarını kontrol ederek güvenli çıkış yollarını aç.",
+          "priority": "Yüksek",
+          "rationale": "Yangın yayılmasının önüne geçmek ve çalışanların güvenliğini sağlamak için gerekli."
+        },
+        {
+          "action": "Yangın bölgesindeki tüm personeli ve makineleri acil durumda güvenli bir şekilde uzaklaştır.",
+          "priority": "Yüksek",
+          "rationale": "Yangınla ilgili tehlike altında olanlar için öncelikli koruma ve tahliye."
+        },
+        {
+          "action": "Yangınla ilgili tüm güvenlik sistemlerini (alarm, sprinkler, sensörler) kontrol edip aktif hale getir.",
+          "priority": "Orta",
+          "rationale": "Sistemlerin çalışması, müdahale etmenin ve diğer bölgelerdeki tehlikelerin kontrol edilmesi için kritik."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (480×272); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo4.873.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 2,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 55,
+      "latency_s": 24.5,
+      "summary": "Soba içinde kontrol dışı büyük alevler ve duman yükseliyor. Bu durum, kaminde de kontrol dışı alevlerin yükselişine yol açıyor ve yangın tehlikesi oluşturuyor. Her iki olay da merkezde meydana geliyor ve birbirine doğrudan bağlanıyor.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Soba içinde kontrol dışı büyük alevler ve duman",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        },
+        {
+          "time": "00:10",
+          "event": "Kaminde kontrol dışı yükselen alevler, yangın tehlikesi",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Soba ve kaminde kontrol dışı alevler ve duman, yangın veya patlama gibi ciddi güvenlik olaylarının başlangıcı olabilir. Bu durum, insan sağlığı ve çevreye ciddi tehdit oluşturuyor.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Yangın söndürme ekiplerini ve acil müdahale ekibini hemen çağır.",
+          "priority": "Kritik",
+          "rationale": "Kontrol dışı alevler ve duman, anında müdahale gerektiren bir yangın tehlikesi oluşturuyor."
+        },
+        {
+          "action": "Tesisin tüm çıkışlarını ve yangın yollarını kontrol ederek, herkesin güvenli bir şekilde uzaklaşmasını sağla.",
+          "priority": "Yüksek",
+          "rationale": "Yangın yayılabilir; tüm çalışanların güvenli bir şekilde tahliye edilmesi öncelikli."
+        },
+        {
+          "action": "Soba ve kaminin çevresindeki tüm elektrik ve gaz bağlantılarını kapat.",
+          "priority": "Yüksek",
+          "rationale": "Alevlerin kaynağına müdahale edilmeden önce, yanma kaynaklarını kesmek yangının büyümesini engelleyebilir."
+        },
+        {
+          "action": "Güvenlik personeli, olay alanına giriş yasaklaması ve çevreye erişimi engelleyerek, müdahaleyi korumalı hale getir.",
+          "priority": "Orta",
+          "rationale": "Olay alanına erişim engellenerek, yangının yayılmasını ve kazaları önlemeye yardımcı olunur."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (480×272); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo5.874.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 80,
+      "latency_s": 30.6,
+      "summary": "00:00–01:20 arası alevler kontrol dışı yükseliyor ve dalgalanıyor. Bu durum, yangın veya patlama gibi ciddi bir güvenlik olayının belirtisi olabilir ve hemen müdahale gerektirir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "alevler kontrol dışı yükseliyor ve dalgalanıyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Alevler kontrol dışı yükseliyor ve dalgalanıyor; bu, yangın veya patlama riski taşıyan bir durumdur ve hemen müdahale edilmesi gerekir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Yangın söndürme ekiplerini hemen çağırın.",
+          "priority": "Kritik",
+          "rationale": "Alevler kontrol dışı yükseliyor ve dalgalanıyor; bu durum yangın veya patlama riski taşıyan bir olaydır ve hemen müdahale edilmelidir."
+        },
+        {
+          "action": "Olay alanına erişimi engelleyin ve çevreyi güvenli hale getirin.",
+          "priority": "Yüksek",
+          "rationale": "Alevlerin yayılmasına engel olmak için alanın erişimi kısıtlanmalı ve çevredeki kişilerden uzak tutulmalıdır."
+        },
+        {
+          "action": "Güvenlik ekiplerini ve acil müdahale ekibini olay yerine yönlendirin.",
+          "priority": "Yüksek",
+          "rationale": "Alevlerin kontrol dışı olması, acil müdahale gerektiren bir durumdur ve ekiplerin hemen varlığı kritiktir."
+        },
+        {
+          "action": "Olay yerini kamera kayıtlarına göre izleyin ve müdahale sürecini takip edin.",
+          "priority": "Orta",
+          "rationale": "Kamera kayıtları, müdahale sürecini izlemek ve gerekirse ek müdahalelerde yardımcı olmak için önemlidir."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (480×272); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo6.875.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 3,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 26,
+      "latency_s": 24.9,
+      "summary": "Bir kişi alevli nesneye eğilerek müdahale etmiş, ancak kısa sürede alevler büyümüş ve kişi kaybolmuştur. Olay, anında müdahale edilmemiş ve tehlike artmıştır.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "Kişi alevli nesneye eğilmiş, müdahale ediyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "sol"
+        },
+        {
+          "time": "00:02",
+          "event": "Alevli nesne duman çıkararak büyüyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "alt sağ"
+        },
+        {
+          "time": "00:06",
+          "event": "Kişi kayboldu, sadece alev ve duman kaldı",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "sol"
+        }
+      ],
+      "risk_rationale": "Alevli nesne duman çıkararak büyümüş ve müdahale eden kişi kaybolmuştur; bu, yangının kontrol altına alınmaması ve potansiyel patlama veya ciddi yaralanma riskiyle doğrudan ilişkilidir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Yangın alarmını hemen başlat ve itfaiye ekiplerini çağır.",
+          "priority": "Kritik",
+          "rationale": "Alevler büyümüş ve kişi kaybolmuştur; yangın kontrol altına alınmamıştır; itfaiye acil müdahale gerektirir."
+        },
+        {
+          "action": "Güvenlik ekipleriyle iletişime geç ve bölgeyi hemen kapat.",
+          "priority": "Yüksek",
+          "rationale": "İş yerinin güvenliği korunmalı; diğer personelin tehlikede kalmasını engellemek için bölgeye erişim engellenmelidir."
+        },
+        {
+          "action": "Kaybolan kişiyi arama ve kurtarma ekipleriyle koordine et.",
+          "priority": "Yüksek",
+          "rationale": "Kişi kaybolmuş ve tehlike altında olabilir; acil arama ve kurtarma ekiplerinin müdahalesi gerekmektedir."
+        },
+        {
+          "action": "Görevli personelin durumunu kontrol et ve yaralı varsa sağlık ekiplerini çağır.",
+          "priority": "Orta",
+          "rationale": "Kişi kaybolmuşsa, müdahale eden kişinin yaralanıp yaralanmadığı belirlenmelidir; sağlık ekipleri acil müdahale için hazır olmalıdır."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (352×288); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo7.876.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 4,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "guvenlik_ekibi_uyar",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 55,
+      "latency_s": 26.9,
+      "summary": "Video boyunca alt ve alt sağ bölgelerde iki ayrı yangın tespit edildi. İlk yangın 00:00'da altta görüldü, ardından 00:20'de alt sağda yere düşmüş bir nesne yanıyor. 00:30-00:50 arasında ise beton duvar önünde toprakta bir yangın devam ediyor. 00:12'de yetkisiz giriş şüphesi de gözlemlenmiştir.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "yangın",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "alt"
+        },
+        {
+          "time": "00:12",
+          "event": "yetkisiz giriş şüphesi - elin görünmesi",
+          "severity": "Yüksek",
+          "category": "Yetkisiz Erişim",
+          "region": null
+        },
+        {
+          "time": "00:20",
+          "event": "yere düşmüş nesne yanıyor",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "alt sağ"
+        },
+        {
+          "time": "00:30",
+          "event": "beton duvar önünde toprakta yangın",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "alt sağ"
+        }
+      ],
+      "risk_rationale": "Video boyunca iki ayrı yangın tespit edildi ve bu yangınlar farklı konumlarda devam etti. Yangınlar güvenlik açısından en ciddi tehditlerdir ve müdahale edilmezse ciddi hasar veya yaralanma riski taşıyor.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Yangın bölgesindeki tüm personeli hemen uzaklaştırın.",
+          "priority": "Kritik",
+          "rationale": "Yangınlar tehlikeli durumlardır ve personelin bulunduğu alanlarda yanma veya patlama riski var."
+        },
+        {
+          "action": "Yangın söndürme ekipmanlarını hemen bölgeye yönlendirin.",
+          "priority": "Kritik",
+          "rationale": "Yangınlar kontrol altına alınmazsa daha büyük hasarlar ve yaralanmalar meydana gelebilir."
+        },
+        {
+          "action": "Yetkisiz giriş şüphesi olan bölgeyi güvenlik ekipleriyle kontrol edin.",
+          "priority": "Yüksek",
+          "rationale": "Yetkisiz giriş şüphesi, güvenlik ihlalleri ve potansiyel tehditlerle ilişkilidir ve hemen kontrol edilmelidir."
+        },
+        {
+          "action": "Yangınların nedenini tespit edip, benzer olayların tekrarlanmasını önlemek için rapor oluşturun.",
+          "priority": "Orta",
+          "rationale": "Yangınların nedeni belirlenerek, gelecekte benzer olayların tekrarlanmasını engellemek için önlemler alınmalıdır."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Fire/posVideo8.877.avi",
+      "category": "Fire",
+      "is_anomaly": true,
+      "n_events": 1,
+      "max_severity": 4,
+      "risk_ord": 4,
+      "risk_level": "Kritik",
+      "category_match": true,
+      "triggered": [
+        "acil_durdurma_tetikle",
+        "alan_guvenligini_sagla",
+        "yonetici_bilgilendir",
+        "olay_kaydi_olustur"
+      ],
+      "duration_s": 17,
+      "latency_s": 17.4,
+      "summary": "00:00–00:10 arası merkezde kontrolsüz büyüyen bir yangın tespit edilmiştir. Yangının hızla yayılması, çevredeki alanlara tehlike oluşturuyor.",
+      "events": [
+        {
+          "time": "00:00",
+          "event": "kontrolsüz büyüyen yangın",
+          "severity": "Kritik",
+          "category": "Güvenlik",
+          "region": "merkez"
+        }
+      ],
+      "risk_rationale": "Kontrolsüz büyüyen yangın, çevreye anında zarar verme potansiyeline sahip olup, insanlar veya malzeme kaybına yol açabilir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Yangınla ilgili bölgeyi hemen izole et.",
+          "priority": "Kritik",
+          "rationale": "Yangının yayılmasını önlemek için etkilenen alanın erişimi kesilmelidir."
+        },
+        {
+          "action": "Yangın söndürme ekiplerini hemen yönlendir.",
+          "priority": "Kritik",
+          "rationale": "Yangın kontrol altına alınmamışsa, kısa sürede büyük bir hasara neden olabilir."
+        },
+        {
+          "action": "Güvenlik personeline yangınla ilgili tüm bilgileri aktar.",
+          "priority": "Yüksek",
+          "rationale": "Güvenlik ekipleri, yangınla ilgili tüm detayları bilerek daha etkili müdahale edebilir."
+        },
+        {
+          "action": "İlgili alanın çevresindeki kişileri güvenli bir alana taşı.",
+          "priority": "Yüksek",
+          "rationale": "Yangınla ilgili tehlike, insan sağlığı açısından en yüksek önceliğe sahiptir."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (480×272); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/4_tr13.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 13.1,
+      "summary": "00:06'da yetkisiz bir giriş tespit edilmiştir. Bu, güvenlik önlemlerinin ihlali olarak değerlendirilmekte olup, hemen güvenlik ekiplerine bildirilmelidir.",
+      "events": [
+        {
+          "time": "00:06",
+          "event": "yetkisiz giriş",
+          "severity": "Düşük",
+          "category": "Güvenlik",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Yetkisiz giriş, fiziksel hasar veya ciddi tehlike oluşturmamaktadır; ancak güvenlik ihlali olarak değerlendirilerek hemen müdahale edilmelidir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Güvenlik ekiplerine hemen bildirin.",
+          "priority": "Yüksek",
+          "rationale": "Yetkisiz giriş, güvenlik protokollerinin ihlali olduğu için hemen müdahale edilmelidir."
+        },
+        {
+          "action": "Giriş noktasını gözlemleyen güvenlik kamerasını kontrol edin.",
+          "priority": "Orta",
+          "rationale": "Giriş noktasının durumunu tekrar kontrol etmek, tekrarlayan bir ihlal olup olmadığını anlamak için gerekli olur."
+        },
+        {
+          "action": "Giriş yapan kişiye izin verilmeden önce kimlik kontrolü yapın.",
+          "priority": "Orta",
+          "rationale": "Yetkisiz girişin tekrar edilmesini önlemek için kimlik doğrulaması yapılmalıdır."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_te1.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 7,
+      "latency_s": 9.9,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Herhangi bir olay olmadığı için tekrar kontrol yapılması gerekmez, ancak rutin olarak kontrol edilmelidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_te12.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 11.6,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk düzeyi düşüktür.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay olmadığı için öncelikli bir eylem gerekmez, ancak düzenli kontrol devam etmelidir."
+        },
+        {
+          "action": "Sistemdeki alarm ve uyarı sistemlerini kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olay tespit edilmediğinden sistemdeki alarmlar aktif değilse, bu durumun sistemin doğru çalıştığını gösterir."
+        },
+        {
+          "action": "Operasyonel protokollere göre günlük rutin kontrolü yap.",
+          "priority": "Düşük",
+          "rationale": "Herhangi bir olay olmadığı için rutin kontrol, sistemin sürekli çalışmasını sağlamak için önemlidir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_te14.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 9.9,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir kontrol gerekmez."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_tr19.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 9.9,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar inceleyerek manuel olarak kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Olay tespit edilmediği için tekrar kontrol yapılması, hatalı algılamayı önlemek için önerilir."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/5_tr20.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 10.0,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, girdişi veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir kontrol gerekmez."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/6_te12.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 10,
+      "latency_s": 15.8,
+      "summary": "Robotik taşıyıcı cihaz, işçiyle çarpışma riski taşıyan bir alanda hareket ediyor. Bu durum, insan ve makine etkileşimi açısından potansiyel bir tehlike oluşturuyor ancak anında bir kaza veya zarar görülmemiş.",
+      "events": [
+        {
+          "time": "00:10",
+          "event": "Robotik taşıyıcı cihaz, işçiyle çarpışma riski taşıyan yolda hareket ediyor",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Çarpışma riski taşıyan bir durum tespit edildi ancak henüz fiziksel bir etkileşim veya hasar gözlemlenmedi. Bu nedenle ciddi bir tehlike değil, ancak dikkat gerektiren bir anomali.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Robotik cihazın hareket ettiği yolu ve çevresini gözden geçirerek çarpışma riskini azaltacak fiziksel engeller veya uyarı sistemleri kur.",
+          "priority": "Yüksek",
+          "rationale": "Çarpışma riski taşıyan bir alanda hareket eden cihazlar için güvenlik önlemleri alınmalı; bu, potansiyel bir kazayı önler."
+        },
+        {
+          "action": "İşçi ve robotik cihazın hareket ettiğini gözlemleyen operatörün, cihazın hareketini izlemeye devam etmesi ve gerekirse durdurma komutu vermesi.",
+          "priority": "Orta",
+          "rationale": "İşçi ve cihazın birbirine yaklaşması durumunda anında müdahale edilmesi, kaza önlemede kritik öneme sahiptir."
+        },
+        {
+          "action": "Robotik cihazın hareket rotası ve işçi hareketleri arasındaki zaman farkını analiz ederek, otomatik durdurma mekanizmaları kurulmalı.",
+          "priority": "Yüksek",
+          "rationale": "Zaman farkı analizi, cihazın ve işçinin birbirine yaklaşırken otomatik olarak durdurulmasını sağlar ve insan hatalarını minimize eder."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/7_tr15.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 2,
+      "latency_s": 10.3,
+      "summary": "Görüntüde herhangi bir olay tespit edilmedi. Sistemdeki güvenlik kamerası, belirtilen 2 saniyelik süre içinde herhangi bir tehlike, kaza veya anormal durum gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntüde herhangi bir tehlike, kaza veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Kamera sisteminin çalışmasını ve kayıtların bütünlüğünü kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Görüntüde herhangi bir olay yoksa, sistemdeki teknik sorunlar veya kayıtların bozulması riski göz önünde bulundurulmalıdır."
+        },
+        {
+          "action": "Güvenlik operatörüne, bu süre içinde başka bir kamera veya bölgeye geçiş yapmasını öner.",
+          "priority": "Orta",
+          "rationale": "Sadece 2 saniyelik bir görüntüde herhangi bir olay yoksa, operatörün diğer bölgeleri kontrol etmesi, daha kapsamlı bir gözlem sağlar."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_926_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 60,
+      "latency_s": 17.5,
+      "summary": "Video süresince herhangi bir olay veya anormal durum tespit edilmedi. Görüntüler, normal ve beklenen aktiviteleri yansıtmaktadır.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike, kaza, güvenlik ihlali veya anormal davranış gözlemlenmemiştir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Görüntü kayıtlarını düzenli aralıklarla kontrol etmek",
+          "priority": "Düşük",
+          "rationale": "Normal aktivitelerin devam ettiğini doğrulamak için düzenli kontrol yapılması önerilir."
+        },
+        {
+          "action": "Kamera sistemlerinin çalışmasını kontrol etmek",
+          "priority": "Düşük",
+          "rationale": "Görüntülerin net ve tam olması için sistemlerin sağlıklı çalıştığından emin olmak gerekir."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_928_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 1,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 16.2,
+      "summary": "00:18'de erkek müşteri, çocuğun omuzuna el koyarak onu uzaklaştırdı; çocuk hemen geri çekildi. Bu davranış, çocuğun fiziksel güvenliğini tehdit eden bir anomali olarak değerlendirilebilir.",
+      "events": [
+        {
+          "time": "00:18",
+          "event": "Erkek müşteri, çocuğun omuzuna el koyarak onu uzaklaştırdı; çocuk hemen geri çekildi",
+          "severity": "Düşük",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Olay, fiziksel bir temas ve kısa süreli bir geri çekilme içerir; ciddi yaralanma veya tehlike yoktur. Ancak çocuklara yönelik davranışlar güvenlik açısından dikkat gerektirir.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Çocuğu ve müşteriyi izlemeye devam et.",
+          "priority": "Orta",
+          "rationale": "Çocuğun hemen ardından yapılacak bir hareket veya tepki olabileceği için sürekli gözlem gerekir."
+        },
+        {
+          "action": "Güvenlik personeliyle iletişime geç ve durumu onlara bildir.",
+          "priority": "Orta",
+          "rationale": "Çocuklara yönelik davranışlar, güvenlik protokollerine uygun olarak raporlanmalı ve müdahale edilmelidir."
+        },
+        {
+          "action": "Kamera kaydıyla olayı kaydet ve güvenlik merkezine gönder.",
+          "priority": "Düşük",
+          "rationale": "Olayı belgelemek, gelecekte benzer durumlar için analiz ve eğitimi destekler."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_929_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 0,
+      "max_severity": 0,
+      "risk_ord": 1,
+      "risk_level": "Düşük",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 31,
+      "latency_s": 13.9,
+      "summary": "Video süresince herhangi bir olay tespit edilmedi. Görüntülerde herhangi bir tehlike, kaza, yetkisiz giriş veya anormal davranış gözlemlenmedi.",
+      "events": [],
+      "risk_rationale": "Görüntülerde herhangi bir tehlike veya anormal durum tespit edilmediği için risk seviyesi düşüktür.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Görüntüleri tekrar incelemek için bir sonraki videoyu kontrol et.",
+          "priority": "Düşük",
+          "rationale": "Şu anda herhangi bir olay yoksa, güvenlik operatörüne ekstra bir değerlendirme gerekmez."
+        },
+        {
+          "action": "Kamera sistemini kontrol et ve düzgün çalışıp çalışmadığını doğrula.",
+          "priority": "Orta",
+          "rationale": "Görüntülerde herhangi bir olay yoksa, sistemde teknik bir arıza olup olmadığını kontrol etmek güvenliği artırır."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    },
+    {
+      "path": "data/eval_scenario/Normal/Normal_Videos_932_x264.mp4",
+      "category": "Normal",
+      "is_anomaly": false,
+      "n_events": 1,
+      "max_severity": 2,
+      "risk_ord": 2,
+      "risk_level": "Orta",
+      "category_match": null,
+      "triggered": [],
+      "duration_s": 59,
+      "latency_s": 20.1,
+      "summary": "00:40 itibariyle bir kişi merdiven tırmanıyor. Bu hareket, mekânın kullanımına göre yetkisiz giriş veya anormal bir faaliyet olabileceği için dikkat gerektirir. Görüntüde başka herhangi bir tehlike veya olay tespit edilmedi.",
+      "events": [
+        {
+          "time": "00:40",
+          "event": "Kişi merdiven tırmanıyor",
+          "severity": "Orta",
+          "category": "Anomali",
+          "region": null
+        }
+      ],
+      "risk_rationale": "Kişi merdiven tırmanması, yetkisiz giriş veya güvenlik dışı bir faaliyet olabileceği için potansiyel bir güvenlik riski oluşturur. Ancak görüntüde başka bir tehlike veya acil durum yoktur.",
+      "policy_trace": [],
+      "actions": [
+        {
+          "action": "Merdiven tırmanan kişiyi izlemeye devam et.",
+          "priority": "Orta",
+          "rationale": "Kişinin nereye gittiği ve ne yapmak istediğini belirlemek için izlemeye devam edilmelidir."
+        },
+        {
+          "action": "Güvenlik personeliyle iletişime geç ve durumu onlara bildir.",
+          "priority": "Orta",
+          "rationale": "Yetkisiz giriş veya anormal faaliyet olabileceği için güvenlik ekiplerinin müdahale etmesi gerekir."
+        },
+        {
+          "action": "Kamera kaydıyla ilgili bölgeye erişim engellenmeli.",
+          "priority": "Orta",
+          "rationale": "Kişinin tekrar giriş yapmasını engellemek için güvenlik önlemleri alınmalıdır."
+        },
+        {
+          "action": "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir",
+          "priority": "Düşük",
+          "rationale": "Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."
+        }
+      ]
+    }
+  ]
+}

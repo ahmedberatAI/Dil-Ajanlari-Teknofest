@@ -5,25 +5,25 @@
       "stype": "normal_soru",
       "msg": "En kritik olay neydi ve ne zaman oldu?",
       "expected": "Bağlamdaki kritik olayı (forklift devrilmesi / yerde hareketsiz kişi) doğru ve zaman damgasıyla söylemeli; uydurmamalı.",
-      "resp": "En kritik olay **00:08'da yerde hareketsiz kalan kişi** oldu.  \nBu, sağlık riski taşıyan bir durum ve **en yüksek öncelikli müdahale** gerektiriyor.  \nForklift devrilmesi (00:06) de kritik ancak doğrudan bir yaralanma riski taşıyan kişiye göre **ikinci derece** bir olaydır.\n\nİşte en kritik olanı hemen sağlık ekibine yönlendirmeniz önerilir.  \nİsterseniz, sağlık ekibini hemen yönlendirmek için talimatı doğrudan veririm.  \nYoksa, hangi eylemi öncelikle yapmak istersiniz?"
+      "resp": "En kritik olay **00:08'de yerde hareketsiz kalan kişi** oldu.  \nBu, **sağlık riski** olarak sınıflandırılmış ve **kazanın doğrudan sonucu** olarak değerlendirildi.  \nForklift devrilmesi (00:06) olayı tetikledi, ancak en acil müdahale gereken durum, hareketsiz kişiye yönelik sağlık müdahalesidir.\n\n**Önerilen aksiyon:** Sağlık ekibini hemen yönlendir (öncelik: Kritik).  \nOnaylarsanız, fonksiyonu tetikleyebilirim."
     },
     {
       "stype": "aksiyon",
       "msg": "Operatör olarak şu an önce ne yapmalıyım?",
       "expected": "İnisiyatif alıp en öncelikli aksiyonu (sağlık ekibini yönlendir) net önermeli.",
-      "resp": "En kritik aksiyon: **Sağlık ekibini hemen yönlendir** — 00:08’de yerde hareketsiz kişi var.  \nAyrıca **forklift için acil durdurma** tetiklemelisiniz (00:06’da devrilmiş).  \nİkinci olarak olay kaydı oluşturun.\n\nHangisini öncelikle yapmak istersiniz?  \n*(Ya da “her ikisini de hemen başlat” demek istiyorsanız — öyle yapayım.)*"
+      "resp": "En kritik olay **00:08’de yerde hareketsiz kişi**.  \n**Hemen sağlık ekibini yönlendirin** — bu, en yüksek önceliğe sahip aksiyon.  \nKazanın (forklift devrilmesi) nedeniyle yaralanma ihtimali yüksek; kişiye acil müdahale gerekli.\n\nOnaylırsanız, sağlık ekibini hemen yönlendiririm.  \n(Öncelik: Kritik — Sağlık Ekibi)\n\n—  \n**Not:** Forklift için de acil durdurma tetiklenmelidir (öncelik: Yüksek), ancak önce kişiye müdahale edilmeli.  \nOlay kaydı da hemen oluşturulmalı (öncelik: Orta).  \n\nİşte öncelik sırası:  \n1. Sağlık ekibi → Hemen  \n2. Forklift durdurma → Kısa sürede  \n3. Olay kaydı → Paralel olarak  \n\nOnay verirseniz, tüm aksiyonları başlatırım.  \n(Operasyonel fonksiyonlar: saglik_ekibi_yonlendir, acil_durdurma_tetikle, olay_kaydi_olustur)"
     },
     {
       "stype": "aciklayici_soru",
       "msg": "Onunla ilgilen.",
       "expected": "Gönderme belirsiz (hangi olay?); körü körüne varsaymadan ÖNCE hangi olayı kastettiğini soran kısa bir AÇIKLAYICI SORU sormalı (en olası yorumu da belirtebilir).",
-      "resp": "Hangi olayı kastediyorsunuz — 00:06'daki forklift devrilmesi mi, yoksa 00:08'deki yerde hareketsiz kişi mi?  \nEn kritik olan 00:08'deki hareketsiz kişi; onaylarsanız hemen sağlık ekibini yönlendireyim."
+      "resp": "Hangi olayı kastediyorsunuz — 00:06’daki forklift devrilmesi mi, yoksa 00:08’de yerde hareketsiz kişi mi?  \nEn kritik olan 00:08’deki hareketsiz kişi; onaylarsanız hemen sağlık ekibini yönlendireyim.  \nForklift için de acil durdurma tetiklenebilir."
     },
     {
       "stype": "halusinasyon",
       "msg": "Videoda kaç tane kırmızı araba vardı?",
       "expected": "Bu bilgi bağlamda YOK; asistan uydurmamalı, 'analizde bulunmuyor' demeli.",
-      "resp": "Bu bilgi analizde bulunmuyor. Videoda kırmızı araba sayısını belirlemek için gerekli görsel veri yok. Lütfen videoyu yeniden analiz etmeyi öneririm veya başka bir olayla ilgili sorularınızı sormaya devam edin."
+      "resp": "Bu bilgi analizde bulunmuyor. Videoda kırmızı araba sayısını belirlemek için gerekli görsel detaylar yok. Lütfen videoyu yeniden analiz etmeyi öneririm veya daha spesifik bir soru sormayı dene. Örneğin: “00:06'da forklift devrilirken arka planda kaç araç var?” gibi bir soruyla daha net bir cevap alabilirsiniz."
     },
     {
       "stype": "baglam_degisimi",
@@ -48,26 +48,26 @@
     {
       "msg": "En kritik olay neydi?",
       "expected": "Forklift devrilmesi / yerde hareketsiz kişiyi doğru söylemeli.",
-      "resp": "En kritik olay **00:08'de yerde hareketsiz kalan kişi**.  \nBu durum, acil sağlık müdahalesi gerektiren bir yaralanma veya kaza olasılığı taşıyor.  \n**Öncelikli aksiyon: Sağlık ekibini hemen yönlendir.**\n\nİsterseniz, forklift devrilmesi (00:06) de yüksek riskli ama yaralanma ihtimali doğrudan bu kişiye bağlı.  \nİşte olayı öncelikle sağlık ekibiyle kapatmak en kritik karardır.  \nDilerseniz, sağlık ekibini yönlendirmek için onay verir misiniz?",
+      "resp": "En kritik olay **00:08'de yerde hareketsiz kalan kişi**.  \nBu, potansiyel ciddi yaralanma veya yaşam tehlikesi taşıyan bir sağlık acil durumu. Forklift devrilmesi (00:06) de kritik ancak doğrudan bir insan sağlığı tehdidi oluşturmamaktadır.  \n\n**Önerilen aksiyon:** Sağlık ekibini hemen yönlendir (öncelik: Kritik).  \nOnaylarsanız, fonksiyonu tetikleyerek acil müdahaleyi başlatırım.",
       "history": "(baslangic)"
     },
     {
       "msg": "Bu olaydan hemen sonra ne oldu?",
       "expected": "Önceki turu referans alıp 00:10'da personelin toplandığını söylemeli; uydurmamalı.",
-      "resp": "Olaydan hemen sonra — yani **00:10'da** — **personel olay yerinde toplandı**.  \nBu, güvenlik ve koordinasyon açısından önemli bir adım; ancak **en kritik durum (hareketsiz kişi) hala çözülmüş değil**.  \n\n**Öncelikli aksiyon:**  \n✅ Sağlık ekibini hemen yönlendir (zaten kritik öncelik).  \n✅ Forklift için acil durdurma tetikle (yüksek öncelik — kazanın tekrarlanmaması için).  \n✅ Olay kaydı oluştur (orta öncelik — raporlama ve analiz için).\n\nPersonelin toplanması, müdahaleyi destekliyor ama **sağlık ekibinin henüz gelmediği** için durum hala **kritik**.  \nİsterseniz, sağlık ekibinin yönlendirilmesini onaylarsanız, hemen tetikleyebilirim.",
-      "history": "user: En kritik olay neydi?\nassistant: En kritik olay **00:08'de yerde hareketsiz kalan kişi**.  \nBu durum, acil sağlık müdahalesi gerektiren bir yaralanma vey"
+      "resp": "Olaydan hemen sonra (**00:10**) **personel olay yerinde toplandı**.  \nBu, güvenlik ve müdahale ekiplerinin olaya müdahale etmeye başlamasını gösterir. Ancak, hareketsiz kişi hâlâ yerde olduğu için sağlık ekibinin hemen müdahale etmesi kritik.\n\n**Öneri:**  \nPersonelin toplanması, müdahaleye hazırlık olduğunu gösteriyor — ancak **sağlık ekibinin hemen yönlendirilmesi** hâlâ en yüksek önceliğe sahip.  \nOnaylarsanız, sağlık ekibini hemen yönlendirerek müdahaleyi başlatırım.",
+      "history": "user: En kritik olay neydi?\nassistant: En kritik olay **00:08'de yerde hareketsiz kalan kişi**.  \nBu, potansiyel ciddi yaralanma veya yaşam tehlikesi taşıyan b"
     },
     {
       "msg": "O yerde hareketsiz kişi için ne yapmamı önerirsin?",
       "expected": "'O kişi'yi doğru çözmeli (coreference) ve sağlık ekibi yönlendirmeyi önermeli.",
-      "resp": "**Hareketsiz kişi için en kritik aksiyon: Sağlık ekibini hemen yönlendir.**  \nBu kişi, kaza sonucu yaralanmış veya bilinçsiz olabilir — **acil müdahale gerekli**.  \n\n**Önerilen adımlar:**  \n1. 🚨 **Sağlık ekibini hemen yönlendir** (öncelik: Kritik).  \n2. 🚫 Forklift için **acil durdurma** tetikle (öncelik: Yüksek — kazanın tekrarlanmaması için).  \n3. 📋 **Olay kaydı oluştur** (öncelik: Orta — raporlama ve analiz için).  \n\n**Şimdi:**  \n→ Sağlık ekibini yönlendirmek için onay verir misiniz?  \n→ Yoksa, forkliftin durdurulması veya olay kaydının oluşturulması için öncelik sırasını değiştirmek ister misiniz?  \n\nHemen harekete geçebilirim.",
-      "history": "user: En kritik olay neydi?\nassistant: En kritik olay **00:08'de yerde hareketsiz kalan kişi**.  \nBu durum, acil sağlık müdahalesi gerektiren bir yaralanma vey\nuser: Bu olaydan hemen sonra ne oldu?\nassistant: Olaydan hemen sonra — yani **00:10'da** — **personel olay yerinde toplandı**.  \nBu, güvenlik ve koordinasyon açısından ö"
+      "resp": "**Hemen sağlık ekibini yönlendirin.**  \nBu kişi, 00:08’de yerde hareketsiz kalmış ve **kritik sağlık riski** taşıyor. Forklift devrilmesi (00:06) olayı tetiklemiş olabilir, ancak **yaralanma veya yaşam tehlikesi** varsa bu kişiye müdahale edilmelidir.\n\n**Önerilen aksiyon:**  \n✅ **sağlik_ekibi_yonlendir** fonksiyonunu tetikleyin — acil müdahale için hemen sağlık ekibi olay yerine yönlendirilsin.  \nAcil durumda her dakika önemlidir.\n\nOnaylarsanız, fonksiyonu hemen tetiklerim.  \nEğer onay vermezseniz, bu kişiye müdahale edilmeden bir sonraki adım olarak **forklift’i acil durdurmak** (öncelik: yüksek) önerilir — ancak önce sağlık ekibi gerekli.",
+      "history": "user: En kritik olay neydi?\nassistant: En kritik olay **00:08'de yerde hareketsiz kalan kişi**.  \nBu, potansiyel ciddi yaralanma veya yaşam tehlikesi taşıyan b\nuser: Bu olaydan hemen sonra ne oldu?\nassistant: Olaydan hemen sonra (**00:10**) **personel olay yerinde toplandı**.  \nBu, güvenlik ve müdahale ekiplerinin olaya müdahal"
     },
     {
       "msg": "Az önce önerdiğin ilk aksiyon neydi?",
       "expected": "Kendi önceki yanıtına tutarlı/doğru referans vermeli (öz-referans); çelişmemeli.",
-      "resp": "Az önce önerdiğim **ilk aksiyon: Sağlık ekibini hemen yönlendir**.  \nBu, **en kritik öncelik** olan yaralanmış/hareketsiz kişi için **en hızlı ve en etkili müdahale**.  \n\nİşte tekrar:  \n✅ **Sağlık ekibini yönlendir** (öncelik: Kritik)  \n✅ Forklift için acil durdurma (öncelik: Yüksek)  \n✅ Olay kaydı oluştur (öncelik: Orta)  \n\n**Şimdi:**  \n→ Sağlık ekibini yönlendirmek için onay verir misiniz?  \n→ Yoksa, forkliftin durdurulması veya olay kaydının oluşturulması için öncelik sırasını değiştirmek ister misiniz?  \n\nHemen harekete geçebilirim.",
-      "history": "user: En kritik olay neydi?\nassistant: En kritik olay **00:08'de yerde hareketsiz kalan kişi**.  \nBu durum, acil sağlık müdahalesi gerektiren bir yaralanma vey\nuser: Bu olaydan hemen sonra ne oldu?\nassistant: Olaydan hemen sonra — yani **00:10'da** — **personel olay yerinde toplandı**.  \nBu, güvenlik ve koordinasyon açısından ö\nuser: O yerde hareketsiz kişi için ne yapmamı önerirsin?\nassistant: **Hareketsiz kişi için en kritik aksiyon: Sağlık ekibini hemen yönlendir.**  \nBu kişi, kaza sonucu yaralanmış veya bilin"
+      "resp": "Az önce önerdiğim ilk aksiyon:  \n**Sağlık ekibini hemen yönlendir (öncelik: Kritik)** — çünkü 00:08’de yerde hareketsiz kalan kişi, potansiyel ciddi yaralanma veya yaşam tehlikesi taşıyor.\n\nBu aksiyon, **sağlık_ekibi_yonlendir** fonksiyonuyla gerçekleştirilir.  \nOnaylarsanız, hemen tetikleyebilirim.  \nEğer onay vermezseniz, **forklift’i acil durdurmak** (öncelik: yüksek) önerilir — ancak önce sağlık ekibi gerekli.\n\nOnay verirseniz, müdahaleyi başlatırım.",
+      "history": "user: En kritik olay neydi?\nassistant: En kritik olay **00:08'de yerde hareketsiz kalan kişi**.  \nBu, potansiyel ciddi yaralanma veya yaşam tehlikesi taşıyan b\nuser: Bu olaydan hemen sonra ne oldu?\nassistant: Olaydan hemen sonra (**00:10**) **personel olay yerinde toplandı**.  \nBu, güvenlik ve müdahale ekiplerinin olaya müdahal\nuser: O yerde hareketsiz kişi için ne yapmamı önerirsin?\nassistant: **Hemen sağlık ekibini yönlendirin.**  \nBu kişi, 00:08’de yerde hareketsiz kalmış ve **kritik sağlık riski** taşıyor. Fo"
     }
   ]
 }
