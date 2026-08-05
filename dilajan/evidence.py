@@ -16,6 +16,7 @@ from typing import Optional
 from PIL import Image, ImageDraw
 
 from dilajan.schema import AnalysisResult, Severity
+from dilajan.utils import QUERY_DATA_NOTE, operator_query_of
 from dilajan.video import extract_timestamped_frames
 
 _SEV_ORD = {Severity.DUSUK: 1, Severity.ORTA: 2, Severity.YUKSEK: 3, Severity.KRITIK: 4}
@@ -30,11 +31,15 @@ def _secs(mmss: str) -> int:
 
 
 def build_evidence_bundle(video_path: str, result: AnalysisResult, out_dir: str,
-                          min_severity: Severity = Severity.YUKSEK) -> dict:
+                          min_severity: Severity = Severity.YUKSEK,
+                          query: Optional[str] = None) -> dict:
     """Yuksek-onemli olaylar icin kanit kareleri (bbox overlay) + hash'li manifest uretir.
 
     Donus: {"dir","frames":[png yollari],"manifest":json yolu,"count":n} veya {"error":...,"dir":...}.
-    FAIL-OPEN: kare cikarilamazsa hata alani doner (cökmez)."""
+    FAIL-OPEN: kare cikarilamazsa hata alani doner (cökmez).
+
+    `query`: operatorun serbest-metin analiz sorgusu (opsiyonel; verilmezse karar-izinden
+    okunur). Sorgu/yanit alanlari manifeste YALNIZCA `result.query_answer` doluyken girer."""
     os.makedirs(out_dir, exist_ok=True)
     try:
         frames, _info = extract_timestamped_frames(video_path)
@@ -47,8 +52,23 @@ def build_evidence_bundle(video_path: str, result: AnalysisResult, out_dir: str,
         "video": os.path.basename(video_path),
         "olusturma": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "genel_risk": result.risk.level.value,
-        "olaylar": [],
     }
+    # --- SORGU-GUDUMLU ANALIZ KAYDI (denetlenebilirlik) ---------------------------------
+    # SHA-256 ZINCIRI ETKILENMEZ: her `olaylar[i].sha256` degeri YALNIZ ilgili PNG'nin DISKE
+    # YAZILMIS baytlarindan hesaplanir (asagidaki dongu, img.save sonrasi). Manifest icerigi
+    # hicbir hash'e girmez -> buraya alan eklemek butunluk dogrulamasini bozmaz.
+    # B2: sorgu yoksa manifest anahtarlari BIREBIR eski hali (video, olusturma, genel_risk, olaylar).
+    # B5: operator metni VERI olarak, "talimat degildir" notuyla birlikte kaydedilir.
+    try:
+        qa = str(getattr(result, "query_answer", None) or "").strip()
+    except Exception:
+        qa = ""
+    if qa:
+        manifest["operator_sorgusu"] = operator_query_of(result, query) or "(kayıtta yok)"
+        manifest["ajan_sorgu_yaniti"] = qa
+        manifest["sorgu_notu"] = (QUERY_DATA_NOTE + " Sorgu analizi odaklar, filtrelemez: "
+                                  "sorguyla ilgisiz kritik olaylar da bu manifeste girer.")
+    manifest["olaylar"] = []
     targets = [e for e in result.events if _SEV_ORD.get(e.severity, 0) >= _SEV_ORD[min_severity]] or result.events
     saved = []
     for i, e in enumerate(targets):

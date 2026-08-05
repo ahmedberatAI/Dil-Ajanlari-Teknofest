@@ -12,20 +12,23 @@ Kullanim:
     python scripts/live_analyze.py 0                 # webcam (0. cihaz)
     python scripts/live_analyze.py rtsp://...        # IP kamera (RTSP)
     python scripts/live_analyze.py data/x.mp4        # dosyayi akis gibi isle (test)
-Ortam: WINDOW (sn, vars 12), MAX_WINDOWS (test icin sinir, vars 0=sinirsiz)
+    python scripts/live_analyze.py 0 --query "Forklift hareketlerine odaklan"
+Ortam: WINDOW (sn, vars 12), MAX_WINDOWS (test icin sinir, vars 0=sinirsiz),
+       QUERY (canli akis icin operator sorgusu; --query ile ayni is)
 """
 from __future__ import annotations
 
 import os
 import sys
 import time
+from typing import List, Tuple
 
 import cv2  # noqa
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dilajan import tamper  # noqa: E402
 from dilajan.agent import analyze_prepared  # noqa: E402
-from dilajan.config import settings  # noqa: E402
+from dilajan.config import request_config, settings  # noqa: E402
 from dilajan.video import build_video_info, timedframes_from_bgr  # noqa: E402
 
 
@@ -33,8 +36,32 @@ def _open(source):
     return cv2.VideoCapture(source)
 
 
+def _split_query(argv: List[str]) -> Tuple[List[str], str]:
+    """`--query/-q <metin>` bayragini argv'den ayirir -> (kalan_argv, sorgu).
+
+    SORGU-GUDUMLU ANALIZ, canli akis yolunda da kullanilabilsin diye eklendi. Bayrak
+    verilmezse QUERY ortam degiskenine, o da yoksa BOSA duser -> davranis birebir eskisi
+    gibidir (B2: sorgu yoksa ajan tarafinda TEK KARAKTER bile degismez)."""
+    rest, q = [], ""
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        if a in ("--query", "-q") and i + 1 < len(argv):
+            q = argv[i + 1]
+            i += 2
+            continue
+        if a.startswith("--query="):
+            q = a.split("=", 1)[1]
+            i += 1
+            continue
+        rest.append(a)
+        i += 1
+    return rest, (q or os.environ.get("QUERY", "")).strip()
+
+
 def main() -> None:
-    src = sys.argv[1] if len(sys.argv) > 1 else "0"
+    argv, query = _split_query(sys.argv[1:])
+    src = argv[0] if argv else "0"
     source = int(src) if str(src).isdigit() else src
     is_stream = isinstance(source, str)
     window = float(os.environ.get("WINDOW", "12"))
@@ -52,6 +79,9 @@ def main() -> None:
     win_frames = max(1, int(window * fps))
     print(f"CANLI ANALİZ (decode-once) | kaynak={source} | pencere={window:.0f}s | "
           f"{w}x{h}@{fps:.0f}fps | örnek={fps_sample:.1f}fps")
+    if query:
+        print(f"🔎 operatör sorgusu: \"{query}\"\n   (sorgu ODAKLAR, filtrelemez: yangın/kaza/"
+              "silah gibi kritik olaylar sorgudan bağımsız olarak her pencerede raporlanır)")
 
     idx, ended, backoff = 0, False, 1.0
     while not ended:
@@ -82,9 +112,19 @@ def main() -> None:
                 if tk:
                     print(f"\n⏱  pencere #{idx}  →  ⚠️  {tk['kind'].upper()}: {tk['detail']}  (@{tk['time']})")
                 else:
-                    r = analyze_prepared(frames, info)
+                    # SORGU-GUDUMLU ANALIZ: istek-kapsamli konfig (run_analysis.py ile AYNI
+                    # desen). Kapi PENCERE BASINA alinip birakilir — 7/24 dongu boyunca
+                    # tutulsaydi es zamanli baska bir analiz bloke olurdu. Sorgu bossa
+                    # request_config HIC cagrilmaz -> DILAJAN_ANALYSIS_QUERY ezilmez.
+                    if query:
+                        with request_config(analysis_query=query):
+                            r = analyze_prepared(frames, info)
+                    else:
+                        r = analyze_prepared(frames, info)
                     risk = r.risk.level.value
                     print(f"\n⏱  pencere #{idx}  ({len(sampled)} kare, {time.time()-t0:.0f}s)  →  RİSK: {risk}")
+                    if r.query_answer:
+                        print(f"     🔎 sorgu yanıtı: {r.query_answer}")
                     if r.events:
                         for e in r.events:
                             span = f"{e.time}–{e.end_time}" if e.end_time else e.time

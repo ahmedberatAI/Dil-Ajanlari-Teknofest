@@ -12,6 +12,7 @@ Calistirma:
 """
 from __future__ import annotations
 
+import html as _html
 import json
 import os
 import subprocess
@@ -223,14 +224,36 @@ def _ensure_playable(path):
     return path  # fail-open
 
 
+def query_panel_html(query: str, answer: str) -> str:
+    """Operatör sorgusu + ajanın doğrudan yanıtı (sorgu boşken hiç gösterilmez).
+
+    GÜVENLİK: hem operatör sorgusu hem model yanıtı HTML-escape edilir — serbest metin
+    ham HTML olarak panele enjekte edilemez.
+    """
+    q = _html.escape((query or "").strip())
+    a = _html.escape((answer or "").strip()) or "—"
+    return (
+        "<div class='qa-card'>"
+        "<div class='card-title'>🔎 SORGU YANITI</div>"
+        f"<div class='qa-q'>“{q}”</div>"
+        f"<div class='qa-a'>{a}</div>"
+        "<div class='qa-note'>Sorgu analizi <b>odaklar</b>, filtrelemez — sorguyla ilgisiz "
+        "kritik olaylar da aşağıdaki risk/olay listesinde raporlanır.</div>"
+        "</div>"
+    )
+
+
 def _blank():
-    # status disindaki tum ciktilar (summary, risk, timeline, events, actions, funcs, trace,
-    # json, context_state, result_state, path_state) icin akis-arasi yer-tutucu
-    return (gr.update(),) * 11
+    # status disindaki tum ciktilar (query, summary, risk, timeline, events, actions, funcs,
+    # trace, json, context_state, result_state, path_state) icin akis-arasi yer-tutucu.
+    # !! Bu sayi, analyze()'in yield ettigi demet ve analyze_btn.click(outputs=[...]) listesiyle
+    #    TUTARLI olmak ZORUNDA (12 + status = 13). build_ui() testi bunu dogrular.
+    return (gr.update(),) * 12
 
 
 def analyze(video_path, facility_rules="", restricted_zones="",
-            detect_vehicles=False, vehicle_zones="", detect_crowd=False):
+            detect_vehicles=False, vehicle_zones="", detect_crowd=False,
+            analysis_query=""):
     if not video_path:
         yield (_alert("Lütfen önce bir video yükleyin."), *_blank())
         return
@@ -245,6 +268,9 @@ def analyze(video_path, facility_rules="", restricted_zones="",
         detect_vehicles=bool(detect_vehicles),
         vehicle_zones=(vehicle_zones or "").strip(),
         detect_crowd=bool(detect_crowd),
+        # Sorgu-gudumlu analiz: operatorun serbest-metin sorgusu da ISTEK-KAPSAMLIDIR
+        # (eszamanli baska bir operatorun analizini daraltamaz). Bos -> tam no-op.
+        analysis_query=(analysis_query or "").strip(),
     ):
         seen: list = []
         yield (_pipeline_html(seen), *_blank())  # baslangic: Görüntü Alımı aktif
@@ -273,8 +299,22 @@ def analyze(video_path, facility_rules="", restricted_zones="",
     raw = json.dumps(result.model_dump(), ensure_ascii=False, indent=2)
     ctx = chat_agent.build_context(result)  # mevcut analiz henüz episodik bellekte değil -> "geçmiş" olarak görünmez
     memory.append_episode(result, source=os.path.basename(str(video_path)))
+    # Sorgu yaniti bloku: YALNIZ sorgu girildiyse gorunur; aksi halde panel tamamen gizlenir
+    # (sorgusuz akista arayuz birebir eskisi gibi kalir).
+    # DURUSTLUK (adversaryel denetim bulgusu): sorgu YALNIZCA sinirlayici/yapisal karakterden
+    # olusuyorsa (or. "<<<>>>") sanitize sonrasi BOSALIR ve analiz sorgusuz kosar; bu durumda
+    # `result.query_answer` None'dir. Eskiden panel "—" gosterip sorgunun uygulanmis oldugu
+    # izlenimi veriyordu -> artik NE OLDUGU acikca yazilir.
+    q_txt = (analysis_query or "").strip()
+    if q_txt:
+        answer = result.query_answer or (
+            "Sorgu geçerli bir metin içermediği için uygulanmadı; analiz standart kapsamda "
+            "tamamlandı (aşağıdaki özet, risk ve olay listesi geçerlidir).")
+        query_block = gr.update(value=query_panel_html(q_txt, answer), visible=True)
+    else:
+        query_block = gr.update(value="", visible=False)
     # result + video yolu State'lere yazilir -> Tutanak / Kanıt Paketi butonlari bunlari kullanir
-    yield (_pipeline_html(seen, done=True), result.summary, risk, timeline,
+    yield (_pipeline_html(seen, done=True), query_block, result.summary, risk, timeline,
            events_rows, actions_md, funcs_md, trace_md, raw, ctx, result, str(video_path))
 
 
@@ -296,22 +336,27 @@ def make_briefing(hours):
     return briefing.generate_shift_briefing(h)
 
 
-def make_report(result, path):
-    """Analiz sonucundan resmi Markdown olay tutanağı üretir."""
+def make_report(result, path, query=""):
+    """Analiz sonucundan resmi Markdown olay tutanağı üretir.
+
+    `query`: sorgu kutusunun O ANKI içeriği. Tutanağa hangi metnin gireceğine
+    `utils.operator_query_of` karar verir: karar-izine yazılan (analizde FİİLEN kullanılan)
+    sorgu otoritedir; kutu metni yalnızca aynı sorgunun kırpılmamış hâliyse tercih edilir."""
     if not result:
         return "Önce bir video analiz edin; ardından tutanak üretebilirsiniz."
     from dilajan import report
     cam = os.path.basename(str(path)) if path else "—"
-    return report.build_incident_report(result, camera=cam)
+    return report.build_incident_report(result, camera=cam, query=(query or "").strip())
 
 
-def make_evidence(result, path):
+def make_evidence(result, path, query=""):
     """Yüksek-önemli olaylar için bbox-overlay kanıt kareleri + hash'li manifest üretir."""
     if not result or not path:
         return None
     from dilajan import evidence
     out_dir = os.path.join(tempfile.gettempdir(), "dilajan_kanit")
-    res = evidence.build_evidence_bundle(str(path), result, out_dir)
+    res = evidence.build_evidence_bundle(str(path), result, out_dir,
+                                         query=(query or "").strip())
     files = list(res.get("frames", []))
     if res.get("manifest"):
         files.append(res["manifest"])
@@ -504,6 +549,22 @@ footer { display: none !important; }
 .chip-k { font-size: .62rem; letter-spacing: .12em; color: #64748b; font-weight: 700; }
 .chip-v { font-size: 1.05rem; font-weight: 800; color: #e2e8f0; }
 
+/* ---- sorgu-gudumlu analiz (girdi ipucu + yanit karti) ---- */
+.qa-hint { font-size: .74rem; color: #8fa3bd; margin: -4px 2px 10px; line-height: 1.45; }
+.qa-hint b { color: #7dd3fc; }
+.qa-card {
+  background: linear-gradient(180deg, rgba(8,47,73,.55), rgba(9,13,25,.85));
+  border: 1px solid rgba(34,211,238,.28); border-radius: 16px; padding: 14px 16px;
+  box-shadow: 0 10px 32px rgba(0,0,0,.38), inset 0 0 40px rgba(34,211,238,.05);
+  animation: fadeUp .45s ease both;
+}
+.qa-q { font-size: .84rem; color: #a5f3fc; font-style: italic; margin: 2px 0 8px;
+  padding-left: 10px; border-left: 2px solid rgba(34,211,238,.45); }
+.qa-a { font-size: .98rem; line-height: 1.55; color: #e8eef8; font-weight: 500; }
+.qa-note { font-size: .7rem; color: #7c8ea8; margin-top: 10px; padding-top: 8px;
+  border-top: 1px dashed rgba(148,163,184,.16); }
+.qa-note b { color: #67e8f9; }
+
 /* ---- zaman cizelgesi & olay listesi ---- */
 .ev-list { list-style: none; padding: 4px 2px 0; margin: 8px 0 0; font-size: .88rem; }
 .ev-list li { margin: 5px 0; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -596,6 +657,15 @@ def build_ui() -> gr.Blocks:
                         vehicle_zones_in = gr.Textbox(
                             label="Araç yasak bölgeleri (3×3 ızgara, virgülle — boşsa durağan araç bilgi amaçlı)",
                             placeholder="Örn: alt sağ, sağ  → bu bölgelerde araç = Yetkisiz/Yanlış Konumlu Araç (Yüksek)")
+                    # SORGU-GUDUMLU ANALIZ: operator, analizi kendi niyetine gore yonlendirir.
+                    # Bos birakilirsa davranis BIREBIR eskisi gibidir (varsayilan kapali).
+                    query_in = gr.Textbox(
+                        label="🔎 Analiz sorgusu (opsiyonel)",
+                        placeholder="Örn: Forklift hareketlerine odaklan · Yangın riski var mı? · Kaç kişi girdi?",
+                        lines=2)
+                    gr.HTML("<div class='qa-hint'>Sorgu analizi <b>odaklar</b>, filtrelemez: "
+                            "yangın, kaza, silah gibi güvenlik-kritik olaylar sorgudan bağımsız "
+                            "olarak <b>her zaman</b> raporlanır.</div>")
                     analyze_btn = gr.Button("🔍  ANALİZİ BAŞLAT", variant="primary", elem_id="analyze-btn", size="lg")
             with gr.Column(scale=7):
                 with gr.Group(elem_classes="panel"):
@@ -604,6 +674,9 @@ def build_ui() -> gr.Blocks:
                 with gr.Group(elem_classes="panel"):
                     gr.HTML("<div class='card-title'>⚠️ RİSK DEĞERLENDİRMESİ</div>")
                     risk_out = gr.HTML("<div class='empty'>—</div>")
+                # Sorgu yaniti — ozet panelinin USTUNDE, belirgin ve KENDI kartinda.
+                # Baslik da bu HTML'in icinde oldugu icin sorgu bosken blok TAMAMEN gizlenir.
+                query_out = gr.HTML(visible=False, elem_id="qa-out")
                 with gr.Group(elem_classes="panel"):
                     gr.HTML("<div class='card-title'>📝 OPERASYON ÖZETİ</div>")
                     summary_out = gr.Textbox(label=None, show_label=False, lines=3,
@@ -672,9 +745,12 @@ def build_ui() -> gr.Blocks:
         # Upload'ta tarayici-oynatilabilir H.264'e cevir (onizleme + analiz ayni dosyayi kullanir)
         video_in.upload(_ensure_playable, inputs=[video_in], outputs=[video_in])
 
+        # !! DIKKAT: outputs listesi (13) = analyze()'in yield ettigi demet = 1 (status) +
+        #    _blank() uzunlugu (12). Uclu tutarlilik build_ui() testinde assert edilir.
         analyze_btn.click(
-            analyze, inputs=[video_in, facility_in, zones_in, vehicles_in, vehicle_zones_in, crowd_in],
-            outputs=[status_out, summary_out, risk_out, timeline_out,
+            analyze, inputs=[video_in, facility_in, zones_in, vehicles_in, vehicle_zones_in,
+                             crowd_in, query_in],
+            outputs=[status_out, query_out, summary_out, risk_out, timeline_out,
                      events_out, actions_out, funcs_out, trace_out, json_out, context_state,
                      result_state, path_state],
         )
@@ -682,8 +758,11 @@ def build_ui() -> gr.Blocks:
         chat_in.submit(chat_respond, [chat_in, chatbot, context_state], [chatbot, chat_in])
 
         # Hizli-kazanim UI baglantilari
-        report_btn.click(make_report, [result_state, path_state], [report_out])
-        evidence_btn.click(make_evidence, [result_state, path_state], [evidence_out])
+        # NOT: query_in bu iki BASIT (generator OLMAYAN) fonksiyona GIRDI olarak eklendi ->
+        # tutanak/kanit manifesti "operator ne sordu" kaydini tasiyabilsin. analyze()'in
+        # generator yield ARITESI (13) bu degisiklikten ETKILENMEZ; outputs listeleri de ayni.
+        report_btn.click(make_report, [result_state, path_state, query_in], [report_out])
+        evidence_btn.click(make_evidence, [result_state, path_state, query_in], [evidence_out])
         brief_btn.click(make_briefing, [brief_hours], [brief_out])
 
     return demo

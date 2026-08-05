@@ -79,9 +79,24 @@ class AnalysisResult(BaseModel):
         default_factory=list,
         description="Ajanin adim-adim karar-izi (aciklanabilirlik): hangi dugum ne karar verdi",
     )
+    query_answer: Optional[str] = Field(
+        default=None,
+        description=(
+            "SORGU-GUDUMLU ANALIZ: operatorun serbest-metin analiz sorgusuna "
+            "(config.analysis_query) tespit edilen olaylara dayanarak verilen dogrudan Turkce "
+            "yanit. Sorgu girilmediyse None. Sorgu analizi yalnizca ODAKLAR/onceliklendirir; "
+            "guvenlik-kritik olaylar sorgudan bagimsiz olarak `events`/`risk` icinde KALIR. "
+            "SOZLESME DISIDIR: to_sartname_dict() bu alani DONDURMEZ."
+        ),
+    )
 
     def to_sartname_dict(self) -> dict:
-        """Sartnamenin sade JSON formatini üretir."""
+        """Sartnamenin sade JSON formatini üretir.
+
+        SOZLESME (BOZULAMAZ): TAM 4 anahtar — {summary, events, risk, actions}.
+        `query_answer` gibi zenginlestirme alanlari buraya SIZMAZ; onlar yalniz
+        `model_dump()` ciktisinda bulunur. (tests/test_query_driven.py ile assert edilir.)
+        """
         return {
             "summary": self.summary,
             "events": [{"time": e.time, "event": e.event} for e in self.events],

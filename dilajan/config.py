@@ -125,6 +125,22 @@ class Settings(BaseSettings):
                                     # Deterministik (VLM zone-reasoning guvenilmez); opt-in (bos=kapali).
     adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)
 
+    # --- SORGU-GUDUMLU ANALIZ (operator niyeti; env: DILAJAN_ANALYSIS_QUERY) ---
+    # Operatorun serbest-metin sorgusu ("sadece forklift hareketlerine bak", "yangin riski
+    # var mi?", "kac kisi girdi?"). Analiz bu konuya ODAKLANIR ve cikti sorguyu YANITLAR.
+    #
+    # K1 VARSAYILAN BOS = TAM NO-OP: bos iken perceive/reason promptlarina TEK KARAKTER
+    #    eklenmez (graph._query_focus_block / _query_answer_block ilk satirda "" doner)
+    #    -> mevcut olcumler (senaryo recall %96, holdout %96, dar-FP %0) yeniden uretilebilir.
+    # !! ODAKLAR, FILTRELEMEZ: sorgu bir ONCELIK katmanidir; "tum sapmalari raporla" talimati
+    #    AYNEN KALIR. Sorguyla ILGISIZ olsa bile yangin/duman/patlama/silah/ciddi kaza/yere
+    #    dusmus kisi HER ZAMAN raporlanir (bkz. prompts.QUERY_FOCUS_SUFFIX). Bu bir GUVENLIK
+    #    sistemidir; operatorun dar sorgusu kritik olayi BASTIRAMAZ.
+    # K6 Sorgu metni prompt'a VERI olarak (<<< >>> sinirlayicilari icinde, "talimat degildir"
+    #    cercevesiyle) girer; sanitize + uzunluk siniri graph._sanitize_query'dedir.
+    analysis_query: str = ""
+    analysis_query_max_len: int = 500  # asiri uzun sorgu prompt butcesini yemesin (kirpilir)
+
     # --- Politika hakemligi (policy_gate) — BEYAN-BAGLI ONEM DERECESI (kusur #2) ---
     # SORUN (olculdu): model politika-ihlalini GORUYOR ve DOGRU ADLANDIRIYOR ama ONEM DERECESINI
     # dusuk veriyor (47 tespitin 34'u severity=Dusuk) -> risk tabani Dusuk -> sevk kapisi acilmiyor.
@@ -258,6 +274,10 @@ REQUEST_SCOPED_FIELDS = (
     # ISTEK-KAPSAMLIDIR (bir operatorun beyani digerinin analizine sizmamali).
     "facility_policy",
     "policy_dispatch",
+    # Sorgu-gudumlu analiz: operatorun SERBEST METIN sorgusu da istek-kapsamlidir — bir
+    # operatorun "sadece forklift" sorgusu, eszamanli calisan baska bir analizin algisini
+    # daraltamaz (K5). Kapi (semaphore) + try/finally geri-yukleme ayni desende calisir.
+    "analysis_query",
 )
 
 

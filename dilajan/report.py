@@ -11,6 +11,7 @@ import re
 from typing import List, Optional
 
 from dilajan.schema import AnalysisResult
+from dilajan.utils import QUERY_DATA_NOTE, operator_query_of
 
 
 def _kayit_no(action_log: List[dict]) -> str:
@@ -24,11 +25,34 @@ def _kayit_no(action_log: List[dict]) -> str:
 
 
 def build_incident_report(result: AnalysisResult, action_log: Optional[List[dict]] = None,
-                          camera: str = "—", now: Optional[str] = None) -> str:
-    """AnalysisResult'tan Markdown olay tutanagi uretir. action_log verilmezse result.action_log kullanilir."""
+                          camera: str = "—", now: Optional[str] = None,
+                          query: Optional[str] = None) -> str:
+    """AnalysisResult'tan Markdown olay tutanagi uretir. action_log verilmezse result.action_log kullanilir.
+
+    `query`: operatorun serbest-metin analiz sorgusu (opsiyonel). Verilmezse karar-izinden
+    geri okunur (`utils.operator_query_of`). Sorgu bolumu YALNIZCA `result.query_answer`
+    doluyken eklenir; aksi halde tutanak metni -bolum numaralari dahil- BIREBIR eski halidir.
+    """
     now = now or datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     log = action_log if action_log is not None else list(getattr(result, "action_log", []) or [])
     kayit = _kayit_no(log)
+
+    # --- SORGU-GUDUMLU ANALIZ KAYDI (aciklanabilirlik / denetlenebilirlik) ---------------
+    # B4 FAIL-OPEN: getattr + try, eski/yabanci sonuc nesneleri tutanagi cokertmez.
+    # B2 VARSAYILAN KAPALI: `qa` bos -> asagidaki tek `if` calismaz, bolum numaralari 1..5
+    #    olarak eski haliyle akar (tests/test_query_driven.py grup 14 BIREBIR karsilastirir).
+    try:
+        qa = str(getattr(result, "query_answer", None) or "").strip()
+    except Exception:
+        qa = ""
+    q_txt = operator_query_of(result, query) if qa else ""
+
+    _no = [0]
+
+    def _sec(baslik: str) -> str:
+        """Bolum basligi — numaralar SIRAYLA uretilir (sorgu bolumu eklenince kaymaz)."""
+        _no[0] += 1
+        return f"## {_no[0]}. {baslik}"
 
     lines = [
         f"# OLAY TUTANAĞI — {kayit}",
@@ -38,10 +62,27 @@ def build_incident_report(result: AnalysisResult, action_log: Optional[List[dict
         f"- **Video Süresi:** {result.video_duration or '—'}",
         f"- **Genel Risk:** {result.risk.level.value} — {result.risk.rationale}",
         "",
-        "## 1. Özet",
+    ]
+    if qa:
+        # B5: operator metni VERI olarak, uyari cercevesi ICINDE yazilir — bu tutanak baska
+        # bir modele beslenebilir; icindeki komut benzeri ifadeler talimat gibi durmamalidir.
+        lines += [
+            _sec("Operatör Sorgusu ve Ajan Yanıtı"),
+            f"> ⚠️ _{QUERY_DATA_NOTE}_",
+            "",
+            "- **OPERATÖR SORGUSU (veri):** “"
+            + (q_txt or "(sorgu metni bu kayıtta saklanmamış)") + "”",
+            f"- **AJAN YANITI:** {qa}",
+            "",
+            "_Sorgu analizi **odaklar**, filtrelemez: sorguyla ilgisiz kritik olaylar da "
+            "aşağıdaki bölümlerde raporlanır._",
+            "",
+        ]
+    lines += [
+        _sec("Özet"),
         (result.summary or "—"),
         "",
-        "## 2. Olay Zaman Çizelgesi",
+        _sec("Olay Zaman Çizelgesi"),
     ]
     if result.events:
         lines += ["| Zaman | Olay | Önem | Kategori | Konum |", "|---|---|---|---|---|"]
@@ -52,7 +93,7 @@ def build_incident_report(result: AnalysisResult, action_log: Optional[List[dict
     else:
         lines.append("_Kayda değer olay tespit edilmedi._")
 
-    lines += ["", "## 3. Alınan Operasyonel Aksiyonlar"]
+    lines += ["", _sec("Alınan Operasyonel Aksiyonlar")]
     if log:
         for d in log:
             args = ", ".join(f"{k}={v}" for k, v in (d.get("args") or {}).items())
@@ -62,7 +103,7 @@ def build_incident_report(result: AnalysisResult, action_log: Optional[List[dict
     else:
         lines.append("- Operasyonel çağrı yapılmadı.")
 
-    lines += ["", "## 4. Öneriler"]
+    lines += ["", _sec("Öneriler")]
     if result.actions:
         for a in result.actions:
             lines.append(f"- **[{a.priority.value}]** {a.action}" + (f" — _{a.rationale}_" if a.rationale else ""))
@@ -70,7 +111,7 @@ def build_incident_report(result: AnalysisResult, action_log: Optional[List[dict
         lines.append("- —")
 
     lines += [
-        "", "## 5. Onay",
+        "", _sec("Onay"),
         "| Hazırlayan (Operatör) | İmza | Vardiya Amiri | İmza |",
         "|---|---|---|---|",
         "|  |  |  |  |",

@@ -467,6 +467,38 @@ def _flags(events: Sequence[dict]) -> Dict[str, bool]:
     return {k: any(w in blob for w in ws) for k, ws in _KW.items()}
 
 
+#: SORGU-GUDUMLU ANALIZ ipucu — `prompts.QUERY_ANSWER_INSTRUCTION` karar-destek istemine
+#: EKLENDIGINDE bu alan adi istemde gecer. Operator sorgusu BOSKEN o blok hic eklenmez
+#: (graph._query_answer_block "" doner) -> ipucu de gecmez -> mock alani URETMEZ (K1/B2).
+_QA_FIELD_CUE = "query_answer"
+
+
+def _gen_query_answer(events: Sequence[dict], top: Optional[dict]) -> str:
+    """MOCK sorgu yaniti — YALNIZ istemden geri okunan (sahte) olaylardan turer.
+
+    ILKELER
+      * DETERMINIZM : girdi olay listesi ayni ise cumle de aynidir (ek tohum kullanilmaz).
+      * UYDURMA YOK : olay yoksa "cikarilamadi" denir; prompt'un anti-halusinasyon kurali
+                      (`QUERY_ANSWER_INSTRUCTION`) mock tarafinda da AYNEN uygulanir.
+      * DURUSTLUK   : yanit MOCK_TAG ile damgalidir; olcum/karar dayanagi olamaz.
+      * ENJEKSIYON  : operatorun SORGU METNI yanita KOPYALANMAZ. Sorgu, isteme <<< >>>
+                      arasinda VERI olarak girer; onu ciktiya tasimak metni tutanaga,
+                      kanit manifestine ve sohbet baglamina yayardi (gereksiz saldiri yuzeyi).
+                      Mock yalnizca OLAYLARA dayanan bir cumle kurar.
+    """
+    if not events:
+        return (f"{MOCK_TAG} Bu bilgi videodan çıkarılamadı: sahte akışta sorguyla "
+                f"ilişkilendirilebilecek hiçbir olay işaretlenmedi. Yanıt modelsiz modda "
+                f"üretildi; görüntü içeriğini YANSITMAZ.")
+    listed = "; ".join(f"[{e.get('time', '?')}] {e.get('event', '')}" for e in events[:3])
+    extra = f" (+{len(events) - 3} olay daha)" if len(events) > 3 else ""
+    worst_s = (f" En ciddi bulgu [{top['time']}] {top['event']} ({top['severity']})."
+               if top else "")
+    return (f"{MOCK_TAG} Sorguya yalnızca işaretlenen olaylara dayanarak yanıt: sahte akışta "
+            f"{len(events)} olay var — {listed}{extra}.{worst_s} Yanıt modelsiz modda üretildi; "
+            f"görüntü içeriğini YANSITMAZ, karar dayanağı olamaz.")
+
+
 def _gen_decision(text: str, seed: int) -> str:
     events = _parse_events_block(text)
     worst = _worst(events)
@@ -513,13 +545,19 @@ def _gen_decision(text: str, seed: int) -> str:
         "rationale": "Bu rapordaki özet, olaylar ve risk seviyesi sahte üretilmiştir; karar dayanağı olamaz.",
     })
 
-    return json.dumps({
+    out: Dict[str, object] = {
         "summary": summary,
         "risk": {"level": worst,
                  "rationale": f"{MOCK_TAG} Sahte değerlendirme: risk, işaretlenen sahte olayların en "
                               f"yüksek önem derecesinden ({worst}) türetildi; görüntü kanıtı YOKTUR."},
         "actions": actions[:5],
-    }, ensure_ascii=False)
+    }
+    # SORGU-GUDUMLU ANALIZ (B2 VARSAYILAN KAPALI): `query_answer` YALNIZCA istem onu ACIKCA
+    # istiyorsa uretilir. Sorgusuz akista bu dal HIC calismaz -> JSON birebir eski halidir
+    # (sozlesme + demo ciktisi bit-bit korunur; tests/test_query_driven.py grup 13 kanitlar).
+    if _QA_FIELD_CUE in (text or ""):
+        out["query_answer"] = _gen_query_answer(events, top)
+    return json.dumps(out, ensure_ascii=False)
 
 
 # Sevk argumani -> anlamsal slot (graph._ARG_SLOT_HINTS ile ayni ruh; burada YEREL ve kucuk).
