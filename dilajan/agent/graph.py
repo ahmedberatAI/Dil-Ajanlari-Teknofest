@@ -40,7 +40,7 @@ from typing import Dict, List, Optional, Tuple
 
 from langgraph.graph import END, START, StateGraph
 
-from dilajan import policy, prompts
+from dilajan import evidence_questions, policy, prompts
 from dilajan.agent.state import AgentState
 from dilajan.config import settings
 from dilajan.llm_client import VLMClient
@@ -507,6 +507,162 @@ def _query_trace_line(prefix: str, suffix: str) -> Optional[str]:
     return f'{prefix}"{shown}"{suffix}'
 
 
+# ---------------------------------------------------------------------------
+# KANIT SORULARI (ASK-HINT, arXiv 2510.02155) — "kanit -> olay ADI"
+# ---------------------------------------------------------------------------
+# Akis (yalniz `settings.evidence_questions` ACIK ve segmentte >=1 olay VARSA):
+#   betimleme -> olay cikarimi -> [N ikili kanit sorusu] -> birlestirme -> [1 adlandirma cagrisi]
+#
+# UC YAPISAL GARANTI (hepsi tests/test_evidence_questions.py'de assert edilir):
+#
+#  G1  VARSAYILAN KAPALI (K2): bayrak kapaliyken `_kanit_adlandirma` ILK SATIRDA doner —
+#      prompt metni ve VLM cagri sayisi BIREBIR eski halidir.
+#
+#  G2  YANLIS-POZITIF KAPISI ACILMAZ (gorevin "KRITIK RISK" maddesi): sorular YALNIZCA
+#      olay listesi BOS DEGILSE sorulur. Normal klipte olay yoktur -> soru sorulmaz ->
+#      ipucu uretilmez -> hicbir alarm/severity/sevk terimi degismez. Yani olculen
+#      dar-FP %0 ve sevk-FP %0 profili bir prompt sozune degil, BU KOSULA dayanir.
+#
+#  G3  "KANIT -> AD, KANIT -/-> ALARM": adlandirma adimi olaylari `model_copy(update=
+#      {"event": ..., "evidence_prev": ...})` ile tasir. severity / category / time /
+#      end_time / bbox / region alanlarina TEK BIR KOD YOLU dokunmaz. Ayrica bu adim ALGI
+#      ZINCIRININ SONUNDA, SEGMENT ICINDE severity'yi degistiren TUM adimlardan (severity
+#      kalibrasyonu, verify_events, semantic_plausibility, verify_pose_falls) SONRA calisir.
+#
+#  G4  ALARM MUHAFIZI (adversaryel denetim sonrasi EKLENDI — G3 tek basina YETMIYORDU):
+#      `perceive` DISINDA da metne bakip alarm yukselten iki adim var ve ikisi de bu adimdan
+#      SONRA calisir. Denetimde OLCULDU (sahte VLM, tek soruya "Evet"):
+#          severity Orta -> YUKSEK · risk Orta -> Yuksek · sevk [] -> ['guvenlik_ekibi_uyar']
+#      Kapatilan iki yol:
+#        (a) `reexamine` olay METNINI modele sorup Orta->Yuksek yukseltir. ARTIK hakeme
+#            `ev.evidence_prev or ev.event` gonderilir -> istem metni ozellik KAPALIYKENKI
+#            ile BYTE-ESIT, dolayisiyla severity karari da AYNI.
+#        (b) `reason` olay metnini okuyup RISK seviyesini yukseltebilir; risk >= Yuksek sevk
+#            kapisinin 3. terimidir. ARTIK `evidence_renamed` bayragi bu terimi MASKELER
+#            (risk_recall_bias ile ayni desen) -> risk operatore FLAG olur, SEVK ACMAZ.
+#      KALAN (kapatilmayan, bilerek): operatore GOSTERILEN risk seviyesi yeniden adlandirilmis
+#      metin yuzunden yukselebilir. Bu bilincli bir taviz — ozetin olay adiyla TUTARLI olmasi
+#      icin `reason` yeni adi GORMELIDIR. Bu artis A/B betiginin `fp_dar` olcutuyle
+#      OLCULUR ve artis varsa kol REDDEDILIR (scripts/run_evidence_ab.py).
+#
+# G2'NIN SINIRI (durustluk notu — OLCULDU): "normal klipte olay yoktur" varsayimi
+# eval_holdout'ta 8 normal klipin 3'unde YANLIS (olay uretiliyor, biri Orta severity).
+# Yani FP guvenligi G2'ye DEGIL, G4'e dayanir.
+
+#: "EVET/HAYIR/BİLİNMİYOR" icin fazlasiyla yeterli (gorev sarti: 8-16).
+_KANIT_MAX_TOKENS = 12
+#: Sorular ES ZAMANLI sorulur — vLLM eszamanli istekleri batch'ler; K4 gecikme tavani icin
+#: N ardisik cagri yerine ~1 cagri suresi. `pool.map` SIRAYI KORUR (yanit-soru eslesmesi guvenli).
+_KANIT_MAX_WORKERS = 4
+#: Adlandirma promptuna giren betimleme uzunluk tavani (prompt butcesi).
+_KANIT_DESC_MAX = 1500
+
+
+def _kanit_yanitla(vlm: VLMClient, frames, soru) -> str:
+    """Tek IKILI kanit sorusunu sorar ve etiketi dondurur.
+    FAIL-OPEN: cagri/parse hatasi -> BILINMIYOR (o soru hicbir yone kanit saymaz)."""
+    try:
+        ham = vlm.analyze_frames(
+            frames, prompts.EVIDENCE_QUESTION_INSTRUCTION.format(soru=soru.metin),
+            temperature=0.0, max_tokens=_KANIT_MAX_TOKENS)
+    except Exception:
+        return evidence_questions.BILINMIYOR
+    return evidence_questions.yanit_ayristir(ham)
+
+
+def _kanit_ile_adlandir(vlm: VLMClient, seg, desc: Optional[str], events: List[Event],
+                        ozet, sorular) -> Tuple[List[Event], str]:
+    """Kanit ozetine gore olaylarin YALNIZCA `event` metnini yeniler (GORUNTUSUZ tek cagri).
+
+    G3: donen olaylar `model_copy(update={"event": ...})` ile uretilir -> severity/category/
+    zaman/bbox alanlari BIREBIR korunur. Onerilen ad `ad_kabul_edilebilir_mi` vetosundan
+    gecmezse (bos/uzun/yabanci karakter ya da "Hayır" denen kanitla celiskili) ESKI AD KALIR.
+    """
+    instr = prompts.EVIDENCE_NAMING_INSTRUCTION.format(
+        start=seg.start_str, end=seg.end_str,
+        description=(str(desc or "").strip() or "(açıklama üretilemedi)")[:_KANIT_DESC_MAX],
+        kanit_block=evidence_questions.kanit_blok(ozet, sorular),
+        ipucu=ozet.ipucu,
+        olay_block="\n".join(f"{i + 1}) {e.event}" for i, e in enumerate(events)),
+    )
+    raw = vlm.chat(
+        [{"role": "system", "content": prompts.SYSTEM_PERSONA},
+         {"role": "user", "content": instr}],
+        temperature=0.0, max_tokens=320,
+    )
+    onerilen: Dict[int, str] = {}
+    for kayit in (extract_json(raw) or {}).get("adlar", []):
+        try:
+            onerilen[int(kayit.get("no"))] = str(kayit.get("ad", "")).strip()
+        except Exception:  # tek bozuk kayit digerlerini dusurmesin
+            continue
+    out: List[Event] = []
+    degisen = red = 0
+    redler: List[str] = []
+    for i, ev in enumerate(events):
+        ad = onerilen.get(i + 1, "")
+        if ad and ad != ev.event:
+            uygun, sebep = evidence_questions.ad_kabul_edilebilir_mi(ad, ozet)
+            if uygun:
+                # G3: severity/kategori/zaman/bbox alanlarina DOKUNULMAZ. `evidence_prev`
+                # ALARM MUHAFIZIDIR: yeniden adlandirmadan onceki metni saklar ki
+                # `reexamine` gibi METNE BAKIP severity yukseltebilen adimlar kararlarini
+                # ozellik KAPALIYKENKI metinle versin. `evidence_prev` SEMA ALANI DEGILDIR
+                # (policy_ref/policy_prev ile ayni desen) -> model_dump()/sozlesme DEGISMEZ.
+                ev = ev.model_copy(update={
+                    "event": ad,
+                    "evidence_prev": getattr(ev, "evidence_prev", None) or ev.event})
+                degisen += 1
+            else:
+                red += 1
+                redler.append(sebep)
+        out.append(ev)
+    not_ = (f"kanıt-adlandırma: {degisen}/{len(events)} olay adı kanıtla güncellendi"
+            + (f", {red} öneri reddedildi ({'; '.join(redler[:2])})" if red else "")
+            + " — önem derecesi, kategori ve risk DEĞİŞMEDİ")
+    return out, not_
+
+
+def _kanit_adlandirma(vlm: VLMClient, seg, desc: Optional[str],
+                      events: List[Event]) -> Tuple[List[Event], List[str]]:
+    """ASK-HINT ana akisi: ikili kanit sorulari -> kategori ipucu -> olay ADI yenileme.
+
+    K2/G1: ozellik kapaliysa VEYA segmentte olay yoksa TEK CAGRI bile yapilmaz.
+    K3   : her ariza modunda (soru cagrisi patlar, JSON bozuk, sablon hatali) olaylar
+           DEGISMEDEN doner ve analiz normal surer.
+    """
+    if not settings.evidence_questions or not events:
+        return events, []  # <-- G1 + G2: erken donus; olcumler ve FP profili korunur
+    # N-KEZ ALGI (event_consistency_n>1) KAPSAM DISI — iki gerekce (denetimde OLCULDU):
+    #  (1) DOGRULUK: cogunluk-oyu kumeleme olay METNINI (_dedup_words) kullanir. Kosular
+    #      arasinda kanit yanitlari farkli cikarsa AYNI olay farkli adlarla gelir, ayni
+    #      kumeye DUSMEZ ve esigin altinda kalip ELENIR -> recall KAYBI.
+    #  (2) GECIKME (K4): ek cagri N ile carpilir; olculdu n=3'te 6 -> 18 cagri (3.0x) ve
+    #      adlandirmayla birlikte 3x tavani ASAR.
+    # Ikisi de OPT-IN'dir; varsayilan n=1'de bu satir hicbir sey yapmaz. Bilgilendirme
+    # `_segment_consistent_events`in kendi notuna yazilir (bu fonksiyonun notu orada dusuyor).
+    if settings.event_consistency_n > 1:
+        return events, []
+    notes: List[str] = []
+    try:
+        sorular = evidence_questions.soru_seti(settings.evidence_question_set)
+        if not sorular:
+            return events, []
+        workers = max(1, min(len(sorular), _KANIT_MAX_WORKERS))
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            yanitlar = list(pool.map(lambda s: _kanit_yanitla(vlm, seg.frames, s), sorular))
+        ozet = evidence_questions.birlestir(sorular, yanitlar)
+        notes.append(f"perceive: segment {seg.index} {ozet.ozet_satiri}")
+        if not ozet.ipucu:  # kanit yok / cakisma -> ek cagri YAPILMAZ, olaylar aynen kalir
+            return events, notes
+        events, ad_notu = _kanit_ile_adlandir(vlm, seg, desc, events, ozet, sorular)
+        notes.append(f"perceive: segment {seg.index} {ad_notu}")
+    except Exception as ex:  # FAIL-OPEN (K3)
+        notes.append(f"perceive: segment {seg.index} kanıt soruları atlandı "
+                     f"(toleranslı devam, olaylar değiştirilmedi): {ex}")
+    return events, notes
+
+
 def _perceive_single_pass(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str]]:
     """Hizli mod: segment basina TEK VLM cagrisi (describe+extract birlesik).
     verify/grounding YOK -> dusuk gecikme. (olaylar, hata_notu) doner."""
@@ -562,9 +718,17 @@ def _motion_cue(seg) -> str:
 
 def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str]]:
     """Tek segment icin iki asamali algi: serbest tarif -> olay cikarimi.
-    (olaylar, hata_notu) doner; hata olursa olaylar boş + not döner (toleransli)."""
+    (olaylar, hata_notu) doner; hata olursa olaylar boş + not döner (toleransli).
+    NOT: `hata_notu` birden cok satir icerebilir (karar-izine tek girdi olarak yazilir)."""
     if settings.single_pass_perceive:
-        return _perceive_single_pass(vlm, seg)
+        evs, note = _perceive_single_pass(vlm, seg)
+        # ASK-HINT hizli modda UYGULANMAZ: tek-gecisli algida ayri bir betimleme metni yoktur
+        # ve fast_mode'un tek amaci gecikmedir (K4). Sessiz kalmamak icin karar-izine yazilir.
+        if settings.evidence_questions:
+            note = "\n".join(filter(None, [
+                note, f"perceive: segment {seg.index} kanıt soruları HIZLI MODDA uygulanmadı "
+                      "(tek-geçişli algı)"]))
+        return evs, note
     try:
         instr = prompts.SEGMENT_DESCRIBE_INSTRUCTION.format(start=seg.start_str, end=seg.end_str)
         if settings.facility_rules:
@@ -632,7 +796,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         # VLM "kisi yere dusmus/hareketsiz" der ama YOLO-poz kisinin EMIN bicimde DIK (comelmis/egilmis)
         # oldugunu gosterirse severity'yi dispatch-esiginin ALTINA (Orta) cek -> sahte "dusmus kisi Kritik+cagri"
         # kesilir. FAIL-OPEN: poz guvenilmez/kisi yoksa (ABSTAIN) VLM korunur -> gercek dusme recall'i bozulmaz.
-        pose_note = None
+        notes: List[str] = []
         if settings.verify_pose_falls and out and any(_is_person_fall_event(e.event) for e in out):
             try:
                 from dilajan import detector
@@ -647,7 +811,8 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                                    severity=Severity.ORTA, category=ev.category, bbox=ev.bbox, region=ev.region)
                     adj.append(ev)
                 out = adj
-                pose_note = f"perceive: segment {seg.index} poz-doğrulama [{vnote}] -> kişi-düşme severity↓Orta"
+                notes.append(f"perceive: segment {seg.index} poz-doğrulama [{vnote}] "
+                             "-> kişi-düşme severity↓Orta")
         # Mekansal grounding: onemli olaylarin karedeki konumunu (bbox + bölge) cikar
         if settings.spatial_grounding and out:
             grounded: List[Event] = []
@@ -659,6 +824,14 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                                    category=ev.category, bbox=bb, region=reg)
                 grounded.append(ev)
             out = grounded
+        # KANIT SORULARI (ASK-HINT) — BURAYA KONUMLANDIRILDI, iki gerekceyle:
+        #  (a) severity'yi degistirebilen TUM adimlar (kalibrasyon, verify_events,
+        #      semantic_plausibility, verify_pose_falls) ve grounding ARTIK BITTI ->
+        #      o kararlarin hepsi olayin ORIJINAL metniyle alindi (G3);
+        #  (b) asagidaki DETERMINISTIK dedektor olaylari (geofence/arac/kalabalik) HENUZ
+        #      eklenmedi -> LLM adlandirmasi onlarin sabit metnini BOZAMAZ.
+        out, kanit_notlari = _kanit_adlandirma(vlm, seg, desc, out)
+        notes.extend(kanit_notlari)
         # SAVUNMA geofence: yasak/kisitli bolgelerde KISI -> "Yasak Bölge İhlali" (deterministik YOLO).
         # Opt-in (restricted_zones bos=kapali -> mevcut davranis degismez); VLM zone-reasoning guvenilmez
         # oldugu icin uzman dedektorle yapilir (perimetre/tesis guvenligi cekirdegi).
@@ -712,7 +885,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                     time=cs.get("dispersal_time", seg.start_str),
                     event=f"Ani dağılma / panik hareketi (kalabalık {cs['peak']} kişiden hızla azaldı)",
                     severity=Severity.YUKSEK, category=EventCategory.GUVENLIK))
-        return out, pose_note
+        return out, ("\n".join(notes) if notes else None)
     except Exception as ex:  # hata toleransi: segment atlanir
         return [], f"perceive: segment {seg.index} hatasi: {ex}"
 
@@ -750,9 +923,19 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
                         # olay birden cok segmente yayiliyor -> zaman PENCERESI [baslangic, bitis]
                         t0 = min(k.time, e.time)
                         t1 = max(k.end_time or k.time, e.end_time or e.time)
-                        kept[-1] = Event(time=t0, end_time=(t1 if t1 != t0 else None),
+                        birlesik = Event(time=t0, end_time=(t1 if t1 != t0 else None),
                                          event=better, severity=sev, category=k.category,
                                          bbox=k.bbox or e.bbox, region=k.region or e.region)
+                        # ALARM MUHAFIZI birlestirmede KAYBOLMAMALI (sema-disi alan, `Event(...)`
+                        # yeniden-kurmasi onu dusurur): `better` hangi olaydan geldiyse onun
+                        # kanit-oncesi metni tasinir, yoksa digerininki. Temkinli yon: alarm
+                        # karari HER ZAMAN kanit-ONCESI metinle verilsin.
+                        _pe, _pk = (getattr(e, "evidence_prev", None),
+                                    getattr(k, "evidence_prev", None))
+                        prev = (_pe if better == e.event else _pk) or _pk or _pe
+                        if prev:
+                            birlesik = birlesik.model_copy(update={"evidence_prev": prev})
+                        kept[-1] = birlesik
                         continue
         kept.append(e)
     # Zamansal-SUREKLILIK yukseltmesi (Agent-C): bir TEHLIKE olayi >=2 bitisik segmentte surduyse
@@ -763,8 +946,9 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
         for e in kept:
             if (e.end_time and e.end_time != e.time
                     and e.category in _DANGER_CATS and e.severity == Severity.ORTA):
-                e = Event(time=e.time, end_time=e.end_time, event=e.event,
-                          severity=Severity.YUKSEK, category=e.category, bbox=e.bbox, region=e.region)
+                # model_copy: TUM alanlar + sema-disi ALARM MUHAFIZI (`evidence_prev`)
+                # korunur; `Event(...)` yeniden-kurmasi onlari sessizce dusururdu.
+                e = e.model_copy(update={"severity": Severity.YUKSEK})
             esc.append(e)
         kept = esc
     return kept
@@ -803,6 +987,11 @@ def _segment_consistent_events(vlm: VLMClient, seg, n: int) -> Tuple[List[Event]
             for c in clusters if len(c["runs"]) >= thr]
     note = (f"perceive: segment {seg.index} self-consistency {n}× -> "
             f"{len(clusters)} aday, {len(kept)} tutuldu (eşik {thr}/{n})")
+    if settings.evidence_questions:
+        # Sessiz kalmamak icin karar-izine yazilir (fast_mode ile AYNI desen).
+        note += ("\nperceive: kanıt soruları N-KEZ ALGIDA uygulanmadı "
+                 f"(event_consistency_n={n}; çoğunluk-oyu olay METNİNE dayanır, "
+                 "yeniden adlandırma oyu bozardı — ayrıca K4 gecikme tavanı)")
     return kept, note
 
 
@@ -839,7 +1028,11 @@ def perceive(state: AgentState) -> dict:
             trace.append(f"perceive: {len(events)} olay ({n_raw} ham, {len(segments)} segment, {workers} paralel)")
     except Exception as ex:
         trace.append(f"perceive: dugum hatasi (toleransli devam, {len(events)} olay korundu): {ex}")
-    return {"events": events, "trace": trace}
+    # ALARM MUHAFIZI bayragi: en az bir olayin adi kanit sorulariyla yeniden yazildi mi?
+    # `act` bu bayrakla RISK terimini sevk kapisindan maskeler (risk_recall_bias ile AYNI
+    # desen). Ozellik kapaliyken HER ZAMAN False -> sevk cebiri bit-bit eskisiyle ayni.
+    return {"events": events, "trace": trace,
+            "evidence_renamed": any(getattr(e, "evidence_prev", None) for e in events)}
 
 
 def _secs(mmss: str) -> int:
@@ -891,20 +1084,27 @@ def reexamine(state: PolicyAgentState) -> dict:
             if seg is None:
                 new_events.append(ev)
                 continue
+            # ALARM MUHAFIZI (adversaryel denetimde OLCULEN kusur): bu cagri severity'yi
+            # Orta->YUKSEK'e cikarabilir ve YUKSEK dogrudan sevk kapisini acar. Kanit
+            # sorulari olayin ADINI daha belirli/alarmli hale getirdiginde bu kapi
+            # ozellik yuzunden aciliyordu (olculdu: Orta -> Yuksek, sevk [] -> ['guvenlik_ekibi_uyar']).
+            # Cozum: hakem HER ZAMAN kanit-ONCESI metni gorur -> verdigi karar ozellik
+            # KAPALIYKENKI ile BIREBIR AYNIDIR (istem metni de byte-esit olur).
+            hakem_metni = getattr(ev, "evidence_prev", None) or ev.event
             try:
-                ans = (vlm.analyze_frames(seg.frames, _REEX_PROMPT.format(event=ev.event),
+                ans = (vlm.analyze_frames(seg.frames, _REEX_PROMPT.format(event=hakem_metni),
                                           temperature=0.0, max_tokens=20) or "").upper()
             except Exception:
                 new_events.append(ev)
                 continue
+            # model_copy: alanlarin tamami + sema-disi ALARM MUHAFIZI korunur
+            # (`Event(...)` yeniden-kurmasi `evidence_prev`i sessizce dusururdu).
             if "RUTIN" in ans:
-                new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
-                                        severity=Severity.DUSUK, category=ev.category, bbox=ev.bbox, region=ev.region))
+                new_events.append(ev.model_copy(update={"severity": Severity.DUSUK}))
                 routine.append(policy.event_key(ev))
                 n_down += 1
             elif "CIDDI" in ans:
-                new_events.append(Event(time=ev.time, end_time=ev.end_time, event=ev.event,
-                                        severity=Severity.YUKSEK, category=ev.category, bbox=ev.bbox, region=ev.region))
+                new_events.append(ev.model_copy(update={"severity": Severity.YUKSEK}))
                 n_up += 1
             else:
                 new_events.append(ev)
@@ -1403,12 +1603,24 @@ def act(state: PolicyAgentState) -> dict:
     esc_sevk = bool(recs) and settings.policy_dispatch and any(r.get("sevk") for r in recs)
     policy_only = bool(state.get("risk_from_policy_only", False)) or bool(
         getattr(risk, "policy_only", False))
+    # KANIT-ADLANDIRMA MASKESI (risk_recall_bias ile AYNI desen, ayni gerekce):
+    # kanit sorulari bir olayin ADINI daha belirli/alarmli hale getirdiyse, `reason`
+    # bu METNI okuyup riski yukseltebilir. Risk operatore FLAG olarak gosterilebilir ama
+    # OPERASYONEL SEVK'i acmamalidir -> risk terimi maskelenir. Sevk boylece yalniz
+    # olay-severity'sine (max_intrinsic) baglanir; o da `Event.evidence_prev` muhafizi
+    # sayesinde kanit-ONCESI metinle karara baglanmistir. Ozellik kapali/adlandirma
+    # yapilmamissa bayrak False -> ifade cebirsel olarak ESKI SATIRIN AYNISIDIR.
+    kanit_adli = bool(state.get("evidence_renamed", False))
     dispatch_signal = (
         (max_intrinsic >= _SEV_ORD[Severity.YUKSEK])
         or (esc_sevk and max_ev >= _SEV_ORD[Severity.YUKSEK])
         or (risk_ord >= _SEV_ORD[Severity.YUKSEK] and not settings.risk_recall_bias
-            and not policy_only)
+            and not policy_only and not kanit_adli)
     )
+    if (kanit_adli and risk_ord >= _SEV_ORD[Severity.YUKSEK]
+            and max_intrinsic < _SEV_ORD[Severity.YUKSEK] and not esc_sevk):
+        trace.append("act: risk terimi MASKELENDI (en az bir olay adi kanit sorulariyla yeniden "
+                     "yazildi; risk operatore FLAG olarak gorunur ama SEVK acmaz)")
     if not events or not dispatch_signal:
         if recs:
             trace.append(f"act: politika yukseltmesi var ({len(recs)}) ancak SEVK yolu kapali "

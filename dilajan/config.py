@@ -141,6 +141,25 @@ class Settings(BaseSettings):
     analysis_query: str = ""
     analysis_query_max_len: int = 500  # asiri uzun sorgu prompt butcesini yemesin (kirpilir)
 
+    # --- KANIT SORULARI / ASK-HINT (env: DILAJAN_EVIDENCE_QUESTIONS) ---
+    # Literatur: arXiv 2510.02155 (WACV 2026). Tek "ne oldu?" cagrisi yerine sinif basina
+    # INCE-TANELI ikili EYLEM sorulari ayri ayri sorulur, yanitlar birlestirilir
+    # (UCF-Crime AUC 74.50 -> 89.83, DONMUS model). Tam soru havuzu 67.17'ye DUSUYOR:
+    # cok soru sormak ZARARLI -> setler en fazla 4 soru icerir (bkz. dilajan/evidence_questions.py).
+    #
+    # BIZDEKI UYARLAMA: makale IKILI ANOMALI SKORU uretir; bizim recall %96-100, bosluk
+    # SINIF ADLANDIRMADA (%46). Bu yuzden sorular TESPIT icin degil ADLANDIRMA icin sorulur
+    # ve uretilen ipucu YALNIZCA `Event.event` metnine etki eder.
+    # K1 VARSAYILAN KAPALI = TAM NO-OP: kapaliyken prompt metinleri VE VLM cagri sayisi
+    #    birebir eski halidir (graph._kanit_adlandirma ilk satirindaki erken-donus).
+    # K3 YANLIS-POZITIF: (a) sorular YALNIZCA en az bir olay cikarilmissa sorulur -> olaysiz
+    #    klipte TEK CAGRI bile yapilmaz; AMA bu tek basina YETMEZ (olculdu: 8 normal klipin
+    #    3'u olay uretiyor). (b) ASIL guvence graph.py'deki ALARM MUHAFIZI'dir: `reexamine`
+    #    hakemi kanit-ONCESI metni gorur (Event.evidence_prev) ve `act` sevk kapisinda RISK
+    #    terimi adlandirma yapildiysa maskelenir -> severity/SEVK ozellikten ETKILENMEZ.
+    evidence_questions: bool = False
+    evidence_question_set: str = "sokak"  # "sokak" (UCF-Crime sokak sucu) | "tesis" (endustri/savunma)
+
     # --- Politika hakemligi (policy_gate) — BEYAN-BAGLI ONEM DERECESI (kusur #2) ---
     # SORUN (olculdu): model politika-ihlalini GORUYOR ve DOGRU ADLANDIRIYOR ama ONEM DERECESINI
     # dusuk veriyor (47 tespitin 34'u severity=Dusuk) -> risk tabani Dusuk -> sevk kapisi acilmiyor.
@@ -278,6 +297,11 @@ REQUEST_SCOPED_FIELDS = (
     # operatorun "sadece forklift" sorgusu, eszamanli calisan baska bir analizin algisini
     # daraltamaz (K5). Kapi (semaphore) + try/finally geri-yukleme ayni desende calisir.
     "analysis_query",
+    # Kanit sorulari (ASK-HINT): ozelligin acik/kapali olmasi ve hangi soru setinin
+    # kullanildigi da ISTEK-KAPSAMLIDIR — bir operatorun "tesis" seti, eszamanli kosan
+    # baska bir analizin sorularini degistiremez (analysis_query ile AYNI desen).
+    "evidence_questions",
+    "evidence_question_set",
 )
 
 

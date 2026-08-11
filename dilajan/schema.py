@@ -42,6 +42,11 @@ class Event(BaseModel):
     category: EventCategory = Field(default=EventCategory.DIGER)
     bbox: Optional[List[int]] = Field(default=None, description="Olayin karedeki konumu (bbox_2d, 0-1000 normalize)")
     region: Optional[str] = Field(default=None, description="Olayin karedeki bölgesi (ör. 'üst sol', 'merkez')")
+    # NOT — SEMA-DISI EK ALANLAR: `policy_ref`/`policy_prev` (politika hakemligi) ve
+    # `evidence_prev` (kanit sorulari ALARM MUHAFIZI) olaya `model_copy(update=...)` ile
+    # eklenir; SEMA ALANI DEGILDIRLER, bu yuzden `model_dump()` anahtarlarina SIZMAZLAR
+    # (tests/test_kusur2_severity.py bunu assert eder). Okuma her zaman
+    # `getattr(e, "...", None)` ile yapilir.
 
 
 class Action(BaseModel):

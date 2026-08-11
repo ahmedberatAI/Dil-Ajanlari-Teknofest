@@ -35,6 +35,19 @@ class AgentState(TypedDict, total=False):
     # dondurdugu deger finalize'a ulassin diye alan burada gercek bir KANAL olarak tanimlidir.
     query_answer: Optional[str]
 
+    # KANIT SORULARI (ASK-HINT) — ALARM MUHAFIZI BAYRAGI.
+    # Kanit sorulari ve uretilen kategori ipucu `perceive` ICINDE tuketilir; DISARI cikan
+    # TEK bilgi budur: "en az bir olayin ADI kanitla yeniden yazildi mi?".
+    # NEDEN GEREKLI (adversaryel denetimde OLCULDU): yeniden adlandirilmis metin `reason`
+    # tarafindan okunur ve risk seviyesini yukseltebilir; risk >= Yuksek ise `act` sevk
+    # kapisini acar. Bu bayrakla `act` RISK terimini maskeler (var olan `risk_recall_bias`
+    # deseninin AYNISI) -> sevk YALNIZ olay-severity'sine baglanir, o da `evidence_prev`
+    # muhafiziyla kanit-oncesi metne baglidir.
+    # LangGraph semada TANIMSIZ anahtarlari SESSIZCE DUSURUR (yukaridaki `query_answer`
+    # notu) -> bayrak burada GERCEK bir kanal olarak tanimlidir. Ozellik kapaliyken
+    # HER ZAMAN False'tur; `act` cebirsel olarak eski satira indirgenir.
+    evidence_renamed: bool
+
     # act cikti (mock fonksiyon cagrilari)
     triggered_functions: List[str]
     action_log: List[dict]
