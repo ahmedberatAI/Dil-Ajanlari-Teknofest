@@ -72,52 +72,78 @@ Bu yetenek kazancı değil, cevap anahtarını modele vermektir. Bu yüzden koll
 
 ---
 
-## 4. Belirleyici kanıt: model verilen kelimeleri KULLANMADI
+## 4. ⚠️ DÜZELTME (2026-08-11) — bu bölümün ilk hâli YANLIŞTI
 
-C kolunda modele 8 kategorinin tamamı açıkça verildi. Eğer darboğaz sözcüksel olsaydı,
-model bu kelimeleri kullanır ve cat_match mekanik olarak fırlardı. Ölçüm:
+> **Aşağıdaki iddia geçersizdir. Silinmiyor, çünkü nasıl yanıldığımızın kaydı önemli.**
+
+**İlk yazdığımız (YANLIŞ):**
 
 ```
 Taksonomi kelimesi geçen anomali klip sayısı:
   A (kelimeler VERİLMEDİ) : 9 / 24
   C (kelimeler VERİLDİ)   : 9 / 24   <- BİREBİR AYNI
+=> "Model, eline tutuşturulan cevap anahtarını kullanmadı."
+=> "Darboğaz sözcüksel değil, görsel."
 ```
 
-**Model, eline tutuşturulan cevap anahtarını kullanmadı.** Yani "kavga" demeyi bilmediği için
-değil, **kavgayı göremediği için** adlandıramıyor.
+**Neden yanlış:** O kontrol, metinde *herhangi bir* taksonomi kelimesinin geçip geçmediğini
+saydı — **varlık**. Oysa ölçülmesi gereken *doğru* kategorinin kelimesiydi — **doğruluk**.
+İkisi karıştırıldı.
 
-Bu, mekanik yankı ihtimalini tamamen ortadan kaldırır ve sonucu tek yorumla bırakır:
-**darboğaz sözcüksel değil, görsel.**
+**Doğru ölçüm** (aynı arşiv dosyaları, model çalıştırılmadan yeniden skorlama):
 
-### Destekleyici gözlem
-`Shooting` üç kolda da **0/3**. Model 320×240 grenli görüntüde silahı hiç seçemiyor; hiçbir
-talimat bunu değiştirmiyor. Raporun kendi teşhisiyle tutarlı: *"belirleyici olan girdi kalitesi"*.
+| | herhangi bir taksonomi kelimesi | **doğru kategori kelimesi** |
+|---|---|---|
+| A (kelimeler verilmedi) | 9/24 | **12/24** |
+| C (kelimeler verildi) | 9/24 | **14/24** |
+
+Toplam kelime sayısı aynı kaldı ama **C'de geçen kelimeler daha sık DOĞRU olanlardı.**
+Model taksonomiyi **kullandı**.
+
+**İkinci ve daha ağır kusur:** `cat_match` yalnızca `events[].event` tarıyordu; `summary`
+alanına hiç bakmıyordu — oysa `summary` şartname çıktı sözleşmesinin (K3) parçası ve
+operatörün okuduğu alandır. C kolunun kazancı tam olarak orada duruyordu.
+
+Ayrıntılı düzeltilmiş ölçüm: [`docs/olcum_onarimi_2026-08-11.md`](olcum_onarimi_2026-08-11.md)
+
+### Ayakta kalan tek bulgu
+`Shooting` üç kolda ve **denenen dört skorlama kuralının hepsinde 0/3**. Bu bir eşleştirici
+artefaktı değil. Model silahlı olayları *"iki kişi arasında fiziksel temas"*, *"bir kişi ani
+şekilde yere düşmüş"*, *"şiddetli bir müdahale"* diye adlandırıyor — yani görüyor ama
+`Silahlı` yerine `Şiddet`/`Düşme` grubuna koyuyor. CCTV-Gun (arXiv 2303.10703) UCF 320×240'ta
+tabancaların **~16 piksel** olduğunu ölçüyor. Bilgi karede fiziksel olarak yok.
 
 ---
 
-## 5. Sonuç
+## 5. Sonuç (2026-08-11 tarihinde düzeltildi)
 
-**Hipotez çürüdü — ve bu değerli bir bulgu.**
+**İlk yazdığımız sonuç — "sorgu adlandırmaya yardım etmiyor, darboğaz tamamen görsel" —
+ölçüm kusurlu olduğu için KANITLANMAMIŞTIR.**
 
-Sorgu yönlendirmesinin `cat_match` üzerinde ölçülebilir bir etkisi yok; ne temiz bağlam (B),
-ne de doğrudan taksonomi enjeksiyonu (C) yardım ediyor. %38'lik adlandırma boşluğu bir
-**prompt mühendisliği** problemi değil, bir **girdi çözünürlüğü** problemidir.
+Düzeltilmiş tabloda C kolu (taksonomi) A'nın üstünde çıkıyor, ama fark hâlâ ölçülen **%8
+gürültü tabanının** içinde. Yani doğru ifade: *"taksonominin yardım ettiği yönünde işaret var,
+n=24'te kanıtlanamıyor."* Ne "yardım ediyor" ne de "etmiyor" denebilir.
 
-**Yan kazanç — jüriye cevap:** Jürinin 1 numaralı bulgusu *"anahtar kelime ablasyonu koşun,
-cat_match kolay oynanabilir olabilir"* idi. Bu koşu tam tersini gösterdi: modele anahtar
-kelimelerin **tamamı** verildiğinde bile cat_match yükselmedi. Metrik kelime hazırlamayla
-şişirilemiyor.
+**Jüri maddesi hakkında da geri adım:** *"cat_match kelime hazırlamayla şişirilemiyor"*
+demiştik. Şişiriliyor — sadece ölçüm o kanalı (`summary`) görmediği için görünmüyordu.
+Ayrıca eşleştirici o kadar gevşekti ki *"kırmızı sıvı dökülmüş"* ifadesi **"kır"** kökü
+üzerinden `Vandalism` **doğru** sayılıyordu. Jürinin anahtar-kelime ablasyonu uyarısı
+haklıydı.
 
-### Bunun anlamı (yön değişikliği)
+### Bunun anlamı (yön)
 
-| Yanlış kaldıraç | Doğru kaldıraç |
+Ölçüm onarımı tabanı %38'den **%46**'ya taşıdı (bkz. düzeltme raporu) — %81'e değil.
+Kalan boşluk gerçek bir yetenek açığı, ama büyüklüğü ilk sandığımızdan **küçük**.
+
+| Kanıtla elenmiş | Hâlâ açık |
 |---|---|
-| Daha iyi prompt / sorgu | Daha yüksek çözünürlüklü giriş, daha çok kare |
-| Taksonomi tanımı | Bu domaine özgü ince ayar (fine-tune) |
-| | Grenli girdide özel ön işleme (üst-ölçekleme) |
+| Süper-çözünürlük (doğruluğu düşürüyor, halüsinasyon üretiyor) | ASK-HINT deseni (ince-taneli ikili sorular) |
+| Çözünürlük/kare artırmak (aynı token, +0.69 puan) | Kısıtlı kod çözme (`guided_choice`) |
+| Semantik gruplama (bizde A +12.5, B 0, C 0) | Değerlendirme setini n≥100'e çıkarmak |
+| `Shooting` kategorisi (bilgi karede yok) | |
 
 Sorgu özelliği (D26) **kendi işini yapıyor** — operatör niyetini anlıyor, kritik olayı
-bastırmıyor. Sadece **bu** boşluğu kapatmıyor; kapatması da beklenmemeliydi.
+bastırmıyor (D27'de yangın 10/10, p=1.0000). Bu düzeltme onu etkilemiyor.
 
 ---
 

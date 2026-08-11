@@ -12,9 +12,18 @@ Bu, dataset yayincisinin etiketidir — bizim uydurmamiz degil (K7 durustluk sar
 """
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Tuple
+import functools
+import re
+from typing import Dict, List, Optional, Sequence, Set, Tuple
 
 # kategori -> (beklenen anahtar kelimeler, anomali_mi)
+#
+# !!! D28 UYARISI — BU SOZLUK KASITLI OLARAK DONDURULMUSTUR !!!
+# Bu liste ESKI (gevsek) eslestiricinin girdisidir ve arsivlenmis olcumlerin YENIDEN
+# URETILEBILIR kalmasi icin DEGISTIRILMEZ (K2/K4). Sikilastirilmis yeni liste asagida
+# CATEGORY_PATTERNS'tedir. Iki liste BILEREK yan yana durur: rescore.py ikisini de
+# calistirip sonuclari yan yana basar, boylece "metrigi kendimize gore ayarladik"
+# itirazi sayilarla cevaplanabilir.
 CATEGORY_EXPECT: Dict[str, Tuple[List[str], bool]] = {
     "RoadAccidents": (["kaza", "çarpış", "araç", "trafik", "devril"], True),
     "Explosion": (["patlama", "duman", "yangın", "alev", "parlama"], True),
@@ -165,3 +174,341 @@ def category_from_path(rel_path: str) -> Optional[str]:
         if p in CATEGORY_EXPECT:
             return p
     return None
+
+
+# ===========================================================================
+# D28 — ESLESTIRICI ONARIMI  (Turkce-guvenli + kelime sinirli + olumsuzlama kapili)
+# ===========================================================================
+# NEDEN: eski kural `anahtar in metin.lower()` idi. Uc ayri kusuru vardi:
+#   1) Python'un .lower()'i Turkce degildir: "İstismar".lower() -> "i̇stismar"
+#      (i + U+0307 BIRLESIK NOKTA) ve "istismar" anahtariyla ESLESMEZ.
+#      "I".lower() -> "i" olur, oysa Turkce'de "ı" olmalidir.
+#   2) Ciplak alt-dizge kelime ortasini da yakalar: "kırmızı" -> "kır" (Burglary+
+#      Vandalism), "vurgulanmadı" -> "vur" (Assault), "yüksek" -> "yük" (Anomali).
+#      Olculen sonuc: klip basina ~3 YANLIS kategori tetikleniyordu.
+#   3) Olumsuzlama gorulmuyordu: "kaza belirtisi YOK" kaza SAYILIYORDU.
+#
+# TASARIM: kok + KELIME SINIRI + gecerli Turkce EK ZINCIRI. "düş" -> "düştü",
+# "düşerek", "düşmüş" ESLESIR; "düşük", "düşünce" ESLESMEZ. Ek zinciri bir mini
+# bicimbirim cozumleyicisidir (asagidaki _EKLER); cozulemeyen kalinti REDDEDILIR.
+
+#: Turkce metinlerde kelime govdesi sayilan karakterler icin isalnum() kullanilir.
+#: Kok ile kelime arasindaki azami bosluk (cok kelimeli kaliplarda, karakter).
+MAX_KALIP_ARA = 24
+#: Kok sonrasi cozumlenecek azami ek uzunlugu (patolojik birlesikleri eler).
+MAX_EK_UZUNLUK = 14
+
+#: Kok'ten SONRA gelebilecek gecerli Turkce ekler. Zincirlenebilirler
+#: ("düş"+"me"+"si", "kaza"+"sı"+"nda"). Liste BILEREK eksiktir: "-ık/-ik/-uk/-ük"
+#: (düş->düşük, kır->kırık) ve yalin "-ın/-in/-un/-ün" (düş->düşün...) DISARIDA
+#: birakilmistir, cunku bunlar ANLAM DEGISTIREN turetimlerdir.
+_EKLER: Tuple[str, ...] = (
+    # --- fiil zaman/kip ekleri ---
+    "dı", "di", "du", "dü", "tı", "ti", "tu", "tü",
+    "mış", "miş", "muş", "müş",
+    "yor",
+    "acak", "ecek", "acağ", "eceğ",
+    "ar", "er", "ır", "ir", "ur", "ür",
+    # --- mastar / isim-fiil / olumsuzluk / surerlik ---
+    "mak", "mek", "ma", "me", "makta", "mekte",
+    # --- sifat-fiil / zarf-fiil ---
+    "an", "en", "yan", "yen", "arak", "erek", "ıp", "ip", "up", "üp", "ken",
+    # --- cati ekleri ---
+    "ıl", "il", "ul", "ül", "ış", "iş", "uş", "üş",
+    "dır", "dir", "dur", "dür", "tır", "tir", "tur", "tür",
+    "lan", "len",
+    # --- isim cekim ekleri ---
+    "lar", "ler", "sı", "si", "su", "sü", "nın", "nin", "nun", "nün",
+    "da", "de", "ta", "te", "dan", "den", "tan", "ten",
+    "na", "ne", "nda", "nde", "ndan", "nden", "nı", "ni", "nu", "nü",
+    "ya", "ye", "a", "e", "yı", "yi", "yu", "yü", "ı", "i", "u", "ü",
+    "yla", "yle", "la", "le",
+    # --- sik yapim ekleri ---
+    "lı", "li", "lu", "lü", "sız", "siz", "suz", "süz",
+    "lık", "lik", "luk", "lük", "cı", "ci", "cu", "cü", "çı", "çi", "çu", "çü",
+    "gan", "gen", "ğı", "ği", "ğu", "ğü",
+)
+
+#: Ek zinciri cozumleyicisinin YINE DE gecirdigi bilinen yanlis govdeler.
+#: Or. "düş"+"ünüyor" = "ü"+"nü"+"yor" olarak COZULUR ama "düşünüyor" bir DUSME degildir.
+#: Bunlar el ile, gerekce yazilarak kapatilir (testleri: tests/test_rescore.py).
+KOK_ISTISNA: Dict[str, Tuple[str, ...]] = {
+    "düş": ("ün", "ük"),      # düşünce/düşünüyor/düşük  != dusme
+    "vur": ("gu",),           # vurgu/vurgulanmadı       != vurma
+    "kır": ("mızı", "mız"),   # kırmızı                  != kirma
+    "yan": ("ın", "lış", "ıt", "sıra", "aş"),  # yanında/yanlış/yanıt != yanma
+    "ateş": ("kes",),         # ateşkes                  != ates
+}
+
+#: Kategori -> SIKILASTIRILMIS kalip listesi (D28). Tek kelime = kok (ek zinciriyle
+#: eslesir); bosluk iceren giris = SIRALI cok-kelimeli kalip (aradaki bosluk
+#: MAX_KALIP_ARA karakteri gecemez, cumlecik disina TASAMAZ).
+#:
+#: TASARIM KURALI — BU LISTE, CATEGORY_EXPECT'IN SIKI BIR ARITIMIDIR (strict refinement):
+#: her ozgun anahtar ya AYNEN korunur, ya da OLCULEN bir yanlis-tetigi oldugu icin
+#: cok-kelimeli kalibla degistirilir. Ozgun bir anahtari "sezgiyle" ATMAK YASAKTIR —
+#: aksi halde skor dususu eslestirici duzeltmesinden mi kelime dagarcigi kaybindan mi
+#: geldigi ayirt edilemez. (Ilk taslakta "duman" Explosion'dan dusurulmustu; bu bir
+#: HATAYDI ve olculdugu anda geri alindi.)
+#:
+#: DARALTILAN KOKLER ve HER BIRININ OLCULEN GEREKCESI:
+#:   "kır"   (Burglary)  -> "kilidi/kapıyı/camı kır" : "kırmızı sıvı" Burglary tetikliyordu
+#:                          (Vandalism'de KALDI: kelime-siniri "kırmızı"yi zaten eliyor)
+#:   "giriş" (Burglary)  -> "yetkisiz/izinsiz giriş", "girmeye çalış", "giriş denemesi"
+#:                          : "kapıdan giriş yapan personel" Burglary tetikliyordu
+#:   "yol"   (Anomali)   -> "yürüyüş yolu", "yaya yolu", "yaya geçidi", "yol ihlal"
+#:   "geç"   (Anomali)   -> "yaya geçidi", "geçiş ihlal" : "geçiyor" her klipte var
+#:   "açık"  (Anomali)   -> "kapak açık", "açık pano", "pano kapağı"
+#:   "risk"  (Anomali)   -> "devrilme riski", "güvenlik riski" : "yüksek risk" her yerde
+#:   "yük"   (Anomali)   -> "aşırı yük", "yük taşı" : "YÜKsek" alt-dizgesini yakaliyordu
+#:   "tehlike"(Anomali)  -> "tehlikeli davranış", "tehlike arz"
+#:   "müdahale"(Anomali) -> "yetkisiz müdahale" : saglik/guvenlik mudahalesi her klipte
+#:   "araç"  (RoadAcc.)  -> "araç çarp", "araca çarp" : her CCTV'de arac var
+#:   "trafik"(RoadAcc.)  -> "trafik kaza"           : "trafik akışı normal" tetikliyordu
+#:   "yan"   (Fire)      -> "yanıyor/yandı/yanan/yanma" : "kapının YANında" tetikliyordu
+#:   "is"    (Smoke)     -> ATILDI : iki harflik kok, ek zinciriyle her kelimeye uyuyor
+#: Geri kalan TUM ozgun anahtarlar ("düş", "vur", "ateş", "şiddet", "kavga", "yere", ...)
+#: AYNEN durur — onlarin yanlis tetikleri kelime-siniri + olumsuzlama kapisiyla cozulur.
+CATEGORY_PATTERNS: Dict[str, List[str]] = {
+    "RoadAccidents": ["kaza", "çarpış", "çarpma", "devril", "araç çarp", "araca çarp",
+                      "kişiye çarp", "trafik kaza", "ezil", "takla at"],
+    "Explosion": ["patla", "duman", "yangın", "alev", "parlama", "infilak", "şok dalgası"],
+    "Fighting": ["kavga", "dövüş", "saldır", "şiddet", "itiş", "boğuş", "arbede",
+                 "yumruk", "tekme"],
+    "Assault": ["saldır", "darp", "şiddet", "kavga", "vur", "yumruk", "tekme",
+                "bıçakla", "sopayla"],
+    "Abuse": ["istismar", "şiddet", "darp", "saldır", "taciz", "kötü muamele", "eziyet"],
+    "Burglary": ["hırsız", "soygun", "yetkisiz", "çaldı", "çalın", "çalarak", "çalma",
+                 "yetkisiz giriş", "izinsiz giriş", "zorla gir", "gizlice gir",
+                 "girmeye çalış", "giriş denemesi", "kilidi kır", "kapıyı kır",
+                 "camı kır", "kasa"],
+    "Shooting": ["silah", "ateş", "vur", "çatış", "kurşun", "namlu", "tabanca", "tüfek",
+                 "ateş aç"],
+    "Vandalism": ["vandal", "tahrip", "tahrib", "zarar", "kır", "parçala", "kundak",
+                  "duvara yaz"],
+    "Fire": ["yangın", "alev", "ateş", "tutuş", "yanıyor", "yandı", "yanan", "yanma"],
+    "Smoke": ["duman", "yangın", "tüt", "dumanlan"],
+    "Fall": ["düş", "yere", "hareketsiz", "yığıl", "bayıl", "yatıyor", "yatan",
+             "kalkamı", "yere serildi", "yerde kalmış"],
+    "Anomali": ["ihlal", "yetkisiz", "güvensiz", "forklift", "istif", "panel", "pano",
+                "aşırı yük", "yük taşı", "kapak açık", "açık pano", "pano kapağı",
+                "elektrik panosu", "yürüyüş yolu", "yaya yolu", "yaya geçidi",
+                "yol ihlal", "geçiş ihlal", "tehlikeli davranış", "tehlike arz",
+                "devrilme riski", "güvenlik riski", "yetkisiz müdahale",
+                "koruyucu ekipman", "baret", "iş güvenliği"],
+    "Normal": [],
+}
+
+#: SEMANTIK GRUPLAR — arXiv 2511.07171 (Ovis-8B, UCF-Crime %65.31 -> %81.0, EGITIM YOK).
+#: Fikir: "Fighting" yerine "Assault" demek OPERATOR ICIN AYNI MUDAHALEYI dogurur
+#: (guvenlik ekibi sevk); ceza hukuku ayrimi kamera goruntusunden zaten cikarilamaz.
+#: Grup duzeyi eslesme bu ayrimi TOLERE eder, ama "Fighting" yerine "Fire" demeyi ETMEZ.
+#: CATEGORY_EXPECT anahtarlari SILINMEDI — gruplar onlarin USTUNE binen bir katmandir.
+SEMANTIC_GROUPS: Dict[str, List[str]] = {
+    "Siddet": ["Fighting", "Assault", "Abuse"],
+    "MalSuclari": ["Burglary", "Vandalism"],
+    "Yikim": ["Explosion", "Fire", "Smoke"],
+    "Trafik": ["RoadAccidents"],
+    "Silahli": ["Shooting"],
+    "Dusme": ["Fall"],
+}
+
+#: OLUMSUZLAMA kapisi. BILEREK DARDIR: yalnizca VARLIK/GOZLEM fiillerinin olumsuzu
+#: sayilir. "durdurulamadı" / "engellenemedi" gibi BASKA fiillerin olumsuzu olayi
+#: IPTAL ETMEZ (yanlis eleme, yanlis kabulden daha kotudur — gorev sarti).
+_OLUMSUZ_RE = re.compile(
+    r"\byok(?:tur)?\b"
+    r"|\bdeğil(?:dir)?\b"
+    r"|\bmevcut\s+değil"
+    r"|\bhiçbir\s+\w+\s+yok"
+    r"|(?:gözlen|görül|gör|tespit\s+edil|sapt|izlen|bulun|rastlan|oluş|yaşan|gel|"
+    r"belirlen|algılan|fark\s+edil|içer|göster|ol)"
+    r"m[ae](?:dı|di|mış|miş|z|makta|mekte|maktadır|mektedir)"
+    r"|(?:gözle|görül|bulun|içer|göster|izlen)m[ıiuü]yor"
+)
+
+#: Cumlecik ayiraclari — olumsuzlama YALNIZ kendi cumleciginde gecerlidir.
+#: Boylece "yere düşen kişi hareketsiz, tepki vermiyor" cumlesinde "vermiyor"
+#: ilk cumlecikteki "düş"u IPTAL ETMEZ.
+_AYIRAC_RE = re.compile(r"[.!?;:\n,]|\s+(?:ve|ile|ancak|fakat|ama|çünkü|ayrıca|oysa)\s+")
+
+
+def tr_lower(s: str) -> str:
+    """TURKCE-GUVENLI kucuk harf.
+
+    Python'un str.lower()'i Turkce degildir:
+        "İstismar".lower() -> "i̇stismar"  (i + U+0307 BIRLESIK NOKTA)  -> "istismar" ile ESLESMEZ
+        "Itfaiye".lower()  -> "itfaiye"    (dogrusu "ıtfaiye")
+    Cozum: once "I"->"ı" ve "İ"->"i" cevrilir, SONRA lower() cagrilir. Son adimda
+    baska bir yerde .lower() gecmis metinlerde kalmis olabilecek U+0307 temizlenir.
+    """
+    if not s:
+        return ""
+    return s.replace("I", "ı").replace("İ", "i").lower().replace("\u0307", "")
+
+
+@functools.lru_cache(maxsize=8192)
+def _ek_zinciri_gecerli(kalan: str) -> bool:
+    """Kok sonrasi kalinti GECERLI Turkce ek zinciri olarak cozulebiliyor mu?
+
+    Bos kalinti (tam kelime) her zaman gecerlidir. Cozulemeyen kalinti kokun
+    BASKA bir kelimenin icinde kaldigini gosterir ("kır"+"mızı", "vur"+"gulanmadı").
+    """
+    if not kalan:
+        return True
+    if len(kalan) > MAX_EK_UZUNLUK:
+        return False
+    for ek in _EKLER:
+        if kalan.startswith(ek) and _ek_zinciri_gecerli(kalan[len(ek):]):
+            return True
+    return False
+
+
+def _kok_konumlari(metin: str, kok: str) -> List[Tuple[int, int]]:
+    """kok'un metinde KELIME BASINDA gectigi ve gecerli ekle bittigi (bas, son) konumlari."""
+    out: List[Tuple[int, int]] = []
+    if not kok:
+        return out
+    istisna = KOK_ISTISNA.get(kok, ())
+    ara = 0
+    while True:
+        i = metin.find(kok, ara)
+        if i < 0:
+            return out
+        ara = i + 1
+        if i > 0 and metin[i - 1].isalnum():
+            continue                       # kelime ORTASI — sayilmaz ("savur" icinde "vur")
+        j = i + len(kok)
+        k = j
+        while k < len(metin) and metin[k].isalnum():
+            k += 1
+        kalan = metin[j:k]
+        if istisna and any(kalan.startswith(x) for x in istisna):
+            continue                       # bilinen yanlis govde
+        if _ek_zinciri_gecerli(kalan):
+            out.append((i, k))
+
+
+def _kalip_konumlari(metin: str, kalip: str) -> List[Tuple[int, int]]:
+    """Tek-kelimelik kok veya SIRALI cok-kelimeli kalip icin eslesme konumlari."""
+    parcalar = kalip.split()
+    if len(parcalar) <= 1:
+        return _kok_konumlari(metin, kalip)
+    sonuc: List[Tuple[int, int]] = []
+    for bas, son in _kok_konumlari(metin, parcalar[0]):
+        imlec, tamam = son, True
+        for p in parcalar[1:]:
+            aday = [(s, e) for s, e in _kok_konumlari(metin, p)
+                    if s >= imlec and s - imlec <= MAX_KALIP_ARA]
+            if not aday:
+                tamam = False
+                break
+            imlec = aday[0][1]
+        if tamam:
+            sonuc.append((bas, imlec))
+    return sonuc
+
+
+def _cumlecikler(metin: str) -> List[str]:
+    """Metni cumleciklere boler (olumsuzlama kapisinin etki alani)."""
+    return [c for c in _AYIRAC_RE.split(metin) if c and c.strip()]
+
+
+def patterns_for(category: str) -> List[str]:
+    """Kategori icin SIKILASTIRILMIS kalip listesi (D28)."""
+    return list(CATEGORY_PATTERNS.get(category, []))
+
+
+def group_of(category: str) -> Optional[str]:
+    """Kategorinin semantik grup adi (grubu yoksa None)."""
+    for grup, uyeler in SEMANTIC_GROUPS.items():
+        if category in uyeler:
+            return grup
+    return None
+
+
+def group_members(category: str) -> List[str]:
+    """Kategoriyle AYNI semantik gruptaki kategoriler (grup yoksa kategorinin kendisi)."""
+    grup = group_of(category)
+    return list(SEMANTIC_GROUPS[grup]) if grup else [category]
+
+
+def loose_match(text: str, category: str) -> bool:
+    """ESKI (gevsek) kural: ciplak alt-dizge + Python .lower(). D28 ONCESI davranis.
+
+    K4 — BU FONKSIYON KASITLI OLARAK KUSURLUDUR ve DUZELTILMEYECEKTIR: arsivlenmis
+    olcumlerin birebir yeniden uretilebilmesi icin eski kuralin canli kaydidir.
+    """
+    if not text:
+        return False
+    kelimeler = keywords_for(category)
+    if not kelimeler:
+        return False
+    t = text.lower()
+    return any(k in t for k in kelimeler)
+
+
+def match_category(text: str, category: str, *, negation: bool = True) -> bool:
+    """YENI (sikilastirilmis) kural: Turkce-guvenli + kelime sinirli + olumsuzlama kapili."""
+    if not text:
+        return False
+    kaliplar = patterns_for(category)
+    if not kaliplar:
+        return False
+    for cumlecik in _cumlecikler(tr_lower(text)):
+        for kalip in kaliplar:
+            for _bas, son in _kalip_konumlari(cumlecik, tr_lower(kalip)):
+                if negation and _OLUMSUZ_RE.search(cumlecik, son):
+                    continue               # "kaza belirtisi YOK" -> sayilmaz
+                return True
+    return False
+
+
+def group_match(text: str, category: str, *, negation: bool = True) -> bool:
+    """SEMANTIK GRUP duzeyi eslesme: ayni gruptaki HERHANGI bir kategori eslesirse dogru."""
+    return any(match_category(text, c, negation=negation) for c in group_members(category))
+
+
+def _olcum_kategorileri() -> List[str]:
+    """OZGULLUK sayiminda kullanilan kategoriler (Normal disinda, kalibi olan hepsi)."""
+    return [c for c in CATEGORY_EXPECT if c != "Normal" and (CATEGORY_PATTERNS.get(c)
+                                                             or CATEGORY_EXPECT[c][0])]
+
+
+def matched_categories(text: str, *, mode: str = "strict") -> Set[str]:
+    """Metnin TETIKLEDIGI tum kategoriler. mode: "loose" (eski) | "strict" (yeni).
+
+    OZGULLUK olcumu icin: dogru kategori disindakiler YANLIS tetiktir.
+    """
+    fn = loose_match if mode == "loose" else match_category
+    return {c for c in _olcum_kategorileri() if fn(text, c)}
+
+
+def matched_groups(text: str) -> Set[str]:
+    """Metnin tetikledigi SEMANTIK GRUPLAR (ozgullugun grup duzeyindeki karsiligi)."""
+    out: Set[str] = set()
+    for c in matched_categories(text, mode="strict"):
+        out.add(group_of(c) or c)
+    return out
+
+
+def row_text(row: dict, *, with_summary: bool) -> List[str]:
+    """Bir eval satirindan eslestirmeye girecek METIN PARCALARI.
+
+    with_summary=False -> yalniz events[].event (D28 ONCESI kapsam)
+    with_summary=True  -> events[].event + summary (sartname K3 cikti sozlesmesinin
+                          operatorun OKUDUGU alani; adlandirma kazanci burada kaliyordu)
+    """
+    parcalar = [str(e.get("event") or "") for e in (row.get("events") or [])]
+    if with_summary:
+        parcalar.append(str(row.get("summary") or ""))
+    return [p for p in parcalar if p]
+
+
+def any_match(parts: Sequence[str], category: str, *, mode: str = "strict",
+              group: bool = False) -> bool:
+    """Metin parcalarindan HERHANGI biri kategoriyle (veya grubuyla) eslesiyor mu?"""
+    if mode == "loose":
+        return any(loose_match(p, category) for p in parts)
+    fn = group_match if group else match_category
+    return any(fn(p, category) for p in parts)

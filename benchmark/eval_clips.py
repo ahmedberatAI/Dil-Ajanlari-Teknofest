@@ -8,6 +8,21 @@ Metrikler:
   - Kategori eslesmesi    : tespit edilen olay metni beklenen anahtar kelimeleri iceriyor mu
   - Gecikme               : klip basina sure ve video-saniyesi basina
 
+D28 — KATEGORI ESLESMESI ONARILDI (OKUMADAN GECME):
+Eski kural YALNIZCA events[].event alanini tariyordu; `summary` HIC BAKILMIYORDU.
+Oysa summary sartname cikti sozlesmesinin (K3) parcasi ve operatorun OKUDUGU alandir —
+adlandirma kazancinin bir kismi orada kaliyor ve olculmuyordu. Ayrica eslestirici
+ciplak alt-dizge idi ("kırmızı" -> "kır" -> Burglary) ve Python'un .lower()'i Turkce
+degildi ("İstismar" -> "i̇stismar", "istismar" ile eslesmez).
+
+K4 GEREGI metrik SESSIZCE DEGISTIRILMEDI. Her satirda UC alan yan yana yazilir:
+    category_match       YENI  : event + summary, sikilastirilmis eslestirici
+    category_match_eski  ESKI  : yalniz event, ciplak alt-dizge  (KARSILASTIRMA TABANI)
+    category_match_grup  GRUP  : semantik grup duzeyinde eslesme (arXiv 2511.07171)
+Eski skor SILINMEZ/GIZLENMEZ/USTUNE YAZILMAZ. DILAJAN_EVAL_MATCH=eski ile
+`category_match` alani BIREBIR eski kurala dondurulur (K2 — varsayilana donus yolu).
+Arsivlenmis sonuclari model calistirmadan yeniden skorlamak icin: benchmark/rescore.py
+
 K10 — MUKERRER ELEME: ayni MD5'e sahip klipler payda'yi sisirir
 (or. Normal_Videos_936/937 BIREBIR AYNI dosya -> Normal paydasi 8 degil 7'dir).
 Bu betik artik klipleri icerik-hash'ine gore tekillestirir; atlanan dosyalar cikti
@@ -36,12 +51,12 @@ from dilajan.schema import Severity  # noqa: E402
 
 try:
     from benchmark.dedup import dedup_paths  # noqa: E402
-    from benchmark.labels import CATEGORY_EXPECT  # noqa: E402
+    from benchmark.labels import CATEGORY_EXPECT, any_match  # noqa: E402
     from benchmark.stats_utils import fmt_rate_dict, rate_from_bools  # noqa: E402
 except ImportError:  # benchmark/ icinden dogrudan calistirma
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from dedup import dedup_paths  # type: ignore  # noqa: E402
-    from labels import CATEGORY_EXPECT  # type: ignore  # noqa: E402
+    from labels import CATEGORY_EXPECT, any_match  # type: ignore  # noqa: E402
     from stats_utils import fmt_rate_dict, rate_from_bools  # type: ignore  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -66,6 +81,10 @@ def _warn_if_leaky(eval_dir: str) -> Optional[str]:
 RESULTS_DIR = os.path.join(ROOT, "benchmark", "results")
 # K10 mukerrer eleme varsayilan ACIK; DILAJAN_EVAL_DEDUP=0 ile eski davranisa donulur
 DEDUP = os.environ.get("DILAJAN_EVAL_DEDUP", "1").strip().lower() not in ("0", "false", "no")
+# D28/K2 — `category_match` alanini hangi kural doldurur: "yeni" (event+summary,
+# sikilastirilmis) veya "eski" (yalniz event, ciplak alt-dizge). HANGISI SECILIRSE
+# SECILSIN her uc alan da (yeni/eski/grup) satira YAZILIR — bilgi kaybi olmaz (K4).
+MATCH_MODE = os.environ.get("DILAJAN_EVAL_MATCH", "yeni").strip().lower()
 
 SEV_ORD = {Severity.DUSUK: 1, Severity.ORTA: 2, Severity.YUKSEK: 3, Severity.KRITIK: 4}
 
@@ -89,8 +108,20 @@ def evaluate_clip(path: str, category: str) -> dict:
     n_events = len(res.events)
     max_sev = max((SEV_ORD[e.severity] for e in res.events), default=0)
     risk_ord = SEV_ORD.get(res.risk.level, 0)
-    cat_match = any(any(k in e.event.lower() for k in keywords) for e in res.events) if keywords else None
     dur = _video_seconds(res.video_duration or "00:00")
+
+    # --- D28: kategori eslesmesi UC KURALLA birden hesaplanir (K4 yan yana raporlama) ---
+    # ESKI kapsam: yalniz olay metinleri. YENI kapsam: olay metinleri + summary.
+    parcalar_eski = [e.event for e in res.events if e.event]
+    parcalar_yeni = parcalar_eski + ([res.summary] if res.summary else [])
+    if keywords:
+        cat_eski = any_match(parcalar_eski, category, mode="loose")   # D28 ONCESI kural
+        cat_yeni = any_match(parcalar_yeni, category, mode="strict")  # onarilmis kural
+        cat_grup = any_match(parcalar_yeni, category, mode="strict", group=True)
+    else:
+        # Normal kategorisinin beklenen anahtar kelimesi YOKTUR -> eslesme TANIMSIZ (eski davranis)
+        cat_eski = cat_yeni = cat_grup = None
+    cat_match = cat_eski if MATCH_MODE == "eski" else cat_yeni
 
     return {
         "path": os.path.relpath(path, ROOT),
@@ -100,7 +131,11 @@ def evaluate_clip(path: str, category: str) -> dict:
         "max_severity": max_sev,
         "risk_ord": risk_ord,
         "risk_level": res.risk.level.value,
-        "category_match": cat_match,
+        # UCU DE YAZILIR — hangisinin hangi kural oldugu modul basligindaki tabloda (K4)
+        "category_match": cat_match,           # secili kural (varsayilan: YENI)
+        "category_match_eski": cat_eski,       # ESKI kural — KARSILASTIRMA TABANI, silinmez
+        "category_match_grup": cat_grup,       # semantik grup duzeyi
+        "category_match_kural": MATCH_MODE,    # `category_match` alanini hangi kural doldurdu
         "triggered": res.triggered_functions,
         "duration_s": dur,
         "latency_s": round(dt, 1),
@@ -186,6 +221,10 @@ def main() -> None:
         "recall": rate_from_bools([r["n_events"] > 0 for r in anom]),
         "risk_cal_anom": rate_from_bools([r["risk_ord"] >= 3 for r in anom]),
         "cat_match": rate_from_bools([bool(r["category_match"]) for r in anom]),
+        # D28/K4: eski ve grup skorlari da HER ZAMAN hesaplanir ki taban cizgisi gorunur kalsin.
+        # .get(): arsivlenmis/eski satirlarda bu alanlar YOKTUR — okuyan kod COKMEZ (K3 fail-open).
+        "cat_match_eski": rate_from_bools([bool(r.get("category_match_eski")) for r in anom]),
+        "cat_match_grup": rate_from_bools([bool(r.get("category_match_grup")) for r in anom]),
         # normal yanlis-pozitif (DAR): yuksek/kritik olay VEYA risk >= yuksek
         "normal_fp": rate_from_bools([(r["max_severity"] >= 3 or r["risk_ord"] >= 3) for r in norm]),
         # normal yanlis-pozitif (OPERASYONEL, durust): normalde HERHANGI olay VEYA fonksiyon tetigi
@@ -212,7 +251,15 @@ def main() -> None:
     print("-" * 72)
     print(f"  Anomali RECALL (>=1 olay)      : {fmt_rate_dict(R['recall'])}")
     print(f"  Anomali risk kalibrasyonu(>=Y) : {fmt_rate_dict(R['risk_cal_anom'])}")
-    print(f"  Kategori eslesme orani         : {fmt_rate_dict(R['cat_match'])}")
+    # D28/K4 — UC KURAL YAN YANA. Kural adlari YAZILI; hangisinin ne oldugu tahmine birakilmaz.
+    print(f"  Kategori eslesme [ESKI kural]  : {fmt_rate_dict(R['cat_match_eski'])}"
+          f"   (yalniz event, ciplak alt-dizge — D28 ONCESI taban)")
+    print(f"  Kategori eslesme [YENI kural]  : {fmt_rate_dict(R['cat_match'])}"
+          f"   (event+summary, sikilastirilmis eslestirici)")
+    print(f"  Kategori eslesme [GRUP duzeyi] : {fmt_rate_dict(R['cat_match_grup'])}"
+          f"   (semantik grup: Siddet/MalSuclari/Yikim/...)")
+    print(f"    -> 'category_match' alanini dolduran kural: {MATCH_MODE.upper()}"
+          f"   (DILAJAN_EVAL_MATCH ile degistirilir)")
     print(f"  NORMAL FP (dar: sev/risk>=Y)   : {fmt_rate_dict(R['normal_fp'])}   (dusuk = iyi)")
     print(f"  NORMAL FP (operasyonel)        : {fmt_rate_dict(R['normal_fp_operational'])}   (durust metrik)")
     print(f"  NORMAL yanlis operasyonel-tetik: {fmt_rate_dict(R['normal_dispatch_fp'])}   (dusuk = iyi)")
@@ -245,6 +292,9 @@ def main() -> None:
         "n_anomaly": len(anom), "n_normal": len(norm),
         # --- eski duz alanlar (geriye uyumluluk; TEK BASINA raporlanmamali) ---
         "recall": recall, "risk_cal_anom": risk_cal_anom, "cat_match": cat_match_rate,
+        # D28/K4: taban cizgisi duz alan olarak da tasinir (compare.py/aggregate.py okuyabilsin)
+        "cat_match_eski": R["cat_match_eski"]["p"], "cat_match_grup": R["cat_match_grup"]["p"],
+        "cat_match_kural": MATCH_MODE,
         "normal_fp": fp, "normal_fp_operational": op_fp, "normal_dispatch_fp": dispatch_fp,
         "risk_cal_norm": risk_cal_norm,
         "latency_median": statistics.median(lat) if lat else 0,
