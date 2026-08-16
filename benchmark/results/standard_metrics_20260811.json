@@ -1,0 +1,1683 @@
+{
+  "dosyalar": [
+    {
+      "dosya": "evidence_ab_A_20260811_205728.json",
+      "eval_dir": "data/eval_holdout",
+      "n_toplam": 32,
+      "n_anomali": 24,
+      "n_normal": 8,
+      "prevalans": 0.75,
+      "ikili": {
+        "gevsek": {
+          "ad": "GEVSEK  (n_events > 0)",
+          "tanim": "klipte en az bir olay isaretlendi — en genis tanim, dikkat cekme esigi",
+          "tp": 22,
+          "fp": 3,
+          "tn": 5,
+          "fn": 2,
+          "n": 32,
+          "prevalans": 0.75,
+          "precision": {
+            "k": 22,
+            "n": 25,
+            "p": 0.88,
+            "ci_low": 0.7004,
+            "ci_high": 0.9583,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "recall": {
+            "k": 22,
+            "n": 24,
+            "p": 0.9167,
+            "ci_low": 0.7415,
+            "ci_high": 0.9768,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "specificity": {
+            "k": 5,
+            "n": 8,
+            "p": 0.625,
+            "ci_low": 0.3057,
+            "ci_high": 0.8632,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "npv": {
+            "k": 5,
+            "n": 7,
+            "p": 0.7143,
+            "ci_low": 0.3589,
+            "ci_high": 0.9178,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "accuracy": {
+            "k": 27,
+            "n": 32,
+            "p": 0.8438,
+            "ci_low": 0.6825,
+            "ci_high": 0.9314,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 3,
+            "n": 8,
+            "p": 0.375,
+            "ci_low": 0.1368,
+            "ci_high": 0.6943,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fnr": {
+            "k": 2,
+            "n": 24,
+            "p": 0.0833,
+            "ci_low": 0.0232,
+            "ci_high": 0.2585,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "f1": 0.8979591836734694,
+          "f0_5": 0.8870967741935484,
+          "f2": 0.9090909090909091,
+          "balanced_accuracy": 0.7708333333333333,
+          "mcc": 0.5673665146135802,
+          "cohen_kappa": 0.5652173913043478
+        },
+        "siki": {
+          "ad": "SIKI    (max_sev>=Yuksek VEYA risk>=Yuksek)",
+          "tanim": "gercek alarm esigi: yuksek/kritik siddette olay ya da yuksek risk karari",
+          "tp": 19,
+          "fp": 0,
+          "tn": 8,
+          "fn": 5,
+          "n": 32,
+          "prevalans": 0.75,
+          "precision": {
+            "k": 19,
+            "n": 19,
+            "p": 1.0,
+            "ci_low": 0.8318,
+            "ci_high": 1.0,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "recall": {
+            "k": 19,
+            "n": 24,
+            "p": 0.7917,
+            "ci_low": 0.5953,
+            "ci_high": 0.9076,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "specificity": {
+            "k": 8,
+            "n": 8,
+            "p": 1.0,
+            "ci_low": 0.6756,
+            "ci_high": 1.0,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "npv": {
+            "k": 8,
+            "n": 13,
+            "p": 0.6154,
+            "ci_low": 0.3552,
+            "ci_high": 0.8229,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "accuracy": {
+            "k": 27,
+            "n": 32,
+            "p": 0.8438,
+            "ci_low": 0.6825,
+            "ci_high": 0.9314,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 0,
+            "n": 8,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.3244,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fnr": {
+            "k": 5,
+            "n": 24,
+            "p": 0.2083,
+            "ci_low": 0.0924,
+            "ci_high": 0.4047,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "f1": 0.8837209302325582,
+          "f0_5": 0.95,
+          "f2": 0.8260869565217391,
+          "balanced_accuracy": 0.8958333333333333,
+          "mcc": 0.6979824404521128,
+          "cohen_kappa": 0.6551724137931034
+        },
+        "sevk": {
+          "ad": "SEVK    (triggered != bos)",
+          "tanim": "operasyonel eylem: en az bir arac/fonksiyon tetiklendi (ekip sevki)",
+          "tp": 19,
+          "fp": 0,
+          "tn": 8,
+          "fn": 5,
+          "n": 32,
+          "prevalans": 0.75,
+          "precision": {
+            "k": 19,
+            "n": 19,
+            "p": 1.0,
+            "ci_low": 0.8318,
+            "ci_high": 1.0,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "recall": {
+            "k": 19,
+            "n": 24,
+            "p": 0.7917,
+            "ci_low": 0.5953,
+            "ci_high": 0.9076,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "specificity": {
+            "k": 8,
+            "n": 8,
+            "p": 1.0,
+            "ci_low": 0.6756,
+            "ci_high": 1.0,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "npv": {
+            "k": 8,
+            "n": 13,
+            "p": 0.6154,
+            "ci_low": 0.3552,
+            "ci_high": 0.8229,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "accuracy": {
+            "k": 27,
+            "n": 32,
+            "p": 0.8438,
+            "ci_low": 0.6825,
+            "ci_high": 0.9314,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 0,
+            "n": 8,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.3244,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fnr": {
+            "k": 5,
+            "n": 24,
+            "p": 0.2083,
+            "ci_low": 0.0924,
+            "ci_high": 0.4047,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "f1": 0.8837209302325582,
+          "f0_5": 0.95,
+          "f2": 0.8260869565217391,
+          "balanced_accuracy": 0.8958333333333333,
+          "mcc": 0.6979824404521128,
+          "cohen_kappa": 0.6551724137931034
+        }
+      },
+      "tanim_ozdeslikleri": [
+        "siki == sevk"
+      ],
+      "coksinifli_kategori": {
+        "ad": "kategori",
+        "siniflar": [
+          "Abuse",
+          "Assault",
+          "Burglary",
+          "Explosion",
+          "Fighting",
+          "RoadAccidents",
+          "Shooting",
+          "Vandalism"
+        ],
+        "tahminler": [
+          "Abuse",
+          "Assault",
+          "Burglary",
+          "Explosion",
+          "Fighting",
+          "RoadAccidents",
+          "Shooting",
+          "Vandalism",
+          "BELIRSIZ"
+        ],
+        "matris": {
+          "Abuse|BELIRSIZ": 3,
+          "Assault|BELIRSIZ": 3,
+          "Burglary|BELIRSIZ": 1,
+          "Burglary|Burglary": 1,
+          "Burglary|RoadAccidents": 1,
+          "Explosion|BELIRSIZ": 1,
+          "Explosion|Explosion": 2,
+          "Fighting|BELIRSIZ": 2,
+          "Fighting|Burglary": 1,
+          "RoadAccidents|BELIRSIZ": 1,
+          "RoadAccidents|RoadAccidents": 2,
+          "Shooting|BELIRSIZ": 1,
+          "Shooting|Burglary": 1,
+          "Shooting|RoadAccidents": 1,
+          "Vandalism|BELIRSIZ": 3
+        },
+        "n": 24,
+        "sinif_basi": {
+          "Abuse": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Assault": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Burglary": {
+            "destek": 3,
+            "tp": 1,
+            "fp": 2,
+            "fn": 2,
+            "precision": 0.3333333333333333,
+            "recall": 0.3333333333333333,
+            "f1": 0.3333333333333333,
+            "yalniz_tahmin": false
+          },
+          "Explosion": {
+            "destek": 3,
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "yalniz_tahmin": false
+          },
+          "Fighting": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "RoadAccidents": {
+            "destek": 3,
+            "tp": 2,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.5,
+            "recall": 0.6666666666666666,
+            "f1": 0.5714285714285714,
+            "yalniz_tahmin": false
+          },
+          "Shooting": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Vandalism": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          }
+        },
+        "accuracy": 0.20833333333333334,
+        "macro_f1": 0.2130952380952381,
+        "micro_f1": 0.30303030303030304,
+        "micro_tp_fp_fn": [
+          5,
+          4,
+          19
+        ],
+        "weighted_f1": 0.21309523809523812,
+        "cohen_kappa": 0.16939890710382516
+      },
+      "coksinifli_grup_eslenmis": {
+        "ad": "grup",
+        "siniflar": [
+          "MalSuclari",
+          "Siddet",
+          "Silahli",
+          "Trafik",
+          "Yikim"
+        ],
+        "tahminler": [
+          "MalSuclari",
+          "Trafik",
+          "Yikim",
+          "BELIRSIZ"
+        ],
+        "matris": {
+          "MalSuclari|BELIRSIZ": 4,
+          "MalSuclari|MalSuclari": 1,
+          "MalSuclari|Trafik": 1,
+          "Siddet|BELIRSIZ": 8,
+          "Siddet|MalSuclari": 1,
+          "Silahli|BELIRSIZ": 1,
+          "Silahli|MalSuclari": 1,
+          "Silahli|Trafik": 1,
+          "Trafik|BELIRSIZ": 1,
+          "Trafik|Trafik": 2,
+          "Yikim|BELIRSIZ": 1,
+          "Yikim|Yikim": 2
+        },
+        "n": 24,
+        "sinif_basi": {
+          "MalSuclari": {
+            "destek": 6,
+            "tp": 1,
+            "fp": 2,
+            "fn": 5,
+            "precision": 0.3333333333333333,
+            "recall": 0.16666666666666666,
+            "f1": 0.2222222222222222,
+            "yalniz_tahmin": false
+          },
+          "Siddet": {
+            "destek": 9,
+            "tp": 0,
+            "fp": 0,
+            "fn": 9,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Silahli": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Trafik": {
+            "destek": 3,
+            "tp": 2,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.5,
+            "recall": 0.6666666666666666,
+            "f1": 0.5714285714285714,
+            "yalniz_tahmin": false
+          },
+          "Yikim": {
+            "destek": 3,
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "yalniz_tahmin": false
+          }
+        },
+        "accuracy": 0.20833333333333334,
+        "macro_f1": 0.31873015873015875,
+        "micro_f1": 0.30303030303030304,
+        "micro_tp_fp_fn": [
+          5,
+          4,
+          19
+        ],
+        "weighted_f1": 0.22698412698412698,
+        "cohen_kappa": 0.15555555555555556
+      },
+      "coksinifli_grup_dogrudan": {
+        "ad": "grup_dogrudan",
+        "siniflar": [
+          "MalSuclari",
+          "Siddet",
+          "Silahli",
+          "Trafik",
+          "Yikim"
+        ],
+        "tahminler": [
+          "MalSuclari",
+          "Siddet",
+          "Silahli",
+          "Trafik",
+          "Yikim",
+          "BELIRSIZ"
+        ],
+        "matris": {
+          "MalSuclari|BELIRSIZ": 4,
+          "MalSuclari|MalSuclari": 1,
+          "MalSuclari|Trafik": 1,
+          "Siddet|BELIRSIZ": 6,
+          "Siddet|MalSuclari": 1,
+          "Siddet|Siddet": 2,
+          "Silahli|BELIRSIZ": 1,
+          "Silahli|MalSuclari": 1,
+          "Silahli|Trafik": 1,
+          "Trafik|BELIRSIZ": 1,
+          "Trafik|Trafik": 2,
+          "Yikim|BELIRSIZ": 1,
+          "Yikim|Yikim": 2
+        },
+        "n": 24,
+        "sinif_basi": {
+          "MalSuclari": {
+            "destek": 6,
+            "tp": 1,
+            "fp": 2,
+            "fn": 5,
+            "precision": 0.3333333333333333,
+            "recall": 0.16666666666666666,
+            "f1": 0.2222222222222222,
+            "yalniz_tahmin": false
+          },
+          "Siddet": {
+            "destek": 9,
+            "tp": 2,
+            "fp": 0,
+            "fn": 7,
+            "precision": 1.0,
+            "recall": 0.2222222222222222,
+            "f1": 0.36363636363636365,
+            "yalniz_tahmin": false
+          },
+          "Silahli": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Trafik": {
+            "destek": 3,
+            "tp": 2,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0.5,
+            "recall": 0.6666666666666666,
+            "f1": 0.5714285714285714,
+            "yalniz_tahmin": false
+          },
+          "Yikim": {
+            "destek": 3,
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "yalniz_tahmin": false
+          }
+        },
+        "accuracy": 0.2916666666666667,
+        "macro_f1": 0.39145743145743145,
+        "micro_f1": 0.4,
+        "micro_tp_fp_fn": [
+          7,
+          4,
+          17
+        ],
+        "weighted_f1": 0.36334776334776336,
+        "cohen_kappa": 0.21839080459770116
+      },
+      "berabere_kategori": 6,
+      "berabere_grup": 4,
+      "belirsiz_kategori": 15,
+      "beraberlik_politikalari": {
+        "belirsiz": {
+          "accuracy": 0.20833333333333334,
+          "macro_f1": 0.2130952380952381
+        },
+        "sabit": {
+          "accuracy": 0.20833333333333334,
+          "macro_f1": 0.18712121212121213
+        },
+        "iyimser": {
+          "accuracy": 0.3333333333333333,
+          "macro_f1": 0.3755952380952381
+        }
+      },
+      "acik_kume_accuracy": 0.08333333333333333,
+      "top1_ayrinti": [
+        {
+          "path": "data/eval_holdout/Abuse/Abuse005_x264.mp4",
+          "gercek": "Abuse",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Assault": 1,
+            "Fighting": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Abuse/Abuse014_x264.mp4",
+          "gercek": "Abuse",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Abuse/Abuse018_x264.mp4",
+          "gercek": "Abuse",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Assault/Assault020_x264.mp4",
+          "gercek": "Assault",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Assault/Assault038_x264.mp4",
+          "gercek": "Assault",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Assault": 1,
+            "Fighting": 1,
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Assault/Assault051_x264.mp4",
+          "gercek": "Assault",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Assault": 1,
+            "Fighting": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Burglary/Burglary059_x264.mp4",
+          "gercek": "Burglary",
+          "tahmin": "Burglary",
+          "berabere": false,
+          "skor": {
+            "Burglary": 3
+          }
+        },
+        {
+          "path": "data/eval_holdout/Burglary/Burglary078_x264.mp4",
+          "gercek": "Burglary",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Burglary/Burglary081_x264.mp4",
+          "gercek": "Burglary",
+          "tahmin": "RoadAccidents",
+          "berabere": false,
+          "skor": {
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Explosion/Explosion001_x264.mp4",
+          "gercek": "Explosion",
+          "tahmin": "Explosion",
+          "berabere": false,
+          "skor": {
+            "Explosion": 2
+          }
+        },
+        {
+          "path": "data/eval_holdout/Explosion/Explosion019_x264.mp4",
+          "gercek": "Explosion",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Explosion/Explosion044_x264.mp4",
+          "gercek": "Explosion",
+          "tahmin": "Explosion",
+          "berabere": false,
+          "skor": {
+            "Explosion": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Fighting/Fighting018_x264.mp4",
+          "gercek": "Fighting",
+          "tahmin": "Burglary",
+          "berabere": false,
+          "skor": {
+            "Burglary": 2,
+            "Assault": 1,
+            "Fighting": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Fighting/Fighting023_x264.mp4",
+          "gercek": "Fighting",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Burglary": 1,
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Fighting/Fighting038_x264.mp4",
+          "gercek": "Fighting",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Abuse": 1,
+            "Assault": 1,
+            "Fighting": 1,
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/RoadAccidents/RoadAccidents021_x264.mp4",
+          "gercek": "RoadAccidents",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/RoadAccidents/RoadAccidents069_x264.mp4",
+          "gercek": "RoadAccidents",
+          "tahmin": "RoadAccidents",
+          "berabere": false,
+          "skor": {
+            "RoadAccidents": 2
+          }
+        },
+        {
+          "path": "data/eval_holdout/RoadAccidents/RoadAccidents134_x264.mp4",
+          "gercek": "RoadAccidents",
+          "tahmin": "RoadAccidents",
+          "berabere": false,
+          "skor": {
+            "RoadAccidents": 2
+          }
+        },
+        {
+          "path": "data/eval_holdout/Shooting/Shooting001_x264.mp4",
+          "gercek": "Shooting",
+          "tahmin": "RoadAccidents",
+          "berabere": false,
+          "skor": {
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Shooting/Shooting023_x264.mp4",
+          "gercek": "Shooting",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Shooting/Shooting030_x264.mp4",
+          "gercek": "Shooting",
+          "tahmin": "Burglary",
+          "berabere": false,
+          "skor": {
+            "Burglary": 2,
+            "Abuse": 1,
+            "Assault": 1,
+            "Fighting": 1,
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Vandalism/Vandalism014_x264.mp4",
+          "gercek": "Vandalism",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Burglary": 1,
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Vandalism/Vandalism027_x264.mp4",
+          "gercek": "Vandalism",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Vandalism/Vandalism039_x264.mp4",
+          "gercek": "Vandalism",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        }
+      ],
+      "hesaplanamayan": [
+        {
+          "metrik": "ROC-AUC / PR-AUC",
+          "neden": "Model surekli bir GUVEN SKORU uretmiyor; AYRIK bir karar (olay listesi + risk seviyesi) uretiyor. Egri cizmek icin esigi supurup her esikte TPR/FPR gerekir; supurulecek surekli bir eksen YOK. Elimizdeki 3 tanim (gevsek/siki/sevk) ROC uzayinda yalnizca 3 AYRIK NOKTADIR, bir egri degildir.",
+          "gerekli": "Cikti sozlesmesine klip-duzeyi kalibre edilmis bir anomali olasiligi (0-1) eklemek ve ayni kliplerde esigi supurmek gerekir."
+        },
+        {
+          "metrik": "mAP / IoU (nesne tespiti)",
+          "neden": "Kare-duzeyi sinirlayici kutu (bbox) ALTIN ETIKETIMIZ yok. UCF-Crime klip-duzeyi etiketle geliyor; biz de klip-duzeyi calisiyoruz. mAP'i tanimlamak icin gereken (kutu, sinif, kare) uclusu veride MEVCUT DEGIL.",
+          "gerekli": "Degerlendirme kliplerinin kare-duzeyi bbox etiketlenmesi (insan anotasyonu) ve ajanin bbox dondurmesi gerekir."
+        },
+        {
+          "metrik": "Zamansal IoU / olay yerellestirme",
+          "neden": "Olayin BASLANGIC-BITIS altin etiketi yok; elimizde yalnizca 'bu klipte X vardir' bilgisi var. Model events[].time uretiyor ama karsilastirilacak GERCEK zaman araligi olmadigi icin dogrulanamaz.",
+          "gerekli": "Klip basina (baslangic_sn, bitis_sn) araliklarinin insan tarafindan isaretlenmesi; ya da data/temporal gibi splice noktasi TASARIMDAN bilinen kompozit kliplerin sistematik uretilmesi."
+        },
+        {
+          "metrik": "Kare-duzeyi AUC (UCF-Crime standart protokolu)",
+          "neden": "UCF-Crime'in TEST bolumunde kare-duzeyi etiketler VARDIR, ama biz klip duzeyinde olcuyoruz ve ajan kare-basi skor uretmiyor. Literaturdeki kare-AUC sayilariyla DOGRUDAN KIYASLANAMAZ — ayni sayi degildir.",
+          "gerekli": "Kare-basi anomali skoru ureten bir cikti yolu + resmi UCF-Crime test bolumu kare etiketlerinin indirilmesi."
+        },
+        {
+          "metrik": "Ozgullugun (specificity) kategori-basi kirilimi",
+          "neden": "Normal klipler kategori ETIKETI TASIMIYOR (hepsi 'Normal'). Bu yuzden 'Fighting icin FPR' gibi bir sayi tanimlanamaz: bir normal klibin hangi kategoriye karsi negatif oldugu belirsizdir.",
+          "gerekli": "Normal kliplerin 'hangi anomaliye benziyor' diye alt-etiketlenmesi (or. yangin-benzeri negatif, kalabalik-benzeri negatif) gerekir."
+        }
+      ]
+    },
+    {
+      "dosya": "evidence_ab_B_20260811_210933.json",
+      "eval_dir": "data/eval_holdout",
+      "n_toplam": 32,
+      "n_anomali": 24,
+      "n_normal": 8,
+      "prevalans": 0.75,
+      "ikili": {
+        "gevsek": {
+          "ad": "GEVSEK  (n_events > 0)",
+          "tanim": "klipte en az bir olay isaretlendi — en genis tanim, dikkat cekme esigi",
+          "tp": 23,
+          "fp": 5,
+          "tn": 3,
+          "fn": 1,
+          "n": 32,
+          "prevalans": 0.75,
+          "precision": {
+            "k": 23,
+            "n": 28,
+            "p": 0.8214,
+            "ci_low": 0.6441,
+            "ci_high": 0.9212,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "recall": {
+            "k": 23,
+            "n": 24,
+            "p": 0.9583,
+            "ci_low": 0.7976,
+            "ci_high": 0.9926,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "specificity": {
+            "k": 3,
+            "n": 8,
+            "p": 0.375,
+            "ci_low": 0.1368,
+            "ci_high": 0.6943,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "npv": {
+            "k": 3,
+            "n": 4,
+            "p": 0.75,
+            "ci_low": 0.3006,
+            "ci_high": 0.9544,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "accuracy": {
+            "k": 26,
+            "n": 32,
+            "p": 0.8125,
+            "ci_low": 0.6469,
+            "ci_high": 0.9111,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 5,
+            "n": 8,
+            "p": 0.625,
+            "ci_low": 0.3057,
+            "ci_high": 0.8632,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fnr": {
+            "k": 1,
+            "n": 24,
+            "p": 0.0417,
+            "ci_low": 0.0074,
+            "ci_high": 0.2024,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "f1": 0.8846153846153846,
+          "f0_5": 0.8455882352941176,
+          "f2": 0.9274193548387096,
+          "balanced_accuracy": 0.6666666666666667,
+          "mcc": 0.4364357804719848,
+          "cohen_kappa": 0.4
+        },
+        "siki": {
+          "ad": "SIKI    (max_sev>=Yuksek VEYA risk>=Yuksek)",
+          "tanim": "gercek alarm esigi: yuksek/kritik siddette olay ya da yuksek risk karari",
+          "tp": 20,
+          "fp": 1,
+          "tn": 7,
+          "fn": 4,
+          "n": 32,
+          "prevalans": 0.75,
+          "precision": {
+            "k": 20,
+            "n": 21,
+            "p": 0.9524,
+            "ci_low": 0.7733,
+            "ci_high": 0.9915,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "recall": {
+            "k": 20,
+            "n": 24,
+            "p": 0.8333,
+            "ci_low": 0.6415,
+            "ci_high": 0.9332,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "specificity": {
+            "k": 7,
+            "n": 8,
+            "p": 0.875,
+            "ci_low": 0.5291,
+            "ci_high": 0.9776,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "npv": {
+            "k": 7,
+            "n": 11,
+            "p": 0.6364,
+            "ci_low": 0.3538,
+            "ci_high": 0.8483,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "accuracy": {
+            "k": 27,
+            "n": 32,
+            "p": 0.8438,
+            "ci_low": 0.6825,
+            "ci_high": 0.9314,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 1,
+            "n": 8,
+            "p": 0.125,
+            "ci_low": 0.0224,
+            "ci_high": 0.4709,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fnr": {
+            "k": 4,
+            "n": 24,
+            "p": 0.1667,
+            "ci_low": 0.0668,
+            "ci_high": 0.3585,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "f1": 0.8888888888888888,
+          "f0_5": 0.9259259259259259,
+          "f2": 0.8547008547008547,
+          "balanced_accuracy": 0.8541666666666667,
+          "mcc": 0.6457765999379483,
+          "cohen_kappa": 0.6296296296296297
+        },
+        "sevk": {
+          "ad": "SEVK    (triggered != bos)",
+          "tanim": "operasyonel eylem: en az bir arac/fonksiyon tetiklendi (ekip sevki)",
+          "tp": 20,
+          "fp": 1,
+          "tn": 7,
+          "fn": 4,
+          "n": 32,
+          "prevalans": 0.75,
+          "precision": {
+            "k": 20,
+            "n": 21,
+            "p": 0.9524,
+            "ci_low": 0.7733,
+            "ci_high": 0.9915,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "recall": {
+            "k": 20,
+            "n": 24,
+            "p": 0.8333,
+            "ci_low": 0.6415,
+            "ci_high": 0.9332,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "specificity": {
+            "k": 7,
+            "n": 8,
+            "p": 0.875,
+            "ci_low": 0.5291,
+            "ci_high": 0.9776,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "npv": {
+            "k": 7,
+            "n": 11,
+            "p": 0.6364,
+            "ci_low": 0.3538,
+            "ci_high": 0.8483,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "accuracy": {
+            "k": 27,
+            "n": 32,
+            "p": 0.8438,
+            "ci_low": 0.6825,
+            "ci_high": 0.9314,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 1,
+            "n": 8,
+            "p": 0.125,
+            "ci_low": 0.0224,
+            "ci_high": 0.4709,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fnr": {
+            "k": 4,
+            "n": 24,
+            "p": 0.1667,
+            "ci_low": 0.0668,
+            "ci_high": 0.3585,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "f1": 0.8888888888888888,
+          "f0_5": 0.9259259259259259,
+          "f2": 0.8547008547008547,
+          "balanced_accuracy": 0.8541666666666667,
+          "mcc": 0.6457765999379483,
+          "cohen_kappa": 0.6296296296296297
+        }
+      },
+      "tanim_ozdeslikleri": [
+        "siki == sevk"
+      ],
+      "coksinifli_kategori": {
+        "ad": "kategori",
+        "siniflar": [
+          "Abuse",
+          "Assault",
+          "Burglary",
+          "Explosion",
+          "Fighting",
+          "RoadAccidents",
+          "Shooting",
+          "Vandalism"
+        ],
+        "tahminler": [
+          "Abuse",
+          "Assault",
+          "Burglary",
+          "Explosion",
+          "Fighting",
+          "RoadAccidents",
+          "Shooting",
+          "Vandalism",
+          "BELIRSIZ"
+        ],
+        "matris": {
+          "Abuse|BELIRSIZ": 3,
+          "Assault|BELIRSIZ": 3,
+          "Burglary|Burglary": 3,
+          "Explosion|BELIRSIZ": 1,
+          "Explosion|Explosion": 1,
+          "Explosion|RoadAccidents": 1,
+          "Fighting|BELIRSIZ": 2,
+          "Fighting|RoadAccidents": 1,
+          "RoadAccidents|BELIRSIZ": 1,
+          "RoadAccidents|RoadAccidents": 2,
+          "Shooting|BELIRSIZ": 3,
+          "Vandalism|Burglary": 1,
+          "Vandalism|Explosion": 1,
+          "Vandalism|RoadAccidents": 1
+        },
+        "n": 24,
+        "sinif_basi": {
+          "Abuse": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Assault": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Burglary": {
+            "destek": 3,
+            "tp": 3,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571428571428571,
+            "yalniz_tahmin": false
+          },
+          "Explosion": {
+            "destek": 3,
+            "tp": 1,
+            "fp": 1,
+            "fn": 2,
+            "precision": 0.5,
+            "recall": 0.3333333333333333,
+            "f1": 0.4,
+            "yalniz_tahmin": false
+          },
+          "Fighting": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "RoadAccidents": {
+            "destek": 3,
+            "tp": 2,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.4,
+            "recall": 0.6666666666666666,
+            "f1": 0.5,
+            "yalniz_tahmin": false
+          },
+          "Shooting": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Vandalism": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          }
+        },
+        "accuracy": 0.25,
+        "macro_f1": 0.21964285714285714,
+        "micro_f1": 0.34285714285714286,
+        "micro_tp_fp_fn": [
+          6,
+          5,
+          18
+        ],
+        "weighted_f1": 0.21964285714285714,
+        "cohen_kappa": 0.2044198895027624
+      },
+      "coksinifli_grup_eslenmis": {
+        "ad": "grup",
+        "siniflar": [
+          "MalSuclari",
+          "Siddet",
+          "Silahli",
+          "Trafik",
+          "Yikim"
+        ],
+        "tahminler": [
+          "MalSuclari",
+          "Trafik",
+          "Yikim",
+          "BELIRSIZ"
+        ],
+        "matris": {
+          "MalSuclari|MalSuclari": 4,
+          "MalSuclari|Trafik": 1,
+          "MalSuclari|Yikim": 1,
+          "Siddet|BELIRSIZ": 8,
+          "Siddet|Trafik": 1,
+          "Silahli|BELIRSIZ": 3,
+          "Trafik|BELIRSIZ": 1,
+          "Trafik|Trafik": 2,
+          "Yikim|BELIRSIZ": 1,
+          "Yikim|Trafik": 1,
+          "Yikim|Yikim": 1
+        },
+        "n": 24,
+        "sinif_basi": {
+          "MalSuclari": {
+            "destek": 6,
+            "tp": 4,
+            "fp": 0,
+            "fn": 2,
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "yalniz_tahmin": false
+          },
+          "Siddet": {
+            "destek": 9,
+            "tp": 0,
+            "fp": 0,
+            "fn": 9,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Silahli": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Trafik": {
+            "destek": 3,
+            "tp": 2,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.4,
+            "recall": 0.6666666666666666,
+            "f1": 0.5,
+            "yalniz_tahmin": false
+          },
+          "Yikim": {
+            "destek": 3,
+            "tp": 1,
+            "fp": 1,
+            "fn": 2,
+            "precision": 0.5,
+            "recall": 0.3333333333333333,
+            "f1": 0.4,
+            "yalniz_tahmin": false
+          }
+        },
+        "accuracy": 0.2916666666666667,
+        "macro_f1": 0.34,
+        "micro_f1": 0.4,
+        "micro_tp_fp_fn": [
+          7,
+          4,
+          17
+        ],
+        "weighted_f1": 0.31250000000000006,
+        "cohen_kappa": 0.23163841807909608
+      },
+      "coksinifli_grup_dogrudan": {
+        "ad": "grup_dogrudan",
+        "siniflar": [
+          "MalSuclari",
+          "Siddet",
+          "Silahli",
+          "Trafik",
+          "Yikim"
+        ],
+        "tahminler": [
+          "MalSuclari",
+          "Siddet",
+          "Silahli",
+          "Trafik",
+          "Yikim",
+          "BELIRSIZ"
+        ],
+        "matris": {
+          "MalSuclari|MalSuclari": 4,
+          "MalSuclari|Trafik": 1,
+          "MalSuclari|Yikim": 1,
+          "Siddet|BELIRSIZ": 3,
+          "Siddet|Siddet": 5,
+          "Siddet|Trafik": 1,
+          "Silahli|BELIRSIZ": 1,
+          "Silahli|Siddet": 2,
+          "Trafik|BELIRSIZ": 1,
+          "Trafik|Trafik": 2,
+          "Yikim|BELIRSIZ": 1,
+          "Yikim|Trafik": 1,
+          "Yikim|Yikim": 1
+        },
+        "n": 24,
+        "sinif_basi": {
+          "MalSuclari": {
+            "destek": 6,
+            "tp": 4,
+            "fp": 0,
+            "fn": 2,
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "yalniz_tahmin": false
+          },
+          "Siddet": {
+            "destek": 9,
+            "tp": 5,
+            "fp": 2,
+            "fn": 4,
+            "precision": 0.7142857142857143,
+            "recall": 0.5555555555555556,
+            "f1": 0.625,
+            "yalniz_tahmin": false
+          },
+          "Silahli": {
+            "destek": 3,
+            "tp": 0,
+            "fp": 0,
+            "fn": 3,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0,
+            "yalniz_tahmin": false
+          },
+          "Trafik": {
+            "destek": 3,
+            "tp": 2,
+            "fp": 3,
+            "fn": 1,
+            "precision": 0.4,
+            "recall": 0.6666666666666666,
+            "f1": 0.5,
+            "yalniz_tahmin": false
+          },
+          "Yikim": {
+            "destek": 3,
+            "tp": 1,
+            "fp": 1,
+            "fn": 2,
+            "precision": 0.5,
+            "recall": 0.3333333333333333,
+            "f1": 0.4,
+            "yalniz_tahmin": false
+          }
+        },
+        "accuracy": 0.5,
+        "macro_f1": 0.465,
+        "micro_f1": 0.5714285714285714,
+        "micro_tp_fp_fn": [
+          12,
+          6,
+          12
+        ],
+        "weighted_f1": 0.546875,
+        "cohen_kappa": 0.38461538461538464
+      },
+      "berabere_kategori": 9,
+      "berabere_grup": 2,
+      "belirsiz_kategori": 13,
+      "beraberlik_politikalari": {
+        "belirsiz": {
+          "accuracy": 0.25,
+          "macro_f1": 0.21964285714285714
+        },
+        "sabit": {
+          "accuracy": 0.2916666666666667,
+          "macro_f1": 0.23501984126984127
+        },
+        "iyimser": {
+          "accuracy": 0.4583333333333333,
+          "macro_f1": 0.48214285714285715
+        }
+      },
+      "acik_kume_accuracy": 0.25,
+      "top1_ayrinti": [
+        {
+          "path": "data/eval_holdout/Abuse/Abuse005_x264.mp4",
+          "gercek": "Abuse",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Assault": 2,
+            "Fighting": 2,
+            "Abuse": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Abuse/Abuse014_x264.mp4",
+          "gercek": "Abuse",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Abuse/Abuse018_x264.mp4",
+          "gercek": "Abuse",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Abuse": 1,
+            "Assault": 1,
+            "Fighting": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Assault/Assault020_x264.mp4",
+          "gercek": "Assault",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Assault/Assault038_x264.mp4",
+          "gercek": "Assault",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Abuse": 1,
+            "Assault": 1,
+            "Fighting": 1,
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Assault/Assault051_x264.mp4",
+          "gercek": "Assault",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Assault": 1,
+            "Fighting": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Burglary/Burglary059_x264.mp4",
+          "gercek": "Burglary",
+          "tahmin": "Burglary",
+          "berabere": false,
+          "skor": {
+            "Burglary": 2
+          }
+        },
+        {
+          "path": "data/eval_holdout/Burglary/Burglary078_x264.mp4",
+          "gercek": "Burglary",
+          "tahmin": "Burglary",
+          "berabere": false,
+          "skor": {
+            "Burglary": 2
+          }
+        },
+        {
+          "path": "data/eval_holdout/Burglary/Burglary081_x264.mp4",
+          "gercek": "Burglary",
+          "tahmin": "Burglary",
+          "berabere": false,
+          "skor": {
+            "Burglary": 2
+          }
+        },
+        {
+          "path": "data/eval_holdout/Explosion/Explosion001_x264.mp4",
+          "gercek": "Explosion",
+          "tahmin": "Explosion",
+          "berabere": false,
+          "skor": {
+            "Explosion": 2,
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Explosion/Explosion019_x264.mp4",
+          "gercek": "Explosion",
+          "tahmin": "RoadAccidents",
+          "berabere": false,
+          "skor": {
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Explosion/Explosion044_x264.mp4",
+          "gercek": "Explosion",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/Fighting/Fighting018_x264.mp4",
+          "gercek": "Fighting",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Abuse": 1,
+            "Assault": 1,
+            "Fighting": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Fighting/Fighting023_x264.mp4",
+          "gercek": "Fighting",
+          "tahmin": "RoadAccidents",
+          "berabere": false,
+          "skor": {
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Fighting/Fighting038_x264.mp4",
+          "gercek": "Fighting",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Abuse": 2,
+            "Assault": 2,
+            "Fighting": 2,
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/RoadAccidents/RoadAccidents021_x264.mp4",
+          "gercek": "RoadAccidents",
+          "tahmin": "BELIRSIZ",
+          "berabere": false,
+          "skor": {}
+        },
+        {
+          "path": "data/eval_holdout/RoadAccidents/RoadAccidents069_x264.mp4",
+          "gercek": "RoadAccidents",
+          "tahmin": "RoadAccidents",
+          "berabere": false,
+          "skor": {
+            "RoadAccidents": 3
+          }
+        },
+        {
+          "path": "data/eval_holdout/RoadAccidents/RoadAccidents134_x264.mp4",
+          "gercek": "RoadAccidents",
+          "tahmin": "RoadAccidents",
+          "berabere": false,
+          "skor": {
+            "RoadAccidents": 2
+          }
+        },
+        {
+          "path": "data/eval_holdout/Shooting/Shooting001_x264.mp4",
+          "gercek": "Shooting",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Assault": 1,
+            "Fighting": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Shooting/Shooting023_x264.mp4",
+          "gercek": "Shooting",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Abuse": 1,
+            "Assault": 1,
+            "Fighting": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Shooting/Shooting030_x264.mp4",
+          "gercek": "Shooting",
+          "tahmin": "BELIRSIZ",
+          "berabere": true,
+          "skor": {
+            "Assault": 2,
+            "Burglary": 2,
+            "Fighting": 2,
+            "Abuse": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Vandalism/Vandalism014_x264.mp4",
+          "gercek": "Vandalism",
+          "tahmin": "Burglary",
+          "berabere": false,
+          "skor": {
+            "Burglary": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Vandalism/Vandalism027_x264.mp4",
+          "gercek": "Vandalism",
+          "tahmin": "RoadAccidents",
+          "berabere": false,
+          "skor": {
+            "RoadAccidents": 1
+          }
+        },
+        {
+          "path": "data/eval_holdout/Vandalism/Vandalism039_x264.mp4",
+          "gercek": "Vandalism",
+          "tahmin": "Explosion",
+          "berabere": false,
+          "skor": {
+            "Explosion": 1
+          }
+        }
+      ],
+      "hesaplanamayan": [
+        {
+          "metrik": "ROC-AUC / PR-AUC",
+          "neden": "Model surekli bir GUVEN SKORU uretmiyor; AYRIK bir karar (olay listesi + risk seviyesi) uretiyor. Egri cizmek icin esigi supurup her esikte TPR/FPR gerekir; supurulecek surekli bir eksen YOK. Elimizdeki 3 tanim (gevsek/siki/sevk) ROC uzayinda yalnizca 3 AYRIK NOKTADIR, bir egri degildir.",
+          "gerekli": "Cikti sozlesmesine klip-duzeyi kalibre edilmis bir anomali olasiligi (0-1) eklemek ve ayni kliplerde esigi supurmek gerekir."
+        },
+        {
+          "metrik": "mAP / IoU (nesne tespiti)",
+          "neden": "Kare-duzeyi sinirlayici kutu (bbox) ALTIN ETIKETIMIZ yok. UCF-Crime klip-duzeyi etiketle geliyor; biz de klip-duzeyi calisiyoruz. mAP'i tanimlamak icin gereken (kutu, sinif, kare) uclusu veride MEVCUT DEGIL.",
+          "gerekli": "Degerlendirme kliplerinin kare-duzeyi bbox etiketlenmesi (insan anotasyonu) ve ajanin bbox dondurmesi gerekir."
+        },
+        {
+          "metrik": "Zamansal IoU / olay yerellestirme",
+          "neden": "Olayin BASLANGIC-BITIS altin etiketi yok; elimizde yalnizca 'bu klipte X vardir' bilgisi var. Model events[].time uretiyor ama karsilastirilacak GERCEK zaman araligi olmadigi icin dogrulanamaz.",
+          "gerekli": "Klip basina (baslangic_sn, bitis_sn) araliklarinin insan tarafindan isaretlenmesi; ya da data/temporal gibi splice noktasi TASARIMDAN bilinen kompozit kliplerin sistematik uretilmesi."
+        },
+        {
+          "metrik": "Kare-duzeyi AUC (UCF-Crime standart protokolu)",
+          "neden": "UCF-Crime'in TEST bolumunde kare-duzeyi etiketler VARDIR, ama biz klip duzeyinde olcuyoruz ve ajan kare-basi skor uretmiyor. Literaturdeki kare-AUC sayilariyla DOGRUDAN KIYASLANAMAZ — ayni sayi degildir.",
+          "gerekli": "Kare-basi anomali skoru ureten bir cikti yolu + resmi UCF-Crime test bolumu kare etiketlerinin indirilmesi."
+        },
+        {
+          "metrik": "Ozgullugun (specificity) kategori-basi kirilimi",
+          "neden": "Normal klipler kategori ETIKETI TASIMIYOR (hepsi 'Normal'). Bu yuzden 'Fighting icin FPR' gibi bir sayi tanimlanamaz: bir normal klibin hangi kategoriye karsi negatif oldugu belirsizdir.",
+          "gerekli": "Normal kliplerin 'hangi anomaliye benziyor' diye alt-etiketlenmesi (or. yangin-benzeri negatif, kalabalik-benzeri negatif) gerekir."
+        }
+      ]
+    }
+  ]
+}

@@ -29,3 +29,7 @@ outputs/
 .DS_Store
 .idea/
 .vscode/
+
+# Handoff notu — YALNIZCA YEREL. Yeni sohbet devri icin hazirlanir,
+# depoya girmez (takim karari, 2026-08-12).
+docs/HANDOFF.md
