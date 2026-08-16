@@ -864,8 +864,12 @@ def test_16_arayuz_arite_ve_canli_akis() -> None:
     check("analyze" in bag, "analyze baglantisi build_ui() icinde kurulu")
     n_out = len(getattr(bag["analyze"], "outputs", []) or [])
     check(n_out == n_blank + 1, f"analyze_btn.click(outputs=…) uzunlugu {n_out} == yield aritesi")
-    check(len(getattr(bag["analyze"], "inputs", []) or []) == 7,
-          "analyze inputs=7 (video + 5 tesis ayari + sorgu kutusu)")
+    # D34: KKD (baret) dedektor anahtari eklendi -> 7 + 1 = 8.
+    # Bu kontrol bir KABLOLAMA TUTARLILIK muhafizidir: analyze() imzasi ile
+    # analyze_btn.click(inputs=[...]) listesi ayrisirsa Gradio argümanlari
+    # KAYDIRIR ve sessizce yanlis ayar uygulanir.
+    check(len(getattr(bag["analyze"], "inputs", []) or []) == 8,
+          "analyze inputs=8 (video + 5 tesis ayari + sorgu kutusu + KKD anahtari)")
     # Tutanak/kanit butonlari sorgu kutusunu da okuyor (BOSLUK 2 UI baglantisi)
     for name in ("make_report", "make_evidence"):
         check(len(getattr(bag[name], "inputs", []) or []) == 3,

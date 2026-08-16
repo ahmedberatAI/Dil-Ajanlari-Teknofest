@@ -1,0 +1,601 @@
+{
+  "dosyalar": [
+    {
+      "dosya": "benchmark/results/isg_B_kurallar_20260816.json",
+      "eval_dir": "data/eval_defense",
+      "n_toplam": 200,
+      "n_sinifi_cozulen": 200,
+      "n_cozulemeyen": 0,
+      "cozulemeyen_ornek": [],
+      "per_sinif": {
+        "Safe_Walkway_Violation": {
+          "kod": "class0",
+          "tr_ad": "Güvenli yürüme yolu ihlali",
+          "guvensiz": true,
+          "n": 25,
+          "sozcuksel": {
+            "k": 5,
+            "n": 25,
+            "p": 0.2,
+            "ci_low": 0.0886,
+            "ci_high": 0.3913,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel": {
+            "k": 9,
+            "n": 25,
+            "p": 0.36,
+            "ci_low": 0.2025,
+            "ci_high": 0.5548,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel_ayirt_edici": {
+            "k": 2,
+            "n": 25,
+            "p": 0.08,
+            "ci_low": 0.0222,
+            "ci_high": 0.2497,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "tam_dogru": {
+            "k": 5,
+            "n": 25,
+            "p": 0.2,
+            "ci_low": 0.0886,
+            "ci_high": 0.3913,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "en_az_bir_olay": {
+            "k": 10,
+            "n": 25,
+            "p": 0.4,
+            "ci_low": 0.234,
+            "ci_high": 0.5926,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "yanlis_sinif_tetigi_ort": 0.04,
+          "kayitli_kaba": {
+            "k": 7,
+            "n": 25,
+            "p": 0.28,
+            "ci_low": 0.1428,
+            "ci_high": 0.4758,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          }
+        },
+        "Unauthorized_Intervention": {
+          "kod": "class1",
+          "tr_ad": "Yetkisiz müdahale",
+          "guvensiz": true,
+          "n": 25,
+          "sozcuksel": {
+            "k": 2,
+            "n": 25,
+            "p": 0.08,
+            "ci_low": 0.0222,
+            "ci_high": 0.2497,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel": {
+            "k": 9,
+            "n": 25,
+            "p": 0.36,
+            "ci_low": 0.2025,
+            "ci_high": 0.5548,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel_ayirt_edici": {
+            "k": 3,
+            "n": 25,
+            "p": 0.12,
+            "ci_low": 0.0417,
+            "ci_high": 0.2996,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "tam_dogru": {
+            "k": 2,
+            "n": 25,
+            "p": 0.08,
+            "ci_low": 0.0222,
+            "ci_high": 0.2497,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "en_az_bir_olay": {
+            "k": 12,
+            "n": 25,
+            "p": 0.48,
+            "ci_low": 0.3003,
+            "ci_high": 0.665,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "yanlis_sinif_tetigi_ort": 0.28,
+          "kayitli_kaba": {
+            "k": 6,
+            "n": 25,
+            "p": 0.24,
+            "ci_low": 0.115,
+            "ci_high": 0.4343,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          }
+        },
+        "Opened_Panel_Cover": {
+          "kod": "class2",
+          "tr_ad": "Açık pano kapağı",
+          "guvensiz": true,
+          "n": 25,
+          "sozcuksel": {
+            "k": 0,
+            "n": 25,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.1332,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel": {
+            "k": 8,
+            "n": 25,
+            "p": 0.32,
+            "ci_low": 0.1721,
+            "ci_high": 0.5159,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel_ayirt_edici": {
+            "k": 1,
+            "n": 25,
+            "p": 0.04,
+            "ci_low": 0.0071,
+            "ci_high": 0.1954,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "tam_dogru": {
+            "k": 0,
+            "n": 25,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.1332,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "en_az_bir_olay": {
+            "k": 11,
+            "n": 25,
+            "p": 0.44,
+            "ci_low": 0.2667,
+            "ci_high": 0.6293,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "yanlis_sinif_tetigi_ort": 0.12,
+          "kayitli_kaba": {
+            "k": 1,
+            "n": 25,
+            "p": 0.04,
+            "ci_low": 0.0071,
+            "ci_high": 0.1954,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          }
+        },
+        "Carrying_Overload_with_Forklift": {
+          "kod": "class3",
+          "tr_ad": "Forklift ile aşırı yük taşıma",
+          "guvensiz": true,
+          "n": 25,
+          "sozcuksel": {
+            "k": 9,
+            "n": 25,
+            "p": 0.36,
+            "ci_low": 0.2025,
+            "ci_high": 0.5548,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel": {
+            "k": 13,
+            "n": 25,
+            "p": 0.52,
+            "ci_low": 0.335,
+            "ci_high": 0.6997,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel_ayirt_edici": {
+            "k": 8,
+            "n": 25,
+            "p": 0.32,
+            "ci_low": 0.1721,
+            "ci_high": 0.5159,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "tam_dogru": {
+            "k": 9,
+            "n": 25,
+            "p": 0.36,
+            "ci_low": 0.2025,
+            "ci_high": 0.5548,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "en_az_bir_olay": {
+            "k": 14,
+            "n": 25,
+            "p": 0.56,
+            "ci_low": 0.3707,
+            "ci_high": 0.7333,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "yanlis_sinif_tetigi_ort": 0.24,
+          "kayitli_kaba": {
+            "k": 17,
+            "n": 25,
+            "p": 0.68,
+            "ci_low": 0.4841,
+            "ci_high": 0.8279,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          }
+        },
+        "Safe_Walkway": {
+          "kod": "class4",
+          "tr_ad": "Güvenli yürüme yolu kullanımı",
+          "guvensiz": false,
+          "n": 25,
+          "sozcuksel": null,
+          "operasyonel": {
+            "k": 16,
+            "n": 25,
+            "p": 0.64,
+            "ci_low": 0.4452,
+            "ci_high": 0.7975,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel_ayirt_edici": {
+            "k": 16,
+            "n": 25,
+            "p": 0.64,
+            "ci_low": 0.4452,
+            "ci_high": 0.7975,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "tam_dogru": null,
+          "en_az_bir_olay": {
+            "k": 9,
+            "n": 25,
+            "p": 0.36,
+            "ci_low": 0.2025,
+            "ci_high": 0.5548,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "yanlis_sinif_tetigi_ort": 0.16,
+          "kayitli_kaba": {
+            "k": 0,
+            "n": 0,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 1.0,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          }
+        },
+        "Authorized_Intervention": {
+          "kod": "class5",
+          "tr_ad": "Yetkili müdahale",
+          "guvensiz": false,
+          "n": 25,
+          "sozcuksel": null,
+          "operasyonel": {
+            "k": 12,
+            "n": 25,
+            "p": 0.48,
+            "ci_low": 0.3003,
+            "ci_high": 0.665,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel_ayirt_edici": {
+            "k": 12,
+            "n": 25,
+            "p": 0.48,
+            "ci_low": 0.3003,
+            "ci_high": 0.665,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "tam_dogru": null,
+          "en_az_bir_olay": {
+            "k": 13,
+            "n": 25,
+            "p": 0.52,
+            "ci_low": 0.335,
+            "ci_high": 0.6997,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "yanlis_sinif_tetigi_ort": 0.4,
+          "kayitli_kaba": {
+            "k": 0,
+            "n": 0,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 1.0,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          }
+        },
+        "Closed_Panel_Cover": {
+          "kod": "class6",
+          "tr_ad": "Kapalı pano kapağı",
+          "guvensiz": false,
+          "n": 25,
+          "sozcuksel": null,
+          "operasyonel": {
+            "k": 19,
+            "n": 25,
+            "p": 0.76,
+            "ci_low": 0.5657,
+            "ci_high": 0.885,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel_ayirt_edici": {
+            "k": 19,
+            "n": 25,
+            "p": 0.76,
+            "ci_low": 0.5657,
+            "ci_high": 0.885,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "tam_dogru": null,
+          "en_az_bir_olay": {
+            "k": 6,
+            "n": 25,
+            "p": 0.24,
+            "ci_low": 0.115,
+            "ci_high": 0.4343,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "yanlis_sinif_tetigi_ort": 0.12,
+          "kayitli_kaba": {
+            "k": 0,
+            "n": 0,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 1.0,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          }
+        },
+        "Safe_Carrying": {
+          "kod": "class7",
+          "tr_ad": "Güvenli yük taşıma",
+          "guvensiz": false,
+          "n": 25,
+          "sozcuksel": null,
+          "operasyonel": {
+            "k": 13,
+            "n": 25,
+            "p": 0.52,
+            "ci_low": 0.335,
+            "ci_high": 0.6997,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "operasyonel_ayirt_edici": {
+            "k": 13,
+            "n": 25,
+            "p": 0.52,
+            "ci_low": 0.335,
+            "ci_high": 0.6997,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "tam_dogru": null,
+          "en_az_bir_olay": {
+            "k": 12,
+            "n": 25,
+            "p": 0.48,
+            "ci_low": 0.3003,
+            "ci_high": 0.665,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "yanlis_sinif_tetigi_ort": 0.36,
+          "kayitli_kaba": {
+            "k": 0,
+            "n": 0,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 1.0,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          }
+        }
+      },
+      "karisiklik": {
+        "Safe_Walkway_Violation": {
+          "Anomali": 8,
+          "(olay yok)": 15,
+          "Yetkisiz Erişim": 2,
+          "Güvenlik": 1,
+          "Sağlık": 2
+        },
+        "Unauthorized_Intervention": {
+          "(olay yok)": 13,
+          "Sağlık": 3,
+          "Anomali": 9,
+          "Güvenlik": 2,
+          "Yetkisiz Erişim": 1
+        },
+        "Opened_Panel_Cover": {
+          "Anomali": 7,
+          "(olay yok)": 14,
+          "Güvenlik": 1,
+          "Sağlık": 2,
+          "Kaza": 1
+        },
+        "Carrying_Overload_with_Forklift": {
+          "Güvenlik": 8,
+          "(olay yok)": 11,
+          "Yetkisiz Erişim": 1,
+          "Anomali": 7
+        },
+        "Safe_Walkway": {
+          "(olay yok)": 16,
+          "Güvenlik": 4,
+          "Yetkisiz Erişim": 2,
+          "Sağlık": 2,
+          "Anomali": 1,
+          "Normal": 1
+        },
+        "Authorized_Intervention": {
+          "Anomali": 11,
+          "Sağlık": 2,
+          "Güvenlik": 2,
+          "Yetkisiz Erişim": 3,
+          "(olay yok)": 12
+        },
+        "Closed_Panel_Cover": {
+          "(olay yok)": 19,
+          "Anomali": 3,
+          "Sağlık": 2,
+          "Yetkisiz Erişim": 1
+        },
+        "Safe_Carrying": {
+          "(olay yok)": 13,
+          "Kaza": 2,
+          "Güvenlik": 6,
+          "Anomali": 8,
+          "Sağlık": 1
+        }
+      },
+      "esli_ayirt_etme": {
+        "Safe_Walkway_Violation": {
+          "guvenli_es": "Safe_Walkway",
+          "kod_guvensiz": "class0",
+          "kod_guvenli": "class4",
+          "tpr": {
+            "k": 5,
+            "n": 25,
+            "p": 0.2,
+            "ci_low": 0.0886,
+            "ci_high": 0.3913,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 2,
+            "n": 25,
+            "p": 0.08,
+            "ci_low": 0.0222,
+            "ci_high": 0.2497,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "ayirt_etme": 0.12000000000000001,
+          "fisher_p": 0.4174265450861103,
+          "anlamli_005": false
+        },
+        "Unauthorized_Intervention": {
+          "guvenli_es": "Authorized_Intervention",
+          "kod_guvensiz": "class1",
+          "kod_guvenli": "class5",
+          "tpr": {
+            "k": 2,
+            "n": 25,
+            "p": 0.08,
+            "ci_low": 0.0222,
+            "ci_high": 0.2497,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 5,
+            "n": 25,
+            "p": 0.2,
+            "ci_low": 0.0886,
+            "ci_high": 0.3913,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "ayirt_etme": -0.12000000000000001,
+          "fisher_p": 0.4174265450861103,
+          "anlamli_005": false
+        },
+        "Opened_Panel_Cover": {
+          "guvenli_es": "Closed_Panel_Cover",
+          "kod_guvensiz": "class2",
+          "kod_guvenli": "class6",
+          "tpr": {
+            "k": 0,
+            "n": 25,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.1332,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 0,
+            "n": 25,
+            "p": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.1332,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "ayirt_etme": 0.0,
+          "fisher_p": 1.0,
+          "anlamli_005": false
+        },
+        "Carrying_Overload_with_Forklift": {
+          "guvenli_es": "Safe_Carrying",
+          "kod_guvensiz": "class3",
+          "kod_guvenli": "class7",
+          "tpr": {
+            "k": 9,
+            "n": 25,
+            "p": 0.36,
+            "ci_low": 0.2025,
+            "ci_high": 0.5548,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "fpr": {
+            "k": 3,
+            "n": 25,
+            "p": 0.12,
+            "ci_low": 0.0417,
+            "ci_high": 0.2996,
+            "ci_method": "wilson",
+            "ci_level": 0.95
+          },
+          "ayirt_etme": 0.24,
+          "fisher_p": 0.0954880141331804,
+          "anlamli_005": false
+        }
+      }
+    }
+  ]
+}

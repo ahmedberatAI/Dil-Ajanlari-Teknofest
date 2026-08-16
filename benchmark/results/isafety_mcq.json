@@ -1,0 +1,42 @@
+{
+  "_aciklama": "iSafetyBench tek-etiketli MCQ. MODELI olcer, ajan boru hattini DEGIL. Yayimlanmis tabanla ayni BICIM, ama makaledeki F1 COK-ETIKETLI metriktir -> ayni sayi DEGIL.",
+  "model": "Qwen/Qwen3-VL-8B-Instruct-FP8",
+  "yontem": "vLLM guided_choice (16 secenek), temperature=0, klip basina <=8 kare",
+  "klip_basina_soru": 1,
+  "pseudo_replikasyon_notu": "ayni klibin birden cok MCQ sorusu BAGIMSIZ degildir; klip basina 1 soru alindi",
+  "lisans": "CC BY-NC-SA 4.0 — yalnizca degerlendirme",
+  "alan_uyarisi": "YouTube kaynakli; dagitim ortami sabit-kamera CCTV. Genelleme stres testi.",
+  "tohum": 2026,
+  "kollar": {
+    "hazard": {
+      "n_soru": 150,
+      "atlanan": 0,
+      "dogruluk": {
+        "k": 83,
+        "n": 150,
+        "p": 0.5533,
+        "ci_low": 0.4734,
+        "ci_high": 0.6306,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "gecikme_medyan": 0.65,
+      "sans_tabani": 0.0625
+    },
+    "normal": {
+      "n_soru": 150,
+      "atlanan": 0,
+      "dogruluk": {
+        "k": 73,
+        "n": 150,
+        "p": 0.4867,
+        "ci_low": 0.408,
+        "ci_high": 0.566,
+        "ci_method": "wilson",
+        "ci_level": 0.95
+      },
+      "gecikme_medyan": 0.64,
+      "sans_tabani": 0.0625
+    }
+  }
+}

@@ -28,6 +28,10 @@ fonksiyonları dinamik olarak çağırır** — çıktının tamamı yapılandı
 - 🛠️ Mock operasyonel fonksiyonların **dinamik** çağrılması (ajanın araçları)
 - 💬 Analiz hakkında doğal Türkçe sohbet (operatör asistanı)
 - 📊 Yapılandırılmış JSON çıktı + KPI ölçüm çerçevesi
+- 🪖 **KKD (baret) tespiti — deterministik YOLO doğrulayıcı** (opsiyonel, varsayılan kapalı).
+  Dil modelinin ince ikili görsel durumları güvenilir okuyamadığı **ölçüldüğü için**
+  ayrı bir dedektöre verildi; bulunan ihlal operatöre görünür ama varsayılan olarak
+  ekip çağırmaz. → [`docs/kkd_dogrulayici_2026-08-16.md`](docs/kkd_dogrulayici_2026-08-16.md)
 
 ## Mimari
 Ayrıntı için → [`docs/architecture.md`](docs/architecture.md)
@@ -163,6 +167,26 @@ Tam envanter, lisanslar ve bilinen kusurlar → [`docs/veri_kaynaklari.md`](docs
   HuggingFace aynasından çekilir.
 - **Hızlı doğrulama:** `python scripts/make_test_video.py` ile sentetik test klibi.
 
+### İSG veri zenginleştirmesi (2026-08-16)
+
+| Set | Boyut | Lisans | **Kullanım** |
+|---|---|---|---|
+| [iSafetyBench](https://huggingface.co/datasets/raiyaanabdullah/isafety-bench) | 1.100 klip (420 tehlike + 680 normal) | **CC BY-NC-SA 4.0** | ⛔ **YALNIZCA DEĞERLENDİRME** |
+| [keremberke/hard-hat-detection](https://huggingface.co/datasets/keremberke/hard-hat-detection) | 19.745 görsel | **CC BY 4.0** | ✅ eğitim (KKD dedektörü) |
+| [keremberke/construction-safety](https://huggingface.co/datasets/keremberke/construction-safety-object-detection) | 398 görsel, 17 sınıf | **CC BY 4.0** | ✅ eğitim |
+
+> **ShareAlike zehirli haptır.** iSafetyBench ile ince ayar yapılırsa model ağırlıkları
+> türev eser sayılabilir → modelimiz de CC BY-NC-SA olmak zorunda kalır. Bu kural bir
+> belgede değil **kodda** durur: `dilajan/veri_lisans.py` yasaklı bir dizin görürse
+> eğitimi **istisna fırlatarak durdurur** (bilerek fail-closed), `tests/test_isg_lisans.py`
+> kilidi sürekli sınar. Aynı sebeple **SH17** (alan eşleşmesi en iyi aday, üretim sanayi)
+> ve **Ultralytics Construction-PPE** (AGPL-3.0) **elendi**.
+>
+> ⚠️ İki alan uyarısı: iSafetyBench **YouTube** kaynaklıdır (bizim ortamımız sabit-kamera
+> CCTV) → genelleme *stres testi*, aynı-alan kanıtı değil. KKD setleri **şantiye**
+> görüntüsüdür (tesisimiz üretim) → deterministik dedektör için fark küçüktür ama sıfır
+> değildir. Ayrıntı: [`docs/veri_lisans_karari.md`](docs/veri_lisans_karari.md) §11.
+
 ## Değerlendirme (KPI)
 Veriye dayalı bir değerlendirme altyapısı kurulmuştur:
 - `benchmark/eval_clips.py` — dengeli set (anomali + normal) üzerinde anomali recall, **normal yanlış-pozitif oranı**, risk kalibrasyonu, kategori eşleşmesi, gecikme; sonuçlar `benchmark/results/` altında JSON olarak saklanır.
@@ -225,11 +249,23 @@ Tam gerekçeler ve sayılar → [`docs/olcum_durustlugu.md`](docs/olcum_durustlu
   **ama ölçüm henüz yeniden koşulmadı** — düzeltme araçta, rakamlarda değil.
 - **Gece / IR / termal görüntüde sıfır kapsam.** Tüm setlerimiz gündüz görünür-ışıktır;
   savunma dağıtımının birincil kaynağı hakkında hiçbir ölçümümüz yok.
-- **Hedef domainde ÖLÇÜLMÜŞ pozitif yok.** Denetimde tek gerçek 1080p tesis verimizin (`data/industrial`)
-  8/8'i "Normal" etiketliydi. **Veri boşluğu kapatıldı:** `data/eval_defense` = 20 anomali + 20 normal,
-  tamamı 1080p gerçek tesis görüntüsü (yürüme yolu ihlali · yetkisiz müdahale · açık pano kapağı ·
-  forklift ile aşırı yük). **Ama bu sette henüz ölçüm koşulmadı** — tesis-içi iddialarımız hâlâ
-  komşu domainlerden transfer varsayımıdır.
+- **Hedef domainde ayrım ŞANS DÜZEYİNDE (ölçüldü, 2026-08-16).** `data/eval_defense`
+  (n=200, 1080p gerçek tesis) üzerinde **varsayılan yapılandırmayla MCC 0,069 · κ 0,060**.
+  Tesise özgü kurallar enjekte edilince recall %28 → %47 (p=0,0094) ve F2 0,31 → 0,48
+  çıkıyor — **ama MCC 0,071'de sabit kalıyor**: kazanç bir *eşik düşürme* etkisidir,
+  ayırt etme yeteneği kazanılmamıştır (yanlış alarm da %22 → %40 çıkıyor).
+  Dört tehlike sınıfının **hiçbirinde**, güvenli eşinden ayrım kanıtlanamadı
+  (Fisher p = 0,42 / 0,42 / 1,00 / 0,096).
+  → [`docs/isg_taksonomi_hizalamasi_2026-08-16.md`](docs/isg_taksonomi_hizalamasi_2026-08-16.md)
+- **Açık pano kapağını model HİÇ göremiyor.** Zorunlu seçim (`guided_choice`) ile
+  sorulduğunda 20 klibin 20'sinde "KAPALI" dedi — 10'u gerçekte açıkken. Bu bir ifade
+  değil **algı** sınırıdır; sorgu/prompt ile çözülemez. Aynı gerekçe KKD'nin neden
+  ayrı bir dedektöre verildiğini açıklar.
+- **Ölçüm aletinde kusur bulundu ve onarıldı.** Olumsuzlama kapısı `gözlemlenmedi`
+  biçimini kaçırıyordu; modelin *"hiçbir tehlike … gözlemlenmedi"* cümlesi **doğru
+  adlandırma** sayılıyordu. Etkisi tek yönlü değil: kusur **tabanı şişirerek gerçek bir
+  müdahalenin etkisini gizliyordu** (+5 puan p=0,51 → +14 puan p=0,0043). Eski kural
+  silinmedi, yan yana raporlanıyor.
 - **Forklift devrilmesi için gerçek açık veri yok.** Şartname örneğinin açık lisanslı gerçek
   devrilme videosu bulunamadı. En yakın gerçek kanıtlar: `eval_defense`'teki 5 forklift aşırı-yük
   klibi (1080p, devrilme öncesi riskli durum) ve UCF `RoadAccidents` klipleri.
@@ -245,15 +281,32 @@ Tam gerekçeler ve sayılar → [`docs/olcum_durustlugu.md`](docs/olcum_durustlu
 ```
 dilajan/          ana paket: config, video, schema, prompts, llm_client,
                   mock_functions, chat_agent, agent/ (LangGraph grafiği)
+  detector.py     YOLO uzman dedektörleri: poz-tabanlı düşme doğrulaması,
+                  geofence, araç/kalabalık ve **KKD (baret) doğrulayıcısı**
+  veri_lisans.py  VERİ LİSANS KAPISI — hangi set NE İÇİN kullanılabilir;
+                  yasaklı veri eğitime girerse **istisna fırlatır** (fail-closed)
 serve_vllm.py     vLLM sunucu başlatıcı
 run_analysis.py   CLI (video -> JSON)
 app.py            Gradio arayüzü (timeline + risk rozeti + canlı ilerleme + sohbet)
 benchmark/        eval_clips, judge, dialogue_test, variance, compare, stats_utils + results/
+  isg_rescore.py  İSG ince taneli skorlama (GPU'suz, arşive geriye dönük)
+  isg_ab.py       A/B — **ön-kayıtlı eşikleri mekanik uygular** (§7.4)
+  merge_arms.py   kol kol koşumu birleştirir (termal önlem)
+  isafety_mcq.py  iSafetyBench çoktan seçmeli genelleme ölçümü
 scripts/          test videosu üreteci, veri seti indiriciler, yardımcı betikler
+  get_ppe.py · ppe_coco2yolo.py · train_ppe.py     KKD dedektörü boru hattı
+  get_isafety_bench.py · build_isafety_manifest.py  bağımsız değerlendirme seti
+  hazirlik_kontrol.py   **proje bütünlük denetimi** (K1/K2, lisans kapısı, veri, testler)
+  doctor.py       takım üyesinin MAKİNESİNİ teşhis eder (GPU/torch/sunucu)
 docs/             mimari, ölçüm dürüstlüğü, veri kaynakları, performans raporu,
                   şartname uyumu, demo senaryosu, sunum iskeleti/pptx, GitHub rehberi
 requirements-lock.txt   tam sürüm kilidi (pip freeze)
 ```
+
+> **Ağırlıklar depoda değildir** (`.gitignore`: `*.pt`). `yolo11n.pt` /
+> `yolo11n-pose.pt` ilk kullanımda inerken, KKD ağırlığı `yolo11n-ppe.pt`
+> bizim ürettiğimizdir ve sabit tohumla yeniden üretilir:
+> `python scripts/get_ppe.py && python scripts/ppe_coco2yolo.py && python scripts/train_ppe.py`
 
 ## Karşılaşılan Zorluklar ve Çözümler
 - **Blackwell (sm_120) uyumu:** vLLM 0.23 CUDA 13'e derli; torch'u `cu130`'a hizalayarak

@@ -253,7 +253,7 @@ def _blank():
 
 def analyze(video_path, facility_rules="", restricted_zones="",
             detect_vehicles=False, vehicle_zones="", detect_crowd=False,
-            analysis_query=""):
+            analysis_query="", ppe_detection=False):
     if not video_path:
         yield (_alert("Lütfen önce bir video yükleyin."), *_blank())
         return
@@ -271,6 +271,10 @@ def analyze(video_path, facility_rules="", restricted_zones="",
         # Sorgu-gudumlu analiz: operatorun serbest-metin sorgusu da ISTEK-KAPSAMLIDIR
         # (eszamanli baska bir operatorun analizini daraltamaz). Bos -> tam no-op.
         analysis_query=(analysis_query or "").strip(),
+        # KKD (baret) deterministik tespiti — istek-kapsamli (bir operatorun actigi
+        # dedektor digerinin analizini etkilemez). Varsayilan KAPALI (K2); agirlik
+        # (yolo11n-ppe.pt) yoksa acik olsa bile sessizce devre disi (K3).
+        ppe_detection=bool(ppe_detection),
     ):
         seen: list = []
         yield (_pipeline_html(seen), *_blank())  # baslangic: Görüntü Alımı aktif
@@ -654,6 +658,15 @@ def build_ui() -> gr.Blocks:
                         with gr.Row():
                             crowd_in = gr.Checkbox(label="👥 Kalabalık / toplanma + ani dağılma tespiti", value=False)
                             vehicles_in = gr.Checkbox(label="🚗 Araç tespiti (yasak bölge)", value=False)
+                        # KKD: deterministik YOLO dedektoru (VLM'e metin enjeksiyonu DEGIL).
+                        # Varsayilan KAPALI; agirlik yoksa acik olsa bile sessizce devre disi.
+                        ppe_in = gr.Checkbox(
+                            label="🪖 KKD (baret) tespiti — deterministik dedektör", value=False)
+                        gr.HTML("<div class='qa-hint'>Baretsiz personel <b>YOLO ile</b> tespit "
+                                "edilir (dil modeli bu ayrımı güvenilir yapamıyor — ölçüldü). "
+                                "Bulunan ihlal olay listesinde <b>görünür</b> ancak varsayılan "
+                                "olarak <b>ekip çağırmaz</b>: tesis alanındaki doğruluğu henüz "
+                                "ölçülmedi.</div>")
                         vehicle_zones_in = gr.Textbox(
                             label="Araç yasak bölgeleri (3×3 ızgara, virgülle — boşsa durağan araç bilgi amaçlı)",
                             placeholder="Örn: alt sağ, sağ  → bu bölgelerde araç = Yetkisiz/Yanlış Konumlu Araç (Yüksek)")
@@ -749,7 +762,7 @@ def build_ui() -> gr.Blocks:
         #    _blank() uzunlugu (12). Uclu tutarlilik build_ui() testinde assert edilir.
         analyze_btn.click(
             analyze, inputs=[video_in, facility_in, zones_in, vehicles_in, vehicle_zones_in,
-                             crowd_in, query_in],
+                             crowd_in, query_in, ppe_in],
             outputs=[status_out, query_out, summary_out, risk_out, timeline_out,
                      events_out, actions_out, funcs_out, trace_out, json_out, context_state,
                      result_state, path_state],

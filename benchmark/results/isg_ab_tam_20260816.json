@@ -1,0 +1,107 @@
+{
+  "a": "benchmark/results/isg_A_varsayilan_20260816.json",
+  "b": "benchmark/results/isg_B_kurallar_20260816.json",
+  "label_a": "A varsayilan",
+  "label_b": "B kurallar",
+  "n_cift": 200,
+  "eslenemeyen": [],
+  "metrikler": {
+    "recall": {
+      "a": 13,
+      "b": 15,
+      "c": 34,
+      "d": 38,
+      "n": 100,
+      "tanimsiz": 100,
+      "oran_a": 0.28,
+      "oran_b": 0.47,
+      "fark_puan": 18.999999999999993,
+      "p_exact": 0.009399241523873059,
+      "anlamli": true,
+      "fark_ga": [
+        0.0553,
+        0.3154
+      ],
+      "hipotez": "H1",
+      "esik": 15,
+      "gecti": true,
+      "karar": "26 Temmuz'daki +27 puan REPLIKE OLDU"
+    },
+    "cat_d28": {
+      "a": 10,
+      "b": 16,
+      "c": 21,
+      "d": 53,
+      "n": 100,
+      "tanimsiz": 100,
+      "oran_a": 0.26,
+      "oran_b": 0.31,
+      "fark_puan": 4.999999999999999,
+      "p_exact": 0.5113757815852296,
+      "anlamli": false,
+      "fark_ga": [
+        -0.0686,
+        0.1668
+      ]
+    },
+    "cat_onarik": {
+      "a": 1,
+      "b": 4,
+      "c": 18,
+      "d": 77,
+      "n": 100,
+      "tanimsiz": 100,
+      "oran_a": 0.05,
+      "oran_b": 0.19,
+      "fark_puan": 14.000000000000002,
+      "p_exact": 0.004343509674072266,
+      "anlamli": true,
+      "fark_ga": [
+        0.0507,
+        0.2321
+      ],
+      "hipotez": "H2",
+      "esik": 12,
+      "gecti": true,
+      "karar": "kural enjeksiyonu adlandirmayi ARTIRIYOR"
+    },
+    "isg_tam": {
+      "a": 1,
+      "b": 0,
+      "c": 15,
+      "d": 84,
+      "n": 100,
+      "tanimsiz": 100,
+      "oran_a": 0.01,
+      "oran_b": 0.16,
+      "fark_puan": 15.0,
+      "p_exact": 6.103515625e-05,
+      "anlamli": true,
+      "fark_ga": [
+        0.0848,
+        0.2327
+      ]
+    },
+    "normal_temiz": {
+      "a": 53,
+      "b": 25,
+      "c": 7,
+      "d": 15,
+      "n": 100,
+      "tanimsiz": 100,
+      "oran_a": 0.78,
+      "oran_b": 0.6,
+      "fark_puan": -18.000000000000004,
+      "p_exact": 0.0021024015732109547,
+      "anlamli": true,
+      "fark_ga": [
+        -0.2815,
+        -0.0732
+      ],
+      "hipotez": "H3",
+      "esik": -15,
+      "gecti": true,
+      "karar": "kural enjeksiyonunun BEDELI dogrulandi (normal kliplerde gurultu artti)"
+    }
+  }
+}

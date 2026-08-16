@@ -1,0 +1,195 @@
+{
+  "k2_kapali_temiz": true,
+  "k2_kirli_klipler": [],
+  "kkd_bulunan_klip": 1,
+  "ppe_dispatch": false,
+  "sevk_maske_ihlali": [],
+  "gecikme": {
+    "kapali": 14.1,
+    "acik": 12.6,
+    "kat": 0.89
+  },
+  "durustluk_notu": "byte-identity YENIDEN-KOSUMLA dogrulanamaz (%8 gurultu tabani); dogrulanan: KAPALI iken KKD yapiti yok",
+  "kollar": {
+    "kapali": {
+      "satirlar": [
+        {
+          "klip": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te1.mp4",
+          "sure": 14.2,
+          "n_olay": 1,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te2.mp4",
+          "sure": 15.4,
+          "n_olay": 2,
+          "risk": "Orta",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te3.mp4",
+          "sure": 14.0,
+          "n_olay": 1,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te7.mp4",
+          "sure": 11.6,
+          "n_olay": 0,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Normal/Authorized_Intervention/5_te1.mp4",
+          "sure": 9.9,
+          "n_olay": 0,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Normal/Authorized_Intervention/5_te11.mp4",
+          "sure": 14.3,
+          "n_olay": 1,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Normal/Authorized_Intervention/5_te12.mp4",
+          "sure": 10.2,
+          "n_olay": 0,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Normal/Authorized_Intervention/5_te13.mp4",
+          "sure": 18.5,
+          "n_olay": 2,
+          "risk": "Orta",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        }
+      ],
+      "gecikme_medyan": 14.1,
+      "n": 8
+    },
+    "acik": {
+      "satirlar": [
+        {
+          "klip": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te1.mp4",
+          "sure": 16.8,
+          "n_olay": 1,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te2.mp4",
+          "sure": 15.9,
+          "n_olay": 2,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te3.mp4",
+          "sure": 10.3,
+          "n_olay": 0,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te7.mp4",
+          "sure": 10.7,
+          "n_olay": 0,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Normal/Authorized_Intervention/5_te1.mp4",
+          "sure": 12.7,
+          "n_olay": 1,
+          "risk": "Yüksek",
+          "tetiklenen": [],
+          "olay": [
+            "KKD ihlali: baret takmayan personel (alt sol bölgede) — 3 karede tespit"
+          ],
+          "iz": [
+            "perceive: segment 0 KKD dedektörü [baretsiz kafa 3 kutu / 3 kare, güven 0.49, baretli 0] -> deterministik olay eklendi (SEVK yolu KAPALI)",
+            "act: KKD olayi SEVK sinyalinden HARIC tutuldu (ppe_dispatch=False); operatore FLAG olarak gorunur",
+            "act: risk terimi MASKELENDI (yuksek risk YALNIZ KKD olayindan geliyor; operatore FLAG olarak gorunur ama SEVK acmaz)"
+          ],
+          "ppe_src_isaretli": [
+            "KKD ihlali: baret takmayan personel (alt sol bölgede) — 3 karede tespit"
+          ]
+        },
+        {
+          "klip": "data/eval_defense/Normal/Authorized_Intervention/5_te11.mp4",
+          "sure": 12.5,
+          "n_olay": 1,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Normal/Authorized_Intervention/5_te12.mp4",
+          "sure": 11.0,
+          "n_olay": 0,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        },
+        {
+          "klip": "data/eval_defense/Normal/Authorized_Intervention/5_te13.mp4",
+          "sure": 13.5,
+          "n_olay": 1,
+          "risk": "Düşük",
+          "tetiklenen": [],
+          "olay": [],
+          "iz": [],
+          "ppe_src_isaretli": []
+        }
+      ],
+      "gecikme_medyan": 12.6,
+      "n": 8
+    }
+  }
+}

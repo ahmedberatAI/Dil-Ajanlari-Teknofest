@@ -1,0 +1,87 @@
+{
+  "a": "benchmark/results/eval_20260816_111114.json",
+  "b": "benchmark/results/eval_20260816_125336.json",
+  "label_a": "A varsayilan",
+  "label_b": "A' TEKRAR",
+  "n_cift": 100,
+  "gurultu_kipi": true,
+  "eslenemeyen": [],
+  "metrikler": {
+    "recall": {
+      "a": 12,
+      "b": 16,
+      "c": 8,
+      "d": 64,
+      "n": 100,
+      "tanimsiz": 0,
+      "oran_a": 0.28,
+      "oran_b": 0.2,
+      "fark_puan": -8.000000000000002,
+      "p_exact": 0.15158963203430176,
+      "anlamli": false,
+      "fark_ga": [
+        -0.1745,
+        0.0154
+      ],
+      "gurultu_puan": 8.000000000000002,
+      "gurultu_cevirme": 24
+    },
+    "cat_d28": {
+      "a": 11,
+      "b": 15,
+      "c": 16,
+      "d": 58,
+      "n": 100,
+      "tanimsiz": 0,
+      "oran_a": 0.26,
+      "oran_b": 0.27,
+      "fark_puan": 1.0000000000000009,
+      "p_exact": 1.0,
+      "anlamli": false,
+      "fark_ga": [
+        -0.0986,
+        0.1183
+      ],
+      "gurultu_puan": 1.0000000000000009,
+      "gurultu_cevirme": 31
+    },
+    "cat_onarik": {
+      "a": 1,
+      "b": 4,
+      "c": 4,
+      "d": 91,
+      "n": 100,
+      "tanimsiz": 0,
+      "oran_a": 0.05,
+      "oran_b": 0.05,
+      "fark_puan": 0.0,
+      "p_exact": 1.0,
+      "anlamli": false,
+      "fark_ga": [
+        -0.0638,
+        0.0638
+      ],
+      "gurultu_puan": 0.0,
+      "gurultu_cevirme": 8
+    },
+    "isg_tam": {
+      "a": 0,
+      "b": 1,
+      "c": 0,
+      "d": 99,
+      "n": 100,
+      "tanimsiz": 0,
+      "oran_a": 0.01,
+      "oran_b": 0.0,
+      "fark_puan": -1.0,
+      "p_exact": 1.0,
+      "anlamli": false,
+      "fark_ga": [
+        -0.0545,
+        0.0279
+      ],
+      "gurultu_puan": 1.0,
+      "gurultu_cevirme": 1
+    }
+  }
+}

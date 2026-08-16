@@ -128,6 +128,22 @@ DATASET_ORIGIN: Dict[str, Dict[str, str]] = {
         "dataset": "Eskisehir endustriyel isyeri guvenligi (Mendeley xjmtb22pff, CC BY, 1080p)",
         "not": "klasor adlari class0..class7 SEMANTIK ETIKET DEGIL — GT'ye alinmaz (K14)",
     },
+    # --- D33: ISG veri zenginlestirmesi ---
+    "data/isafety_bench": {
+        "dataset": "iSafetyBench (HF raiyaanabdullah/isafety-bench, arXiv 2508.00399)",
+        "not": ("⛔ CC BY-NC-SA 4.0 — YALNIZCA DEGERLENDIRME, EGITIMDE KULLANILAMAZ "
+                "(dilajan/veri_lisans.py kod duzeyinde kilitler). Klipler YOUTUBE "
+                "kaynakli: dagitim alanimiz olan SABIT KAMERA CCTV'den FARKLI — "
+                "sonuclar GENELLEME STRES TESTIDIR, ayni-alan kaniti DEGIL."),
+    },
+    "data/ppe": {
+        "dataset": ("KKD: keremberke/hard-hat-detection (19.745) + "
+                    "keremberke/construction-safety-object-detection (398), ikisi de CC BY 4.0"),
+        "not": ("Deterministik YOLO dogrulayici EGITIMI icin (HANDOFF §6.2; ham nesne "
+                "listesi VLM'e KANIT diye VERILMEZ — olculdu: yanlis alarm %0 -> %12). "
+                "⚠️ Setler SANTIYE, tesisimiz URETIM: alan farki kucuk ama SIFIR DEGIL. "
+                "SH17 (alan eslesmesi en iyi aday) CC BY-NC-SA oldugu icin ELENDI."),
+    },
 }
 
 
@@ -327,6 +343,45 @@ _OLUMSUZ_RE = re.compile(
     r"|(?:gözle|görül|bulun|içer|göster|izlen)m[ıiuü]yor"
 )
 
+#: ---------------------------------------------------------------------------
+#: D33 — OLUMSUZLAMA KAPISI ONARIMI (olculmus kusur)
+#: ---------------------------------------------------------------------------
+#: TESHIS: yukaridaki _OLUMSUZ_RE `gözlen` kokunu biliyor, ama model neredeyse
+#: HER ZAMAN "gözlemlenmedi" yaziyor (govde `gözlemlen`). 71 sonuc dosyasi
+#: tarandi: "gözlemlenmedi" 477, "gözlemlenmemiş" 35, "gözlemlenmemektedir" 8 kez
+#: geciyor ve UCU DE kapidan KACIYOR. ("tespit edilmedi" 984 kez geciyor ve
+#: DOGRU sekilde yakalaniyor — kusur yalnizca `gözlemlen` govdesinde.)
+#:
+#: SONUCU: modelin "Görüntülerde herhangi bir tehlike, kaza, YETKISIZ GIRIS veya
+#: anormal davranış gözlemlenmedi." cumlesi, "yetkisiz" kalibi yuzunden Anomali
+#: ESLESMESI SAYILIYOR. Yani model "hicbir sey yok" derken kategori adlandirmayi
+#: DOGRU yapmis gibi puanlaniyor. Olculen ornek: taze A1 kosusunda kaba
+#: `category_match` 26/100; bunlarin bir kismi bu yoldan geliyor.
+#:
+#: ⚠ K2/K4 — ESKI KURAL DEGISTIRILMEDI. _OLUMSUZ_RE yukarida AYNEN duruyor ve
+#: `match_category` varsayilan olarak ONU kullanmaya devam ediyor; arsivlenmis
+#: olcumler birebir yeniden uretilebilir kalir. Onarilmis kapi AYRI bir kural
+#: olarak sunulur (benchmark/rescore.py 5. kural) ve iki skor YAN YANA basilir.
+#: Yeni yazilan ISG olcumu (isg_match) ise arsiv yuku tasimadigi icin BASTAN
+#: onarilmis kapiyi kullanir.
+#:
+#: EKLENEN GOVDELER ve gerekcesi (BILEREK DAR — modul basindaki kural: "yanlis
+#: eleme, yanlis kabulden daha kotudur"):
+#:   gözlemlen : 520 gecis, saf GOZLEM fiili — `gözlen`/`görül` ile ayni aile
+#:   belirtil  : 14 gecis, RAPORLAMA fiili ("riskten belirtilmemiş")
+#: `oluştur` (14 gecis, "tehlike oluşturmamaktadır") BILEREK DISARIDA: govde
+#: `oluş`tan turemiyor ve genis bir fiil; kazanci kucuk, yanlis eleme riski var.
+_OLUMSUZ_RE_ONARIK = re.compile(
+    r"\byok(?:tur)?\b"
+    r"|\bdeğil(?:dir)?\b"
+    r"|\bmevcut\s+değil"
+    r"|\bhiçbir\s+\w+\s+yok"
+    r"|(?:gözlemlen|gözlen|görül|gör|tespit\s+edil|sapt|izlen|bulun|rastlan|oluş|yaşan|gel|"
+    r"belirlen|belirtil|algılan|fark\s+edil|içer|göster|ol)"
+    r"m[ae](?:dı|di|mış|miş|z|makta|mekte|maktadır|mektedir)"
+    r"|(?:gözlemle|gözle|görül|bulun|içer|göster|izlen)m[ıiuü]yor"
+)
+
 #: Cumlecik ayiraclari — olumsuzlama YALNIZ kendi cumleciginde gecerlidir.
 #: Boylece "yere düşen kişi hareketsiz, tepki vermiyor" cumlesinde "vermiyor"
 #: ilk cumlecikteki "düş"u IPTAL ETMEZ.
@@ -448,17 +503,24 @@ def loose_match(text: str, category: str) -> bool:
     return any(k in t for k in kelimeler)
 
 
-def match_category(text: str, category: str, *, negation: bool = True) -> bool:
-    """YENI (sikilastirilmis) kural: Turkce-guvenli + kelime sinirli + olumsuzlama kapili."""
+def match_category(text: str, category: str, *, negation: bool = True,
+                   onarik_olumsuzlama: bool = False) -> bool:
+    """YENI (sikilastirilmis) kural: Turkce-guvenli + kelime sinirli + olumsuzlama kapili.
+
+    onarik_olumsuzlama=False (VARSAYILAN) -> D28 kapisi (_OLUMSUZ_RE). Arsivlenmis
+        olcumler birebir yeniden uretilir; K2 geregi davranis DEGISMEZ.
+    onarik_olumsuzlama=True -> D33 onarilmis kapi (`gözlemlenmedi` ailesi de elenir).
+    """
     if not text:
         return False
     kaliplar = patterns_for(category)
     if not kaliplar:
         return False
+    kapi = _OLUMSUZ_RE_ONARIK if onarik_olumsuzlama else _OLUMSUZ_RE
     for cumlecik in _cumlecikler(tr_lower(text)):
         for kalip in kaliplar:
             for _bas, son in _kalip_konumlari(cumlecik, tr_lower(kalip)):
-                if negation and _OLUMSUZ_RE.search(cumlecik, son):
+                if negation and kapi.search(cumlecik, son):
                     continue               # "kaza belirtisi YOK" -> sayilmaz
                 return True
     return False
@@ -506,9 +568,281 @@ def row_text(row: dict, *, with_summary: bool) -> List[str]:
 
 
 def any_match(parts: Sequence[str], category: str, *, mode: str = "strict",
-              group: bool = False) -> bool:
+              group: bool = False, onarik_olumsuzlama: bool = False) -> bool:
     """Metin parcalarindan HERHANGI biri kategoriyle (veya grubuyla) eslesiyor mu?"""
     if mode == "loose":
         return any(loose_match(p, category) for p in parts)
-    fn = group_match if group else match_category
-    return any(fn(p, category) for p in parts)
+    if group:
+        return any(any(match_category(p, c, onarik_olumsuzlama=onarik_olumsuzlama)
+                       for c in group_members(category)) for p in parts)
+    return any(match_category(p, category, onarik_olumsuzlama=onarik_olumsuzlama)
+               for p in parts)
+
+
+# ===========================================================================
+# D33 — ISG (IS SAGLIGI VE GUVENLIGI) TAKSONOMISI
+# ===========================================================================
+# KAPSAM DEGISIKLIGI: yarisma kapsami savunma sanayiden ISG'ye kaydi. Yukaridaki
+# UCF suc kategorileri (Fighting/Burglary/Shooting...) KAPSAM DISIDIR ama
+# SILINMEZ: arsivlenmis olcumlerin yeniden uretilebilmesi icin rescore.py ve
+# metrics.py onlari okumaya devam eder (K4 / HANDOFF §7.3).
+#
+# ---------------------------------------------------------------------------
+# COZULEN SORUN — IKI TAKSONOMI (HANDOFF §6.1)
+# ---------------------------------------------------------------------------
+# Model `dilajan/schema.py:EventCategory` ile OPERASYONEL bir taksonomi uretir
+# (Normal · Güvenlik · Kaza · Sağlık · Anomali · Yetkisiz Erişim · Diğer) — yani
+# *"kimi cagiracagiz?"*. Degerlendirme seti ise Mendeley xjmtb22pff'in ISG
+# taksonomisini kullanir (class0-7). Bu iki taksonomi HIZALANMADAN olculurse
+# modelin gercek basarisi gorunmez (UCF'de olculen: kendi taksonomisinde %64,
+# capraz olcumde %20,8).
+#
+# Bu bolum hizalamayi ACIKCA yazar ve UC AYRI sey olcer:
+#   1) SOZCUKSEL adlandirma  : metin, o sinifa OZGU tehlikeyi adlandiriyor mu?
+#   2) OPERASYONEL eslesme   : uretilen EventCategory kabul kumesinde mi?
+#                              -> "dogru ekip cagrilir miydi?"
+#   3) AYIRT EDICI eslesme   : generic "Anomali"/"Diğer" kovasi HARIC tutuldugunda
+#                              model SPESIFIK kategoriyi secebiliyor mu?
+# (3) ayri olculur cunku (2) tek basina zayiftir: "Anomali" her sinifta kabul
+# edilebilir oldugu icin model her seye "Anomali" diyerek (2)'yi bedavaya gecer.
+#
+# ---------------------------------------------------------------------------
+# ⚠ MEVCUT OLCUM SU AN NE YAPIYOR (ve neden yetersiz)
+# ---------------------------------------------------------------------------
+# eval_clips.py kategoriyi UST klasorden alir -> data/eval_defense icin yalnizca
+# "Anomali" / "Normal". Dort GUVENSIZ sinif TEK KOVAYA dusuyor; sinif duzeyinde
+# hicbir sey olculmuyor. Asagidaki ISG_SINIFLAR alt klasor adindan ince taneli
+# etiketi cikarir. Alt klasor adi bizim uydurmamiz DEGIL, veri seti yayincisinin
+# etiketidir (data/industrial/CLASSES.md ile dogrulanmis) -> K7 durustluk sarti.
+
+#: CATEGORY_EXPECT anahtari -> kapsam etiketi. Raporlarda "hangi sinif hala
+#: guncel kapsamda?" sorusunu tahmine birakmamak icin ACIKCA yazilir.
+KAPSAM: Dict[str, str] = {
+    # --- ARSIV: UCF-Crime sokak sucu (kapsam disi, silinmedi) ---
+    "RoadAccidents": "arsiv_ucf", "Explosion": "arsiv_ucf", "Fighting": "arsiv_ucf",
+    "Assault": "arsiv_ucf", "Abuse": "arsiv_ucf", "Burglary": "arsiv_ucf",
+    "Shooting": "arsiv_ucf", "Vandalism": "arsiv_ucf",
+    # --- ISG kapsaminda GECERLI kalan senaryo kategorileri ---
+    # Yangin/duman/dusme ISG'nin de olaylaridir (is kazasi) -> kapsamda KALIR.
+    "Fire": "isg_senaryo", "Smoke": "isg_senaryo", "Fall": "isg_senaryo",
+    # --- ISG asil set (data/eval_defense · data/industrial), IKILI duzey ---
+    "Anomali": "isg_ikili", "Normal": "isg_ikili",
+}
+
+#: ISG INCE TANELI SINIFLAR — Mendeley xjmtb22pff class0-7.
+#: Anahtarlar `data/eval_defense/<Anomali|Normal>/<ALT KLASOR>` adlariyla BIREBIR
+#: aynidir; eslestirme yol parcasindan yapilir (isg_sinif_from_path).
+#:
+#: `kaliplar`: D28 sikilastirilmis eslestiricisine verilir (kelime siniri + Turkce
+#: ek zinciri + olumsuzlama kapisi). Cok kelimeli girisler SIRALI kaliptir.
+#:
+#: KALIP TASARIM KURALI (D28'in ayni kurali): kalip ya SINIF TANIMINDAN
+#: (Mendeley/CLASSES.md) ya da TESIS KURALI metninden (scripts/run_policy_ab.py
+#: FACILITY_RULES) turetilir. "Modelin ciktisina bakip skoru yukseltmek" YASAK;
+#: her kalibin yaninda NEDEN orada oldugu yazilidir. Ozgulluk (yanlis sinif
+#: tetigi) benchmark/isg_rescore.py'de HER ZAMAN yan yana raporlanir — kalip
+#: listesini genisletmek ozgullugu dusurursek bu tabloda GORUNUR.
+ISG_SINIFLAR: Dict[str, dict] = {
+    # ---------------- GUVENSIZ (class0-3) ----------------
+    "Safe_Walkway_Violation": {
+        "kod": "class0",
+        "tr_ad": "Güvenli yürüme yolu ihlali",
+        "guvensiz": True,
+        "tanim": ("Personel zeminde isaretli guvenli yurume yolunun DISINA cikiyor; "
+                  "makine/forklift sahasindan geciyor."),
+        "kaliplar": [
+            # tesis kuralindan (FACILITY_RULES md.1) ve sinif tanimindan
+            "yürüyüş yolu", "yürüme yolu", "yaya yolu", "yaya geçidi",
+            "güvenli yol", "güvenlik yolu", "güvenlik çizgisi", "işaretli yol",
+            "yol dışı", "yol dışına", "yoldan çık", "şerit dışı",
+            "yol ihlal", "geçiş ihlal",
+            # NOT: yalin "yol" / "geç" BILEREK YOK — D28'de olculdu, her klipte
+            # gecen govdeler ("yoluna", "geçiyor") yanlis tetik uretiyordu.
+        ],
+    },
+    "Unauthorized_Intervention": {
+        "kod": "class1",
+        "tr_ad": "Yetkisiz müdahale",
+        "guvensiz": True,
+        "tanim": ("Makineye, elektrik panosuna veya ekipmana YETKISIZ kisi mudahale "
+                  "ediyor (yetkili teknisyen disinda)."),
+        "kaliplar": [
+            "yetkisiz müdahale", "izinsiz müdahale", "yetkisiz kişi",
+            "yetkisiz giriş", "yetkisiz erişim", "yetkisiz personel",
+            "makineye müdahale", "panele müdahale", "panoya müdahale",
+            "ekipmana müdahale", "eliyle müdahale", "elle müdahale",
+            # NOT: yalin "müdahale" BILEREK YOK — SAGLIK/guvenlik mudahalesi
+            # neredeyse her klipte geciyor (config.py:167 ve D28 olcumu).
+        ],
+    },
+    "Opened_Panel_Cover": {
+        "kod": "class2",
+        "tr_ad": "Açık pano kapağı",
+        "guvensiz": True,
+        "tanim": "Elektrik/kontrol pano kapagi ACIK birakilmis (kapali olmasi gerekir).",
+        "kaliplar": [
+            "pano kapağı", "panel kapağı", "kapak açık", "kapağı açık",
+            "açık pano", "açık panel", "pano açık", "panel açık",
+            "elektrik panosu", "kontrol panosu", "elektrik panel",
+        ],
+    },
+    "Carrying_Overload_with_Forklift": {
+        "kod": "class3",
+        "tr_ad": "Forklift ile aşırı yük taşıma",
+        "guvensiz": True,
+        "tanim": ("Forklift gorusu engelleyecek veya guvenli kapasiteyi asacak "
+                  "sekilde ASIRI/istiflenmis yuk tasiyor."),
+        "kaliplar": [
+            "aşırı yük", "fazla yük", "yük sınırı", "kapasite aş", "istif",
+            "yük taşı", "forklift yükü", "dengesiz yük", "yük dengesiz",
+            "devrilme riski", "görüşü engel",
+            # NOT: yalin "forklift" BILEREK YOK — bu tesisin NEREDEYSE HER
+            # klibinde forklift var; tek basina ihlal DEGIL (guvenli tasima
+            # class7 de forklift icerir).
+        ],
+    },
+    # ---------------- GUVENLI (class4-7) ----------------
+    # Guvenli siniflarda "beklenen anahtar kelime" YOKTUR: dogruluk olcusu
+    # "guvensiz olay URETMEDI" seklindedir (Normal kategorisiyle ayni mantik).
+    "Safe_Walkway": {
+        "kod": "class4", "tr_ad": "Güvenli yürüme yolu kullanımı",
+        "guvensiz": False, "tanim": "Personel isaretli guvenli yolda yuruyor.",
+        "kaliplar": [],
+    },
+    "Authorized_Intervention": {
+        "kod": "class5", "tr_ad": "Yetkili müdahale",
+        "guvensiz": False, "tanim": "Yetkili teknisyen ekipmana usulunce mudahale ediyor.",
+        "kaliplar": [],
+    },
+    "Closed_Panel_Cover": {
+        "kod": "class6", "tr_ad": "Kapalı pano kapağı",
+        "guvensiz": False, "tanim": "Pano kapaklari kapali — kural geregi dogru durum.",
+        "kaliplar": [],
+    },
+    "Safe_Carrying": {
+        "kod": "class7", "tr_ad": "Güvenli yük taşıma",
+        "guvensiz": False, "tanim": "Forklift guvenli kapasitede yuk tasiyor.",
+        "kaliplar": [],
+    },
+}
+
+#: ---------------------------------------------------------------------------
+#: TAKSONOMI HIZALAMASI — ISG sinifi -> KABUL EDILEBILIR EventCategory kumesi
+#: ---------------------------------------------------------------------------
+#: "Dogru ekip cagrilir miydi?" sorusunun cevabi. Tek bir 'dogru' kategori iddia
+#: ETMIYORUZ (RISK_ACCEPT_ANOMALY ile ayni felsefe): bir yurume-yolu ihlaline
+#: hem "Güvenlik" hem "Yetkisiz Erişim" demek operatorde AYNI mudahaleyi dogurur.
+ISG_OPERASYONEL_KABUL: Dict[str, Set[str]] = {
+    "Safe_Walkway_Violation": {"Güvenlik", "Yetkisiz Erişim", "Anomali"},
+    "Unauthorized_Intervention": {"Yetkisiz Erişim", "Güvenlik", "Anomali"},
+    "Opened_Panel_Cover": {"Güvenlik", "Anomali"},
+    "Carrying_Overload_with_Forklift": {"Güvenlik", "Kaza", "Anomali"},
+    # Guvenli siniflarda dogru davranis: ya HIC olay yok ya da "Normal".
+    "Safe_Walkway": {"Normal"},
+    "Authorized_Intervention": {"Normal"},
+    "Closed_Panel_Cover": {"Normal"},
+    "Safe_Carrying": {"Normal"},
+}
+
+#: ---------------------------------------------------------------------------
+#: ESLI SINIFLAR — veri setinin en degerli ozelligi
+#: ---------------------------------------------------------------------------
+#: Mendeley seti her tehlikeyi GUVENLI KARSILIGIYLA birlikte verir: ayni sahne,
+#: ayni kamera, ayni ekipman — fark YALNIZCA davranistir. Bu, "model tehlikeyi mi
+#: goruyor yoksa SAHNE TURUNE mi tepki veriyor?" sorusunu dogrudan olcmeyi saglar.
+#:
+#: Olcum: guvensiz sinifta sozcuksel isabet (TPR) ile GUVENLI esinde ayni dilin
+#: tetiklenmesi (FPR) yan yana konur. Ikisi birbirine YAKINSA model ayirt
+#: ETMIYOR demektir — kaba ikili metrikte bu tamamen GORUNMEZ.
+ISG_ESLI: Dict[str, str] = {
+    "Safe_Walkway_Violation": "Safe_Walkway",
+    "Unauthorized_Intervention": "Authorized_Intervention",
+    "Opened_Panel_Cover": "Closed_Panel_Cover",
+    "Carrying_Overload_with_Forklift": "Safe_Carrying",
+}
+
+#: GENERIC (ayirt edici OLMAYAN) operasyonel kategoriler. `Anomali` semasal olarak
+#: "bir sey ters" demektir ve DORT guvensiz sinifin da kabul kumesindedir; model
+#: her seye "Anomali" diyerek operasyonel eslesmeyi BEDAVAYA gecer. Ayirt edici
+#: olcumde bunlar DISLANIR.
+ISG_GENERIC_KATEGORILER: Set[str] = {"Anomali", "Diğer"}
+
+
+#: `classN` dizin adi -> ISG sinif adi. `data/eval_defense` semantik alt klasor
+#: adlari kullanir, ama ASIL HAVUZ `data/industrial` ham `class0..class7` adlarini
+#: kullanir. Ikisi de cozulebilmeli, yoksa HANDOFF §6.4'teki "kalan 491 klibi
+#: degerlendirmeye kat" isi yapilamaz. Esleme kaynagi: data/industrial/CLASSES.md
+#: (DOGRULANMIS tablo) — burada YENIDEN TURETILMEZ, ISG_SINIFLAR["kod"]'dan okunur.
+ISG_KOD_DIZIN: Dict[str, str] = {v["kod"]: k for k, v in ISG_SINIFLAR.items()}
+
+
+def isg_sinif_from_path(rel_path: str) -> Optional[str]:
+    """Yol parcalarindan ISG ince-taneli sinif adini cikarir (yoksa None).
+
+    Iki adlandirma da cozulur:
+      "data/eval_defense/Anomali/Opened_Panel_Cover/2_te1.mp4" -> "Opened_Panel_Cover"
+      "data/industrial/class2/2_te1.mp4"                       -> "Opened_Panel_Cover"
+
+    Bilinen bir ISG sinifi yoksa None doner — UYDURMA etiket URETMEZ (K7).
+    """
+    for p in reversed(rel_path.replace("\\", "/").split("/")[:-1]):
+        if p in ISG_SINIFLAR:
+            return p
+        if p in ISG_KOD_DIZIN:
+            return ISG_KOD_DIZIN[p]
+    return None
+
+
+def isg_guvensiz(sinif: str) -> bool:
+    """Sinif GUVENSIZ mi? (bilinmeyen sinif -> False; uydurma anomali URETMEZ)"""
+    return bool(ISG_SINIFLAR.get(sinif, {}).get("guvensiz", False))
+
+
+def isg_patterns_for(sinif: str) -> List[str]:
+    """ISG sinifinin sozcuksel kalip listesi."""
+    return list(ISG_SINIFLAR.get(sinif, {}).get("kaliplar", []))
+
+
+def isg_match(text: str, sinif: str, *, negation: bool = True) -> bool:
+    """Metin, ISG sinifina OZGU tehlikeyi adlandiriyor mu? (D28 eslestiricisi)
+
+    OLUMSUZLAMA: ONARILMIS kapi (_OLUMSUZ_RE_ONARIK) kullanilir. Bu kod YENIDIR,
+    arsiv uyumu yuku TASIMAZ; bastan dogru kapiyla olcmek serbesttir. Eski
+    `match_category` ise K2 geregi D28 kapisinda BIRAKILDI.
+    """
+    if not text:
+        return False
+    kaliplar = isg_patterns_for(sinif)
+    if not kaliplar:
+        return False
+    for cumlecik in _cumlecikler(tr_lower(text)):
+        for kalip in kaliplar:
+            for _bas, son in _kalip_konumlari(cumlecik, tr_lower(kalip)):
+                if negation and _OLUMSUZ_RE_ONARIK.search(cumlecik, son):
+                    continue
+                return True
+    return False
+
+
+def isg_any_match(parts: Sequence[str], sinif: str) -> bool:
+    """Metin parcalarindan HERHANGI biri ISG sinifiyla eslesiyor mu?"""
+    return any(isg_match(p, sinif) for p in parts)
+
+
+def isg_matched_siniflar(text: str) -> Set[str]:
+    """Metnin TETIKLEDIGI tum ISG siniflari — OZGULLUK olcumu icin.
+
+    Dogru sinif disindakiler YANLIS tetiktir. Kalip listesini genisletmenin
+    bedeli burada gorunur.
+    """
+    return {s for s in ISG_SINIFLAR if isg_patterns_for(s) and isg_match(text, s)}
+
+
+def isg_operasyonel_kabul(sinif: str, *, ayirt_edici: bool = False) -> Set[str]:
+    """Sinif icin kabul edilebilir EventCategory kumesi.
+
+    ayirt_edici=True -> generic "Anomali"/"Diğer" kovasi DISLANIR (model
+    spesifik kategoriyi secebiliyor mu?).
+    """
+    kabul = set(ISG_OPERASYONEL_KABUL.get(sinif, set()))
+    return (kabul - ISG_GENERIC_KATEGORILER) if ayirt_edici else kabul

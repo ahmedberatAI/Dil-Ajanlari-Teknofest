@@ -1,0 +1,150 @@
+{
+  "kontroller": [
+    {
+      "ad": "ppe_detection varsayilan KAPALI",
+      "ok": true,
+      "mesaj": "= False",
+      "kritik": true
+    },
+    {
+      "ad": "ppe_dispatch varsayilan KAPALI (sevk yetkisi opt-in)",
+      "ok": true,
+      "mesaj": "= False",
+      "kritik": true
+    },
+    {
+      "ad": "facility_rules / facility_policy varsayilan BOS",
+      "ok": true,
+      "mesaj": "rules='' policy=''",
+      "kritik": true
+    },
+    {
+      "ad": "evidence_questions / use_detector varsayilan KAPALI",
+      "ok": true,
+      "mesaj": "evidence=False detector=False",
+      "kritik": true
+    },
+    {
+      "ad": "to_sartname_dict() tam 4 anahtar",
+      "ok": true,
+      "mesaj": "['actions', 'events', 'risk', 'summary']",
+      "kritik": true
+    },
+    {
+      "ad": "sema-disi alanlar model_dump()'a SIZMIYOR (ppe_src)",
+      "ok": true,
+      "mesaj": "temiz",
+      "kritik": true
+    },
+    {
+      "ad": "isafety_bench EGITIMDE yasak",
+      "ok": true,
+      "mesaj": "yasak",
+      "kritik": true
+    },
+    {
+      "ad": "egitim_icin_dogrula ISTISNA firlatiyor (fail-closed)",
+      "ok": true,
+      "mesaj": "fail-closed dogru",
+      "kritik": true
+    },
+    {
+      "ad": "ppe / industrial EGITIMDE serbest",
+      "ok": true,
+      "mesaj": "serbest",
+      "kritik": true
+    },
+    {
+      "ad": "isafety_bench kunyesi (LISANS.json) yerinde",
+      "ok": true,
+      "mesaj": "CC BY-NC-SA 4.0",
+      "kritik": false
+    },
+    {
+      "ad": "data/eval_defense 200 klip",
+      "ok": true,
+      "mesaj": "200 klip",
+      "kritik": false
+    },
+    {
+      "ad": "data/isafety_bench 1100 klip + etiketler",
+      "ok": true,
+      "mesaj": "1100 klip, etiket=var",
+      "kritik": false
+    },
+    {
+      "ad": "data/ppe_yolo YOLO bicimi hazir",
+      "ok": true,
+      "mesaj": "14089 egitim gorseli, yaml=var",
+      "kritik": false
+    },
+    {
+      "ad": "yolo11n-ppe.pt agirligi mevcut",
+      "ok": true,
+      "mesaj": "var",
+      "kritik": false
+    },
+    {
+      "ad": "agirlik yokken FAIL-OPEN (cokme yok)",
+      "ok": true,
+      "mesaj": "None / ABSTAIN",
+      "kritik": true
+    },
+    {
+      "ad": "D33 A kolu (varsayilan)",
+      "ok": true,
+      "mesaj": "benchmark/results/isg_A_varsayilan_20260816.json",
+      "kritik": false
+    },
+    {
+      "ad": "D33 B kolu (kurallar)",
+      "ok": true,
+      "mesaj": "benchmark/results/isg_B_kurallar_20260816.json",
+      "kritik": false
+    },
+    {
+      "ad": "D33 A/B karsilastirmasi",
+      "ok": true,
+      "mesaj": "benchmark/results/isg_ab_tam_20260816.json",
+      "kritik": false
+    },
+    {
+      "ad": "D33 gurultu tabani (A vs A')",
+      "ok": true,
+      "mesaj": "benchmark/results/isg_gurultu_A_vs_Ap_20260816.json",
+      "kritik": false
+    },
+    {
+      "ad": "D33 raporu",
+      "ok": true,
+      "mesaj": "docs/isg_taksonomi_hizalamasi_2026-08-16.md",
+      "kritik": false
+    },
+    {
+      "ad": "D33 on-kaydi",
+      "ok": true,
+      "mesaj": "docs/on_kayit_isg_2026-08-16.md",
+      "kritik": false
+    },
+    {
+      "ad": "D34 KKD raporu",
+      "ok": true,
+      "mesaj": "docs/kkd_dogrulayici_2026-08-16.md",
+      "kritik": false
+    },
+    {
+      "ad": "lisans karari",
+      "ok": true,
+      "mesaj": "docs/veri_lisans_karari.md",
+      "kritik": false
+    },
+    {
+      "ad": "tum testler geciyor",
+      "ok": true,
+      "mesaj": "16 dosya, hepsi GECTI",
+      "kritik": true
+    }
+  ],
+  "kritik_kalan": 0,
+  "uyari": 0
+}

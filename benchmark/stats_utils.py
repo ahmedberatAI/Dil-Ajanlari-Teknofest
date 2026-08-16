@@ -263,6 +263,73 @@ def _binom_cdf(m: int, k: int, p: float) -> float:
 
 
 # ===========================================================================
+# FISHER TAM TESTI — ESLESMEMIS iki oran
+# ===========================================================================
+# NE ZAMAN KULLANILIR: iki oran FARKLI birimlerden geliyorsa (or. 25 guvensiz
+# klipte isabet vs 25 GUVENLI klipte yanlis alarm — ayri klipler, eslestirme YOK).
+# McNemar bu durumda YANLIS testtir: o, AYNI birimin iki kosusunu karsilastirir.
+#
+#            basari   basarisiz
+#   grup A      a         b
+#   grup B      c         d
+#
+# H0: iki gruptaki basari olasiligi ayni. Kucuk n'de ki-kare yaklasimi guvenilmez;
+# tam (hipergeometrik) test kesin dagilimi kullanir.
+
+def fisher_exact_p(a: int, b: int, c: int, d: int) -> float:
+    """Fisher TAM testi, iki-yonlu p degeri (2x2 ESLESMEMIS tablo).
+
+    Iki-yonlu tanim: gozlenen tablonunkinden DAHA OLASI OLMAYAN tum tablolarin
+    olasiliklarinin toplami (Fisher'in klasik tanimi; scipy.stats.fisher_exact
+    ile ayni yontem).
+
+    Args:
+        a: grup A'da basari    b: grup A'da basarisizlik
+        c: grup B'de basari    d: grup B'de basarisizlik
+
+    Returns:
+        Iki-yonlu p degeri [0, 1]. Bos/gecersiz tabloda 1.0 (karar YOK).
+
+    Ornek (klasik cay-tadimi 2x2):
+        fisher_exact_p(3, 0, 0, 3) -> 0.1
+    """
+    if min(a, b, c, d) < 0:
+        return 1.0
+    n = a + b + c + d
+    if n <= 0:
+        return 1.0
+    satir1, satir2 = a + b, c + d
+    sutun1 = a + c
+    if satir1 == 0 or satir2 == 0 or sutun1 == 0 or (b + d) == 0:
+        return 1.0  # bir kenar toplami sifir -> tablo SABIT, test bilgi tasimaz
+
+    def _log_p(i: int) -> float:
+        """log P(A hucresi = i) — hipergeometrik, kenar toplamlari sabit."""
+        j = satir1 - i
+        k = sutun1 - i
+        m = satir2 - k
+        if min(i, j, k, m) < 0:
+            return -math.inf
+        return (math.lgamma(satir1 + 1) + math.lgamma(satir2 + 1)
+                + math.lgamma(sutun1 + 1) + math.lgamma(b + d + 1)
+                - math.lgamma(n + 1)
+                - math.lgamma(i + 1) - math.lgamma(j + 1)
+                - math.lgamma(k + 1) - math.lgamma(m + 1))
+
+    alt = max(0, sutun1 - satir2)
+    ust = min(satir1, sutun1)
+    gozlenen = _log_p(a)
+    # Kayan nokta gurultusune karsi kucuk tolerans (scipy de ayni yaklasimi kullanir):
+    # "gozlenenden daha olasi DEGIL" karsilastirmasi 1e-7 goreli paylik tolere eder.
+    esik = gozlenen + 1e-7
+    logs = [lp for i in range(alt, ust + 1) if (lp := _log_p(i)) != -math.inf and lp <= esik]
+    if not logs:
+        return 1.0
+    mx = max(logs)
+    return min(1.0, math.exp(mx) * sum(math.exp(l - mx) for l in logs))
+
+
+# ===========================================================================
 # McNEMAR — ESLESTIRILMIS IKILI METRIK TESTI
 # ===========================================================================
 # 2x2 uyusmazlik tablosu (ayni klip, iki kosu; "dogru" = metrik saglandi):

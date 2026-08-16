@@ -33,3 +33,13 @@ pydantic-settings>=2.4
 
 # Arayuz
 gradio>=6.0
+
+# Nesne tespiti (KKD/baret dogrulayicisi, poz-tabanli dusme dogrulamasi, geofence)
+# NOT: vLLM zaten bagimli olarak cekiyor olabilir; burada ACIKCA belirtilir cunku
+# dilajan/detector.py dogrudan ithal eder.
+ultralytics>=8.4
+
+# Veri seti indirme betikleri (scripts/get_ppe.py, scripts/get_isafety_bench.py).
+# Yalnizca VERI cekmek icin; calisma zamaninda (analiz yolunda) KULLANILMAZ —
+# K5 "tamamen offline" sarti bozulmaz.
+huggingface_hub>=1.0

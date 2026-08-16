@@ -885,6 +885,44 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                     time=cs.get("dispersal_time", seg.start_str),
                     event=f"Ani dağılma / panik hareketi (kalabalık {cs['peak']} kişiden hızla azaldı)",
                     severity=Severity.YUKSEK, category=EventCategory.GUVENLIK))
+        # D33 — KKD (BARET) DETERMINISTIK TESPITI. Desen: yukaridaki geofence/arac ile AYNI —
+        # dedektor KENDI karar verir, sonuc TIPLI bir olaya donusur. Dedektorun ham ciktisi
+        # VLM'e "kanit" METNI olarak ENJEKTE EDILMEZ (HANDOFF §6.2; olculdu: %0 -> %12 FP).
+        #
+        # KONUM GEREKCESI: bu blok `_kanit_adlandirma`dan SONRADIR — boylece LLM adlandirmasi
+        # buradaki SABIT metni bozamaz (yukaridaki (b) gerekcesinin aynisi).
+        #
+        # K2: `ppe_detection` False iken bu blok TEK SATIR bile calistirmaz (erken-donus),
+        # olay uretilmez, ize yazilmaz -> mevcut olcumler BIREBIR yeniden uretilir.
+        if settings.ppe_detection:
+            try:
+                from dilajan import detector
+                ppe = detector.detect_ppe_violation(
+                    seg.frames, conf=settings.ppe_conf, min_kare=settings.ppe_min_kare)
+            except Exception as ex:
+                ppe, notes = None, notes + [f"perceive: segment {seg.index} KKD hatası: {ex}"]
+            if ppe:
+                try:
+                    sev = Severity(settings.ppe_severity)
+                except ValueError:
+                    sev = Severity.YUKSEK          # gecersiz ayar -> guvenli varsayilan
+                bolge = ppe.get("region")
+                # `ppe_src`: SEMA-DISI isaret (policy_prev/evidence_prev ile ayni desen).
+                # `model_dump()` anahtarlarina SIZMAZ; act() sevk kapisi bunu okuyup
+                # KKD olaylarini sevk sinyalinden HARIC tutar (ppe_dispatch=False iken).
+                out.append(Event(
+                    time=ppe["time"],
+                    event=(f"KKD ihlali: baret takmayan personel"
+                           + (f" ({bolge} bölgede)" if bolge else "")
+                           + f" — {ppe['n_kare']} karede tespit"),
+                    severity=sev,
+                    category=EventCategory.GUVENLIK,
+                    region=bolge).model_copy(update={"ppe_src": True}))
+                notes.append(
+                    f"perceive: segment {seg.index} KKD dedektörü [baretsiz kafa "
+                    f"{ppe['n_ihlal_kutu']} kutu / {ppe['n_kare']} kare, güven {ppe['conf']}, "
+                    f"baretli {ppe['n_baretli']}] -> deterministik olay eklendi"
+                    + ("" if settings.ppe_dispatch else " (SEVK yolu KAPALI)"))
         return out, ("\n".join(notes) if notes else None)
     except Exception as ex:  # hata toleransi: segment atlanir
         return [], f"perceive: segment {seg.index} hatasi: {ex}"
@@ -910,6 +948,19 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
     for e in events:
         if kept:
             k = kept[-1]
+            # D34 — KKD OLAYLARI VLM OLAYLARIYLA BIRLESTIRILMEZ. Iki gerekce:
+            #  (1) GUVENLIK: birlestirme `Event(...)` ile YENIDEN KURUYOR ve sema-disi
+            #      alanlari DUSURUYOR (asagida yalniz `evidence_prev` elle tasiniyor).
+            #      `ppe_src` dusseydi act() sevk maskesi SESSIZCE calismaz ve
+            #      `ppe_dispatch=False` sozu YALAN olurdu.
+            #  (2) METIN: KKD olayinin metni DETERMINISTIKTIR (dedektorden gelir).
+            #      VLM metniyle birlestirilirse "en bilgilendirici" secimi sabit
+            #      ifadeyi bozabilir — blogun `_kanit_adlandirma`dan SONRA
+            #      konumlandirilmasiyla ayni gerekce.
+            # Iki KKD olayi birbiriyle birlesebilir (ayni kaynak, isaret korunur).
+            if bool(getattr(k, "ppe_src", False)) != bool(getattr(e, "ppe_src", False)):
+                kept.append(e)
+                continue
             if k.category == e.category:
                 ew, kw = _dedup_words(e.event), _dedup_words(k.event)
                 if ew and kw:
@@ -935,6 +986,11 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
                         prev = (_pe if better == e.event else _pk) or _pk or _pe
                         if prev:
                             birlesik = birlesik.model_copy(update={"evidence_prev": prev})
+                        # D34: iki KKD olayi birlesiyorsa isaret KORUNMALI (yukaridaki
+                        # kapi geregi ya IKISI de KKD'dir ya da HICBIRI). Isaret dusseydi
+                        # sevk maskesi bu birlesik olayda calismazdi.
+                        if getattr(k, "ppe_src", False):
+                            birlesik = birlesik.model_copy(update={"ppe_src": True})
                         kept[-1] = birlesik
                         continue
         kept.append(e)
@@ -1601,6 +1657,26 @@ def act(state: PolicyAgentState) -> dict:
     if max_intrinsic is None:  # kanal yoksa olaylarin policy_prev alanindan turet (ayni deger)
         max_intrinsic = policy.intrinsic_max_ord(events)
     esc_sevk = bool(recs) and settings.policy_dispatch and any(r.get("sevk") for r in recs)
+    # D33 — KKD SEVK MASKESI (K3 YAPISAL GARANTISI, policy_dispatch ile AYNI mantik):
+    # KKD dedektoru "Yüksek" severity'li bir olay uretir; maske olmasaydi bu olay
+    # max_intrinsic'i tek basina sevk esigine tasir ve `ppe_dispatch=False` YALAN olurdu.
+    # Maske ile: KKD olayi operatore GORUNUR (olay listesinde, riskte) ama OPERASYONEL
+    # CAGRI ACMAZ. Gerekce: dedektorun tesis alaninda dogrulugu HENUZ olculmedi
+    # (egitim verisi SANTIYE, tesisimiz URETIM) — once olc, sonra sevk yetkisi ver.
+    # CEBIRSEL INDIRGEME: ppe_detection=False iken hic KKD olayi yoktur -> ppe_haric
+    # == max_intrinsic -> ifade ESKI SATIRIN AYNISIDIR (birim testle assert edilir).
+    # UC TERIMLI degil IKI TERIMLI kapi yeter: (1) max_intrinsic'ten cikar, (2) risk
+    # terimini maskele. (2) sart: risk tabani severity'yi risk'e tasidigi icin yalniz
+    # (1) yapmak `ppe_dispatch=False` sozunu YALAN cikarirdi (policy'de olculmus tuzak).
+    ppe_only = False
+    if not settings.ppe_dispatch and any(getattr(e, "ppe_src", False) for e in events):
+        ppe_haric = policy.intrinsic_max_ord([e for e in events
+                                              if not getattr(e, "ppe_src", False)])
+        ppe_only = ppe_haric < _SEV_ORD[Severity.YUKSEK] <= max_intrinsic
+        if ppe_haric < max_intrinsic:
+            trace.append(f"act: KKD olayi SEVK sinyalinden HARIC tutuldu "
+                         f"(ppe_dispatch={settings.ppe_dispatch}); operatore FLAG olarak gorunur")
+        max_intrinsic = ppe_haric
     policy_only = bool(state.get("risk_from_policy_only", False)) or bool(
         getattr(risk, "policy_only", False))
     # KANIT-ADLANDIRMA MASKESI (risk_recall_bias ile AYNI desen, ayni gerekce):
@@ -1615,8 +1691,11 @@ def act(state: PolicyAgentState) -> dict:
         (max_intrinsic >= _SEV_ORD[Severity.YUKSEK])
         or (esc_sevk and max_ev >= _SEV_ORD[Severity.YUKSEK])
         or (risk_ord >= _SEV_ORD[Severity.YUKSEK] and not settings.risk_recall_bias
-            and not policy_only and not kanit_adli)
+            and not policy_only and not kanit_adli and not ppe_only)
     )
+    if ppe_only and risk_ord >= _SEV_ORD[Severity.YUKSEK]:
+        trace.append("act: risk terimi MASKELENDI (yuksek risk YALNIZ KKD olayindan geliyor; "
+                     "operatore FLAG olarak gorunur ama SEVK acmaz)")
     if (kanit_adli and risk_ord >= _SEV_ORD[Severity.YUKSEK]
             and max_intrinsic < _SEV_ORD[Severity.YUKSEK] and not esc_sevk):
         trace.append("act: risk terimi MASKELENDI (en az bir olay adi kanit sorulariyla yeniden "

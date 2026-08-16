@@ -125,6 +125,31 @@ class Settings(BaseSettings):
                                     # Deterministik (VLM zone-reasoning guvenilmez); opt-in (bos=kapali).
     adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)
 
+    # --- D33: KKD (BARET) DETERMINISTIK TESPITI ---
+    # K2 VARSAYILAN KAPALI: False iken graph'ta TEK SATIR bile calismaz (erken-donus),
+    # olay uretilmez, karar-izine yazilmaz -> mevcut olcumler BIREBIR yeniden uretilir.
+    #
+    # NEDEN DETERMINISTIK (HANDOFF §6.2): KKD tespiti VLM isi DEGIL. Dedektorun ham
+    # ciktisi VLM'e "kanit" METNI olarak ENJEKTE EDILMEZ — olculdu: yanlis alarm
+    # %0 -> %12. Desen `restricted_zones` geofence'i ile aynidir: dedektor kendi
+    # karar verir, sonuc TIPLI bir olaya donusur.
+    #
+    # D33 KANITI: `guided_choice` ile zorunlu secimde VLM, acik/kapali pano kapagi
+    # sorusunda 20 klibin 20'sinde "KAPALI" dedi (10'u gercekte ACIK) -> ince ikili
+    # gorsel durum VLM'in okuyamadigi bir sey. Baret var/yok AYNI problem sinifi.
+    #
+    # GEREKSINIM: `yolo11n-ppe.pt` (scripts/train_ppe.py uretir). Agirlik YOKSA
+    # bayrak acik olsa bile tespit sessizce devre disidir (FAIL-OPEN, K3).
+    ppe_detection: bool = False
+    ppe_conf: float = 0.45           # dedektor guven esigi (yuksek = daha az yanlis alarm)
+    ppe_min_kare: int = 2            # segmentte ihlal saymak icin gereken EN AZ ihlalli kare.
+                                     # TEK kare yetmez: kafa donusu/bulanikligin urettigi
+                                     # gecici yanlis tespitler elenir (FP en pahali hata).
+    ppe_severity: str = "Yüksek"     # uretilen olayin onem derecesi (KKD ihlali is kazasi riski)
+    ppe_dispatch: bool = False       # K3 YAPISAL GARANTISI: KKD kaynakli olay SEVK yoluna
+                                     # varsayilan olarak KATILMAZ. Once dogruluk olculmeli,
+                                     # sonra sevk yetkisi verilmeli (sevk-FP en pahali hata).
+
     # --- SORGU-GUDUMLU ANALIZ (operator niyeti; env: DILAJAN_ANALYSIS_QUERY) ---
     # Operatorun serbest-metin sorgusu ("sadece forklift hareketlerine bak", "yangin riski
     # var mi?", "kac kisi girdi?"). Analiz bu konuya ODAKLANIR ve cikti sorguyu YANITLAR.
@@ -297,6 +322,9 @@ REQUEST_SCOPED_FIELDS = (
     # operatorun "sadece forklift" sorgusu, eszamanli calisan baska bir analizin algisini
     # daraltamaz (K5). Kapi (semaphore) + try/finally geri-yukleme ayni desende calisir.
     "analysis_query",
+    # KKD (baret) deterministik tespiti: bir operatorun actigi dedektor, eszamanli
+    # calisan baska bir analize SIZMAMALI (facility_rules ile ayni gerekce).
+    "ppe_detection",
     # Kanit sorulari (ASK-HINT): ozelligin acik/kapali olmasi ve hangi soru setinin
     # kullanildigi da ISTEK-KAPSAMLIDIR — bir operatorun "tesis" seti, eszamanli kosan
     # baska bir analizin sorularini degistiremez (analysis_query ile AYNI desen).

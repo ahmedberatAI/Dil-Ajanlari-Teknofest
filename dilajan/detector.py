@@ -269,6 +269,164 @@ def crowd_stats(frames: Sequence[Tuple[str, bytes]], conf: float = 0.35,
         return {}
 
 
+# ===========================================================================
+# D33 — KKD (BARET) DETERMINISTIK TESPITI
+# ===========================================================================
+# MIMARI (HANDOFF §6.2): KKD tespiti VLM isi DEGIL. Bu fonksiyonun ciktisi VLM'e
+# "kanit" METNI olarak ENJEKTE EDILMEZ — olculdu: ham nesne listesini VLM'e vermek
+# yanlis alarmi %0 -> %12 yukseltmisti. Desen `detect_zone_intrusion` (geofence)
+# ile aynidir: dedektor KENDI karar verir, sonuc TIPLI bir olaya donusur.
+#
+# D33 EK KANIT: `guided_choice` ile zorunlu secim yaptirildiginda VLM, acik/kapali
+# pano kapagi sorusunda 20 klibin 20'sinde de "KAPALI" dedi (10'u gercekte ACIK).
+# Ince, ikili gorsel durum bu VLM'in okuyabildigi bir sey degil; baret var/yok
+# AYNI problem sinifidir -> deterministik dedektor.
+#
+# EGITIM: scripts/train_ppe.py (data/ppe_yolo, CC BY 4.0, 14.089 gorsel/39.082 kutu)
+# SINIFLAR: 0 = baret_var, 1 = baret_yok
+#
+# ⚠️ ALAN FARKI: egitim verisi SANTIYE, tesisimiz URETIM. Deterministik dedektor
+# icin bu fark VLM'e gore kucuktur ama SIFIR DEGILDIR.
+
+#: Egitilmis KKD agirligi (scripts/train_ppe.py bunu uretir). YOKSA tespit KAPALIDIR.
+PPE_AGIRLIK = "yolo11n-ppe.pt"
+_ppe_model = None
+_ppe_yok_uyarildi = False
+
+#: Egitilen sinif adlari -> anlam. Model kendi `names`ini tasir; bu tablo yalnizca
+#: beklenen adlari DOGRULAMAK icindir (agirlik degisirse sessizce yanlis okumayalim).
+PPE_SINIF_BEKLENEN = {0: "baret_var", 1: "baret_yok"}
+
+
+def _get_ppe_model():
+    """KKD modelini yukler. Agirlik yoksa None (FAIL-OPEN — tespit devre disi)."""
+    global _ppe_model, _ppe_yok_uyarildi
+    if _ppe_model is not None:
+        return _ppe_model
+    import os as _os
+    kok = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+    yol = _os.path.join(kok, PPE_AGIRLIK)
+    if not _os.path.exists(yol):
+        if not _ppe_yok_uyarildi:
+            _ppe_yok_uyarildi = True
+            print(f"[detector] KKD agirligi yok ({PPE_AGIRLIK}); tespit KAPALI. "
+                  f"Uretmek icin: python scripts/train_ppe.py")
+        return None
+    from ultralytics import YOLO
+    _ppe_model = YOLO(yol)
+    return _ppe_model
+
+
+def ppe_available() -> bool:
+    """Egitilmis KKD agirligi mevcut mu?"""
+    import os as _os
+    kok = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+    return _os.path.exists(_os.path.join(kok, PPE_AGIRLIK))
+
+
+def _ppe_say(frames: Sequence[Tuple[str, bytes]], conf: float) -> Optional[dict]:
+    """KKD modelini TEK GECISTE calistirir ve sayimlari dondurur.
+
+    `detect_ppe_violation` ve `verify_ppe_claim` AYNI sayimlari kullanir; ayri ayri
+    predict cagirmak K4 gecikme butcesini bosa harcardi (2x YOLO cikarimi).
+
+    Donus: {ihlalli_kare, n_ihlal_kutu, n_baretli, ilk} veya None (agirlik yok /
+    beklenmeyen sinif adlari / hata -> FAIL-OPEN).
+    """
+    model = _get_ppe_model()
+    if model is None:
+        return None
+    imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
+    results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+
+    # Sinif indeksini ADA gore coz — agirlik degisirse indeks kaymasina karsi.
+    adlar = getattr(model, "names", None) or PPE_SINIF_BEKLENEN
+    cift = adlar.items() if isinstance(adlar, dict) else enumerate(adlar)
+    cift = list(cift)
+    yok_idx = {i for i, ad in cift if str(ad) == "baret_yok"}
+    var_idx = {i for i, ad in cift if str(ad) == "baret_var"}
+    if not yok_idx:                          # beklenmeyen agirlik -> karar VERME
+        return None
+
+    ihlalli_kare = 0
+    n_ihlal_kutu = n_baretli = 0
+    ilk: Optional[dict] = None
+    for fi, r in enumerate(results):
+        w, h = imgs[fi].size
+        kare_ihlal = False
+        for box, cls, cf in zip(r.boxes.xyxy.tolist(), r.boxes.cls.tolist(),
+                                r.boxes.conf.tolist()):
+            ci = int(cls)
+            if ci in var_idx:
+                n_baretli += 1
+            elif ci in yok_idx:
+                kare_ihlal = True
+                n_ihlal_kutu += 1
+                if ilk is None:
+                    cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
+                    ilk = {"time": frames[fi][0], "region": _region_of(cx, cy, w, h),
+                           "conf": round(float(cf), 2)}
+        if kare_ihlal:
+            ihlalli_kare += 1
+    return {"ihlalli_kare": ihlalli_kare, "n_ihlal_kutu": n_ihlal_kutu,
+            "n_baretli": n_baretli, "ilk": ilk}
+
+
+def detect_ppe_violation(frames: Sequence[Tuple[str, bytes]], conf: float = 0.45,
+                         min_kare: int = 2) -> Optional[dict]:
+    """BARETSIZ kafa tespiti — deterministik KKD ihlali.
+
+    KARAR KURALI (FP'ye karsi bilerek muhafazakar — yanlis alarm en pahali hatadir):
+      * Bir kare "ihlalli" sayilir: o karede `baret_yok` kutusu var.
+      * Segment ihlal sayilir: ihlalli kare sayisi >= `min_kare`.
+        TEK kare yetmez — gecici yanlis tespitler (kafa donusu, bulaniklik) elenir.
+
+    Donus: ihlal varsa {time, region, conf, n_kare, n_ihlal_kutu, n_baretli},
+    yoksa None. Agirlik yok / hata / kutu yok -> None (FAIL-OPEN, K3).
+
+    NOT: `n_baretli` bilgi amaclidir — sahnede baretli kisiler de olabilir; ihlal
+    kararini DEGISTIRMEZ (bir kisinin baretli olmasi digerinin baretsizligini aklamaz).
+    """
+    try:
+        s = _ppe_say(frames, conf)
+        if not s or s["ihlalli_kare"] < min_kare or s["ilk"] is None:
+            return None
+        return {**s["ilk"], "n_kare": s["ihlalli_kare"],
+                "n_ihlal_kutu": s["n_ihlal_kutu"], "n_baretli": s["n_baretli"]}
+    except Exception:
+        return None                          # FAIL-OPEN (K3)
+
+
+def verify_ppe_claim(frames: Sequence[Tuple[str, bytes]], conf: float = 0.45
+                     ) -> Tuple[str, str]:
+    """VLM'in "baret takmiyor/KKD ihlali" iddiasini dedektorle dogrular.
+
+    `verify_fallen` ile AYNI sozlesme: ('CONFIRM'|'REJECT'|'ABSTAIN', not).
+      CONFIRM : baretsiz kafa bulundu -> iddia destekleniyor
+      REJECT  : GUVENILIR bicimde yalnizca BARETLI kafalar var -> iddia supheli,
+                severity DUSURULUR (silinmez)
+      ABSTAIN : kafa bulunamadi / agirlik yok / hata -> VLM iddiasi KORUNUR
+
+    REJECT esigi bilerek YUKSEK (>=3 baretli kutu ve HIC baretsiz yok): gercek
+    ihlalleri yanlislikla elemektense kararsiz kalmak yeglenir.
+    """
+    try:
+        # TEK GECIS: hem ihlal karari hem baretli sayimi ayni cikarimdan gelir (K4).
+        s = _ppe_say(frames, conf)
+        if s is None:
+            return "ABSTAIN", "KKD ağırlığı yok veya beklenmeyen sınıf adları"
+        if s["ihlalli_kare"] >= 1 and s["ilk"] is not None:
+            return "CONFIRM", (f"{s['ihlalli_kare']} karede baretsiz kafa "
+                               f"(güven {s['ilk']['conf']}) -> KKD ihlali doğrulandı")
+        n_baretli = s["n_baretli"]
+        if n_baretli >= 3:
+            return "REJECT", (f"{n_baretli} baretli kafa tespit edildi, baretsiz YOK "
+                              "-> KKD ihlali iddiası şüpheli")
+        return "ABSTAIN", f"yeterli kafa tespiti yok (baretli {n_baretli}) -> VLM korunur"
+    except Exception as e:  # noqa: BLE001
+        return "ABSTAIN", f"KKD doğrulama hatası: {e}"
+
+
 def available() -> bool:
     try:
         import ultralytics  # noqa: F401

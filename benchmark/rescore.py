@@ -61,19 +61,29 @@ except ImportError:  # benchmark/ icinden dogrudan calistirma
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-#: (anahtar, ekrandaki ad, summary dahil mi, eslestirici modu, grup duzeyi mi)
-KURALLAR: Tuple[Tuple[str, str, bool, str, bool], ...] = (
-    ("eski", "ESKI  (yalniz event, ciplak alt-dizge)", False, "loose", False),
-    ("summary", "+summary (AYNI gevsek eslestirici)", True, "loose", False),
-    ("siki", "+summary +SIKILASTIRILMIS eslestirici", True, "strict", False),
-    ("grup", "+summary +sikilastirilmis +SEMANTIK GRUP", True, "strict", True),
+#: (anahtar, ekrandaki ad, summary dahil mi, eslestirici modu, grup duzeyi mi,
+#:  onarilmis olumsuzlama kapisi mi)
+KURALLAR: Tuple[Tuple[str, str, bool, str, bool, bool], ...] = (
+    ("eski", "ESKI  (yalniz event, ciplak alt-dizge)", False, "loose", False, False),
+    ("summary", "+summary (AYNI gevsek eslestirici)", True, "loose", False, False),
+    ("siki", "+summary +SIKILASTIRILMIS eslestirici", True, "strict", False, False),
+    ("grup", "+summary +sikilastirilmis +SEMANTIK GRUP", True, "strict", True, False),
+    # D33 — OLCULMUS KUSUR: D28 olumsuzlama kapisi `gözlen` kokunu biliyor ama
+    # model "gözlemlenmedi" yaziyor (arsivde 520 gecis) ve kapidan KACIYOR. Sonuc:
+    # "hicbir tehlike ... gözlemlenmedi" cumlesi, icindeki "yetkisiz"/"ihlal"
+    # kelimeleri yuzunden DOGRU KATEGORI ADLANDIRMASI sayiliyor.
+    # Bu satir, 3. kuralin (siki) UZERINE yalnizca onarilmis kapiyi ekler; aradaki
+    # fark DOGRUDAN kusurun buyuklugudur.
+    ("olumsuz", "+summary +sikilastirilmis +ONARIK OLUMSUZLAMA", True, "strict", False, True),
 )
 
 
-def _satir_sonucu(row: dict, summary_dahil: bool, mod: str, grup: bool) -> bool:
+def _satir_sonucu(row: dict, summary_dahil: bool, mod: str, grup: bool,
+                  onarik: bool = False) -> bool:
     """Tek klip icin tek kuralin karari."""
     parcalar = row_text(row, with_summary=summary_dahil)
-    return any_match(parcalar, row.get("category", ""), mode=mod, group=grup)
+    return any_match(parcalar, row.get("category", ""), mode=mod, group=grup,
+                     onarik_olumsuzlama=onarik)
 
 
 def _yanlis_tetik(row: dict, summary_dahil: bool, mod: str, grup: bool) -> int:
@@ -94,8 +104,8 @@ def dosyayi_skorla(yol: str) -> dict:
     anom = [r for r in tum if r.get("is_anomaly")]
 
     kural_sonuc: Dict[str, dict] = {}
-    for anahtar, ad, s_dahil, mod, grup in KURALLAR:
-        kararlar = [_satir_sonucu(r, s_dahil, mod, grup) for r in anom]
+    for anahtar, ad, s_dahil, mod, grup, onarik in KURALLAR:
+        kararlar = [_satir_sonucu(r, s_dahil, mod, grup, onarik) for r in anom]
         yanlislar = [_yanlis_tetik(r, s_dahil, mod, grup) for r in anom]
         kural_sonuc[anahtar] = {
             "ad": ad,
@@ -106,7 +116,22 @@ def dosyayi_skorla(yol: str) -> dict:
         }
 
     # --- HAT DOGRULAMASI: kural 1, dosyadaki KAYITLI degeri yeniden uretiyor mu? ---
-    kayitli = [r.get("category_match") for r in anom]
+    # D33 DUZELTMESI: kural 1 ESKI (gevsek) kuraldir. Ama D28'den SONRA uretilen
+    # dosyalarda `category_match` alanini YENI kural doldurur (bkz. eval_clips.py
+    # MATCH_MODE / satirdaki `category_match_kural`). Eskiden bu kontrol her zaman
+    # `category_match`e bakiyordu; D28 sonrasi her dosyada SAHTE "TABLO SUPHELI"
+    # alarmi veriyordu (or. taze kosuda 74/100). Dogru karsilik `category_match_eski`.
+    def _taban(r: dict):
+        """Kural 1 ile karsilastirilacak KAYITLI alan (fail-open, K3)."""
+        if r.get("category_match_kural") == "yeni" and "category_match_eski" in r:
+            return r.get("category_match_eski")
+        return r.get("category_match")
+
+    kayitli = [_taban(r) for r in anom]
+    taban_alani = ("category_match_eski"
+                   if any(r.get("category_match_kural") == "yeni"
+                          and "category_match_eski" in r for r in anom)
+                   else "category_match")
     yeniden = kural_sonuc["eski"]["kararlar"]
     karsilastirilabilir = [i for i, v in enumerate(kayitli) if v is not None]
     uyan = sum(1 for i in karsilastirilabilir if bool(kayitli[i]) == yeniden[i])
@@ -130,6 +155,8 @@ def dosyayi_skorla(yol: str) -> dict:
             "karsilastirilabilir": len(karsilastirilabilir),
             "uyan": uyan,
             "tamam": uyan == len(karsilastirilabilir) and len(karsilastirilabilir) > 0,
+            # Hangi KAYITLI alanla karsilastirildigi tahmine birakilmaz (K7).
+            "taban_alani": taban_alani,
         },
         "per_category": per_cat,
     }
@@ -161,8 +188,8 @@ def bas(sonuc: dict, kategori_dokumu: bool = False) -> None:
 
     hd = sonuc["hat_dogrulama"]
     durum = "TAMAM" if hd["tamam"] else "!!! UYUSMAZLIK — TABLO SUPHELI !!!"
-    print(f"HAT DOGRULAMASI: kural 1, dosyadaki kayitli category_match ile "
-          f"{hd['uyan']}/{hd['karsilastirilabilir']} ayni  [{durum}]")
+    print(f"HAT DOGRULAMASI: kural 1, dosyadaki kayitli `{hd.get('taban_alani', 'category_match')}` "
+          f"ile {hd['uyan']}/{hd['karsilastirilabilir']} ayni  [{durum}]")
 
     if kategori_dokumu:
         print("-" * 86)

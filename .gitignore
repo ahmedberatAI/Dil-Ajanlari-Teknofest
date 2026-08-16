@@ -22,6 +22,10 @@ outputs/
 *.log
 .cache/
 
+# Ultralytics egitim/dogrulama artiklari (scripts/train_ppe.py). Agirlik zaten
+# *.pt ile disarida; bu dizin yalnizca grafik/log tasir ve yeniden uretilebilir.
+runs/
+
 # Gradio cache / flagged
 .gradio/
 

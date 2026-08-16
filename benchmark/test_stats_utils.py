@@ -16,14 +16,14 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     from benchmark.stats_utils import (  # noqa: E402
-        Z95, fmt_pct, fmt_rate, mean_sd, pct_decimals, pseudo_replication_note,
-        rate, rate_from_bools, wilson_ci,
+        Z95, fisher_exact_p, fmt_pct, fmt_rate, mean_sd, pct_decimals,
+        pseudo_replication_note, rate, rate_from_bools, wilson_ci,
     )
 except ImportError:  # dogrudan benchmark/ icinden calistirilirsa
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from stats_utils import (  # noqa: E402
-        Z95, fmt_pct, fmt_rate, mean_sd, pct_decimals, pseudo_replication_note,
-        rate, rate_from_bools, wilson_ci,
+        Z95, fisher_exact_p, fmt_pct, fmt_rate, mean_sd, pct_decimals,
+        pseudo_replication_note, rate, rate_from_bools, wilson_ci,
     )
 
 
@@ -106,6 +106,45 @@ def test_pseudo_replikasyon_notu() -> None:
     assert note and "PSEUDO-REPLIKASYON" in note and "30" in note and "90" in note
     assert pseudo_replication_note(30, 30) is None
     assert pseudo_replication_note(0, 0) is None
+
+
+def test_fisher_bilinen_degerler() -> None:
+    """Fisher tam testi — LITERATURDEN bilinen degerlerle (scipy'siz dogrulama).
+
+    Beklenen degerler koddan DEGIL, klasik orneklerden gelir:
+      * cay-tadimi 2x2 (3,0,0,3): iki-yonlu p = 1/10 TAM OLARAK
+        (tek olasi asiri tablo cifti; her biri 1/20)
+      * Fisher'in kendi ornegi (1,9,11,3): p ~= 0.00276
+    """
+    assert _close(fisher_exact_p(3, 0, 0, 3), 0.1, 1e-9), fisher_exact_p(3, 0, 0, 3)
+    assert _close(fisher_exact_p(1, 9, 11, 3), 0.0027594, 1e-6)
+    assert _close(fisher_exact_p(10, 10, 10, 10), 1.0, 1e-12)
+
+
+def test_fisher_simetri_ve_kenar() -> None:
+    """Satir/sutun degis-tokusu p'yi DEGISTIRMEZ; dejenere tablo 1.0 doner."""
+    for a, b, c, d in [(5, 20, 3, 22), (7, 18, 2, 23), (0, 25, 4, 21)]:
+        p = fisher_exact_p(a, b, c, d)
+        assert _close(p, fisher_exact_p(c, d, a, b), 1e-12), f"satir simetrisi ({a},{b},{c},{d})"
+        assert _close(p, fisher_exact_p(b, a, d, c), 1e-12), f"sutun simetrisi ({a},{b},{c},{d})"
+        assert 0.0 <= p <= 1.0
+    # Kenar toplami sifir / bos tablo -> KARAR YOK (1.0), cokme yok
+    assert fisher_exact_p(0, 0, 0, 0) == 1.0
+    assert fisher_exact_p(5, 0, 3, 0) == 1.0     # ikinci sutun bos
+    assert fisher_exact_p(0, 0, 3, 4) == 1.0     # ilk satir bos
+    assert fisher_exact_p(-1, 2, 3, 4) == 1.0    # gecersiz girdi -> karar yok
+
+
+def test_fisher_yon_duyarliligi() -> None:
+    """Ayrim buyudukce p KUCULMELI (monotonluk), ve 25'lik gruplarda
+    8 puanlik fark ANLAMLI CIKMAMALI — HANDOFF §7.1 gurultu tabani ile tutarli.
+    """
+    p_kucuk = fisher_exact_p(5, 20, 3, 22)     # %20 vs %12  (+8 puan)
+    p_orta = fisher_exact_p(7, 18, 2, 23)      # %28 vs %8   (+20 puan)
+    p_buyuk = fisher_exact_p(20, 5, 2, 23)     # %80 vs %8   (+72 puan)
+    assert p_kucuk > p_orta > p_buyuk, (p_kucuk, p_orta, p_buyuk)
+    assert p_kucuk > 0.05, f"n=25'te +8 puan ANLAMLI CIKMAMALI (p={p_kucuk:.3f})"
+    assert p_buyuk < 0.001, f"+72 puan acikca anlamli olmali (p={p_buyuk:.5f})"
 
 
 def test_mean_sd() -> None:

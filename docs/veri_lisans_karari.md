@@ -132,6 +132,65 @@ sahip olmadıklarını veremez.
 | **Eskişehir / Mendeley** | **CC BY 4.0** (§1) | ✅ Telifçe serbest | Atıf | `eval_defense` (200), `eval_scenario/Normal` (8), `industrial` (691) | **YAYINLAMA — manifest ile** (§4) |
 | **URFD** | **CC BY-NC-SA 4.0** | ⚠️ Şartlı | NC + ShareAlike | `falls_surveillance` (6), `eval_scenario/Fall` (6) | **YAYINLAMA** (§6) |
 | **UCF-Crime** | **Lisans beyanı YOK** | ❌ Yasak | — | `eval_tune` (31), `eval_holdout` (32), `e2_vehicle` (9), `eval`, `eval_big`, `eval_scenario/Normal` (4) | **ASLA YAYINLAMA** (§5) |
+| **iSafetyBench** | **CC BY-NC-SA 4.0** (§11) | ❌ Yasak | NC + ShareAlike | `isafety_bench` (1.100) | **YAYINLAMA · EĞİTİMDE DE KULLANMA** (§11) |
+| **KKD: keremberke ×2** | **CC BY 4.0** (§11) | ✅ Serbest | Atıf | `ppe/hard_hat` (19.745), `ppe/construction_safety` (398) | **EĞİTİMDE KULLAN** (§11) |
+
+---
+
+## 11. D33 (2026-08-16) — İSG veri zenginleştirmesi
+
+### 11.1 iSafetyBench — **alındı, ama YALNIZCA DEĞERLENDİRME**
+
+| | |
+|---|---|
+| Videolar | [HF `raiyaanabdullah/isafety-bench`](https://huggingface.co/datasets/raiyaanabdullah/isafety-bench) — 1.100 klip (420 tehlike + 680 normal), 1,29 GB |
+| Etiketler | [GitHub `iSafetyBench/data`](https://github.com/iSafetyBench/data) — `annotations_*.json`, `mcq/`, `actions.txt` |
+| Makale | arXiv:2508.00399 |
+| **Lisans** | **CC BY-NC-SA 4.0** — LICENSE dosyasından **birebir** teyit edildi: *"Attribution-NonCommercial-ShareAlike 4.0 International"* |
+| Klip kaynağı | **halka açık YouTube videoları** (yayıncının "fair use" beyanı) |
+
+**KARAR: yalnızca değerlendirme. Eğitim/ince-ayar YASAK. Baytlar yeniden yayımlanmaz.**
+
+**Gerekçe:** ShareAlike zehirli haptır — bu veriyle ince ayar yapılırsa model
+ağırlıkları türev eser sayılabilir ve **modelimiz de CC BY-NC-SA olmak zorunda kalır**.
+NonCommercial ayrıca yarışma sonrası ticari geleceği kapatır. (URFD için §6'da verilen
+kararın **aynısı**; oradaki mantık burada da geçerlidir.)
+
+**Bu karar artık BELGEDE DEĞİL, KODDA:**
+`dilajan/veri_lisans.py` → `egitim_icin_dogrula()` yasaklı dizin görürse
+**istisna fırlatır** (bilerek fail-closed; projenin geri kalanı fail-open'dır ama
+lisans ihlali bir analiz çökmesinden pahalıdır). `tests/test_isg_lisans.py` kilidi
+sürekli sınar. Kural veriyle birlikte seyahat eder: `data/isafety_bench/LISANS.json`.
+
+**⚠️ ALAN UYARISI (rapor yazarken atlanmamalı):** dağıtım ortamımız **sabit kamera
+endüstriyel CCTV**; bu set **YouTube** kaynaklıdır (değişken açı, kurgu, el kamerası).
+Buradan çıkan sayılar **genelleme stres testidir**, "başka bir fabrikada da böyle olur"
+kanıtı **değildir**.
+
+**Kazanç:** yayımlanmış tabanla karşılaştırılabilir oluruz (Ovis2-8B %53,4 F1 tehlike;
+Qwen2.5-VL-7B de tabloda). Görev **çoktan seçmeli** ve **İngilizce** — bizim çıktı
+sözleşmemiz Türkçe olduğu için bu kol **ayrı raporlanmalı**, K1 sözleşmesi değişmez.
+
+### 11.2 KKD (PPE) — **eğitilebilir set seçildi**
+
+Amaç: HANDOFF §6.2'nin mimari kararı — **deterministik YOLO doğrulayıcı**
+(VLM'e metin enjeksiyonu değil; ölçüldü: yanlış alarm %0 → %12).
+
+| Set | Lisans | İçerik | Karar |
+|---|---|---|---|
+| [`keremberke/hard-hat-detection`](https://huggingface.co/datasets/keremberke/hard-hat-detection) | **CC BY 4.0** | 19.745 görsel · Hardhat / NO-Hardhat · COCO | ✅ **ALINDI** |
+| [`keremberke/construction-safety-object-detection`](https://huggingface.co/datasets/keremberke/construction-safety-object-detection) | **CC BY 4.0** | 398 görsel · 17 sınıf (yelek, eldiven, no-vest…) | ✅ **ALINDI** |
+| [**SH17**](https://github.com/ahmadmughees/sh17dataset) | **CC BY-NC-SA 4.0** | 8.099 görsel · 17 sınıf · **üretim sanayi** | ⛔ **ELENDİ** |
+| [Ultralytics Construction-PPE](https://docs.ultralytics.com/datasets/detect/construction-ppe) | **AGPL-3.0** | 1.416 görsel · 11 sınıf | ⛔ **ELENDİ** |
+
+> **SH17'nin elenmesi acı verici ve kayda geçirilmeli:** 17 sınıfı ve **üretim
+> sanayi** odağıyla alan eşleşmesi **en iyi** adaydı. Yalnızca lisansı yüzünden
+> elendi — iSafetyBench ile aynı ShareAlike tuzağı. Tekrar önerilmesin.
+
+**⚠️ ALAN FARKI:** alınan iki set **şantiye** görüntüsüdür; tesisimiz **üretim/imalat**.
+Deterministik bir dedektör için bu fark bir VLM'in sahne anlamasına göre **çok daha az**
+önemlidir (baret bir kafanın üzerindedir, şantiyede de fabrikada da) — ama **sıfır
+değildir** ve tesis verisinde ayrıca doğrulanmalıdır.
 
 ---
 
