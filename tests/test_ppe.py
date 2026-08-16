@@ -95,6 +95,15 @@ def state(events, **kw):
     return s
 
 
+def _kit_hata() -> bool:
+    """Bilinmeyen kit ISTISNA firlatmali — sessizce 'baret'e dusmemeli."""
+    try:
+        detector._kit("boyle_bir_kit_yok")
+        return False
+    except KeyError:
+        return True
+
+
 # ===========================================================================
 print("=== (1) K2: bayrak KAPALI iken dedektor HIC cagrilmaz ===")
 _cagrildi = {"n": 0}
@@ -122,29 +131,29 @@ finally:
 
 # ===========================================================================
 print("\n=== (2) K3 FAIL-OPEN: agirlik yok / istisna / bos girdi ===")
-_orig_get = detector._get_ppe_model
-detector._get_ppe_model = lambda: None
+_orig_get = detector._get_kkd_model
+detector._get_kkd_model = lambda kit="baret": None
 try:
     check("agirlik YOK -> detect_ppe_violation None (cokme yok)",
           detector.detect_ppe_violation([("00:01", b"x")]) is None)
     v, n = detector.verify_ppe_claim([("00:01", b"x")])
     check("agirlik YOK -> verify_ppe_claim ABSTAIN", v == "ABSTAIN", f"{v} / {n}")
 finally:
-    detector._get_ppe_model = _orig_get
+    detector._get_kkd_model = _orig_get
 
 
-def _patlayan():
+def _patlayan(kit="baret"):
     raise RuntimeError("simule YOLO patlamasi")
 
 
-detector._get_ppe_model = _patlayan
+detector._get_kkd_model = _patlayan
 try:
     check("YOLO PATLARSA -> None (istisna disari SIZMAZ)",
           detector.detect_ppe_violation([("00:01", b"x")]) is None)
     v, _ = detector.verify_ppe_claim([("00:01", b"x")])
     check("YOLO PATLARSA -> verify ABSTAIN", v == "ABSTAIN")
 finally:
-    detector._get_ppe_model = _orig_get
+    detector._get_kkd_model = _orig_get
 
 check("bos kare listesi -> None", detector.detect_ppe_violation([]) is None)
 
@@ -193,11 +202,11 @@ def _kareler(n):
 
 
 def _ile_model(kare_siniflari, **kw):
-    detector._get_ppe_model = lambda: _SahteModel(kare_siniflari)
+    detector._get_kkd_model = lambda kit="baret": _SahteModel(kare_siniflari)
     try:
         return detector.detect_ppe_violation(_kareler(len(kare_siniflari)), **kw)
     finally:
-        detector._get_ppe_model = _orig_get
+        detector._get_kkd_model = _orig_get
 
 
 r = _ile_model([[1], [0], [0]], min_kare=2)
@@ -221,12 +230,12 @@ class _YanlisModel(_SahteModel):
     names = {0: "person", 1: "helmet"}
 
 
-detector._get_ppe_model = lambda: _YanlisModel([[1], [1]])
+detector._get_kkd_model = lambda kit="baret": _YanlisModel([[1], [1]])
 try:
     check("BEKLENMEYEN sinif adlari -> None (sessizce yanlis okumaz)",
           detector.detect_ppe_violation(_kareler(2)) is None)
 finally:
-    detector._get_ppe_model = _orig_get
+    detector._get_kkd_model = _orig_get
 
 # ===========================================================================
 print("\n=== (4) SEVK MASKESI: KKD olayi tek basina cagri ACMAZ ===")
@@ -285,26 +294,26 @@ check("olay diger alanlari normal", e.model_dump().get("severity") == "Yüksek")
 
 # ===========================================================================
 print("\n=== (7) DOGRULAYICI sozlesmesi ===")
-detector._get_ppe_model = lambda: _SahteModel([[1], [1], [1]])
+detector._get_kkd_model = lambda kit="baret": _SahteModel([[1], [1], [1]])
 try:
     v, n = detector.verify_ppe_claim(_kareler(3))
     check("baretsiz VAR -> CONFIRM", v == "CONFIRM", f"{v} / {n}")
 finally:
-    detector._get_ppe_model = _orig_get
+    detector._get_kkd_model = _orig_get
 
-detector._get_ppe_model = lambda: _SahteModel([[0, 0], [0, 0], [0]])
+detector._get_kkd_model = lambda kit="baret": _SahteModel([[0, 0], [0, 0], [0]])
 try:
     v, n = detector.verify_ppe_claim(_kareler(3))
     check("çok sayida BARETLI + baretsiz YOK -> REJECT", v == "REJECT", f"{v} / {n}")
 finally:
-    detector._get_ppe_model = _orig_get
+    detector._get_kkd_model = _orig_get
 
-detector._get_ppe_model = lambda: _SahteModel([[], [0]])
+detector._get_kkd_model = lambda kit="baret": _SahteModel([[], [0]])
 try:
     v, n = detector.verify_ppe_claim(_kareler(2))
     check("yetersiz kafa tespiti -> ABSTAIN (VLM korunur)", v == "ABSTAIN", f"{v} / {n}")
 finally:
-    detector._get_ppe_model = _orig_get
+    detector._get_kkd_model = _orig_get
 
 # ===========================================================================
 print("\n=== (7b) BIRLESTIRME: ppe_src isareti KAYBOLMUYOR ===")
@@ -341,6 +350,46 @@ else:
             EventCategory.GUVENLIK, time="00:04")
     check("KKD DISI benzer olaylar hala birlesiyor (gerileme yok)",
           len(_merge([a1, a2])) == 1, str(len(_merge([a1, a2]))))
+
+
+# ===========================================================================
+print("\n=== (7c) KKD KITLERI: baret + yelek AYRI modeller ===")
+# NEDEN AYRI: iki veri setinin ETIKET UZAYLARI AYRIK. Baret seti (39k kutu)
+# yelekleri etiketlemez; tek modelde birlestirilseydi baret setindeki YELEKLI
+# isci "etiketsiz" kalir ve modele "yelek YOK" diye ogretilirdi -> yelek sinifi
+# icin SISTEMATIK yanlis-negatif. Bu test o karari kilitler.
+check("iki kit tanimli", set(detector.KKD_KITLERI) == {"baret", "yelek"},
+      str(sorted(detector.KKD_KITLERI)))
+check("kitler AYRI agirlik dosyalari kullaniyor",
+      detector.KKD_KITLERI["baret"]["agirlik"] != detector.KKD_KITLERI["yelek"]["agirlik"],
+      str([k["agirlik"] for k in detector.KKD_KITLERI.values()]))
+check("kitler AYRI sinif adlari kullaniyor",
+      detector.KKD_KITLERI["baret"]["yok"] == "baret_yok"
+      and detector.KKD_KITLERI["yelek"]["yok"] == "yelek_yok")
+check("bilinmeyen kit ISTISNA firlatiyor (sessizce baret'e dusmuyor)",
+      _kit_hata(), "KeyError bekleniyordu")
+
+
+class _YelekModel(_SahteModel):
+    names = {0: "yelek_var", 1: "yelek_yok"}
+
+
+# Yelek kiti KENDI sinif adlariyla calisiyor mu?
+detector._get_kkd_model = lambda kit="baret": _YelekModel([[1], [1]])
+try:
+    r = detector.detect_ppe_violation(_kareler(2), min_kare=2, kit="yelek")
+    check("yelek kiti kendi sinif adlariyla IHLAL buluyor",
+          r is not None and r.get("kit") == "yelek", str(r))
+    # BARET kiti YELEK agirligini gorurse karar VERMEMELI (sinif adlari uyusmuyor)
+    r2 = detector.detect_ppe_violation(_kareler(2), min_kare=2, kit="baret")
+    check("baret kiti YELEK agirligiyla karar VERMIYOR (sinif adi uyusmazligi)",
+          r2 is None, str(r2))
+finally:
+    detector._get_kkd_model = _orig_get
+
+check("ppe_kits varsayilani iki kiti de iceriyor",
+      set(x.strip() for x in type(settings)().ppe_kits.split(",")) == {"baret", "yelek"},
+      type(settings)().ppe_kits)
 
 
 # ===========================================================================

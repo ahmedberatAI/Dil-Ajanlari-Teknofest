@@ -288,63 +288,115 @@ def crowd_stats(frames: Sequence[Tuple[str, bytes]], conf: float = 0.35,
 # ⚠️ ALAN FARKI: egitim verisi SANTIYE, tesisimiz URETIM. Deterministik dedektor
 # icin bu fark VLM'e gore kucuktur ama SIFIR DEGILDIR.
 
-#: Egitilmis KKD agirligi (scripts/train_ppe.py bunu uretir). YOKSA tespit KAPALIDIR.
-PPE_AGIRLIK = "yolo11n-ppe.pt"
-_ppe_model = None
-_ppe_yok_uyarildi = False
+#: ---------------------------------------------------------------------------
+#: KKD KITLERI — her biri AYRI egitilmis bir dedektor
+#: ---------------------------------------------------------------------------
+#: NEDEN AYRI MODELLER: baret ve yelek veri setlerinin ETIKET UZAYLARI AYRIK.
+#: Baret seti (keremberke, 39k kutu) yelekleri ETIKETLEMEZ. Tek modelde
+#: birlestirilseydi, baret setindeki YELEKLI bir isci "etiketsiz" kalir ve modele
+#: "burada yelek YOK" diye ogretilirdi -> yelek sinifi icin SISTEMATIK
+#: yanlis-negatif. Iki cikarim klip basina ~2.2 ms; K4 butcesinde (klip basina
+#: ~20 sn) ihmal edilebilir.
+#:
+#: D35 GORSEL DENETIM: hedef tesiste isciler BARET TAKMIYOR, hi-vis YELEK giyiyor
+#: -> bu dagitim icin ANLAMLI KIT "yelek"tir. "baret" santiye senaryosu icin durur.
+KKD_KITLERI = {
+    "baret": {
+        "agirlik": "yolo11n-ppe.pt",
+        "var": "baret_var", "yok": "baret_yok",
+        "olay": "baret takmayan personel",
+        "uret": "python scripts/train_ppe.py --profil baret",
+    },
+    "yelek": {
+        "agirlik": "yolo11n-yelek.pt",
+        "var": "yelek_var", "yok": "yelek_yok",
+        "olay": "hi-vis yelek giymeyen personel",
+        "uret": "python scripts/train_ppe.py --profil yelek",
+    },
+}
 
-#: Egitilen sinif adlari -> anlam. Model kendi `names`ini tasir; bu tablo yalnizca
-#: beklenen adlari DOGRULAMAK icindir (agirlik degisirse sessizce yanlis okumayalim).
+#: Geriye uyumluluk: eski adlar (tests/test_ppe.py ve mevcut cagrilar bunlari kullanir)
+PPE_AGIRLIK = KKD_KITLERI["baret"]["agirlik"]
 PPE_SINIF_BEKLENEN = {0: "baret_var", 1: "baret_yok"}
+
+_kkd_modeller: dict = {}
+_kkd_uyarildi: set = set()
+
+
+def _kit(kit: str) -> dict:
+    k = KKD_KITLERI.get(kit)
+    if k is None:
+        raise KeyError(f"bilinmeyen KKD kiti: {kit!r} (gecerli: {sorted(KKD_KITLERI)})")
+    return k
+
+
+def _get_kkd_model(kit: str = "baret"):
+    """Kit modelini yukler. Agirlik yoksa None (FAIL-OPEN — o kit devre disi)."""
+    if kit in _kkd_modeller:
+        return _kkd_modeller[kit]
+    import os as _os
+    k = _kit(kit)
+    kok = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+    yol = _os.path.join(kok, k["agirlik"])
+    if not _os.path.exists(yol):
+        if kit not in _kkd_uyarildi:
+            _kkd_uyarildi.add(kit)
+            print(f"[detector] KKD '{kit}' agirligi yok ({k['agirlik']}); bu kit KAPALI. "
+                  f"Uretmek icin: {k['uret']}")
+        return None
+    from ultralytics import YOLO
+    m = YOLO(yol)
+    _kkd_modeller[kit] = m
+    return m
 
 
 def _get_ppe_model():
-    """KKD modelini yukler. Agirlik yoksa None (FAIL-OPEN — tespit devre disi)."""
-    global _ppe_model, _ppe_yok_uyarildi
-    if _ppe_model is not None:
-        return _ppe_model
+    """Geriye uyumlu takma ad — 'baret' kitini dondurur (mevcut testler bunu yamalar)."""
+    return _get_kkd_model("baret")
+
+
+def kkd_available(kit: str = "baret") -> bool:
+    """Bu kitin egitilmis agirligi mevcut mu?"""
     import os as _os
     kok = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
-    yol = _os.path.join(kok, PPE_AGIRLIK)
-    if not _os.path.exists(yol):
-        if not _ppe_yok_uyarildi:
-            _ppe_yok_uyarildi = True
-            print(f"[detector] KKD agirligi yok ({PPE_AGIRLIK}); tespit KAPALI. "
-                  f"Uretmek icin: python scripts/train_ppe.py")
-        return None
-    from ultralytics import YOLO
-    _ppe_model = YOLO(yol)
-    return _ppe_model
+    return _os.path.exists(_os.path.join(kok, _kit(kit)["agirlik"]))
+
+
+def kkd_mevcut_kitler() -> list:
+    """Agirligi HAZIR olan kitler (sirali)."""
+    return [k for k in sorted(KKD_KITLERI) if kkd_available(k)]
 
 
 def ppe_available() -> bool:
-    """Egitilmis KKD agirligi mevcut mu?"""
-    import os as _os
-    kok = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
-    return _os.path.exists(_os.path.join(kok, PPE_AGIRLIK))
+    """Geriye uyumlu: 'baret' kiti hazir mi?"""
+    return kkd_available("baret")
 
 
-def _ppe_say(frames: Sequence[Tuple[str, bytes]], conf: float) -> Optional[dict]:
-    """KKD modelini TEK GECISTE calistirir ve sayimlari dondurur.
+def _ppe_say(frames: Sequence[Tuple[str, bytes]], conf: float,
+             kit: str = "baret") -> Optional[dict]:
+    """Kit modelini TEK GECISTE calistirir ve sayimlari dondurur.
 
     `detect_ppe_violation` ve `verify_ppe_claim` AYNI sayimlari kullanir; ayri ayri
     predict cagirmak K4 gecikme butcesini bosa harcardi (2x YOLO cikarimi).
 
     Donus: {ihlalli_kare, n_ihlal_kutu, n_baretli, ilk} veya None (agirlik yok /
     beklenmeyen sinif adlari / hata -> FAIL-OPEN).
+    NOT: `n_baretli` alan adi geriye uyumluluk icin korundu; anlami "KKD'si OLAN
+    kisi sayisi" (yelek kitinde yelekli).
     """
-    model = _get_ppe_model()
+    k = _kit(kit)
+    model = _get_kkd_model(kit)
     if model is None:
         return None
     imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
     results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
 
     # Sinif indeksini ADA gore coz — agirlik degisirse indeks kaymasina karsi.
-    adlar = getattr(model, "names", None) or PPE_SINIF_BEKLENEN
+    adlar = getattr(model, "names", None) or {0: k["var"], 1: k["yok"]}
     cift = adlar.items() if isinstance(adlar, dict) else enumerate(adlar)
     cift = list(cift)
-    yok_idx = {i for i, ad in cift if str(ad) == "baret_yok"}
-    var_idx = {i for i, ad in cift if str(ad) == "baret_var"}
+    yok_idx = {i for i, ad in cift if str(ad) == k["yok"]}
+    var_idx = {i for i, ad in cift if str(ad) == k["var"]}
     if not yok_idx:                          # beklenmeyen agirlik -> karar VERME
         return None
 
@@ -373,7 +425,7 @@ def _ppe_say(frames: Sequence[Tuple[str, bytes]], conf: float) -> Optional[dict]
 
 
 def detect_ppe_violation(frames: Sequence[Tuple[str, bytes]], conf: float = 0.45,
-                         min_kare: int = 2) -> Optional[dict]:
+                         min_kare: int = 2, kit: str = "baret") -> Optional[dict]:
     """BARETSIZ kafa tespiti — deterministik KKD ihlali.
 
     KARAR KURALI (FP'ye karsi bilerek muhafazakar — yanlis alarm en pahali hatadir):
@@ -388,17 +440,17 @@ def detect_ppe_violation(frames: Sequence[Tuple[str, bytes]], conf: float = 0.45
     kararini DEGISTIRMEZ (bir kisinin baretli olmasi digerinin baretsizligini aklamaz).
     """
     try:
-        s = _ppe_say(frames, conf)
+        s = _ppe_say(frames, conf, kit=kit)
         if not s or s["ihlalli_kare"] < min_kare or s["ilk"] is None:
             return None
-        return {**s["ilk"], "n_kare": s["ihlalli_kare"],
+        return {**s["ilk"], "n_kare": s["ihlalli_kare"], "kit": kit,
                 "n_ihlal_kutu": s["n_ihlal_kutu"], "n_baretli": s["n_baretli"]}
     except Exception:
         return None                          # FAIL-OPEN (K3)
 
 
-def verify_ppe_claim(frames: Sequence[Tuple[str, bytes]], conf: float = 0.45
-                     ) -> Tuple[str, str]:
+def verify_ppe_claim(frames: Sequence[Tuple[str, bytes]], conf: float = 0.45,
+                     kit: str = "baret") -> Tuple[str, str]:
     """VLM'in "baret takmiyor/KKD ihlali" iddiasini dedektorle dogrular.
 
     `verify_fallen` ile AYNI sozlesme: ('CONFIRM'|'REJECT'|'ABSTAIN', not).
@@ -411,18 +463,19 @@ def verify_ppe_claim(frames: Sequence[Tuple[str, bytes]], conf: float = 0.45
     ihlalleri yanlislikla elemektense kararsiz kalmak yeglenir.
     """
     try:
-        # TEK GECIS: hem ihlal karari hem baretli sayimi ayni cikarimdan gelir (K4).
-        s = _ppe_say(frames, conf)
+        # TEK GECIS: hem ihlal karari hem KKD'li sayimi ayni cikarimdan gelir (K4).
+        s = _ppe_say(frames, conf, kit=kit)
         if s is None:
             return "ABSTAIN", "KKD ağırlığı yok veya beklenmeyen sınıf adları"
+        ad = _kit(kit)["olay"].split()[0]     # "baret" / "hi-vis"
         if s["ihlalli_kare"] >= 1 and s["ilk"] is not None:
-            return "CONFIRM", (f"{s['ihlalli_kare']} karede baretsiz kafa "
+            return "CONFIRM", (f"{s['ihlalli_kare']} karede {ad}siz personel "
                                f"(güven {s['ilk']['conf']}) -> KKD ihlali doğrulandı")
-        n_baretli = s["n_baretli"]
-        if n_baretli >= 3:
-            return "REJECT", (f"{n_baretli} baretli kafa tespit edildi, baretsiz YOK "
+        n_var = s["n_baretli"]
+        if n_var >= 3:
+            return "REJECT", (f"{n_var} adet {ad}li personel tespit edildi, ihlal YOK "
                               "-> KKD ihlali iddiası şüpheli")
-        return "ABSTAIN", f"yeterli kafa tespiti yok (baretli {n_baretli}) -> VLM korunur"
+        return "ABSTAIN", f"yeterli tespit yok ({ad}li {n_var}) -> VLM korunur"
     except Exception as e:  # noqa: BLE001
         return "ABSTAIN", f"KKD doğrulama hatası: {e}"
 

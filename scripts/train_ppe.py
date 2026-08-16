@@ -42,11 +42,15 @@ sys.path.insert(0, ROOT)
 
 from dilajan.veri_lisans import egitim_icin_dogrula  # noqa: E402
 
-VERI = os.path.join(ROOT, "data", "ppe_yolo")
-YAML = os.path.join(VERI, "ppe.yaml")
-CIKTI = os.path.join(ROOT, "data", "ppe_yolo", "egitim")
-#: Uretilen agirligin PROJEDE kullanilacak sabit yolu (detector.py bunu arar).
-AGIRLIK_HEDEF = os.path.join(ROOT, "yolo11n-ppe.pt")
+#: Hazir veri seti profilleri. Ayri dedektorler AYRI egitilir — etiket uzaylari
+#: ayrik oldugu icin birlestirme sistematik yanlis-negatif uretir (bkz.
+#: scripts/yelek_veri_hazirla.py basligi).
+PROFILLER = {
+    "baret": {"veri": os.path.join("data", "ppe_yolo"), "yaml": "ppe.yaml",
+              "agirlik": "yolo11n-ppe.pt", "ad": "baret"},
+    "yelek": {"veri": os.path.join("data", "yelek_yolo"), "yaml": "yelek.yaml",
+              "agirlik": "yolo11n-yelek.pt", "ad": "yelek"},
+}
 
 
 def _bos_vram_gb() -> float:
@@ -69,20 +73,33 @@ def main() -> int:
     ap.add_argument("--patience", type=int, default=10, help="erken durdurma sabri")
     ap.add_argument("--hizli", action="store_true", help="3 epoch — boru hatti denemesi")
     ap.add_argument("--zorla", action="store_true", help="dusuk VRAM uyarisini yoksay")
+    ap.add_argument("--profil", choices=sorted(PROFILLER), default="baret",
+                    help="hangi dedektor egitilecek (baret | yelek)")
     args = ap.parse_args()
 
+    p = PROFILLER[args.profil]
+    VERI = os.path.join(ROOT, p["veri"])
+    YAML = os.path.join(VERI, p["yaml"])
+    CIKTI = os.path.join(VERI, "egitim")
+    AGIRLIK_HEDEF = os.path.join(ROOT, p["agirlik"])
+
     print("=" * 78)
-    print("KKD (baret) YOLO egitimi")
+    print(f"KKD YOLO egitimi — profil: {args.profil.upper()}")
+    print(f"  veri    : {p['veri']}")
+    print(f"  agirlik : {p['agirlik']}")
     print("=" * 78)
 
     # --- 1) LISANS KAPISI (fail-closed) ---
     print("[1/4] Lisans kapisi...")
-    egitim_icin_dogrula([os.path.relpath(VERI, ROOT)])
-    print("      ✅ data/ppe_yolo egitimde kullanilabilir (CC BY 4.0)")
+    egitim_icin_dogrula([p["veri"]])
+    print(f"      ✅ {p['veri']} egitimde kullanilabilir")
 
     if not os.path.exists(YAML):
         print(f"[HATA] veri yok: {os.path.relpath(YAML, ROOT)}")
-        print("       once: python scripts/get_ppe.py && python scripts/ppe_coco2yolo.py")
+        if args.profil == "baret":
+            print("       once: python scripts/get_ppe.py && python scripts/ppe_coco2yolo.py")
+        else:
+            print("       once: python scripts/yelek_veri_hazirla.py")
         return 1
 
     # --- 2) VRAM ---
@@ -108,7 +125,7 @@ def main() -> int:
         imgsz=args.imgsz,
         patience=args.patience,
         project=CIKTI,
-        name="baret",
+        name=p["ad"],
         exist_ok=True,
         seed=2026,          # proje geneli sabit tohum (bkz. eval_defense MANIFEST)
         deterministic=True,
@@ -120,7 +137,7 @@ def main() -> int:
 
     # --- 4) DOGRULAMA + AGIRLIGI YERINE KOY ---
     print("[4/4] Test bolumunde dogrulama...")
-    en_iyi = os.path.join(CIKTI, "baret", "weights", "best.pt")
+    en_iyi = os.path.join(CIKTI, p["ad"], "weights", "best.pt")
     if not os.path.exists(en_iyi):
         print(f"[HATA] agirlik uretilmedi: {en_iyi}")
         return 1

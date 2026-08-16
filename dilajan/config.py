@@ -141,6 +141,14 @@ class Settings(BaseSettings):
     # GEREKSINIM: `yolo11n-ppe.pt` (scripts/train_ppe.py uretir). Agirlik YOKSA
     # bayrak acik olsa bile tespit sessizce devre disidir (FAIL-OPEN, K3).
     ppe_detection: bool = False
+    # Hangi KKD kitleri kosulacak (virgulle). Gecerli: "baret", "yelek".
+    # AYRI MODELLER cunku iki veri setinin ETIKET UZAYLARI AYRIK — birlestirme
+    # yelek sinifi icin sistematik yanlis-negatif uretirdi (bkz. detector.KKD_KITLERI).
+    # D35 GORSEL DENETIM: hedef tesiste isciler BARET TAKMIYOR, hi-vis YELEK giyiyor
+    # -> bu dagitim icin anlamli kit YELEKTIR. Ikisi de varsayilan olarak listede;
+    # agirligi olmayan kit SESSIZCE atlanir (K3 fail-open).
+    # NOT: `ppe_detection=False` iken bu ayarin HICBIR etkisi yoktur (K2).
+    ppe_kits: str = "baret,yelek"
     ppe_conf: float = 0.45           # dedektor guven esigi (yuksek = daha az yanlis alarm)
     ppe_min_kare: int = 2            # segmentte ihlal saymak icin gereken EN AZ ihlalli kare.
                                      # TEK kare yetmez: kafa donusu/bulanikligin urettigi

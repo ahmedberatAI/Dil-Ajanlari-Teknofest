@@ -895,33 +895,43 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         # K2: `ppe_detection` False iken bu blok TEK SATIR bile calistirmaz (erken-donus),
         # olay uretilmez, ize yazilmaz -> mevcut olcumler BIREBIR yeniden uretilir.
         if settings.ppe_detection:
-            try:
-                from dilajan import detector
-                ppe = detector.detect_ppe_violation(
-                    seg.frames, conf=settings.ppe_conf, min_kare=settings.ppe_min_kare)
-            except Exception as ex:
-                ppe, notes = None, notes + [f"perceive: segment {seg.index} KKD hatası: {ex}"]
-            if ppe:
+            from dilajan import detector
+            kitler = [k.strip() for k in (settings.ppe_kits or "").split(",") if k.strip()]
+            for kit in kitler:
+                if kit not in detector.KKD_KITLERI:
+                    notes.append(f"perceive: bilinmeyen KKD kiti atlandı: {kit!r}")
+                    continue
+                try:
+                    ppe = detector.detect_ppe_violation(
+                        seg.frames, conf=settings.ppe_conf,
+                        min_kare=settings.ppe_min_kare, kit=kit)
+                except Exception as ex:
+                    ppe = None
+                    notes.append(f"perceive: segment {seg.index} KKD '{kit}' hatası: {ex}")
+                if not ppe:
+                    continue
                 try:
                     sev = Severity(settings.ppe_severity)
                 except ValueError:
                     sev = Severity.YUKSEK          # gecersiz ayar -> guvenli varsayilan
                 bolge = ppe.get("region")
+                olay_metni = detector.KKD_KITLERI[kit]["olay"]
                 # `ppe_src`: SEMA-DISI isaret (policy_prev/evidence_prev ile ayni desen).
                 # `model_dump()` anahtarlarina SIZMAZ; act() sevk kapisi bunu okuyup
                 # KKD olaylarini sevk sinyalinden HARIC tutar (ppe_dispatch=False iken).
                 out.append(Event(
                     time=ppe["time"],
-                    event=(f"KKD ihlali: baret takmayan personel"
+                    event=(f"KKD ihlali: {olay_metni}"
                            + (f" ({bolge} bölgede)" if bolge else "")
                            + f" — {ppe['n_kare']} karede tespit"),
                     severity=sev,
                     category=EventCategory.GUVENLIK,
                     region=bolge).model_copy(update={"ppe_src": True}))
                 notes.append(
-                    f"perceive: segment {seg.index} KKD dedektörü [baretsiz kafa "
-                    f"{ppe['n_ihlal_kutu']} kutu / {ppe['n_kare']} kare, güven {ppe['conf']}, "
-                    f"baretli {ppe['n_baretli']}] -> deterministik olay eklendi"
+                    f"perceive: segment {seg.index} KKD dedektörü [{kit}] "
+                    f"[ihlal {ppe['n_ihlal_kutu']} kutu / {ppe['n_kare']} kare, "
+                    f"güven {ppe['conf']}, kurallı {ppe['n_baretli']}] "
+                    f"-> deterministik olay eklendi"
                     + ("" if settings.ppe_dispatch else " (SEVK yolu KAPALI)"))
         return out, ("\n".join(notes) if notes else None)
     except Exception as ex:  # hata toleransi: segment atlanir
