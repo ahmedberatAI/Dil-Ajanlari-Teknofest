@@ -214,6 +214,43 @@ bütçesi ~20 sn. Gecikmedeki 0,89× fark gürültüdür (§7.1).
 
 ---
 
+## 5b. ⚠️ GÖRSEL DENETİM — bu tesiste baret DEĞİL, **YELEK** takılıyor
+
+`scripts/ppe_etiket_hazirla.py` ile üretilen inceleme paketindeki kontak
+sayfaları ve yakınlaştırılmış kırpmalar **elle incelendi**. Üç bulgu:
+
+**1. Dedektör tesis verisinde DOĞRU çalışıyor.** Yakınlaştırılmış kırpmalarda
+kırmızı kutular tam olarak **baretsiz insan kafalarının** üzerinde
+(güven 0,48–0,53). Yanlış pozitif değil — gerçek tespit.
+
+**2. `B_baretli` kovası BOŞ: 0 klip.** Dedektör bu tesiste **hiçbir klipte
+baretli kafa bulmadı**. Görsel denetim bunu doğruluyor: işçiler baret takmıyor.
+
+**3. ⭐ Kullanılan KKD **yelek**.** Kontak sayfalarında işçilerin üzerinde
+**yeşil hi-vis yelek** açıkça görünüyor — baret yok.
+
+> ### Bunun anlamı: doğru dedektörü eğitmiş olabiliriz ama YANLIŞ SINIF için
+>
+> Bu bir pres atölyesi; baret muhtemelen **zorunlu değil**. Dolayısıyla
+> "baretsiz personel" bu tesiste bir **ihlal olmayabilir** — dedektör doğru
+> çalışıyor ama ölçtüğü şey burada anlamlı bir güvenlik olayı değil.
+>
+> **Bu tesiste anlamlı olan KKD YELEKTİR** — ve yelek tam da veri yetersizliği
+> yüzünden (91 kutu) eğitemediğimiz sınıf.
+>
+> **Sonuç:** KKD önceliği **baret → yelek** olarak değişmelidir. Baret dedektörü
+> silinmez (şantiye/inşaat senaryosu için geçerli ve mAP50 0,934) ama **bu
+> dağıtım için birincil sınıf değildir**.
+>
+> Ayrıca bu, `ppe_dispatch=False` kararını **güçlendirir**: doğruluğu yüksek bir
+> dedektör bile, tesiste kural değilse yanlış alarm üretir. Sevk kapısı ancak
+> tesisin **gerçek KKD kuralı** öğrenildikten sonra açılmalıdır.
+
+**Kalan iş:** yelek için ≥1.000 kutuluk, `yelek_var` / `yelek_yok` ayrı etiketli,
+izin verici lisanslı (CC BY 4.0+) veri seti bulmak.
+
+---
+
 ## 6. Testler — `tests/test_ppe.py`
 
 | # | Ne korunuyor |
