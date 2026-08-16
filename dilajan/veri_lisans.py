@@ -72,6 +72,16 @@ BILINEN: Dict[str, dict] = {
                     "secildi. SH17 (alan eslesmesi EN IYI olan aday) CC BY-NC-SA "
                     "oldugu icin ELENDI. ⚠️ ALAN FARKI: setler SANTIYE, tesisimiz URETIM."),
     },
+    "data/yelek_yolo": {
+        "lisans": "CC BY 4.0 (iki kaynagin da lisansi)",
+        "egitimde_kullanilabilir": True,
+        "degerlendirmede_kullanilabilir": True,
+        "gerekce": ("scripts/yelek_veri_hazirla.py ciktisi. Kaynaklar: "
+                    "LibreYOLO/construction-safety-gsnvb (HF, data.yaml'dan CC BY 4.0) + "
+                    "Mendeley 8vf7z6v5sb (public-api data_licence'tan CC BY 4.0). "
+                    "Iki set arasinda MUKERRER YOK (0 ortak MD5); Mendeley'nin kendi "
+                    "31 kopyasi elendi, bolme dedup SONRASI yapildi (sizinti yok)."),
+    },
     "data/ppe_yolo": {
         "lisans": "CC BY 4.0 (data/ppe'den turetilmis)",
         "egitimde_kullanilabilir": True,
