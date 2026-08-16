@@ -246,7 +246,55 @@ baretli kafa bulmadı**. Görsel denetim bunu doğruluyor: işçiler baret takm�
 > dedektör bile, tesiste kural değilse yanlış alarm üretir. Sevk kapısı ancak
 > tesisin **gerçek KKD kuralı** öğrenildikten sonra açılmalıdır.
 
-**Kalan iş:** yelek için ≥1.000 kutuluk, `yelek_var` / `yelek_yok` ayrı etiketli,
+## 5c. YELEK dedektörü — eğitildi, **dağıtılmıyor** (ölçülmüş karar)
+
+Bulgu üzerine yelek verisi arandı ve bulundu:
+[`LibreYOLO/construction-safety-gsnvb`](https://huggingface.co/datasets/LibreYOLO/construction-safety-gsnvb)
+— **CC BY 4.0**, kaynak `data.yaml` içindeki `roboflow.license` alanından birebir teyitli.
+`yelek_var` / `yelek_yok` **ayrı etiketli** (ihlal tespiti için şart).
+
+| | kutu |
+|---|---|
+| önceki elimizdeki | 91 |
+| yeni | **2.235** (25×) |
+| bunun eğitim bölümü | 1.814 (1.073 var + **741 yok**) |
+
+**Eğitim sonucu (yolo11n, 80 epoch, test bölümü):**
+
+| | mAP50 | P | R |
+|---|---|---|---|
+| tümü | 0,678 | — | — |
+| `yelek_var` | 0,773 | 0,800 | 0,713 |
+| **`yelek_yok`** (ihlal) | **0,582** | **0,535** | 0,661 |
+
+Karşılaştırma: baret dedektöründe `baret_yok` P **0,893** / R **0,891**.
+
+### ⛔ KARAR: dağıtılmıyor — eşik taraması
+
+`scripts/yelek_esik_tara.py` güven eşiğini taradı:
+
+| conf | `yelek_yok` P | `yelek_yok` R |
+|---|---|---|
+| 0,45 | 0,630 | 0,590 |
+| 0,65 | 0,721 | 0,508 |
+| 0,85 | **1,000** | **0,049** |
+
+**Kabul ölçütü İKİ TARAFLI:** P ≥ 0,85 **ve** R ≥ 0,50. **Hiçbir eşik ikisini
+birden sağlamıyor.**
+
+> ⚠️ **Ölçütün ilk hâli tek yanlıydı ve beni yanılttı.** Yalnızca `P ≥ 0,85`
+> arandığında tarama `conf=0,85`'i "KULLANILABILIR" işaretledi — ama orada
+> **R=0,049**, yani ihlallerin %5'i yakalanıyor. Eşiği yükselttikçe precision
+> zaten 1'e gider; bu bir başarı değil, **ölçütün kusurudur**. Düzeltildi.
+
+**Sebep:** yalnızca **741** eğitim kutusu (baret dedektöründe 9.797 vardı).
+
+**Sonuç:** `ppe_kits` varsayılanı **`"baret"`** — yelek opt-in
+(`DILAJAN_PPE_KITS="baret,yelek"`). Açılırsa karar-izine **ölçülmüş zayıflığı
+yazan bir uyarı** düşer; sessizce güvenilmez olay üretmez.
+Ağırlık ve veri **silinmedi** — yeterli veri bulununca yeniden eğitilecek.
+
+**Kalan iş:** yelek için ≥5.000 kutuluk, `yelek_var` / `yelek_yok` ayrı etiketli,
 izin verici lisanslı (CC BY 4.0+) veri seti bulmak.
 
 ---

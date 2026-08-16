@@ -901,6 +901,14 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                 if kit not in detector.KKD_KITLERI:
                     notes.append(f"perceive: bilinmeyen KKD kiti atlandı: {kit!r}")
                     continue
+                # DAGITIMA HAZIR OLMAYAN kit acilabilir (opt-in) ama SESSIZ OLMAZ:
+                # karar-izine olculmus zayifligi yazilir ki operator/jury bu olayin
+                # guvenilirligini bilsin. Ornek: yelek kiti P=0,72 @ R=0,51.
+                if not detector.KKD_KITLERI[kit].get("dagitima_hazir", True):
+                    notes.append(
+                        f"perceive: ⚠ KKD kiti '{kit}' DAGITIMA HAZIR DEĞİL "
+                        f"({detector.KKD_KITLERI[kit].get('olcum', '?')}) — "
+                        f"bilerek açılmış; bulguları düşük güvenle okuyun")
                 try:
                     ppe = detector.detect_ppe_violation(
                         seg.frames, conf=settings.ppe_conf,

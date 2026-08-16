@@ -306,12 +306,26 @@ KKD_KITLERI = {
         "var": "baret_var", "yok": "baret_yok",
         "olay": "baret takmayan personel",
         "uret": "python scripts/train_ppe.py --profil baret",
+        # test mAP50 0,934 · baret_yok P 0,893 / R 0,891 (39.082 kutu ile egitildi)
+        "dagitima_hazir": True,
+        "olcum": "test mAP50 0,934 · baret_yok P 0,893 / R 0,891",
     },
     "yelek": {
         "agirlik": "yolo11n-yelek.pt",
         "var": "yelek_var", "yok": "yelek_yok",
         "olay": "hi-vis yelek giymeyen personel",
         "uret": "python scripts/train_ppe.py --profil yelek",
+        # ⛔ DAGITIMA HAZIR DEGIL — OLCULDU (scripts/yelek_esik_tara.py):
+        # Kullanilabilir recall'da precision YETERSIZ. Esik taramasi (test bolumu):
+        #   conf 0,45 -> P 0,630 / R 0,590
+        #   conf 0,65 -> P 0,721 / R 0,508
+        #   conf 0,85 -> P 1,000 / R 0,049   (ihlallerin %5'i — ise yaramaz)
+        # Kabul olcutu IKI TARAFLI (P>=0,85 VE R>=0,50); hicbir esik saglamiyor.
+        # SEBEP: yalnizca 741 egitim kutusu (baret dedektorunde 9.797 vardi).
+        # Agirlik ve veri SILINMEDI — daha cok veri bulununca yeniden egitilecek.
+        "dagitima_hazir": False,
+        "olcum": ("test mAP50 0,678 · yelek_yok P 0,535 / R 0,661 — "
+                  "kullanilabilir recall'da precision YETERSIZ"),
     },
 }
 

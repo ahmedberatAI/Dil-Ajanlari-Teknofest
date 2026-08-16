@@ -1,0 +1,116 @@
+{
+  "_aciklama": "Yelek dedektoru guven esigi taramasi. Kabul kosulu: ihlal sinifinda (yelek_yok) precision >= 0.85.",
+  "agirlik": "yolo11n-yelek.pt",
+  "split": "test",
+  "precision_esigi": 0.85,
+  "kutu_duzeyi": true,
+  "not": "Uretimde ppe_min_kare KLIP duzeyinde ek suzgectir; gercek klip-duzeyi precision bundan daha iyi olur.",
+  "tarama": [
+    {
+      "conf": 0.25,
+      "siniflar": {
+        "yelek_var": {
+          "P": 0.7997,
+          "R": 0.7132,
+          "F1": 0.754
+        },
+        "yelek_yok": {
+          "P": 0.5351,
+          "R": 0.6606,
+          "F1": 0.5913
+        }
+      }
+    },
+    {
+      "conf": 0.35,
+      "siniflar": {
+        "yelek_var": {
+          "P": 0.8198,
+          "R": 0.7054,
+          "F1": 0.7583
+        },
+        "yelek_yok": {
+          "P": 0.5493,
+          "R": 0.6393,
+          "F1": 0.5909
+        }
+      }
+    },
+    {
+      "conf": 0.45,
+      "siniflar": {
+        "yelek_var": {
+          "P": 0.8448,
+          "R": 0.6331,
+          "F1": 0.7238
+        },
+        "yelek_yok": {
+          "P": 0.6298,
+          "R": 0.5902,
+          "F1": 0.6093
+        }
+      }
+    },
+    {
+      "conf": 0.55,
+      "siniflar": {
+        "yelek_var": {
+          "P": 0.837,
+          "R": 0.5969,
+          "F1": 0.6968
+        },
+        "yelek_yok": {
+          "P": 0.6923,
+          "R": 0.5902,
+          "F1": 0.6372
+        }
+      }
+    },
+    {
+      "conf": 0.65,
+      "siniflar": {
+        "yelek_var": {
+          "P": 0.8507,
+          "R": 0.4419,
+          "F1": 0.5816
+        },
+        "yelek_yok": {
+          "P": 0.7209,
+          "R": 0.5082,
+          "F1": 0.5962
+        }
+      }
+    },
+    {
+      "conf": 0.75,
+      "siniflar": {
+        "yelek_var": {
+          "P": 0.8049,
+          "R": 0.2558,
+          "F1": 0.3882
+        },
+        "yelek_yok": {
+          "P": 0.7143,
+          "R": 0.2459,
+          "F1": 0.3659
+        }
+      }
+    },
+    {
+      "conf": 0.85,
+      "siniflar": {
+        "yelek_var": {
+          "P": 0.6667,
+          "R": 0.031,
+          "F1": 0.0593
+        },
+        "yelek_yok": {
+          "P": 1.0,
+          "R": 0.0492,
+          "F1": 0.0938
+        }
+      }
+    }
+  ],
+  "kullanilabilir": false
+}

@@ -387,8 +387,17 @@ try:
 finally:
     detector._get_kkd_model = _orig_get
 
-check("ppe_kits varsayilani iki kiti de iceriyor",
-      set(x.strip() for x in type(settings)().ppe_kits.split(",")) == {"baret", "yelek"},
+# ⛔ YELEK DAGITIMDA KAPALI — olculmus gerekce (scripts/yelek_esik_tara.py):
+# kullanilabilir recall'da (0,51) precision yalnizca 0,72; kabul baraji 0,85.
+# Bu testler kararin sessizce geri alinmasini engeller.
+check("yelek kiti DAGITIMA HAZIR DEGIL diye isaretli",
+      detector.KKD_KITLERI["yelek"]["dagitima_hazir"] is False)
+check("baret kiti dagitima hazir",
+      detector.KKD_KITLERI["baret"]["dagitima_hazir"] is True)
+check("her kitte OLCUM kaydi var (iddia gerekcesiz degil)",
+      all(k.get("olcum") for k in detector.KKD_KITLERI.values()))
+check("ppe_kits VARSAYILANI yalnizca 'baret' (yelek opt-in)",
+      [x.strip() for x in type(settings)().ppe_kits.split(",")] == ["baret"],
       type(settings)().ppe_kits)
 
 

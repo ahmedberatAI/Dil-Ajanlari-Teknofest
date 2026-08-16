@@ -148,7 +148,13 @@ class Settings(BaseSettings):
     # -> bu dagitim icin anlamli kit YELEKTIR. Ikisi de varsayilan olarak listede;
     # agirligi olmayan kit SESSIZCE atlanir (K3 fail-open).
     # NOT: `ppe_detection=False` iken bu ayarin HICBIR etkisi yoktur (K2).
-    ppe_kits: str = "baret,yelek"
+    # ⛔ "yelek" BILEREK VARSAYILANDA YOK. Olculdu (scripts/yelek_esik_tara.py):
+    # kullanilabilir recall'da (0,51) precision yalnizca 0,72 — kabul barajı 0,85.
+    # Yanlis alarm bu sistemde en pahali hatadir; yariya yakini yanlis olan bir
+    # ihlal akisi operatoru kor eder. Agirlik ve veri DURUYOR; yeterli veri
+    # bulununca yeniden egitilip varsayilana alinacak.
+    # Bilerek acmak icin: DILAJAN_PPE_KITS="baret,yelek"
+    ppe_kits: str = "baret"
     ppe_conf: float = 0.45           # dedektor guven esigi (yuksek = daha az yanlis alarm)
     ppe_min_kare: int = 2            # segmentte ihlal saymak icin gereken EN AZ ihlalli kare.
                                      # TEK kare yetmez: kafa donusu/bulanikligin urettigi
