@@ -148,13 +148,18 @@ class Settings(BaseSettings):
     # -> bu dagitim icin anlamli kit YELEKTIR. Ikisi de varsayilan olarak listede;
     # agirligi olmayan kit SESSIZCE atlanir (K3 fail-open).
     # NOT: `ppe_detection=False` iken bu ayarin HICBIR etkisi yoktur (K2).
-    # ⛔ "yelek" BILEREK VARSAYILANDA YOK. Olculdu (scripts/yelek_esik_tara.py):
-    # kullanilabilir recall'da (0,51) precision yalnizca 0,72 — kabul barajı 0,85.
-    # Yanlis alarm bu sistemde en pahali hatadir; yariya yakini yanlis olan bir
-    # ihlal akisi operatoru kor eder. Agirlik ve veri DURUYOR; yeterli veri
-    # bulununca yeniden egitilip varsayilana alinacak.
-    # Bilerek acmak icin: DILAJAN_PPE_KITS="baret,yelek"
-    ppe_kits: str = "baret"
+    # Ikisi de DAGITIMA HAZIR (olculdu, scripts/yelek_esik_tara.py):
+    #   baret: test mAP50 0,934 · baret_yok P 0,893 / R 0,891
+    #   yelek: test mAP50 0,905 · yelek_yok P 0,898 / R 0,783
+    # ⚠️ YELEK BIR ARA DAGITILMIYORDU: ilk egitimde (741 kutu) P 0,535 cikmisti ve
+    # iki tarafli kabul olcutunu (P>=0,85 VE R>=0,50) saglamiyordu. Ikinci veri
+    # kaynagi (Mendeley 8vf7z6v5sb) egitim kutusunu 3.185'e cikarinca gecti.
+    # DERS: "model zayif" demeden once VERI MIKTARINI kontrol et.
+    #
+    # D35 GORSEL DENETIMI: hedef tesiste isciler BARET TAKMIYOR, hi-vis YELEK
+    # giyiyor -> bu dagitim icin ASIL kit YELEKTIR; baret santiye senaryosu icin.
+    # NOT: `ppe_detection=False` iken bu ayarin HICBIR etkisi yoktur (K2).
+    ppe_kits: str = "baret,yelek"
     ppe_conf: float = 0.45           # dedektor guven esigi (yuksek = daha az yanlis alarm)
     ppe_min_kare: int = 2            # segmentte ihlal saymak icin gereken EN AZ ihlalli kare.
                                      # TEK kare yetmez: kafa donusu/bulanikligin urettigi

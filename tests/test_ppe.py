@@ -387,18 +387,24 @@ try:
 finally:
     detector._get_kkd_model = _orig_get
 
-# ⛔ YELEK DAGITIMDA KAPALI — olculmus gerekce (scripts/yelek_esik_tara.py):
-# kullanilabilir recall'da (0,51) precision yalnizca 0,72; kabul baraji 0,85.
-# Bu testler kararin sessizce geri alinmasini engeller.
-check("yelek kiti DAGITIMA HAZIR DEGIL diye isaretli",
-      detector.KKD_KITLERI["yelek"]["dagitima_hazir"] is False)
-check("baret kiti dagitima hazir",
-      detector.KKD_KITLERI["baret"]["dagitima_hazir"] is True)
+# DAGITIM DURUMU her kitte OLCUMLE gerekcelendirilmis olmali. Yelek bir ara
+# `dagitima_hazir=False` idi (741 kutuyla P 0,535); ikinci veri kaynagi
+# eklenince (3.185 kutu) P 0,898'e cikti ve acildi. Bu testler durumun
+# GEREKCESIZ degismesini engeller.
+check("her kitte dagitim durumu TANIMLI",
+      all("dagitima_hazir" in k for k in detector.KKD_KITLERI.values()))
 check("her kitte OLCUM kaydi var (iddia gerekcesiz degil)",
       all(k.get("olcum") for k in detector.KKD_KITLERI.values()))
-check("ppe_kits VARSAYILANI yalnizca 'baret' (yelek opt-in)",
-      [x.strip() for x in type(settings)().ppe_kits.split(",")] == ["baret"],
-      type(settings)().ppe_kits)
+check("olcum kaydi SAYI iceriyor (bos slogan degil)",
+      all(any(ch.isdigit() for ch in k["olcum"]) for k in detector.KKD_KITLERI.values()),
+      str({a: k["olcum"] for a, k in detector.KKD_KITLERI.items()}))
+# ppe_kits varsayilani YALNIZCA dagitima hazir kitleri icermeli
+_vars = [x.strip() for x in type(settings)().ppe_kits.split(",") if x.strip()]
+check("ppe_kits varsayilani yalnizca DAGITIMA HAZIR kitleri iceriyor",
+      all(detector.KKD_KITLERI[k]["dagitima_hazir"] for k in _vars if k in detector.KKD_KITLERI),
+      str(_vars))
+check("ppe_kits varsayilanindaki her kit TANIMLI",
+      all(k in detector.KKD_KITLERI for k in _vars), str(_vars))
 
 
 # ===========================================================================

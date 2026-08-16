@@ -54,7 +54,7 @@ from PIL import Image, ImageDraw  # noqa: E402
 from dilajan import detector  # noqa: E402
 from dilajan.video import extract_timestamped_frames  # noqa: E402
 
-HEDEF = os.path.join(ROOT, "data", "ppe_tesis_etiket")
+HEDEF = os.path.join(ROOT, "data", "ppe_tesis_etiket")  # --kit ile alt dizin eklenir
 # TASARIM NOTU (olculdu, ilk surumde YANLISTI):
 # Tesis kamerasi TAVANDAN ve UZAKTAN cekiyor; 1080p karede bir kafa ~20-30 piksel.
 # Ilk surum 3x3 izgara + 400 px hucre kullaniyordu -> kafa ~10 piksele iniyordu ve
@@ -77,9 +77,9 @@ def _kareler(yol: str, azami: int = 9):
     return [(f"{int(t) // 60:02d}:{int(t) % 60:02d}", j) for t, j in ham]
 
 
-def _model_kutulari(frames, conf: float):
+def _model_kutulari(frames, conf: float, kit: str = "baret"):
     """Kare basina [(sinif_adi, xyxy, guven)] — kutu cizimi icin."""
-    model = detector._get_ppe_model()
+    model = detector._get_kkd_model(kit)
     if model is None:
         return None
     imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
@@ -96,8 +96,8 @@ def _model_kutulari(frames, conf: float):
 
 
 def _renk(ad: str):
-    """baret_yok = IHLAL -> kirmizi ; baret_var -> yesil."""
-    return (255, 70, 70) if ad == "baret_yok" else (70, 220, 120)
+    """`*_yok` = IHLAL -> kirmizi ; `*_var` -> yesil (kitten bagimsiz)."""
+    return (255, 70, 70) if str(ad).endswith("_yok") else (70, 220, 120)
 
 
 def _kontak_sayfasi(imgs, kutular, kutu_ciz: bool) -> Image.Image:
@@ -164,11 +164,17 @@ def main() -> int:
     ap.add_argument("--tohum", type=int, default=2026)
     ap.add_argument("--kutusuz", action="store_true",
                     help="kutu CIZMEDEN de sayfa uret (anchoring karsilastirmasi)")
+    ap.add_argument("--kit", default="baret", choices=sorted(detector.KKD_KITLERI),
+                    help="hangi KKD kiti icin paket uretilecek")
     args = ap.parse_args()
 
-    if not detector.ppe_available():
-        print("[HATA] yolo11n-ppe.pt yok — once: python scripts/train_ppe.py")
+    if not detector.kkd_available(args.kit):
+        k = detector.KKD_KITLERI[args.kit]
+        print(f"[HATA] '{args.kit}' agirligi yok ({k['agirlik']}) — once: {k['uret']}")
         return 1
+    # Kit basina AYRI dizin: iki kitin sayfalari/CSV'si karismasin.
+    global HEDEF
+    HEDEF = os.path.join(HEDEF, args.kit)
 
     klipler = sorted(glob.glob(os.path.join(ROOT, "data", "eval_defense",
                                             "*", "*", "*.mp4")))
@@ -178,7 +184,7 @@ def main() -> int:
     random.Random(args.tohum).shuffle(klipler)
 
     os.makedirs(HEDEF, exist_ok=True)
-    kovalar = {"A_ihlal": [], "B_baretli": [], "C_bos": []}
+    kovalar = {"A_ihlal": [], "B_kaideli": [], "C_bos": []}
     hedef_n = args.n
 
     print("=" * 86)
@@ -195,15 +201,16 @@ def main() -> int:
         frames = _kareler(yol)
         if not frames:
             continue
-        paket = _model_kutulari(frames, args.conf)
+        paket = _model_kutulari(frames, args.conf, kit=args.kit)
         if paket is None:
             print("[HATA] model yuklenemedi")
             return 1
         imgs, kutular = paket
-        n_yok = sum(1 for kk in kutular for ad, _, _ in kk if ad == "baret_yok")
-        n_var = sum(1 for kk in kutular for ad, _, _ in kk if ad == "baret_var")
+        _k = detector.KKD_KITLERI[args.kit]
+        n_yok = sum(1 for kk in kutular for ad, _, _ in kk if ad == _k["yok"])
+        n_var = sum(1 for kk in kutular for ad, _, _ in kk if ad == _k["var"])
 
-        kova = "A_ihlal" if n_yok else ("B_baretli" if n_var else "C_bos")
+        kova = "A_ihlal" if n_yok else ("B_kaideli" if n_var else "C_bos")
         if len(kovalar[kova]) >= hedef_n:
             continue
         kovalar[kova].append(yol)
@@ -264,7 +271,7 @@ Soru şu: *bu klipte baret takmayan en az bir kişi var mı?*
 | Kova | Ne | Neyi ölçer |
 |---|---|---|
 | `A_ihlal` | dedektör ihlal buldu | **precision** (yanlış alarm) |
-| `B_baretli` | dedektör baretli kafa buldu | sınıflandırma hatası |
+| `B_kaideli` | dedektör KURALLI (KKD takan) kişi buldu | sınıflandırma hatası |
 | `C_bos` | dedektör hiçbir şey bulmadı | **recall** (kaçırma) |
 
 **`C_bos` kovasını atlamayın.** Yalnızca A'ya bakılırsa precision ölçülür,

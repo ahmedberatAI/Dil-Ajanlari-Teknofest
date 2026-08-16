@@ -269,7 +269,11 @@ Bulgu üzerine yelek verisi arandı ve bulundu:
 
 Karşılaştırma: baret dedektöründe `baret_yok` P **0,893** / R **0,891**.
 
-### ⛔ KARAR: dağıtılmıyor — eşik taraması
+> ⚠️ **Aşağıdaki "dağıtılmıyor" kararı GEÇERSİZDİR — ikinci veri kaynağıyla
+> aşıldı. Kayıt olarak duruyor çünkü DERSİ değerli: "model zayıf" teşhisi
+> koymadan önce veri miktarını kontrol et.** Güncel durum §5d'de.
+
+### ⛔ (GEÇERSİZ) İlk karar: dağıtılmıyor — eşik taraması
 
 `scripts/yelek_esik_tara.py` güven eşiğini taradı:
 
@@ -294,8 +298,54 @@ birden sağlamıyor.**
 yazan bir uyarı** düşer; sessizce güvenilmez olay üretmez.
 Ağırlık ve veri **silinmedi** — yeterli veri bulununca yeniden eğitilecek.
 
-**Kalan iş:** yelek için ≥5.000 kutuluk, `yelek_var` / `yelek_yok` ayrı etiketli,
-izin verici lisanslı (CC BY 4.0+) veri seti bulmak.
+---
+
+## 5d. ✅ YELEK dedektörü — ikinci veri kaynağıyla **dağıtıma girdi**
+
+Yukarıdaki karar "daha çok veri gerek" diyordu. İkinci kaynak bulundu:
+
+**Mendeley [`8vf7z6v5sb`](https://data.mendeley.com/datasets/8vf7z6v5sb)** —
+"PPE Detection Dataset (5-Class)", **CC BY 4.0**, Mendeley `public-api`
+`data_licence` alanından teyitli (projenin `data/industrial` lisans çelişkisini
+çözerken kullandığı **aynı yetkili kaynak**). 2.585 görsel, 17.827 kutu.
+
+**Mükerrer denetimi (K10):** gsnvb ↔ Mendeley arasında **0 ortak MD5**, 0 ortak
+Roboflow içerik hash'i. Mendeley'nin kendi içindeki **31 kopya elendi**;
+bölme **dedup'tan sonra** yapıldı → eğitim/test sızıntısı yok.
+
+| | önce | sonra |
+|---|---|---|
+| toplam yelek kutusu | 2.235 | **7.963** |
+| `yelek_yok` eğitim kutusu | 741 | **3.185** (4,3×) |
+
+**Yeniden eğitim (yolo11n, 100 epoch, test bölümü):**
+
+| | AP50 | P | R |
+|---|---|---|---|
+| tümü (mAP50) | **0,905** | — | — |
+| `yelek_var` | 0,927 | 0,894 | 0,890 |
+| **`yelek_yok`** (ihlal) | **0,882** | **0,898** | **0,783** |
+
+Eşik taraması: **conf 0,25–0,75 aralığının tamamı** iki taraflı ölçütü sağlıyor.
+Varsayılan 0,45'te P=0,898 / R=0,783 → **`ppe_kits` varsayılanına eklendi.**
+
+> ### ⭐ DERS: dedektör zayıf değildi, **veri azdı**
+> İlk ölçüm `yelek_yok` için P=0,535 verdi ve "dağıtılamaz" dedik — doğru karardı.
+> Ama teşhis "model yetersiz" değil, **"741 kutu yetersiz"** olmalıydı. Eğitim
+> kutusu 4,3× artınca precision 0,535 → 0,898'e çıktı. **Bir dedektörü elemeden
+> önce veri miktarını kontrol et.**
+
+**Görsel doğrulama (tesis verisi):** `B_kaideli` kovası doldu — dedektör tesiste
+**yeşil hi-vis yelekleri doğru buluyor** (güven 0,48–0,70), kutular tam yeleğin
+üzerinde. Baret kitinde bu kova **boştu** (tesiste baret yok). Bir karede koyu
+lacivert üniforma yelek sanıldı (0,48) — `yelek_var` P=0,894 ile tutarlı, beklenen
+oranda.
+
+**Tesis tetiklenmesi:** yelek 3/40 (%8) · baret 1/40 (%2) — alarm yağmuru yok.
+⚠️ Yine de bu bir **doğruluk ölçümü değil** (tesiste ground-truth yok).
+Etiketleme paketi kit başına üretiliyor: `scripts/ppe_etiket_hazirla.py --kit yelek`
+
+**Kalan iş:** tesis etiketlemesi (~20 dk insan işi) → `ppe_dispatch` açılabilir.
 
 ---
 
