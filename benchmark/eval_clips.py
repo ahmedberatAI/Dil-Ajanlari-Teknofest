@@ -127,6 +127,22 @@ def _kosum_kunyesi() -> dict:
     }
 
 
+def _sizinti_celiskili(rel_path: str) -> bool:
+    """Klip, ZIT etiketli bir klibin tam kapsamasinda mi? (D36 sahne sizintisi)
+
+    Kayit okunamazsa olcumu DURDURMA (K3 fail-open) — yalnizca False don.
+    Bu alan hicbir metrigi degistirmez; raporlama durustlugu icindir.
+    """
+    try:
+        from benchmark.sizinti_eval_defense import celiskili_mi
+    except Exception:
+        try:
+            from sizinti_eval_defense import celiskili_mi  # type: ignore
+        except Exception:
+            return False
+    return celiskili_mi(rel_path)
+
+
 def _ara_kayit_yol() -> str:
     """Ara-kayit dosyasi: hangi SET + hangi KATEGORILER + hangi KUNYE ile kosuldugu.
 
@@ -254,6 +270,10 @@ def evaluate_clip(path: str, category: str) -> dict:
         "category_match_onarik": cat_onarik,   # onarik olumsuzlama kapisi
         "isg_sinif": isg_sinif,                # alt klasorden gercek ISG sinifi
         "isg_match": isg_eslesme,              # sinifa OZGU kalip + onarik kapi
+        # D36 — SAHNE SIZINTISI (yalnizca GORUNURLUK; metrigi DEGISTIRMEZ):
+        # bu klip, ZIT etiketli bir klibin tam kapsamasinda mi? Oyleyse ikili
+        # gercek-etiket kendi icinde celiskilidir ve model burada ZORUNLU yanilir.
+        "sizinti_celiskili": _sizinti_celiskili(os.path.relpath(path, ROOT)),
         "triggered": res.triggered_functions,
         "duration_s": dur,
         "latency_s": round(dt, 1),
