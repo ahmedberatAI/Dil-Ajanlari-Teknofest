@@ -38,8 +38,15 @@ runs/
 # depoya girmez (takim karari, 2026-08-12).
 docs/HANDOFF.md
 
-# Paylasim paketi: agirliklar (*.pt zaten disarida) ve HANDOFF kopyasi
-# repoya GIRMEZ. HANDOFF icin takim karari 2026-08-12 (docs/HANDOFF.md ile ayni gerekce).
-paylasim/agirliklar/
+# Paylasim paketi
+# HANDOFF kopyasi repoya GIRMEZ — takim karari 2026-08-12 (docs/HANDOFF.md ile ayni gerekce).
 paylasim/HANDOFF.md
 paylasim/*.zip
+# ISTISNA — paylasim/agirliklar/ ICERI ALINIR (yukaridaki genel `*.pt` kuralina ragmen):
+#   * `*.pt` kurali "buyuk, ayrica indirilir" gerekcesiyle konmustu; bu iki agirlik
+#     TOPLAM 11 MB ve BASKA HICBIR YERDEN INDIRILEMEZ — biz egittik.
+#   * Depo OZEL (API ile dogrulandi, unauth 404) -> yalnizca davetli ekip gorur.
+#   * Kaynak veri CC BY 4.0, agirliklar KISISEL VERI ICERMEZ -> dagitimi temiz.
+#   Boylece ekip tek `git pull` ile calisir hale gelir; yeniden egitim gerekmez.
+!paylasim/agirliklar/
+!paylasim/agirliklar/*.pt
