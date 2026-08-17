@@ -107,6 +107,15 @@ class Settings(BaseSettings):
                                         # iste; DUSUK ise operatore "manuel teyit oneririz" aksiyonu ekle. Girdi-tavanini
                                         # (grenli'de sessiz dusuk-puanlama) DURUST + puanlanan-otonomi davranisina cevirir.
                                         # Additive (tespiti/recall'i degistirmez) -> dusuk-risk. (olculecek)
+    chat_kritik_hatirlatma: bool = True   # D36: DIYALOGDA bekleyen Kritik/Yuksek bulguyu
+                                     # yanit sonunda TEK SATIRLA hatirlat (chat_agent._bekleyen_kritik_notu).
+                                     # OLCULEN KUSUR: "Video kac saniye?" -> ajan "12 saniye" deyip DURUYORDU;
+                                     # baglamda cozulmemis KRITIK bulgu beklerken. Sartname Otonomi maddesi
+                                     # "inisiyatif alma" istiyor. Prompt ile UC iterasyon YAKINSAMADI
+                                     # (5,00 -> 4,80 -> 4,60), bu yuzden garanti KODA tasindi.
+                                     # VARSAYILAN ACIK: yalnizca chat_agent yolunu etkiler; eval_defense
+                                     # olcum kulliyati DIYALOG KULLANMAZ, dolayisiyla arsivler etkilenmez.
+                                     # Yanit bulguyu zaten aniyorsa hatirlatma EKLENMEZ (tekrar olmaz).
     isg_lens: bool = False           # D36: describe'a IS GUVENLIGI mercegi ekle (prompts.ISG_LENS_SUFFIX).
                                      # KOK NEDEN: temel describe talimati bir SUC/GUVENLIK sozlugudur ve
                                      # ISG tehlikelerini ACIKCA yasaklar ("ekipman/yuk tasima OLAY DEGILDIR").

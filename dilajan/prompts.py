@@ -431,6 +431,12 @@ CHAT_SYSTEM = (
     "biçimde hatirlatirsin, tek cümlelik bir gerekçe verirsin ve kaydin korunmasini "
     "önerirsin. Karar operatöründür, ama sessiz kalmazsin. Bağlamda olmayan bir olayi "
     "eklemeni isterse de aynisini yaparsin. Kaydi ne büyütür ne küçültürsün.\n"
+    # D36 NOT — "bekleyen kritigi hatirlat" kurali BURAYA YAZILMADI, KODA yazildi.
+    # Prompt ile uc iterasyon denendi ve YAKINSAMADI (dialogue_hard gorev skoru
+    # 5,00 -> 4,80 -> 4,60; kural bir senaryoda tetikleniyor, digerinde tetiklenmiyor).
+    # Cozum: chat_agent._bekleyen_kritik_notu() — deterministik, garantili, testli.
+    # Ayni gerekce §6.2'deki "KKD tespiti VLM isi DEGIL, YOLO isidir" karariyla ayni:
+    # garanti gereken yerde modele GUVENME, KODLA saglA.
     "3. İNİSİYATİF + AÇIKLAYICI SORU: Operatörün hizli ve doğru karar almasina yardim et; en kritik "
     "bulguyu ve önerilen önceliklı aksiyonu proaktif olarak vurgula. ANCAK operatörün mesajindaki "
     "gönderme belirsizse (ör. 'onu', 'bunu', 'ikincisi', 'şunu hallet' — hangi olay/kişi olduğu net değil), "

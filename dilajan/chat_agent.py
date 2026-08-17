@@ -10,6 +10,7 @@ import re
 from typing import Any, Dict, List, Optional
 
 from dilajan import memory
+from dilajan.config import settings
 from dilajan.llm_client import VLMClient
 from dilajan.mock_functions import ALL_TOOLS, TOOL_REGISTRY
 from dilajan.prompts import CHAT_EXECUTE_PROMPT, CHAT_SYSTEM
@@ -141,11 +142,79 @@ def build_context(result: AnalysisResult) -> str:
     return "\n".join(lines)
 
 
+_KRITIK_SEV = ("kritik", "yüksek", "yuksek")
+
+
+def _bekleyen_kritik(context: str) -> Optional[tuple]:
+    """Baglamdaki EN ONEMLI cozulmemis bulguyu (zaman, onem, metin) dondurur.
+
+    D36 — NEDEN KODDA, PROMPT'TA DEGIL:
+    Sertlestirilmis testte (dialogue_hard.py, D_inisiyatif_sorulmadan) operator
+    "Video kac saniye?" diye sordu; ajan "Video 12 saniye surmektedir." deyip DURDU.
+    Baglamda cozulmemis KRITIK bulgu (00:08 yerde hareketsiz kisi) bekliyordu.
+    Sartname Otonomi maddesi tam olarak "inisiyatif alma" diyor.
+
+    Prompt ile UC iterasyon denendi ve YAKINSAMADI (gorev skoru 5,00 -> 4,80 -> 4,60;
+    kural bir senaryoda tetikleniyor, digerinde tetiklenmiyor). Garanti gereken yerde
+    modele guvenmek yerine kodla saglamak, §6.2'deki "KKD tespiti VLM isi DEGIL YOLO
+    isidir" karariyla ayni mantiktir.
+
+    IKI BAGLAM BICIMI de desteklenir (biri uretimde, digeri testlerde kullaniliyor):
+        uretim : "  [00:08] Yerde hareketsiz kisi (onem: Kritik, tur: Saglik)"
+        duz    : "- 00:08 | Kritik | Yerde hareketsiz kisi"
+    Tek bicim desteklenseydi testte calisip uretimde calismazdi (veya tersi).
+    """
+    if not context:
+        return None
+    en_iyi = None
+    for ham in context.splitlines():
+        s = ham.strip()
+        if not s or not (s.startswith("[") or s.startswith("-") or s.startswith("  [")):
+            continue
+        m = re.match(r"^[-\s]*\[?(\d{1,2}:\d{2})", s)
+        if not m:
+            continue
+        zaman = m.group(1)
+        dusuk = s.lower()
+        onem = next((o for o in _KRITIK_SEV if o in dusuk), None)
+        if onem is None:
+            continue
+        # metin: bicime gore ya "] ... (" arasi ya da son "|" sonrasi
+        if "|" in s:
+            metin = s.rsplit("|", 1)[-1].strip()
+        else:
+            metin = re.sub(r"^[-\s]*\[[^\]]*\]\s*", "", s)
+            metin = re.split(r"\s*\(önem", metin)[0].strip()
+        agirlik = 2 if onem == "kritik" else 1
+        if en_iyi is None or agirlik > en_iyi[0]:
+            en_iyi = (agirlik, zaman, onem, metin)
+    return (en_iyi[1], en_iyi[2], en_iyi[3]) if en_iyi else None
+
+
+def _bekleyen_kritik_notu(context: str, answer: str) -> str:
+    """Yanit bekleyen kritigi ZATEN anmiyorsa tek satirlik hatirlatma dondurur."""
+    if not settings.chat_kritik_hatirlatma:
+        return ""
+    b = _bekleyen_kritik(context)
+    if not b:
+        return ""
+    zaman, onem, metin = b
+    dusuk = (answer or "").lower()
+    # Zaten anilmissa TEKRAR ETME (yoksa her yanit ayni cumleyle bitip robotlasir).
+    if zaman in dusuk:
+        return ""
+    anahtarlar = [w for w in re.findall(r"\w{5,}", (metin or "").lower())][:3]
+    if anahtarlar and sum(1 for w in anahtarlar if w in dusuk) >= 2:
+        return ""
+    return f"\n\nHatırlatma: {zaman} — {metin} ({onem} önem) hâlâ bekliyor."
+
+
 def respond(
     context: str,
     history: Optional[List[dict]],
     message: str,
     max_tokens: int = 400,
+    temperature: float = 0.3,
 ) -> str:
     """Bir operatör mesajina, analiz baglami + sohbet gecmisine dayanarak yanit uretir."""
     if not context:
@@ -163,7 +232,15 @@ def respond(
             messages.append({"role": m["role"], "content": m["content"]})
     messages.append({"role": "user", "content": message})
     try:
-        answer = _get_client().chat(messages, temperature=0.3, max_tokens=max_tokens).strip()
+        # D36 OLCUM KUSURU: burasi eskiden SABIT temperature=0.3 idi ve DILAJAN_TEMPERATURE
+        # ayarini yok sayiyordu. Sonuc: diyalog olcumleri YENIDEN URETILEBILIR DEGILDI —
+        # ayni yapilandirmanin iki kosusu farkli yanit veriyordu. Bu, D36'da prompt
+        # degisikliklerine YANLIS ATFEDILEN skor oynamalarina yol acti (5,00 -> 4,80 ->
+        # 4,60 -> 5,00 dizisinin ne kadari degisiklik, ne kadari gurultu ayirt EDILEMEDI).
+        # Artik parametre; VARSAYILAN 0.3 (K2 — uretim davranisi BIREBIR ayni),
+        # olcum betikleri 0.0 gecerek tekrarlanabilir kosum alir.
+        answer = _get_client().chat(messages, temperature=temperature,
+                                    max_tokens=max_tokens).strip()
     except Exception as ex:
         return f"Yanıt üretilirken hata oluştu: {ex}"
     # 2) B#1 KAPILI ICRA: operatör ONAY verdiyse, önerilen aksiyonu GERÇEKTEN çalıştır (insan-onay kapısı)
@@ -172,6 +249,13 @@ def respond(
         executed = _maybe_execute(context, history, message)
         if executed:
             answer += "\n\n" + executed
+    # 3) D36 INISIYATIF GARANTISI: bekleyen Kritik/Yuksek bulgu varsa ve yanit onu
+    #    ANMIYORSA tek satirlik hatirlatma eklenir (bkz. _bekleyen_kritik_notu).
+    #    Yanit onu zaten aniyorsa hicbir sey eklenmez -> tekrar/robotlasma olmaz.
+    try:
+        answer += _bekleyen_kritik_notu(context, answer)
+    except Exception:
+        pass  # hatirlatma URETILEMEZSE yanit yine de doner (K3 fail-open)
     return answer
 
 

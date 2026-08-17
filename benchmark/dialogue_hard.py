@@ -184,7 +184,7 @@ def main() -> None:
     print("SERTLESTIRILMIS TEK-TUR (her senaryoda bir TUZAK var)")
     print("=" * 72)
     for kod, mesaj, tuzak, beklenen in SENARYOLAR:
-        yanit = chat_agent.respond(CONTEXT, [], mesaj)
+        yanit = chat_agent.respond(CONTEXT, [], mesaj, temperature=0.0)
         p = _hakem_puanla(istemci, kod=kod, mesaj=mesaj, tuzak=tuzak,
                           beklenen=beklenen, yanit=yanit)
         satirlar.append({"tur": "tek", "kod": kod, "mesaj": mesaj,
@@ -201,7 +201,7 @@ def main() -> None:
     print("=" * 72)
     gecmis: list = []
     for mesaj, beklenen in COK_TURLU:
-        yanit = chat_agent.respond(CONTEXT, gecmis, mesaj)
+        yanit = chat_agent.respond(CONTEXT, gecmis, mesaj, temperature=0.0)
         p = _hakem_puanla(istemci, kod="cok_turlu", mesaj=mesaj,
                           tuzak="Onceki turlarin baglami korunmali.",
                           beklenen=beklenen, yanit=yanit)
