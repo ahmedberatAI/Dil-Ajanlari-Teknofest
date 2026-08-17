@@ -140,11 +140,25 @@ def main() -> int:
     # ---------------- VERI ----------------
     print("\n[VERI] Setler yerinde mi?")
 
-    @kontrol("data/eval_defense 200 klip", kritik=False)
+    @kontrol("data/eval_defense 197 klip (3'u karantinada)", kritik=False)
     def _():
+        # D36: set 200 -> 197. UC klip KASITLI olarak karantinaya alindi cunku ayni
+        # goruntu ZIT etiketle iki kez settedeydi (piksel duzeyinde zamansal hizalama
+        # ile olculdu; kisa klip uzun klibin ICINDE %100 kapsanmis). Tutarli bir model
+        # o ciftlerin birinde ZORUNLU yaniliyordu -> MCC'nin ust siniri 1,0 DEGILDI.
+        # Bu kontrol eskiden 200 bekliyordu; guncellenmeseydi her kosumda SAHTE UYARI
+        # cikacak ve birileri "duzeltmek" icin celiskili klipleri GERI KOYABILECEKTI.
+        # Gerekce: docs/veri_seti_nihai_denetim_2026-08-17.md
         import glob
-        n = len(glob.glob(os.path.join(ROOT, "data", "eval_defense", "*", "*", "*.mp4")))
-        return n == 200, f"{n} klip"
+        kok = os.path.join(ROOT, "data", "eval_defense")
+        n = len(glob.glob(os.path.join(kok, "*", "*", "*.mp4")))
+        kar = len(glob.glob(os.path.join(kok, "_celiskili_cikarildi", "*.mp4")))
+        if n == 197 and kar == 3:
+            return True, f"{n} klip + {kar} karantinada"
+        if n == 200:
+            return False, ("200 klip — celiskili UC klip karantinaya ALINMAMIS. "
+                           "Duzeltme: python scripts/build_defense_eval.py")
+        return False, f"{n} klip (beklenen 197), karantina {kar} (beklenen 3)"
 
     @kontrol("data/isafety_bench 1100 klip + etiketler", kritik=False)
     def _():
