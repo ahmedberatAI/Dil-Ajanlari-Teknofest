@@ -14,8 +14,26 @@ SONUCU: tutarli davranan bir model bu ciftlerin BIRINDE ZORUNLU olarak yanilir.
 Yani raporlanabilir MCC'nin ust siniri 1,0 DEGILDIR. Bu, model kusuru degil
 VERI kusurudur ve oyle raporlanmalidir.
 
-TASARIM: klipler SILINMEZ ve varsayilan davranis DEGISMEZ (K2/K4) — arsivlenmis
-olcumlerle karsilastirilabilirlik korunur. Bu modul yalnizca GORUNUR kilar.
+DURUM (2026-08-17): UC TAM KAPSAMA cifti icin KAPSANAN (kisa) klip KARANTINAYA
+alindi -> `data/eval_defense/_celiskili_cikarildi/`. `_` ile baslayan klasorler
+eval_clips tarafindan atlanir, yani klipler SILINMEDI ama olcume GIRMIYOR.
+Set artik 197 klip: Anomali 99 + Normal 98.
+
+KURAL: kapsanan cikarildi, kapsayan KALDI. Gerekce: uzun klip kisa olanin
+icerdigi her seyi zaten iceriyor -> bilgi kaybi en az; ve hangi etiketin dogru
+oldugundan BAGIMSIZ olarak ayni goruntunun paydada iki kez sayilmasi biter.
+
+OLCULEN ETKI (arsivlerden GPU'suz yeniden hesap, eski degerler K4 geregi duruyor):
+    kol                MCC 200 klip -> MCC 197 klip
+    8B taban            +0,0693 -> +0,0793
+    8B kurallar         +0,0706 -> +0,0673
+    8B + ISG mercek     -0,0201 -> -0,0148
+    Qwen3.8-27B         +0,0833 -> +0,0913
+Degisimler +-0,01 mertebesinde ve SIRALAMA DEGISMEDI. Yani cikarma hicbir sonucu
+kurtarmadi; yalnizca tavani temizledi (artik MCC=1,0 yapisal olarak ulasilabilir).
+
+KISMI ortusen 9 cift SETTE KALDI: etiket celiskisi MUTLAK degil (tehlike, uzun
+klibin ortusmeyen kisminda olabilir) ve cikarmak n'i gereksiz kucultur.
 Rapor: docs/veri_seti_nihai_denetim_2026-08-17.md
 """
 from __future__ import annotations

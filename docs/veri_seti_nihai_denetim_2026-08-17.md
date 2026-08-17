@@ -139,10 +139,45 @@ kliplerde duruyor → ayırt edici değil, iki tarafta da gürültü üretiyor.
 **kusursuz değil ve kusursuz hale getirilemez** — çelişkiler kaynak veri setinin
 tek-etiketli şemasından geliyor.
 
-## Yapılması gerekenler (öncelik sırasıyla)
+---
 
-1. **Üç mutlak çelişkili çiftten birer klip setten çıkarılmalı** veya en azından
-   manifeste işaretlenmeli. Aksi halde MCC'nin tavanı sessizce 1,0'ın altında kalır.
+## ✅ UYGULANDI — temiz tavan (2026-08-17)
+
+Üç tam-kapsama çiftinin **kapsanan (kısa)** klibi karantinaya alındı:
+
+| çıkarılan | sette kalan |
+|---|---|
+| `Normal/Safe_Walkway/4_te16.mp4` | `Anomali/Safe_Walkway_Violation/0_tr13.mp4` |
+| `Normal/Safe_Walkway/4_tr8.mp4` | `Anomali/Opened_Panel_Cover/2_tr119.mp4` |
+| `Anomali/Opened_Panel_Cover/2_tr104.mp4` | `Normal/Authorized_Intervention/5_te5.mp4` |
+
+Klipler **silinmedi**, `data/eval_defense/_celiskili_cikarildi/` altına taşındı
+(`_` ile başlayan klasörler `eval_clips` tarafından atlanır). Geri almak tek `mv`.
+Kayıt: `_celiskili_cikarildi/KARANTINA.json` (MD5'ler dahil).
+
+**Set: 200 → 197 klip** (Anomali 99 + Normal 98). Doğrulandı.
+
+### Etkisi — arşivlerden GPU'suz yeniden hesap
+
+| kol | MCC (200) | **MCC (197)** | değişim |
+|---|---|---|---|
+| 8B taban | +0,0693 | **+0,0793** | +0,0100 |
+| 8B kurallar | +0,0706 | **+0,0673** | −0,0033 |
+| 8B + İSG merceği | −0,0201 | **−0,0148** | +0,0053 |
+| Qwen3.8-27B | +0,0833 | **+0,0913** | +0,0080 |
+
+**Değişimler ±0,01 mertebesinde ve sıralama DEĞİŞMEDİ.** Çıkarma hiçbir sonucu
+kurtarmadı — yalnızca tavanı temizledi. Artık MCC = 1,0 **yapısal olarak
+ulaşılabilir**; önceden değildi.
+
+Eski (200 klip) değerler K4 gereği **silinmedi**, yan yana duruyor.
+
+**Kısmi örtüşen 9 çift sette KALDI:** etiket çelişkisi mutlak değil (tehlike, uzun
+klibin örtüşmeyen kısmında olabilir) ve çıkarmak n'i gereksiz küçültürdü.
+
+---
+
+## Kalan yapılacaklar (öncelik sırasıyla)
 2. **`Opened_Panel_Cover` ayrı raporlanmalı** — bu sınıftaki başarısızlık model
    kusuru olarak sunulmamalı, veri kusuru olarak sunulmalı.
 3. **Eğitim yasağı koda bağlanmalı:** `data/eval_defense` ve `data/industrial`
