@@ -37,3 +37,9 @@ runs/
 # Handoff notu — YALNIZCA YEREL. Yeni sohbet devri icin hazirlanir,
 # depoya girmez (takim karari, 2026-08-12).
 docs/HANDOFF.md
+
+# Paylasim paketi: agirliklar (*.pt zaten disarida) ve HANDOFF kopyasi
+# repoya GIRMEZ. HANDOFF icin takim karari 2026-08-12 (docs/HANDOFF.md ile ayni gerekce).
+paylasim/agirliklar/
+paylasim/HANDOFF.md
+paylasim/*.zip

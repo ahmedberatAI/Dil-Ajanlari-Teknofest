@@ -1,0 +1,29 @@
+{
+  "aciklama": "D36 — piksel duzeyinde zamansal hizalama ile bulunan MUTLAK etiket celiskileri. Kapsanan (kisa) klip karantinaya alindi, kapsayan (uzun) klip sette KALDI. Klipler SILINMEDI.",
+  "kural": "kapsanan cikarilir, kapsayan kalir (bilgi kaybi en az + cift sayim biter)",
+  "uyari": "A subset B ve etiketler zit olmasi MUTLAKA celiski demek DEGILDIR — tehlike B'nin ortusmeyen kisminda olabilir. Ama ayni goruntunun iki kez paydada sayilmasi her halukarda kusurdur.",
+  "rapor": "docs/veri_seti_nihai_denetim_2026-08-17.md",
+  "cikarilanlar": [
+    {
+      "eski_yol": "data/eval_defense/Normal/Safe_Walkway/4_te16.mp4",
+      "karantina": "data/eval_defense/_celiskili_cikarildi/Normal__Safe_Walkway__4_te16.mp4",
+      "kapsayan_kalan": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr13.mp4",
+      "md5": "3c2f8f50f018a256566cdb6c2237cf86",
+      "neden": "7,05 sn'nin %100'u 0_tr13 icinde; etiketler zit (GUVENLI vs GUVENSIZ)"
+    },
+    {
+      "eski_yol": "data/eval_defense/Normal/Safe_Walkway/4_tr8.mp4",
+      "karantina": "data/eval_defense/_celiskili_cikarildi/Normal__Safe_Walkway__4_tr8.mp4",
+      "kapsayan_kalan": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr119.mp4",
+      "md5": "e842aaf2181089bc77b15d5d30904ac8",
+      "neden": "%100'u 2_tr119 icinde; etiketler zit"
+    },
+    {
+      "eski_yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr104.mp4",
+      "karantina": "data/eval_defense/_celiskili_cikarildi/Anomali__Opened_Panel_Cover__2_tr104.mp4",
+      "kapsayan_kalan": "data/eval_defense/Normal/Authorized_Intervention/5_te5.mp4",
+      "md5": "b6109b1d6165c251fc4d3e7f7285e0eb",
+      "neden": "7,00 sn'nin %100'u 5_te5 icinde; etiketler zit (GUVENSIZ vs GUVENLI)"
+    }
+  ]
+}
