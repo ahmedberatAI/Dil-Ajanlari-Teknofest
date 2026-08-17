@@ -764,6 +764,55 @@ def main() -> None:
     print(f"\nkuruldu: {len(rows)} klip ({n_link} hardlink, {n_copy} kopya, "
           f"{len(rows) - n_link - n_copy} zaten vardi) -> {rel(out)}\nmanifest -> {rel(mpath)}",
           flush=True)
+    _celiskilileri_karantinaya_al(out)
+
+
+def _celiskilileri_karantinaya_al(out: str) -> None:
+    """D36 — ZIT ETIKETLI TAM-KAPSAMA ciftlerini olcumden cikar.
+
+    NEDEN OTOMATIK: bu karantina 2026-08-17'de ELLE yapilmisti. Ama bu betik
+    her kosumda seti YENIDEN kuruyor ve karantinadan HABERSIZDI -> baska bir
+    makinede kurulum 200 klip uretiyordu. Sonuc: o makinedeki olcumler bizim
+    arsivlerimizle KARSILASTIRILAMAZ hale geliyordu ve bunu fark etmek zordu.
+
+    Piksel duzeyinde zamansal hizalama ile olculdu: uc kisa klip, ZIT etiketli
+    uzun kliplerin ICINDE %100 kapsanmis durumda. Tutarli bir model bu ciftlerin
+    birinde ZORUNLU yanilir -> MCC'nin ust siniri 1,0 DEGILDI.
+
+    KURAL: kapsanan (kisa) cikarilir, kapsayan (uzun) KALIR — uzun klip kisa
+    olanin icerdigi her seyi zaten iceriyor, bilgi kaybi en az.
+    Klipler SILINMEZ, `_celiskili_cikarildi/` altina tasinir; `_` ile baslayan
+    klasorler eval_clips tarafindan ATLANIR. Geri almak tek `mv`.
+
+    Rapor: docs/veri_seti_nihai_denetim_2026-08-17.md
+    """
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from benchmark.sizinti_eval_defense import TAM_KAPSAMA
+    except Exception as e:  # kayit okunamazsa kurulumu DURDURMA, ama SESSIZ de kalma
+        print(f"[KARANTINA UYARI] celiskili klip kaydi okunamadi ({type(e).__name__}); "
+              f"set 200 klip kaldi. benchmark/sizinti_eval_defense.py'yi kontrol et.",
+              flush=True)
+        return
+
+    kar = os.path.join(out, "_celiskili_cikarildi")
+    tasinan = 0
+    for goreli, kapsayan in TAM_KAPSAMA:
+        # goreli: "data/eval_defense/<Etiket>/<Sinif>/<ad>.mp4" -> out'a gore ic yol
+        ic = goreli.split("data/eval_defense/", 1)[-1]
+        kaynak = os.path.join(out, ic.replace("/", os.sep))
+        if not os.path.exists(kaynak):
+            continue
+        os.makedirs(kar, exist_ok=True)
+        shutil.move(kaynak, os.path.join(kar, ic.replace("/", "__")))
+        tasinan += 1
+        print(f"  [KARANTINA] {ic}\n              (kapsayan sette KALDI: "
+              f"{kapsayan.split('data/eval_defense/', 1)[-1]})", flush=True)
+
+    if tasinan:
+        print(f"\n{tasinan} celiskili klip karantinaya alindi -> set 197 klip "
+              f"(Anomali 99 + Normal 98). Gerekce: "
+              f"docs/veri_seti_nihai_denetim_2026-08-17.md", flush=True)
 
 
 if __name__ == "__main__":
