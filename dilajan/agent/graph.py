@@ -186,8 +186,34 @@ _FALL_KW = {
 _FALL_EVENT_RE = re.compile(r"düş|dus|zemine|yere|yerde|yığıl|yigil|çök|hareketsiz|baygın|baygin|bayıl|bayil")
 
 
+def _tr_lower(s: str) -> str:
+    """D36 HATA DUZELTMESI — TURKCE-GUVENLI kucuk harf.
+
+    Python'un str.lower()'i Turkce DEGILDIR:
+        "İşçi".lower() -> "i" + U+0307 (BIRLESIK NOKTA) + "şçi"
+    ve bu, regex'teki duz "işçi" kalibiyla ESLESMEZ. Sonuc: model cumleye
+    "İşçi ..." diye basladiginda _PERSON_RE KISIYI GORMEZ.
+
+    OLCULDU (6 arsiv, 267 olay metni): metinlerin %13,5'i (36 olay) bu yuzden
+    "kisi yok" sayiliyordu. Aralarinda tam da onemli olanlar vardi:
+        "İşçi zemine düşmüş ve hareketsiz kalmış"
+        "İşçi ani şekilde devrildi ve yere düştü"
+        "İşçi yere düştü"
+    Etkisi iki katli:
+      1) _is_person_fall_event False doner -> verify_pose_falls o olaya HIC uygulanmaz
+      2) _calibrate_severity'deki NESNE-vs-KISI mantigi kisiyi NESNE sanar ->
+         dusme severity'sini YUKSELTMEZ (dusmus NESNE kritik degil kurali yanlis calisir)
+
+    Ayni cozum benchmark/labels.py:402 `tr_lower` icinde ZATEN vardi; ajan katmani
+    benchmark'a bagimli olmamali diye burada tekrarlandi (iki kopya bilincli).
+    """
+    if not s:
+        return ""
+    return s.replace("I", "ı").replace("İ", "i").lower().replace("̇", "")
+
+
 def _is_person_fall_event(text: str) -> bool:
-    t = (text or "").lower()
+    t = _tr_lower(text or "")
     return bool(_PERSON_RE.search(t)) and bool(_FALL_EVENT_RE.search(t))
 
 
@@ -195,7 +221,8 @@ def _calibrate_severity(text: str, model_sev: Severity) -> Severity:
     """Olay metnindeki tehdit kelimelerine gore TEK-YONLU severity tabani uygular (TR + EN).
     NESNE (kisi degil) icin dusme/yere kelimeleri severity'yi YUKSELTMEZ (dusmus nesne kritik degil);
     yangin/silah gibi diger tehditlerde nesne olsa bile yukseltir."""
-    t = (text or "").lower()
+    # D36: duz .lower() DEGIL — "İşçi" cumle basinda kisiyi gorunmez yapiyordu (bkz. _tr_lower).
+    t = _tr_lower(text or "")
     obj_not_person = bool(_OBJ_RE.search(t)) and not bool(_PERSON_RE.search(t))
     floor = model_sev
     for sev, kws in _THREAT_KEYWORDS:  # once Kritik katmani (Turkce alt-dizgi)
