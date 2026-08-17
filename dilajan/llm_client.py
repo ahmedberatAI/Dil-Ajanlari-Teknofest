@@ -85,7 +85,21 @@ class VLMClient:
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
         repetition_penalty: Optional[float] = None,
+        guided_choice: Optional[Sequence[str]] = None,
     ) -> str:
+        """`guided_choice`: vLLM KISITLI KOD COZME — model YALNIZCA verilen
+        seceneklerden birini uretebilir (bicim gurultusu SIFIRLANIR).
+
+        D36: bu parametre EKLENENE KADAR uretim yolunda kullanilamiyordu; yalnizca
+        prob betikleri ham OpenAI istemcisini cagirarak deniyordu
+        (scripts/probe_pano_dogrudan.py, benchmark/isafety_mcq.py). HANDOFF §11 bunu
+        "asil onerilen kullanim HALA YAPILMADI" diye bekletiyordu.
+
+        ⚠️ NE YAPMAZ: kisitli secim ALGIYI duzeltmez. D33 olcumu — pano sorusunda
+        model 20/20 klipte "KAPALI" dedi, 10'u gercekte ACIKTI. Yani zorunlu secim
+        BICIM gurultusunu kaldirir, GORMEDIGINI GORDURMEZ. Secenek listesine bir
+        "hicbiri" kacisi konmazsa model yok yere pozitif uretir.
+        """
         if settings.mock_mode:  # MOCK: ag cagrisi YOK (varsayilan kapali -> gercek yol degismez)
             return mock_reply(_messages_text(messages))
         kwargs = dict(
@@ -104,6 +118,9 @@ class VLMClient:
             # Hibrit akil yuruten modellerde <think> blogunu KAPAT (bkz. config.disable_thinking).
             # Sablon bu anahtari tanimiyorsa jinja onu yok sayar -> zararsiz.
             ek["chat_template_kwargs"] = {"enable_thinking": False}
+        if guided_choice:
+            # Kisitli kod cozme: cikti MUTLAKA bu listeden biri olur.
+            ek["guided_choice"] = list(guided_choice)
         if ek:
             kwargs["extra_body"] = ek
         resp = self.client.chat.completions.create(**kwargs)
@@ -118,10 +135,24 @@ class VLMClient:
         max_tokens: Optional[int] = None,
         repetition_penalty: Optional[float] = None,
         as_video: bool = False,
+        system: Optional[str] = None,
+        guided_choice: Optional[Sequence[str]] = None,
     ) -> str:
         """Zaman damgali kareleri + bir talimati VLM'e gönderir, metin yanit döndürür.
         as_video=True: kareleri tek VIDEO olarak gonderir (EVS temporal-token budama + MRoPE; latency).
-        FAIL-OPEN: video kodlama/gonderim hata verirse image-path'e duser."""
+        FAIL-OPEN: video kodlama/gonderim hata verirse image-path'e duser.
+
+        D37 — SISTEM/KULLANICI PROMPT AYRIMI (mentor onerisi):
+        `system` eskiden SABIT `SYSTEM_PERSONA` idi ve goreve gore degistirilemiyordu.
+        Artik parametre; VARSAYILAN None -> SYSTEM_PERSONA (K2: mevcut cagrilarin
+        davranisi BIREBIR ayni). Yapilandirilmis siniflandirma gibi gorevler kendi
+        dar sistem promptunu verebilir — genel persona o gorevde gurultu yapar
+        ("fabrika VARSAYMA" gibi kurallar ISG siniflandirmasinda ters calisir).
+
+        `guided_choice`: kisitli kod cozme — cikti MUTLAKA listeden biri olur.
+        Bicim gurultusunu sifirlar ama ALGIYI DUZELTMEZ (bkz. chat() docstring).
+        """
+        sistem = system if system is not None else SYSTEM_PERSONA
         if settings.mock_mode:  # MOCK: kare/mp4 kodlamasi ve ag cagrisi YOK; tohum karelerden gelir
             return mock_reply(instruction, frames=frames)
         content: List[dict] = []
@@ -132,9 +163,10 @@ class VLMClient:
                 content.append({"type": "video_url", "video_url": {"url": url}})
                 content.append({"type": "text", "text": instruction})
                 return self.chat([
-                    {"role": "system", "content": SYSTEM_PERSONA},
+                    {"role": "system", "content": sistem},
                     {"role": "user", "content": content},
-                ], temperature=temperature, max_tokens=max_tokens, repetition_penalty=repetition_penalty)
+                ], temperature=temperature, max_tokens=max_tokens,
+                    repetition_penalty=repetition_penalty, guided_choice=guided_choice)
             except Exception:
                 content = []  # image-path'e fail-open
         for ts, jpeg in frames:
@@ -145,11 +177,12 @@ class VLMClient:
         content.append({"type": "text", "text": instruction})
 
         messages = [
-            {"role": "system", "content": SYSTEM_PERSONA},
+            {"role": "system", "content": sistem},
             {"role": "user", "content": content},
         ]
         return self.chat(messages, temperature=temperature, max_tokens=max_tokens,
-                         repetition_penalty=repetition_penalty)
+                         repetition_penalty=repetition_penalty,
+                         guided_choice=guided_choice)
 
     def health_check(self) -> bool:
         """Sunucu ayakta ve model yüklü mü?

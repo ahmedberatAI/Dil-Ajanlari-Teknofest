@@ -1,0 +1,1396 @@
+{
+  "secenekler": [
+    "Safe_Walkway_Violation",
+    "Unauthorized_Intervention",
+    "Opened_Panel_Cover",
+    "Carrying_Overload_with_Forklift",
+    "guvenli_durum",
+    "belirsiz"
+  ],
+  "sistem": "Sen bir üretim tesisinin İŞ SAĞLIĞI VE GÜVENLİĞİ (İSG) kamera analiz uzmanısın. Sana bir güvenlik kamerasından alınmış kareler verilir ve TEK BİR sınıf etiketi seçersin. Yalnızca gerçekten GÖRDÜĞÜNE dayan; göremediğin bir durumu VARSAYMA. Emin değilsen tahmin yürütmek yerine 'belirsiz' seç — yanlış etiket, boş etiketten daha zararlıdır.",
+  "gorev": "Bu karelerde hangi İSG durumu var? TANIMLAR (kararını bunlara göre ver):\n\n- \"Safe_Walkway_Violation\": Personel zeminde isaretli guvenli yurume yolunun DISINA cikiyor; makine/forklift sahasindan geciyor.\n- \"Unauthorized_Intervention\": Makineye, elektrik panosuna veya ekipmana YETKISIZ kisi mudahale ediyor (yetkili teknisyen disinda).\n- \"Opened_Panel_Cover\": Elektrik/kontrol pano kapagi ACIK birakilmis (kapali olmasi gerekir).\n- \"Carrying_Overload_with_Forklift\": Forklift gorusu engelleyecek veya guvenli kapasiteyi asacak sekilde ASIRI/istiflenmis yuk tasiyor.\n- \"guvenli_durum\": Yukarıdaki ihlallerin HİÇBİRİ yok; personel ve ekipman kurallara uygun çalışıyor.\n- \"belirsiz\": Görüntü yetersiz veya durum ayırt edilemiyor.\n\nSeçenekler: [Safe_Walkway_Violation, Unauthorized_Intervention, Opened_Panel_Cover, Carrying_Overload_with_Forklift, guvenli_durum, belirsiz]\n\nYALNIZCA seçeneklerden birini yaz. Açıklama, noktalama veya başka metin YAZMA.",
+  "n": 197,
+  "sinif_dogru": 14,
+  "ikili_dogru": 101,
+  "satirlar": [
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te1.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te2.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te3.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te7.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr10.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr11.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr15.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr16.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr24.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr25.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr27.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr28.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr30.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr31.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr33.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr36.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr37.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr38.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr41.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr42.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr43.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr45.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr47.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr5.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr9.mp4",
+      "gercek": "Carrying_Overload_with_Forklift",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_te12.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_te13.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_te6.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr101.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr112.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr118.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr119.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr12.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr126.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr128.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr16.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr17.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr18.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr19.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr35.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr40.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr52.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr53.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr54.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr58.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr62.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr63.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr66.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr72.mp4",
+      "gercek": "Opened_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_te11.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_te22.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_te31.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr100.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr104.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr108.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr11.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr110.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr113.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr123.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr128.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr13.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr135.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr149.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr171.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr176.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr177.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr178.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr40.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr44.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr59.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr72.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr79.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": true,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr84.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr95.mp4",
+      "gercek": "Safe_Walkway_Violation",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_te10.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_te3.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_te4.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_te5.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr18.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr2.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr22.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr25.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr28.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr33.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr35.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr38.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr42.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr50.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr61.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr62.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr63.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr67.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr7.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr76.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr77.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr81.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr84.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr87.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr88.mp4",
+      "gercek": "Unauthorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te1.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te11.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te12.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te13.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te14.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te15.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te2.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te5.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te6.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te7.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te8.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr10.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr11.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr12.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr13.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr15.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "Unauthorized_Intervention",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr16.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr19.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr20.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr22.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr3.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr4.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr5.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr6.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr8.mp4",
+      "gercek": "Authorized_Intervention",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te10.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te11.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te12.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te13.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te2.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te3.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te4.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te5.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te6.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te7.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te8.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te9.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr1.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr11.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr12.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr14.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr16.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr17.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr18.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr19.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr4.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr5.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr6.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr8.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr9.mp4",
+      "gercek": "Closed_Panel_Cover",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_te1.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_te2.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_te3.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_te4.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_te6.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_te7.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "Carrying_Overload_with_Forklift",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_te8.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr1.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr11.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr12.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr13.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr14.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr15.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr16.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr18.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr2.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr20.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr21.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr22.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr3.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr4.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr5.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr7.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr8.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr9.mp4",
+      "gercek": "Safe_Carrying",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_te1.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_te15.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_te19.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_te6.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr11.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr12.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr13.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr15.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr18.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr22.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr23.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr29.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr3.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr31.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr33.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr35.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr37.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr40.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr41.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr45.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "Safe_Walkway_Violation",
+      "sinif_dogru": false,
+      "ikili_dogru": false
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr47.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr49.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    },
+    {
+      "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr7.mp4",
+      "gercek": "Safe_Walkway",
+      "tahmin": "guvenli_durum",
+      "sinif_dogru": false,
+      "ikili_dogru": true
+    }
+  ]
+}
