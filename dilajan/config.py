@@ -48,6 +48,14 @@ class Settings(BaseSettings):
     dtype: str = "bfloat16"
     trust_remote_code: bool = False  # InternVL gibi modeller icin true
     quantization: str = ""           # "awq" vb.; bos = otomatik algila/yok
+    disable_thinking: bool = False   # D36: HIBRIT AKIL YURUTEN modeller (Qwen3.8/Qwen3.6) sohbet
+                                     # sablonunda varsayilan olarak <think> blogu acar ve akil yurutmeyi
+                                     # `content` icine yazar -> (1) JSON AYRISTIRILAMAZ, (2) token butcesi
+                                     # dusunmede tukenir, cevap hic gelmez, (3) gecikme patlar.
+                                     # OLCULDU (Qwen3.8-27B, tek cagri): ACIK 8,3 sn / 300 token / JSON YOK
+                                     # -> KAPALI 1,9 sn / 43 token / JSON TAMAM.
+                                     # Sablon `enable_thinking=false` ile bos <think></think> on-doldurur.
+                                     # VARSAYILAN FALSE (K2): mevcut Qwen3-VL-8B yolu BIREBIR degismez.
     enable_tools: bool = False        # Qwen3-VL hermes parser'i farkli; act zaten JSON-dispatch kullanir
     mm_processor_kwargs: str = ""     # vLLM mm-processor-kwargs JSON (InternVL tiling: max_dynamic_patch)
 
@@ -99,6 +107,13 @@ class Settings(BaseSettings):
                                         # iste; DUSUK ise operatore "manuel teyit oneririz" aksiyonu ekle. Girdi-tavanini
                                         # (grenli'de sessiz dusuk-puanlama) DURUST + puanlanan-otonomi davranisina cevirir.
                                         # Additive (tespiti/recall'i degistirmez) -> dusuk-risk. (olculecek)
+    isg_lens: bool = False           # D36: describe'a IS GUVENLIGI mercegi ekle (prompts.ISG_LENS_SUFFIX).
+                                     # KOK NEDEN: temel describe talimati bir SUC/GUVENLIK sozlugudur ve
+                                     # ISG tehlikelerini ACIKCA yasaklar ("ekipman/yuk tasima OLAY DEGILDIR").
+                                     # eval_defense'te anomali kliplerinin %72'si SIFIR olay uretiyordu;
+                                     # ozetler bos degil, KENDINDEN EMIN OLUMSUZ idi -> model yanlis seyi ariyor.
+                                     # VARSAYILAN KAPALI (K2): acilmadan once eval_defense'te A/B ile OLCULECEK.
+                                     # Opened_Panel_Cover'i DUZELTMEZ (o algi siniri; deterministik dedektor isi).
     threat_interpretation: bool = True   # GENEL: describe'a "guvenlik analisti tehdit-yorumu" katmani ekle
                                          # (prompts.THREAT_LENS_SUFFIX). Notr betim sucu yuzeysellestiriyordu
                                          # ("fiziksel temas"); bu katman olayi DOGRU adlandirir (saldiri/soygun/

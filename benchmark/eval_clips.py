@@ -51,12 +51,14 @@ from dilajan.schema import Severity  # noqa: E402
 
 try:
     from benchmark.dedup import dedup_paths  # noqa: E402
-    from benchmark.labels import CATEGORY_EXPECT, any_match  # noqa: E402
+    from benchmark.labels import (CATEGORY_EXPECT, any_match,  # noqa: E402
+                                  isg_any_match, isg_sinif_from_path)
     from benchmark.stats_utils import fmt_rate_dict, rate_from_bools  # noqa: E402
 except ImportError:  # benchmark/ icinden dogrudan calistirma
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from dedup import dedup_paths  # type: ignore  # noqa: E402
-    from labels import CATEGORY_EXPECT, any_match  # type: ignore  # noqa: E402
+    from labels import (CATEGORY_EXPECT, any_match,  # type: ignore  # noqa: E402
+                        isg_any_match, isg_sinif_from_path)
     from stats_utils import fmt_rate_dict, rate_from_bools  # type: ignore  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -79,6 +81,99 @@ def _warn_if_leaky(eval_dir: str) -> Optional[str]:
     print("\n" + "!" * 78 + f"\n{msg}\n" + "!" * 78 + "\n")
     return msg
 RESULTS_DIR = os.path.join(ROOT, "benchmark", "results")
+
+
+def _kosum_kunyesi() -> dict:
+    """D36 — kosumun MODEL ve SERVISLEME kunyesi (salt okuma, metrik degistirmez).
+
+    Model degistirerek A/B yapmak, D33'e kadarki tum arsivlerin ortulu varsayimini
+    ('hep ayni model') kirar. Kunye olmadan iki arsiv sayisal olarak kiyaslanabilir
+    ama HANGI degisikligin farki urettigi arsivden okunamaz.
+
+    gpu_memory_utilization / max_num_seqs de yazilir: buyuk modeli sigdirmak icin
+    bunlar degistirilirse KV blok sayisi degisir -> gecikme ve batch davranisi
+    degisir. Sapma kayda gecmezse "ayni kosullarda olculdu" iddiasi yanlis olur.
+    """
+    try:
+        from dilajan.config import settings as _s
+    except Exception as e:  # ayar okunamazsa olcumu DURDURMA (fail-open, K3)
+        return {"hata": f"{type(e).__name__}: {e}"}
+    return {
+        "model": _s.model_name,
+        "quantization": _s.quantization or "(otomatik/yok)",
+        "dtype": _s.dtype,
+        "kv_cache_dtype": _s.kv_cache_dtype or "(varsayilan)",
+        "max_model_len": _s.max_model_len,
+        "gpu_memory_utilization": _s.gpu_memory_utilization,
+        "max_num_seqs": _s.max_num_seqs,
+        "temperature": _s.temperature,
+        # D36: hibrit akil yuruten modellerde bu bayrak sonucu KOKTEN degistirir
+        # (acikken JSON hic gelmiyor, 0 olay uretiliyor) -> kunyede olmak ZORUNDA.
+        "disable_thinking": _s.disable_thinking,
+        "fps_sample": _s.fps_sample,
+        "max_frames_per_segment": _s.max_frames_per_segment,
+        "frame_max_side": _s.frame_max_side,
+        # --- OZELLIK BAYRAKLARI ---
+        # BURAYA, davranisi degistiren HER bayrak girmelidir. Iki sebeple:
+        #   1) arsiv hangi kolun olculdugunu yazmali (raporlama durustlugu),
+        #   2) ara-kayit dosya adi bu kunyenin hash'idir -> eksik bayrak, FARKLI
+        #      yapilandirmalarin ayni ara dosyayi paylasmasina ve birbirinin satirlarini
+        #      devralmasina yol acar. `isg_lens` ilk eklendiginde tam bu hata olustu
+        #      (acik/kapali ayni dosya adini uretti) ve testte yakalandi.
+        "facility_rules_dolu": bool(_s.facility_rules),
+        "ppe_detection": _s.ppe_detection,
+        "isg_lens": _s.isg_lens,
+        "threat_interpretation": _s.threat_interpretation,
+    }
+
+
+def _ara_kayit_yol() -> str:
+    """Ara-kayit dosyasi: hangi SET + hangi KATEGORILER + hangi KUNYE ile kosuldugu.
+
+    Kunye hash'i ada girer -> farkli yapilandirmanin ara kaydi YANLISLIKLA devralinamaz.
+    """
+    import hashlib
+    kimlik = json.dumps({
+        "eval_dir": os.path.relpath(EVAL_DIR, ROOT).replace("\\", "/"),
+        "cats": os.environ.get("EVAL_CATS", ""),
+        "match": MATCH_MODE,
+        "kosum": _kosum_kunyesi(),
+    }, sort_keys=True, ensure_ascii=False)
+    h = hashlib.md5(kimlik.encode("utf-8")).hexdigest()[:10]
+    return os.path.join(RESULTS_DIR, f".ara_{h}.jsonl")
+
+
+def _ara_kayit_yukle():
+    """(yol, {path: row}) dondurur. Bozuk satirlar SESSIZCE atlanir (K3 fail-open)."""
+    yol = _ara_kayit_yol()
+    tamam: dict = {}
+    if os.path.exists(yol):
+        with open(yol, encoding="utf-8") as f:
+            for satir in f:
+                satir = satir.strip()
+                if not satir:
+                    continue
+                try:
+                    r = json.loads(satir)
+                except Exception:
+                    continue  # yarim yazilmis son satir (cokme aninda) — atla
+                if isinstance(r, dict) and r.get("path"):
+                    tamam[r["path"]] = r
+    return yol, tamam
+
+
+def _ara_kayit_ekle(yol: str, row: dict) -> None:
+    """Her klipten SONRA hemen diske yaz + fsync — cokmede en fazla 1 klip kaybedilir."""
+    try:
+        os.makedirs(os.path.dirname(yol), exist_ok=True)
+        with open(yol, "a", encoding="utf-8") as f:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+            f.flush()
+            os.fsync(f.fileno())
+    except Exception as e:  # ara kayit YAZILAMAZSA olcum DURMAZ (K3)
+        print(f"[ARA KAYIT UYARI] yazilamadi: {e}")
+
+
 # K10 mukerrer eleme varsayilan ACIK; DILAJAN_EVAL_DEDUP=0 ile eski davranisa donulur
 DEDUP = os.environ.get("DILAJAN_EVAL_DEDUP", "1").strip().lower() not in ("0", "false", "no")
 # D28/K2 — `category_match` alanini hangi kural doldurur: "yeni" (event+summary,
@@ -118,10 +213,29 @@ def evaluate_clip(path: str, category: str) -> dict:
         cat_eski = any_match(parcalar_eski, category, mode="loose")   # D28 ONCESI kural
         cat_yeni = any_match(parcalar_yeni, category, mode="strict")  # onarilmis kural
         cat_grup = any_match(parcalar_yeni, category, mode="strict", group=True)
+        # --- D36: ONARIK OLUMSUZLAMA KAPISI (SALT EKLEME) ---
+        # D28 kapisi `tespit edil` govdesini biliyor ama `gozlemlen` govdesini BILMIYOR.
+        # Model sablon inkar cumlesini degistirdiginde skor MODEL YETENEGINDEN BAGIMSIZ
+        # olarak ziplyor. Olculdu (ayni iki arsiv):
+        #     8B  "...gozlemlenmedi"      -> kapi KACIRIYOR -> 26 eslesme (21'i SAHTE)
+        #     27B "...tespit edilmemistir"-> kapi YAKALIYOR ->  7 eslesme (0'i sahte)
+        # Onarik kapiyla ayni arsivler 5 ve 7 veriyor -> 27B DAHA IYI, "cokus" yok.
+        # Mevcut uc alan DEGISMEDI; bu dorduncu alan kapi-bagimsiz okuma saglar.
+        cat_onarik = any_match(parcalar_yeni, category, mode="strict",
+                               onarik_olumsuzlama=True)
     else:
         # Normal kategorisinin beklenen anahtar kelimesi YOKTUR -> eslesme TANIMSIZ (eski davranis)
-        cat_eski = cat_yeni = cat_grup = None
+        cat_eski = cat_yeni = cat_grup = cat_onarik = None
     cat_match = cat_eski if MATCH_MODE == "eski" else cat_yeni
+
+    # --- D36: INCE TANELI ISG OLCUMU (SALT EKLEME) ---
+    # `recall` = (n_events > 0) ve olayin DOGRU tehlike olup olmadigina BAKMAZ.
+    # Olculdu: Opened_Panel_Cover kliplerinde model HIC panodan bahsetmiyor (0/25)
+    # ama "yere dusmus metal levha" gibi alakasiz olaylar recall'u kazandiriyor.
+    # Ust klasor (Anomali/Normal) kova-duzeyidir; ALT klasor gercek ISG sinifidir.
+    # `isg_any_match` sinifa OZGU kaliplari ve ONARIK kapiyi kullanir.
+    isg_sinif = isg_sinif_from_path(os.path.relpath(path, ROOT).replace("\\", "/"))
+    isg_eslesme = isg_any_match(parcalar_yeni, isg_sinif) if isg_sinif else None
 
     return {
         "path": os.path.relpath(path, ROOT),
@@ -136,6 +250,10 @@ def evaluate_clip(path: str, category: str) -> dict:
         "category_match_eski": cat_eski,       # ESKI kural — KARSILASTIRMA TABANI, silinmez
         "category_match_grup": cat_grup,       # semantik grup duzeyi
         "category_match_kural": MATCH_MODE,    # `category_match` alanini hangi kural doldurdu
+        # D36 — kapi-bagimsiz okuma + ince taneli ISG ozgullugu (ikisi de SALT EK)
+        "category_match_onarik": cat_onarik,   # onarik olumsuzlama kapisi
+        "isg_sinif": isg_sinif,                # alt klasorden gercek ISG sinifi
+        "isg_match": isg_eslesme,              # sinifa OZGU kalip + onarik kapi
         "triggered": res.triggered_functions,
         "duration_s": dur,
         "latency_s": round(dt, 1),
@@ -199,18 +317,34 @@ def main() -> None:
                 print(f"   - {s['path']}  ==  {dup_of}")
             print()
 
-    print(f"{len(clips)} klip degerlendiriliyor...\n")
-    rows = []
-    for path, cat in clips:
+    # --- D36: ARA KAYIT (checkpoint) ---
+    # 2026-08-17'de bilgisayar IKI KEZ restart atti ve her seferinde ~1 saatlik GPU
+    # kosusu TAMAMEN kayboldu — cunku sonuc YALNIZCA en sonda yazılıyordu.
+    # Artik her klipten sonra JSONL'e eklenir; ayni kunye ile yeniden baslatilirsa
+    # tamamlanmis klipler ATLANIR. Kunye farkliysa devam EDILMEZ (farkli yapilandirmanin
+    # satirlarini birlestirmek olcumu sessizce bozar) — ara dosya yok sayilir.
+    ara_yol, tamamlanan = _ara_kayit_yukle()
+    rows = list(tamamlanan.values())
+    if rows:
+        print(f"[ARA KAYIT] {len(rows)} klip onceki kosumdan devraliniyor "
+              f"({os.path.basename(ara_yol)})\n")
+    kalan = [(p, c) for p, c in clips
+             if os.path.relpath(p, ROOT).replace("\\", "/") not in tamamlanan]
+
+    print(f"{len(kalan)} klip degerlendiriliyor"
+          f"{f' (toplam {len(clips)}, {len(rows)} devralindi)' if rows else ''}...\n")
+    for path, cat in kalan:
         try:
             r = evaluate_clip(path, cat)
         except Exception as e:
             print(f"[HATA] {path}: {e}")
             continue
         rows.append(r)
+        _ara_kayit_ekle(ara_yol, r)
         mark = "✓" if (r["category_match"] or (not r["is_anomaly"] and r["max_severity"] < 3)) else "·"
         print(f"  {mark} [{cat:13s}] olay={r['n_events']} risk={r['risk_level']:6s} "
-              f"kat_eslesme={r['category_match']} {r['latency_s']}s  {os.path.basename(path)}")
+              f"kat_eslesme={r['category_match']} {r['latency_s']}s  {os.path.basename(path)}",
+              flush=True)   # tamponlama yuzunden ilerleme gorunmuyordu
 
     # --- toplulastir ---
     anom = [r for r in rows if r["is_anomaly"]]
@@ -309,6 +443,13 @@ def main() -> None:
             "summary": summary,
             # K9: sizintili eski set kullanildiysa sonuc dosyasina da yazilir (rapor durustlugu)
             "leak_warning": leak_warning,
+            # D36 KOSUM KUNYESI (SALT EKLEME — hicbir metrigi degistirmez):
+            # Model degistirilerek A/B yapildiginda, arsivden HANGI MODELLE kosuldugu
+            # okunabilmeli. Bu alan olmadan iki arsiv sayisal olarak karsilastirilabilir
+            # ama BILIMSEL olarak karsilastirilamaz. Eski arsivlerde alan YOKTUR
+            # (None degil, hic yok) -> okuyan taraf .get("kosum") ile ayirt eder;
+            # bos sozluk dondurmek "olculdu ve varsayilandi" yalanini soyler.
+            "kosum": _kosum_kunyesi(),
             "eval_dir": os.path.relpath(EVAL_DIR, ROOT).replace("\\", "/"),
             "dedup": {  # K10: hangi dosyalar neden sayilmadi
                 "enabled": DEDUP,
@@ -320,6 +461,13 @@ def main() -> None:
             "rows": rows,
         }, f, ensure_ascii=False, indent=2)
     print(f"\nKaydedildi: {os.path.relpath(out, ROOT)}")
+    # Nihai dosya YAZILDIKTAN SONRA ara kaydi sil (once silmek, yazma hata verirse
+    # her seyi kaybettirirdi). Silinemezse olcum yine de gecerli — sadece uyar.
+    try:
+        if os.path.exists(ara_yol):
+            os.remove(ara_yol)
+    except Exception as e:
+        print(f"[ARA KAYIT UYARI] silinemedi ({ara_yol}): {e}")
 
 
 if __name__ == "__main__":

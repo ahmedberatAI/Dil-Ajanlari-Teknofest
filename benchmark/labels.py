@@ -65,7 +65,18 @@ CATEGORY_TR: Dict[str, str] = {
     "Fall": "bir kisinin yere dusmesi ve yerde hareketsiz kalmasi",
     "Anomali": ("uretim tesisinde GUVENSIZ davranis: guvenli yurume yolu ihlali, yetkisiz "
                 "mudahale, acik pano kapagi veya forklift ile asiri yuk tasima"),
-    "Normal": "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK",
+    # D36 DUZELTME — eski metin: "OLAGAN faaliyet — kayda deger hicbir guvenlik olayi YOK".
+    # Bu iddia KAYNAK VERININ VERMEDIGI bir garantiydi. Mendeley xjmtb22pff yalnizca
+    # "class4-7 = bu DORT davranisin GUVENLI hali" der; "bu klipte hicbir ISG tehlikesi
+    # yok" DEMEZ. Gorsel denetimde (docs/normal_set_gorsel_denetim_2026-08-17.md)
+    # dogrulandi: ayni kamera/ayni makine/ayni sahne farkli sinif etiketleriyle
+    # tekrar ediyor; siniflar ayri SAHNELER degil, ayni calisma alaninin HANGI
+    # DAVRANISA bakildigina gore etiketlenmis halleri. Karedeki diger her sey ETIKETSIZ.
+    # Ornek: Authorized_Intervention/5_te6 = yelekli isci yetkili mudahale yapiyor
+    # (etiket dogru) AMA ayni klipte yeleksiz sivil kiyafetli biri uretim alaninda
+    # yuruyor (etiketsiz, tartismali tehlike).
+    "Normal": ("bu dort davranisin GUVENLI hali (guvenli yurume yolu, yetkili mudahale, "
+               "kapali pano, guvenli tasima) — kliptE BASKA tehlike OLMADIGI GARANTI DEGIL"),
 }
 
 # Anomali kliplerinde kabul edilebilir risk seviyeleri (tek bir 'dogru' seviye iddia ETMIYORUZ)

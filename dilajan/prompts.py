@@ -94,6 +94,52 @@ HIRSIZLIK/SOYGUN/izinsiz giriş.
 - KAZA: araç çarpışması/devrilmesi, bir kişiye araç çarpması → TRAFİK KAZASI.
 ANCAK görsel kanıt yoksa UYDURMA; gerçekten olağan/rutin ise "SAPMA YOK" de (normal sahneyi tehdit gösterme)."""
 
+# --- ISG (is sagligi ve guvenligi) mercegi — config.isg_lens ile describe'a eklenir ---
+#
+# D36 KOK-NEDEN OLCUMU (eval_defense n=100, 8B varsayilan):
+#   Anomali kliplerinin %72'si SIFIR olay uretti. Ozetler bos DEGILDI; kendinden emin
+#   olumsuzlardi: "herhangi bir tehlike, kaza, yetkisiz giris veya anormal davranis
+#   gozlemlenmedi". Yani model ARADIGINI bulamadi degil — YANLIS SEYI aradi.
+#
+# SEGMENT_DESCRIBE_INSTRUCTION'daki sapma listesi bir SUC/GUVENLIK sozlugudur
+# (duman, yangin, patlama, kavga, silah, yetkisiz giris) ve ISG tehlikelerini ACIKCA
+# YASAKLAR. Olculen dort sinifin ucunu dogrudan kesen iki cumle:
+#   1) "ekipman/yuk tasima OLAY DEGILDIR"      -> Carrying_Overload_with_Forklift (%20)
+#   2) "birinin yurumesi/gecmesi/durmasi tek
+#       basina yetkisiz giris degildir"        -> Safe_Walkway_Violation (%48),
+#                                                 Unauthorized_Intervention (%36)
+# Bu yuzden mercek, temel talimati CELISKIYLE degil ACIK ISTISNAYLA asar: rutin
+# tasima/yurume hala olay degildir; olay olan GUVENSIZ KOSULDUR. Iki zit emir
+# arasinda birakilan model ikisini de zayif uygular.
+#
+# Sinif bazli recall (8B): Opened_Panel_Cover %8 · Carrying_Overload %20 ·
+# Unauthorized_Intervention %36 · Safe_Walkway_Violation %48.
+# NOT: Opened_Panel_Cover'in dusuklugu prompt DEGIL algi sinirdir — D33'te
+# `guided_choice` ile zorunlu secimde VLM 20/20 "KAPALI" dedi (10'u acikti).
+# Bu mercek onu duzeltmeyi VAAT ETMEZ; o is deterministik dedektorun (bkz. detector.py
+# KKD_KITLERI kaliba) isidir.
+ISG_LENS_SUFFIX = """
+
+4) İŞ GÜVENLİĞİ (İSG) MERCEĞİ: Yukarıdaki suç/güvenlik sapmalarına EK OLARAK, aşağıdaki \
+GÜVENSİZ ÇALIŞMA KOŞULLARINI da sapma/olay say ve zaman damgasıyla raporla:
+- AÇIK PANO/KORUMA: elektrik panosu veya makine koruma kapağının açık/çıkarılmış olması, \
+kablo-terminal-hareketli parçanın açıkta kalması.
+- YÜK VE ARAÇ: aşırı yüklenmiş veya dengesiz istiflenmiş yük, sürücünün görüşünü kapatan yük, \
+kaldırılmış yükün altında/yakınında kişi bulunması, forklift/araç ile yayanın tehlikeli yakınlığı, \
+operatörsüz hareket eden araç.
+- YAYA YOLU: işaretli yaya yolunun/çizginin dışında yürüme, araç veya forklift güzergâhında yaya.
+- YETKİSİZ MÜDAHALE: çalışan/enerjili makineye elle müdahale, koruma düzeneğinin devre dışı \
+bırakılması, uygun alet veya izin olmadan bakım/onarım.
+- GENEL: baret/yelek gibi KKD'nin görünür biçimde takılmamış olması, yüksekte korkuluksuz çalışma, \
+zeminde kayma/takılma yaratan dökülme veya engel, acil çıkışın/geçişin kapatılması.
+
+İSTİSNA KURALI (temel talimatı geçersiz KILMAZ, DARALTIR): rutin yürüme, çalışma ve yük taşıma tek \
+başına hâlâ OLAY DEĞİLDİR. Olay olan, yukarıda sayılan GÜVENSİZ KOŞULDUR. "Bir kişi yük taşıyor" \
+sapma değildir; "yük dengesiz/aşırı" veya "yükü taşıyan araç yayaya tehlikeli yakınlıkta" sapmadır.
+
+UYDURMA YASAĞI korunur: güvensiz koşulu GERÇEKTEN görmüyorsan yazma. Emin değilsen olayı yazma; \
+kararsız kaldığın durumu betimlemende "belirsiz" diye geç. Her şey güvenliyse "SAPMA YOK" de."""
+
 EVENT_EXTRACTION_INSTRUCTION = """Aşağida bir güvenlik kamerasi segmentinin ({start}-{end}) sahne açiklamasi var:
 ---
 {description}

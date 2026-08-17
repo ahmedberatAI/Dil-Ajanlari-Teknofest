@@ -94,9 +94,18 @@ class VLMClient:
             temperature=settings.temperature if temperature is None else temperature,
             max_tokens=settings.max_tokens if max_tokens is None else max_tokens,
         )
-        # vLLM-ozgu repetition_penalty (degenerate dongu/tekrar kirmak icin) -> extra_body
+        # vLLM-ozgu alanlar extra_body'den gider. DIKKAT: tek bir sozluge BIRDEN COK
+        # alan yaziliyor -> atama degil GUNCELLEME yapilmali, yoksa sonraki yazan
+        # oncekini sessizce siler.
+        ek: dict = {}
         if repetition_penalty and repetition_penalty != 1.0:
-            kwargs["extra_body"] = {"repetition_penalty": repetition_penalty}
+            ek["repetition_penalty"] = repetition_penalty
+        if settings.disable_thinking:
+            # Hibrit akil yuruten modellerde <think> blogunu KAPAT (bkz. config.disable_thinking).
+            # Sablon bu anahtari tanimiyorsa jinja onu yok sayar -> zararsiz.
+            ek["chat_template_kwargs"] = {"enable_thinking": False}
+        if ek:
+            kwargs["extra_body"] = ek
         resp = self.client.chat.completions.create(**kwargs)
         return resp.choices[0].message.content or ""
 

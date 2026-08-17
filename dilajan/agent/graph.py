@@ -145,6 +145,32 @@ _THREAT_EN = [
 _THREAT_EN_RE = [(sev, re.compile(r"\b(" + "|".join(ws) + r")\b")) for sev, ws in _THREAT_EN]
 
 
+# D36 HATA DUZELTMESI — TAM KELIME GEREKTIREN ANAHTARLAR
+#
+# `_calibrate_severity` eslesmeyi `k in t` ile, yani CIPLAK ALT-DIZGI olarak yapar
+# (asagida, "once Kritik katmani (Turkce alt-dizgi)" satiri). Bu Turkce icin bilincli
+# bir tercihtir: dil sondan eklemeli, "yangın" -> "yangının" eslesmeli.
+#
+# AMA cok kisa anahtarlar baska kelimelerin ICINDE gecer. Olculen vaka: KRITIK
+# listesindeki "olu" (= "ölü"nun ASCII hali) su kelimelerde eslesiyordu:
+#     yolu · yolun · yolunu · yolundaki · oluşumu · oluşması · oluşturuyor · dolu
+# Arsivlerde 23 yanlis tetikleme sayildi; 11'i BASKA hicbir Kritik kelimesi olmadan,
+# YALNIZCA bu yuzden Kritik'e zorlanmisti. Onbirin SEKIZI "yaya yolu" iceriyordu —
+# yani hata, tam da hedef ISG sinifimizi (Safe_Walkway_Violation) vuruyordu:
+# model DOGRU terimi her kullandiginda severity kazara Kritik'e ziplyordu.
+#
+# Duzeltme: bu anahtarlar TAM KELIME olarak aranir. Diakritikli "ölü" listede zaten
+# var ve model duzgun Turkce yaziyor; ASCII bicimi yalnizca tam kelimeyken kabul edilir.
+_TAM_KELIME_KW = {"olu", "olum"}
+_TAM_KELIME_RE = {k: re.compile(r"\b" + k + r"\b") for k in _TAM_KELIME_KW}
+
+
+def _kw_eslesti(k: str, t: str) -> bool:
+    """Anahtar metinde geciyor mu? Kisa/tuzakli anahtarlar TAM KELIME arar."""
+    re_ = _TAM_KELIME_RE.get(k)
+    return bool(re_.search(t)) if re_ is not None else (k in t)
+
+
 # Nesne-vs-kisi: dusmus/yerde duran NESNE kritik degil; dusme severity'sini yalniz KISI baglaminda yukselt.
 _OBJ_RE = re.compile(r"nesne|alet|malzeme|eşya|esya|koli|kutu|parça|parca|ekipman|tekerlek|cisim|paket")
 _PERSON_RE = re.compile(r"kişi|kisi|insan|işçi|isci|adam|kadın|kadin|çocuk|cocuk|personel|operatör|operator|biri|yaya|şahıs|sahis|birey|genç|genc")
@@ -173,7 +199,9 @@ def _calibrate_severity(text: str, model_sev: Severity) -> Severity:
     obj_not_person = bool(_OBJ_RE.search(t)) and not bool(_PERSON_RE.search(t))
     floor = model_sev
     for sev, kws in _THREAT_KEYWORDS:  # once Kritik katmani (Turkce alt-dizgi)
-        matched = [k for k in kws if k in t]
+        # D36: `k in t` yerine `_kw_eslesti` — tuzakli kisa anahtarlar ("olu") tam
+        # kelime arar, digerleri eskisi gibi alt-dizgi kalir (sondan eklemeli dil).
+        matched = [k for k in kws if _kw_eslesti(k, t)]
         if matched:
             # NESNE + eslesenlerin TUMU dusme/yerde kelimesiyse: yukseltme yapma, sonraki gruba bak
             if obj_not_person and all(k in _FALL_KW for k in matched):
@@ -742,6 +770,12 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                           "dikkate al (ama yalnizca gerçekten gördüğünü raporla).")
         if settings.threat_interpretation:
             instr += prompts.THREAT_LENS_SUFFIX
+        if settings.isg_lens:
+            # D36 — ISG mercegi tehdit merceginden SONRA gelir: ikisi RAKIP degil TAMAMLAYICI
+            # (tehdit = suc/siddet, ISG = guvensiz calisma kosulu). Sira onemlidir cunku
+            # ISG mercegi temel talimattaki "yuk tasima olay degildir" bastirmasina ACIK
+            # istisna getirir; once gelirse bastirma cumlesi onu ezer.
+            instr += prompts.ISG_LENS_SUFFIX
         if settings.motion_saliency_cue:
             instr += _motion_cue(seg)
         # SORGU-GUDUMLU ODAK — bilerek EN SONA eklenir (facility_rules/detector/threat-lens/
