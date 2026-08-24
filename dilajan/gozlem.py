@@ -81,7 +81,8 @@ class Slot:
     def __init__(self, ad: str, soru: str, secenekler: Sequence[str],
                  gorev: str, coz: Callable[[str], Optional[object]],
                  aciklama: str = "", roi_alani: str = "",
-                 kapsam: str = "segment"):
+                 kapsam: str = "segment",
+                 dislanan_gorus_alani: str = "", gorus_esik_alani: str = ""):
         self.ad = ad
         self.soru = soru
         self.secenekler = list(secenekler)
@@ -105,6 +106,19 @@ class Slot:
         #       (MCC +0,689 -> +0,527).
         # Yani kapsam bir performans ayari degil, sorunun ANLAMININ parcasi.
         self.kapsam = kapsam
+        # GORUS MUHAFIZI — slot YALNIZCA dogru kamerada sorulur.
+        # `dislanan_gorus_alani`: ayardan okunan REFERANS imza; sahnenin
+        # benzerligi esigi ASARSA slot HIC sorulmaz (o kamera bu soru icin
+        # gecersizdir).
+        #
+        # NEDEN SADECE BAZI SLOTLARDA: gorus imzasi bazi sinif ciftlerinde
+        # ETIKETLE korele. Olculdu (96 klip, cift ICINDE |MCC|):
+        #     yol   cifti 0,385 · pano cifti 0,275  -> muhafiz GUVENLI
+        #     yetki cifti 0,833                     -> muhafiz YASAK
+        # Yetkisiz mudahale sinifinda muhafiz kullanmak, reddedilen geofence
+        # yaklasiminin ta kendisi olurdu: skor bilgiden degil kameradan gelir.
+        self.dislanan_gorus_alani = dislanan_gorus_alani
+        self.gorus_esik_alani = gorus_esik_alani
 
     def __repr__(self) -> str:      # pragma: no cover
         return f"<Slot {self.ad} -> {self.gorev}>"
@@ -228,6 +242,8 @@ SLOT_YAYA_CIZGI_MESAFE = Slot(
     coz=_sayi,
     roi_alani="yol_roi_vlm",
     kapsam="klip",      # olcum TUM klip uzerinde yapildi; sevk edilen = olculen
+    dislanan_gorus_alani="yol_dislanan_gorus",
+    gorus_esik_alani="yol_gorus_esik",
     aciklama=("Yerdeki isaretli cizgiye uzaklik. ROI kirpmasi ZORUNLU: tam "
               "karede ayni soru MCC +0,192, ROI ile +0,638 (ayrilmis kume)."),
 )
@@ -248,6 +264,8 @@ class GozlemKaydi:
         self.degerler: Dict[str, object] = {}
         self.ham: Dict[str, str] = {}
         self.hatalar: Dict[str, str] = {}
+        #: gorus muhafizi tarafindan ATLANAN slotlar (hata DEGIL — sahne gecersiz)
+        self.atlanan: Dict[str, str] = {}
 
     def koy(self, slot: Slot, ham_cevap: str) -> None:
         self.ham[slot.ad] = ham_cevap
@@ -326,9 +344,35 @@ def roi_coz(slot: Slot, ayar) -> str:
     return (getattr(ayar, slot.roi_alani, "") or "").strip()
 
 
+def gorus_uygun_mu(slot: Slot, ayar, frames) -> bool:
+    """Bu slot BU SAHNEDE sorulmali mi? (kamera gorus muhafizi)
+
+    Muhafiz tanimli degilse HER ZAMAN True — yani muhafiz KULLANMAYAN
+    slotlarin davranisi BIREBIR degismez (K2).
+
+    Kare yoksa (or. onceden cikarilmis kare yolu) muhafiz UYGULANMAZ ve
+    slot sorulur: sessizce kapatmak, olculmemis bir davranis uretmek olurdu.
+    """
+    ad = getattr(slot, "dislanan_gorus_alani", "")
+    if not ad:
+        return True
+    imza = (getattr(ayar, ad, "") or "").strip()
+    if not imza or not frames:
+        return True
+    esik_ad = getattr(slot, "gorus_esik_alani", "")
+    esik = float(getattr(ayar, esik_ad, 0.708)) if esik_ad else 0.708
+    try:
+        from dilajan.pano import gorus_uyuyor
+        # gorus_uyuyor: sahne REFERANSA benziyorsa True.
+        # Referans DISLANAN kameradir -> benziyorsa slot SORULMAZ.
+        return not gorus_uyuyor(frames, imza, esik)
+    except Exception:
+        return True                      # muhafiz cozulemedi -> engelleme (K3)
+
+
 def slotlari_doldur_bolgeli(istemci, slotlar: Sequence[Slot], video_uret,
                             ayar, system: str = GOZLEM_SISTEM,
-                            max_tokens: int = 12) -> GozlemKaydi:
+                            max_tokens: int = 12, frames=None) -> GozlemKaydi:
     """Slotlari ROI'ye GORE GRUPLAYIP doldurur.
 
     `video_uret(roi_str) -> bytes` her FARKLI ROI icin BIR KEZ cagrilir; ayni
@@ -339,6 +383,12 @@ def slotlari_doldur_bolgeli(istemci, slotlar: Sequence[Slot], video_uret,
     GRUP hata kaydeder, digerleri devam eder.
     """
     kayit = GozlemKaydi()
+    # GORUS MUHAFIZI — yanlis kameradaki slotlar HIC sorulmaz (cagri da yapilmaz).
+    if frames is not None:
+        _atlanan = [x for x in slotlar if not gorus_uygun_mu(x, ayar, frames)]
+        for x in _atlanan:
+            kayit.atlanan[x.ad] = "gorus muhafizi: bu kamera bu soru icin gecersiz"
+        slotlar = [x for x in slotlar if x not in _atlanan]
     # GRUPLAMA (ROI, KAPSAM) ikilisine gore: ayni bolgeyi VE ayni zaman
     # olcegini paylasan slotlar TEK video oturumunu paylasir.
     gruplar: Dict[tuple, List[Slot]] = {}

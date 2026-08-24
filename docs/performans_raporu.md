@@ -147,7 +147,7 @@ tür-adlandırma zayıf (22/51) — girdi-tavanı, dürüstçe beyan.
 | Eşzamanlılık güvenliği | `act()` çağrı kayıtları modül-globali değil çağrı-yerel liste → paralel koşular karışmaz |
 | Araç-çağrısı sağlamlığı | yanlış argüman adında **onar + tek kez yeniden dene**; kalıcı hatada karar-izine net UYARI |
 | Ölçeklenme | vLLM continuous-batching; çok-GPU için tensor-parallel yolu (**ölçülmedi**) |
-| Yerel/offline | yalnız `127.0.0.1`; dış API / kapalı servis yok |
+| Çalışma kipi | 2026-08-21 sonrası: yarışma tahsisli 8×H200 uzak servis. Yerel vLLM yolu korunur (`.env.yerel`); yerel GPU kod düzeyinde yasak. |
 | Açık kaynak | Apache-2.0 kod + model, `requirements-lock.txt`, dokümante |
 
 > **Geri çekilen performans iddiası:** "eşzamanlı ×4 throughput +24% (3.7→4.6 video/dk)" için

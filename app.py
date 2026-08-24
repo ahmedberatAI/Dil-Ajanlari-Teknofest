@@ -7,8 +7,11 @@ istatistik cipleri, gelismis olay zaman-cizelgesi (aralik barlari), tutanak/kani
 panelleri, operator sohbeti. Tamamen yerel: dis font/CDN YOK (sistem fontlari).
 
 Calistirma:
-    1) Ayri terminalde:  python serve_vllm.py
-    2) python app.py     (http://127.0.0.1:7860)
+    python app.py     (http://127.0.0.1:7860)
+
+`.env` icinde DILAJAN_API_BASE_URL + DILAJAN_API_KEY dolu ise UZAK servise
+gider ve baska hicbir sey gerekmez. Bos ise yerel vLLM beklenir
+(`python serve_vllm.py`) — yarisma yapilandirmasinda YEREL GPU YASAKTIR.
 """
 from __future__ import annotations
 
@@ -137,6 +140,18 @@ def risk_panel_html(result: AnalysisResult) -> str:
     )
 
 
+def _kac(x) -> str:
+    """Model metnini HTML'e basmadan ONCE kacir.
+
+    KUSUR (2026-08-25 sunum denetimi): olay metni tek tirnakli `title`
+    niteligine HAM basiliyordu. Model "Forklift'in devrilmesi" yazdigi anda
+    nitelik erken kapanir ve zaman-cizelgesi bozulur. Turkce metinde kesme
+    isareti SIK gecer. `query_panel_html` zaten kaciriyordu; iki panele
+    uygulanmamisti.
+    """
+    return _html.escape(str(x), quote=True)
+
+
 def timeline_html(events, duration_str: str) -> str:
     if not events:
         return "<div class='empty'>Kayda değer olay tespit edilmedi.</div>"
@@ -155,7 +170,7 @@ def timeline_html(events, duration_str: str) -> str:
                 f"border-radius:4px;background:{c};opacity:.35;'></div>"
             )
         markers += (
-            f"<div title='[{e.time}] {e.event} ({e.severity.value})' "
+            f"<div title='[{_kac(e.time)}] {_kac(e.event)} ({_kac(e.severity.value)})' "
             f"style='position:absolute;left:{pct:.1f}%;top:0;transform:translateX(-50%);text-align:center;'>"
             f"<div style='width:14px;height:14px;border-radius:50%;background:{c};margin:0 auto;"
             f"border:2px solid #0b1322;box-shadow:0 0 10px {c}99;'></div>"
@@ -180,7 +195,29 @@ def timeline_html(events, duration_str: str) -> str:
 
 
 def _server_status() -> str:
-    """vLLM sunucu sagligini yoklar (sayfa acilisinda) -> durum rozeti."""
+    """Model sunucusu saglik rozeti — UZAK ve YEREL yollarin IKISINI de bilir.
+
+    KUSUR (2026-08-25 sunum provasinda goruldu): bu fonksiyon YALNIZCA yerel
+    vLLM'in /health ucunu yokluyordu. Uzak servise gectikten sonra sistem
+    kusursuz calisirken rozet "MODEL SUNUCUSU KAPALI" yaziyor ve kullaniciya
+    ARTIK YASAK olan `python serve_vllm.py` komutunu oneriyordu. Sahnede
+    juri once bu kirmizi rozeti gorurdu.
+
+    Uzak yolda /v1/models yoklanir (dokumantasyonun kendi saglik ucu).
+    Anahtar EKRANA BASILMAZ.
+    """
+    if settings.uzak_api_mi:
+        try:
+            istek = urllib.request.Request(
+                settings.base_url.rstrip("/") + "/models",
+                headers={"Authorization": f"Bearer {settings.etkin_api_key}"})
+            urllib.request.urlopen(istek, timeout=4)
+            return (f"<div class='srv on'><span class='sdot online'></span>UZAK SERVİS ÇEVRİMİÇİ"
+                    f"<span class='dim'> · algı {settings.gorev_modeli('algi')}"
+                    f" · sayım {settings.gorev_modeli('sayim')}</span></div>")
+        except Exception:
+            return ("<div class='srv off'><span class='sdot offline'></span>UZAK SERVİSE ULAŞILAMIYOR"
+                    "<span class='dim'> · ağ bağlantısını ve .env anahtarını kontrol edin</span></div>")
     try:
         urllib.request.urlopen(
             f"http://{settings.vllm_host}:{settings.vllm_port}/health", timeout=2)
@@ -289,6 +326,24 @@ def analyze(video_path, facility_rules="", restricted_zones="",
 
     if result is None:
         yield (_alert("Analiz tamamlanamadı — model sunucusunun çalıştığından emin olun."), *_blank())
+        return
+
+    # --- SESSIZ BASARISIZLIK MUHAFIZI -------------------------------------
+    # KUSUR (2026-08-25 sunum denetimi): `finalize` HER KOSULDA bir
+    # AnalysisResult dondurur, bu yuzden yukaridaki `result is None` dali
+    # ULASILAMAZ. Servis kapaliyken ekran "✅ Analiz tamamlandi" diyor,
+    # ozet "Ozet uretilemedi." oluyor ve kullanici bunu TEMIZ VIDEO ile
+    # ayirt edemiyor. Olculdu: uzak servis 10 istekte ust uste 502 dondu.
+    # Artik hata karar-izinden okunup EKRANIN USTUNDE gosterilir.
+    _hata_izleri = [t_ for t_ in (result.decision_trace or [])
+                    if any(x in str(t_) for x in
+                           ("Connection error", "hatasi:", "hatası:", "OLCULEMEDI",
+                            "APITimeoutError", "InternalServerError", "okunamadi"))]
+    if _hata_izleri:
+        _ilk = str(_hata_izleri[0])[:220]
+        yield (_alert("Analiz TAMAMLANAMADI — model servisine ulaşılamadı veya "
+                      "adımlar hata verdi. Aşağıdaki sonuç EKSİKTİR.<br>"
+                      f"<code>{_html.escape(_ilk)}</code>"), *_blank())
         return
 
     risk = risk_panel_html(result)
@@ -611,14 +666,14 @@ _HEADER_HTML = """
   <div style="flex:1">
     <div class="brand-top">VIGILANTAI · OPERASYON KONSOLU</div>
     <div class="brand">DilAjanları</div>
-    <div class="brand-sub">Yerel Video Analiz &amp; Karar Destek Ajanı · Qwen3-VL-8B + vLLM + LangGraph · TEKNOFEST TYDA 3. Senaryo</div>
+    <div class="brand-sub">Türkçe Video Analiz &amp; İSG Karar Destek Ajanı · Qwen3-VL + Qwen3.5 (8×H200) + LangGraph · TEKNOFEST TYDA 3. Senaryo</div>
   </div>
 </div>
 """
 
 _FOOTER_HTML = """
 <div class="app-footer">
-  🛡️ <b>Tamamen yerel &amp; çevrimdışı</b> — dış API / bulut bağımlılığı yok ·
+  🛡️ <b>Kararlar deterministik</b> — İSG hükmünü kural motoru verir, model yalnızca ölçer ·
   Apache-2.0 · <b>BilisimVadisi2026</b> · VigilantAI
 </div>
 """
@@ -647,7 +702,7 @@ def build_ui() -> gr.Blocks:
                     # HEVC/eski-mpeg4/avi/mkv tarayicida oynamiyordu; format="mp4" container-only oldugu
                     # icin yetmiyordu. Codec'i universal yapinca onizleme her formatta oynar.
                     video_in = gr.Video(label="Video", sources=["upload"], elem_id="video-in")
-                    with gr.Accordion("🛡️ Savunma / Tesis Ayarları (opsiyonel)", open=False):
+                    with gr.Accordion("🏭 Tesis Kuralları (opsiyonel)", open=False):
                         facility_in = gr.Textbox(
                             label="Tesise özgü güvenlik kuralları",
                             placeholder="Örn: Bu kritik tesise izinsiz giriş yasaktır; baret takmayan personel ihlaldir.",
@@ -661,7 +716,7 @@ def build_ui() -> gr.Blocks:
                         # KKD: deterministik YOLO dedektoru (VLM'e metin enjeksiyonu DEGIL).
                         # Varsayilan KAPALI; agirlik yoksa acik olsa bile sessizce devre disi.
                         ppe_in = gr.Checkbox(
-                            label="🪖 KKD (baret) tespiti — deterministik dedektör", value=False)
+                            label="🦺 KKD tespiti (baret + yelek) — deterministik dedektör", value=False)
                         gr.HTML("<div class='qa-hint'>Baretsiz personel <b>YOLO ile</b> tespit "
                                 "edilir (dil modeli bu ayrımı güvenilir yapamıyor — ölçüldü). "
                                 "Bulunan ihlal olay listesinde <b>görünür</b> ancak varsayılan "

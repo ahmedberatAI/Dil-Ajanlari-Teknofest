@@ -2,15 +2,26 @@
 
 **TEKNOFEST 2026 · Türkçe Yapay Zekâ Dil Ajanları Yarışması · 3. Senaryo**
 
-Savunma sanayi tesisleri ve saha operasyonları için, bir videoyu girdi alıp **tamamen
-yerel / offline** çalışan, multimodal (video + metin) bir yapay zekâ ajanı. Sistem
+Endüstriyel tesisler ve saha operasyonları için, bir videoyu girdi alıp
+**iş sağlığı ve güvenliği (İSG) ihlallerini** tespit eden, multimodal
+(video + metin) bir yapay zekâ ajanı. Sistem
 videodaki olayları **zaman damgasıyla** tespit eder, **Türkçe özet** ve **risk
 değerlendirmesi** üretir, operatöre **aksiyon önerileri** sunar ve uygun **operasyonel
 fonksiyonları dinamik olarak çağırır** — çıktının tamamı yapılandırılmış JSON'dur.
 
-> Yığın: **Qwen3-VL-8B** (görsel-dil modeli, FP8) · **vLLM** (yerel servisleme) ·
-> **LangGraph** (ajan) · **Gradio** (arayüz). Dış API / bulut / ücretli yazılım **yok**.
-> Öz-doğrulama + mekânsal grounding + ayarlanabilir duyarlılık modları. (7B precision-yedek korunur.)
+> Yığın: **Qwen3-VL** (görsel-dil) + **Qwen3.5** (dil) · yarışma düzenleyicisinin
+> tahsis ettiği **8×H200 çıkarım servisi** · **LangGraph** (ajan) · **Gradio** (arayüz).
+> Ücretli/kapalı yazılım yok; tüm bileşenler Apache-2.0 uyumlu.
+>
+> ⚠️ **Çalışma kipi hakkında:** proje başlangıçta tamamen yerel/offline tasarlandı ve
+> yerel vLLM ile çalışabilir durumda (`.env.yerel`). 2026-08-21'de yarışma
+> düzenleyicisi 8×H200'lük ortak bir çıkarım servisi tahsis etti ve offline şartı
+> kaldırıldı; sevk edilen yapılandırma bu servisi kullanır. **Yerel GPU kullanımı
+> kod düzeyinde yasaklanmıştır** (`config.yerel_cihaz()`), çünkü tahsis edilen
+> kaynak uzak servistir.
+>
+> Kararın kendisi **model dışıdır**: İSG hükmünü deterministik bir kural motoru
+> verir, model yalnızca kapalı cevap uzayında ölçüm yapar.
 
 ---
 
@@ -108,7 +119,7 @@ python scripts/make_test_video.py
 
 ### Takım üyeleri — modeli kendi makinenizde çalıştıramıyorsanız
 GPU'suz / WSL'siz makinelerden **kaptanın makinesindeki modele ağ üzerinden** bağlanabilirsiniz
-(kod değişikliği gerekmez; dış API/bulut kullanılmadığı için **"tamamen yerel"** kuralına uyar):
+(kod değişikliği gerekmez):
 
 ```bash
 # Kaptan (WSL, GPU'lu makine)

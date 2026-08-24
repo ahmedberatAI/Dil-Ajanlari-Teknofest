@@ -262,7 +262,11 @@ def respond(
         answer = istemci.chat(messages, temperature=temperature,
                               max_tokens=max_tokens).strip()
     except Exception as ex:
-        return f"Yanıt üretilirken hata oluştu: {ex}"
+        # Ham istisna GOVDESI basilmaz: servis 502 donerse gateway'in HTML
+        # govdesi sohbet baloncuguna dokulurdu (2026-08-25 sunum denetimi).
+        # Tur adi tanilama icin yeterli; ayrinti loga gider.
+        return ("Yanıt üretilemedi — model servisine ulaşılamıyor olabilir. "
+                f"(hata türü: {type(ex).__name__})")
     # 2) B#1 KAPILI ICRA: operatör ONAY verdiyse, önerilen aksiyonu GERÇEKTEN çalıştır (insan-onay kapısı)
     #    K5: onay tespiti olumsuzlama-farkindalikli ("gönderme"/"onaylamıyorum" icra ETMEZ)
     #    D42: onay TEK BASINA yetmez — ONAYLANACAK BIR ONERI de olmali. Bu onkosul

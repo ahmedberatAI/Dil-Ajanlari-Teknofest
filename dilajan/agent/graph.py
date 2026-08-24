@@ -1004,7 +1004,11 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
 
                     kayit = _gz.slotlari_doldur_bolgeli(
                         vlm, slotlar, _video_uret, settings,
-                        system=_gz.GOZLEM_SISTEM)
+                        system=_gz.GOZLEM_SISTEM, frames=seg.frames)
+                    if getattr(kayit, "atlanan", None):
+                        notes.append(
+                            f"perceive: segment {seg.index} gorus muhafizi -> "
+                            f"{list(kayit.atlanan)} slotu bu kamerada SORULMADI")
                     if not _yol:
                         notes.append(
                             f"perceive: segment {seg.index} gozlem duzlemi "

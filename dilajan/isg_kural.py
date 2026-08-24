@@ -144,20 +144,28 @@ class EtiketKurali(Kural):
 # Sablon metinleri sinif TANIMINDAN turer ve eslestiricinin kaliplariyla
 # UYUMLU yazilir — ama asil kazanc su: metin SABIT oldugu icin eslestiricinin
 # es-anlamli/morfoloji kacirmalari YAPISAL OLARAK imkansizdir.
+# SABLON METINLERI GERCEK TURKCE YAZILIR — ASCII'lestirilmez.
+# Bu metinler OPERATORE gosterilir (arayuzdeki olay tablosu) ve etiket
+# metrigi de bunlar uzerinden calisir. ASCII'lestirilmis hallerinde:
+#   (a) juriye "Pano kapagi acik birakilmis" gibi bozuk Turkce gorunuyordu,
+#   (b) `isg_any_match` kaliplari gercek Turkce oldugu icin DORT sablondan
+#       IKISI kendi sinifiyla ESLESMIYORDU — yani kural DOGRU ateslese bile
+#       olcum onu kacirma sayiyordu.
+# Kod yorumlari ASCII kalir (depo kurali); KULLANICIYA GIDEN metin Turkcedir.
 KURALLAR: List[Kural] = [
     EsikKurali(
         kod="Carrying_Overload_with_Forklift",
         slot="catal_kasa_sayisi",
-        sablon=("Forklift asiri yuk tasiyor: catalda {deger} kasa istiflenmis "
-                "(guvenli sinir {esik} kasanin altidir)"),
+        sablon=("Forklift aşırı yük taşıyor: çatalda {deger} kasa istiflenmiş — "
+                "güvenli yük sınırı {esik} kasanın altıdır"),
         esik_alani="forklift_esik", esik_varsayilan=3,
         severity=Severity.YUKSEK,
     ),
     EsikKurali(
         kod="Opened_Panel_Cover",
         slot="pano_koyuluk_0_10",
-        sablon=("Pano kapagi acik birakilmis: elektrik/kontrol panosu bolgesinde "
-                "koyu oyuk goruluyor (koyuluk {deger}/10)"),
+        sablon=("Pano kapağı açık bırakılmış: elektrik/kontrol panosu bölgesinde "
+                "koyu oyuk görülüyor (koyuluk {deger}/10)"),
         esik_alani="panel_koyuluk_esik", esik_varsayilan=3,
         severity=Severity.YUKSEK,
     ),
@@ -167,17 +175,17 @@ KURALLAR: List[Kural] = [
         # METIN OLCULEN SEYI ANLATIR. Cizginin bu tesiste ne oldugunu
         # bilmiyoruz; "yaya yolunun disina cikti" gibi bir NEDEN iddia etmek
         # olcumun otesine gecmek olurdu.
-        sablon=("Yaya yolu ihlali: kisi yerdeki isaretli cizginin hemen "
-                "uzerinde/bitisiginde yuruyor (cizgiye uzaklik {deger}/10, "
-                "guvenli sinir {esik} ve uzeridir)"),
+        sablon=("Yaya yolu ihlali: kişi yerdeki işaretli çizginin hemen "
+                "üzerinde/bitişiğinde yürüyor (çizgiye uzaklık {deger}/10, "
+                "güvenli sınır {esik} ve üzeridir)"),
         esik_alani="yol_mesafe_esik", esik_varsayilan=7,
         severity=Severity.YUKSEK,
     ),
     EtiketKurali(
         kod="Unauthorized_Intervention",
         slot="makine_basinda_yelek",
-        sablon=("Yetkisiz mudahale: makineye mudahale eden kiside reflektif "
-                "yelek yok"),
+        sablon=("Yetkisiz müdahale: makineye müdahale eden kişide "
+                "reflektif yelek yok"),
         ihlal_degeri="YOK",
         kategori=EventCategory.YETKISIZ_ERISIM,
         severity=Severity.YUKSEK,

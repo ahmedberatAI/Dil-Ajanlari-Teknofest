@@ -2,7 +2,7 @@
 
 ## Genel Bakış
 
-DilAjanları, bir videoyu girdi alıp **tamamen yerel/offline** çalışan, multimodal
+DilAjanları, bir videoyu girdi alıp **yerel veya uzak çıkarım servisiyle** çalışabilen, multimodal
 (video + metin) bir **yapay zekâ ajanı** ile analiz eder ve yapılandırılmış karar
 destek çıktısı (zaman damgalı olaylar, Türkçe özet, risk değerlendirmesi, operatöre
 aksiyon önerileri ve tetiklenen operasyonel fonksiyonlar) üretir.

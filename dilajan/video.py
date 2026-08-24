@@ -8,6 +8,8 @@ zaman damgasiyla etiketliyoruz. Bu yaklasim:
 """
 from __future__ import annotations
 
+import os
+
 import io
 from dataclasses import dataclass, field
 from typing import List, Tuple
@@ -362,4 +364,16 @@ def servis_videosu(yol: str, max_side: int = 1280, crf: int = 26,
         _os.unlink(gecici)
     except Exception:
         pass
+    # FAIL-OPEN SINIRI. ffmpeg yoksa/patlarsa ORIJINAL dosya donuyordu; buyuk
+    # bir dosyada bu (a) ~40 MB'lik base64 govde -> 413/zaman asimi,
+    # (b) ROI ve zaman penceresi UYGULANMAMIS = olculmus DEJENERE kip demek.
+    # Kucuk dosyada eski davranis korunur (yalnizca yavaslar, K3); buyukte
+    # SESSIZCE bozuk olcum uretmektense ACIK hata verilir.
+    HAM_YEDEK_SINIRI = 12_000_000
+    _boy = os.path.getsize(yol)
+    if _boy > HAM_YEDEK_SINIRI:
+        raise RuntimeError(
+            f"video yeniden kodlanamadi (ffmpeg yok veya hata verdi) ve ham "
+            f"dosya {_boy/1e6:.1f} MB — yedek yol yalnizca "
+            f"{HAM_YEDEK_SINIRI/1e6:.0f} MB altinda kullanilir. ffmpeg kurulu mu?")
     return open(yol, "rb").read()

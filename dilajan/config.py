@@ -21,8 +21,16 @@ OUTPUT_DIR = PROJECT_ROOT / "outputs"
 
 
 class Settings(BaseSettings):
+    # `.env` DEPO KOKUNDEN okunur, calisma dizininden DEGIL.
+    # KUSUR (2026-08-25 sunum denetimi): `env_file=".env"` CWD'ye goreliydi.
+    # `cd /tmp && python ~/proje/app.py` ile baslatilinca .env SESSIZCE yok
+    # sayiliyor, base_url yerel vLLM'e duyuyor, isg_slotlari bosaliyordu —
+    # yani sistem sahnede "calisiyor gorunup" hicbir ISG kurali kosmuyordu.
     model_config = SettingsConfigDict(
-        env_prefix="DILAJAN_", env_file=".env", extra="ignore"
+        env_prefix="DILAJAN_",
+        env_file=(os.path.join(os.path.dirname(os.path.dirname(
+            os.path.abspath(__file__))), ".env"), ".env"),
+        extra="ignore"
     )
 
     # --- Model / servisleme ---
@@ -261,6 +269,13 @@ class Settings(BaseSettings):
     # BOS = slot tam kareye sorulur = olculmus DUSUK performans.
     yol_roi_vlm: str = ""
     yol_mesafe_esik: int = 7          # cizgiye uzaklik < esik -> ihlal
+    # GORUS MUHAFIZI — yol slotu YALNIZCA dogru kamerada sorulur.
+    # `yol_dislanan_gorus`: DISLANAN kameranin (forklift, kamera 14) referans
+    # imzasi. Sahne buna benziyorsa yol slotu HIC sorulmaz.
+    # Olculdu (96 klip): kamera 14 benzerligi min 0,842 · kamera 9 maks 0,575.
+    # BOS = muhafiz kapali = eski davranis (K2).
+    yol_dislanan_gorus: str = ""
+    yol_gorus_esik: float = 0.708
     # YENIDEN KODLAMA KONTROLU (varsayilan KAPALI = eski davranis, K2).
     # Acikken gozlem duzlemi videolari ORTAK SPEKTE kodlar: sabit fps + sabit
     # bit hizi. Boylece "skor icerikten mi, kodlama izinden mi geliyor?"
