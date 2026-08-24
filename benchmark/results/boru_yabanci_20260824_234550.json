@@ -1,0 +1,673 @@
+{
+ "_aciklama": "Bizim boru hattimiz iSafetyBench kliplerinde (genelleme).",
+ "lisans": "CC BY-NC-SA 4.0 — yalnizca degerlendirme",
+ "n_kol": 30,
+ "tohum": 2026,
+ "satirlar": [
+  {
+   "klip": "H4sC0QCkG7I_trim_316.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 36.0,
+   "ozet": "Görüntüde, bir raf ünitesinde parlak turuncu alev ve kıvılcım oluşumu tespit edilmiştir. Bu durum, iç mekân ortamında ciddi bir yangın veya patlama ri"
+  },
+  {
+   "klip": "_XXq1kmmBYY_trim_6.mp4",
+   "kol": "hazard",
+   "n_olay": 3,
+   "isg_kod": [],
+   "max_sev": 4,
+   "risk": "Kritik",
+   "sure": 51.9,
+   "ozet": "İç mekân ortamında bir forkliftin yükü fırlatması ve kontrolünü kaybederek devrilmesi tespit edilmiştir. Aynı sahne içinde forkliftin sarı güvenlik ba"
+  },
+  {
+   "klip": "_2tSBxyAwLs_trim_9.mp4",
+   "kol": "hazard",
+   "n_olay": 3,
+   "isg_kod": [
+    "Carrying_Overload_with_Forklift"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 53.0,
+   "ozet": "İlk görüntüde, dağılmış yük, cam kırıkları ve sıvı döküntüsü bulunan bir sahne ile enkaz içinde bulunan personel tespit edilmiştir. Aynı anda, forklif"
+  },
+  {
+   "klip": "1s2Tcqr3Rgg_trim_117.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 42.5,
+   "ozet": "Görüntü analizinde, elektrik veya kontrol amaçlı kullanılan bir panonun kapağının açık bırakıldığı tespit edilmiştir. Bu durum, koyu bir oyuk olarak a"
+  },
+  {
+   "klip": "1s2Tcqr3Rgg_trim_160.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 4,
+   "risk": "Kritik",
+   "sure": 36.8,
+   "ozet": "Görüntülerde, bir vinç çalışma alanı yakınında ani bir patlama veya yük düşmesi sonucu yoğun toz ve duman bulutu oluştuğu tespit edilmiştir. Olay anın"
+  },
+  {
+   "klip": "VAL3rSbPzXs_trim_2.mp4",
+   "kol": "hazard",
+   "n_olay": 2,
+   "isg_kod": [],
+   "max_sev": 4,
+   "risk": "Kritik",
+   "sure": 90.5,
+   "ozet": "Görüntülerde metal iskele yapısında şiddetli bir yangın, alevler ve yoğun duman tespit edilmiştir. Aynı anda, sol tarafta bulunan personel yangın hort"
+  },
+  {
+   "klip": "aTW27C3AG-o_trim_157.mp4",
+   "kol": "hazard",
+   "n_olay": 4,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 53.9,
+   "ozet": "İç mekânda, siyah üst giyen bir kişi elindeki cisimle diğer bireye agresif yaklaşıp fiziksel darbe uygulamıştır. Darbe sonucu mavi giyimli birey kutul"
+  },
+  {
+   "klip": "aTW27C3AG-o_trim_45.mp4",
+   "kol": "hazard",
+   "n_olay": 3,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 35.5,
+   "ozet": "Görüntüde elektrik veya kontrol panosu bölgesinde açık bırakılmış bir kapak tespit edilmiştir. İki birey arasında ani hareket ve itiş kakış şüphesi gö"
+  },
+  {
+   "klip": "aTW27C3AG-o_trim_55.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 40.7,
+   "ozet": "Görüntülerde sarı yol silindiri ile beyaz araç arasında bir çarpışma olayı tespit edilmiştir. Bu olay, video kaydının başlangıcında gerçekleşmiş ve yü"
+  },
+  {
+   "klip": "B2MDTsYuyt0_trim_3.mp4",
+   "kol": "hazard",
+   "n_olay": 4,
+   "isg_kod": [
+    "Opened_Panel_Cover",
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 4,
+   "risk": "Kritik",
+   "sure": 48.7,
+   "ozet": "Görüntülerde elektrik panosu kapağının açık bırakıldığı ve bir kişinin makineye reflektif yelek olmadan müdahale ettiği tespit edilmiştir. Ayrıca, kon"
+  },
+  {
+   "klip": "zJqzjDX-XFU_trim_83.mp4",
+   "kol": "hazard",
+   "n_olay": 2,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 32.3,
+   "ozet": "Görüntülerde elektrik veya kontrol amaçlı kullanılan bir panonun kapağının açık bırakıldığı tespit edilmiştir. Ayrıca, bir motosiklet sürücüsünün zemi"
+  },
+  {
+   "klip": "aTW27C3AG-o_trim_32.mp4",
+   "kol": "hazard",
+   "n_olay": 2,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 40.9,
+   "ozet": "Görüntülerde elektrik veya kontrol panosu bölgesinde kapak açık bırakılmış bir durum tespit edilmiştir. Ayrıca, bir forkliftin yük dengesizliği nedeni"
+  },
+  {
+   "klip": "-NF8DZCdcUQ_trim_1.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 2,
+   "risk": "Yüksek",
+   "sure": 31.7,
+   "ozet": "Görüntülerde, 00:06 saniye zaman damgasında bir forkliftin yükünün devrildiği ve bu durumun şiddetli bir çarpışmaya yol açtığı tespit edilmiştir. Çarp"
+  },
+  {
+   "klip": "VTc91caMAR8_trim_2.mp4",
+   "kol": "hazard",
+   "n_olay": 3,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 37.3,
+   "ozet": "Görüntülerde bir forkliftin platformdan aşağı devrilerek ciddi bir kaza oluşturduğu tespit edilmiştir. Aynı anda elektrik veya kontrol panosu bölgesin"
+  },
+  {
+   "klip": "aTW27C3AG-o_trim_145.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 35.6,
+   "ozet": "İç mekân ortamında, raflardan devasa bir yük bloğunun devrilmesi ve ciddi bir kaza riski oluşması tespit edilmiştir. Videonun ikinci bölümünde ise öne"
+  },
+  {
+   "klip": "_4GgKoR0OOw_trim_32.mp4",
+   "kol": "hazard",
+   "n_olay": 3,
+   "isg_kod": [
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 46.1,
+   "ozet": "Görüntülerde, koruyucu yelek giymeden bir makineye müdahale eden bir kişi tespit edilmiştir. Ayrıca, dönen makine parçasına takılan bir kişinin ciddi "
+  },
+  {
+   "klip": "aTW27C3AG-o_trim_3.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 33.1,
+   "ozet": "Görüntü analizinde ilk bölümde önemli bir olay tespit edilmemiştir. İkinci bölümde, yükün dengesinin bozulması sonucu bir kişinin kontrolünü kaybedere"
+  },
+  {
+   "klip": "1gx7OURLLBs_trim_4.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 31.4,
+   "ozet": "Görüntü analizinde, elektrik veya kontrol amaçlı kullanılan bir panonun kapağının açık bırakıldığı tespit edilmiştir. Panonun iç kısmında koyu bir oyu"
+  },
+  {
+   "klip": "BWZSWUVBOuw_trim_6.mp4",
+   "kol": "hazard",
+   "n_olay": 2,
+   "isg_kod": [
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 35.4,
+   "ozet": "Görüntülerde, yansıtıcı yelek giymeden bir makineye müdahale eden bir kişi tespit edilmiştir. Ardından aynı kişi ani şekilde zemine çökerek hareketsiz"
+  },
+  {
+   "klip": "H4sC0QCkG7I_trim_313.mp4",
+   "kol": "hazard",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 24.7,
+   "ozet": "8 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde hareket eden nesne, şüpheli"
+  },
+  {
+   "klip": "87O1pBSGtR0_trim_4.mp4",
+   "kol": "hazard",
+   "n_olay": 2,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 33.8,
+   "ozet": "Görüntülerde vinçten kontrolsüz şekilde düşen devasa bir metal rulo ve çarpma sonucu oluşan ciddi bir kaza tespit edilmiştir. Aynı anda elektrik veya "
+  },
+  {
+   "klip": "1s2Tcqr3Rgg_trim_152.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 4,
+   "risk": "Kritik",
+   "sure": 34.6,
+   "ozet": "Merkez konumunda erimiş metalin kontrollü olmayan dökülmesi, yoğun kıvılcım püskürtmesi, siyah duman ve ateş oluşumu ile şiddetli bir ısıl olay gerçek"
+  },
+  {
+   "klip": "H4sC0QCkG7I_trim_305.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 2,
+   "risk": "Orta",
+   "sure": 25.8,
+   "ozet": "Görüntüde sarı renkli giysili bir bireyin aniden zemine çökmesi ve ardından hızla doğrulması olayı tespit edilmiştir. Bu durum, bireyin ani bir sağlık"
+  },
+  {
+   "klip": "aTW27C3AG-o_trim_99.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 2,
+   "risk": "Kritik",
+   "sure": 39.9,
+   "ozet": "Görüntüde, bir iç mekânda yükün devrilmesi sonucu bir personelin yere düştüğü ve hareketsiz kaldığı tespit edilmiştir. Olay, personelin fiziksel bir d"
+  },
+  {
+   "klip": "R4pN50yYI5k_trim_6.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 4,
+   "risk": "Kritik",
+   "sure": 35.7,
+   "ozet": "Merkez konumda bir raf sisteminin çökmesi ve kutuların devrilmesi sonucu enkaz oluşumu tespit edilmiştir. Görüntüde yaralı kişi veya yangın gibi ek bi"
+  },
+  {
+   "klip": "_2tSBxyAwLs_trim_18.mp4",
+   "kol": "hazard",
+   "n_olay": 2,
+   "isg_kod": [],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 39.8,
+   "ozet": "İlk bölümde, beyaz bir pikabın arkasındaki bidondan yüksek basınçlı sıvı kontrolsüz bir şekilde püskürtülmektedir. Aynı bölümde, mavi bir scooter sürü"
+  },
+  {
+   "klip": "91OaD3ixCyA_trim_65.mp4",
+   "kol": "hazard",
+   "n_olay": 3,
+   "isg_kod": [
+    "Carrying_Overload_with_Forklift"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 42.3,
+   "ozet": "Görüntülerde bir ağır iş makinesinin (forklift) kontrolsüz devrilerek yere düştüğü tespit edilmiştir. Makineye çok yakın mesafede bulunan bir kişi teh"
+  },
+  {
+   "klip": "1b1NOLpwCz8_trim_10.mp4",
+   "kol": "hazard",
+   "n_olay": 3,
+   "isg_kod": [
+    "Opened_Panel_Cover",
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 38.4,
+   "ozet": "Görüntüde elektrik veya kontrol panosu bölgesinde açık bırakılmış bir kapak tespit edilmiştir. Aynı anda, makineye müdahale eden bir kişinin yansıtıcı"
+  },
+  {
+   "klip": "Zag5F6FXlj0_trim_19.mp4",
+   "kol": "hazard",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 44.9,
+   "ozet": "Görüntülerde, bir makine içinde sıkışmış ve hareketsiz durumda olan bir kişi tespit edilmiştir. Bu durum, acil sağlık müdahalesi gerektiren ciddi bir "
+  },
+  {
+   "klip": "o9FuFIY-OKA_trim_25.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 26.1,
+   "ozet": "8 saniyelik video analizinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam ve olağan akış "
+  },
+  {
+   "klip": "MEEGwePfDgM_trim_51.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 29.6,
+   "ozet": "6 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup,"
+  },
+  {
+   "klip": "zaV3OjWE834_trim_2.mp4",
+   "kol": "hazard",
+   "n_olay": 3,
+   "isg_kod": [
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 51.6,
+   "ozet": "Görüntülerde, yansıtıcı yelek takmayan bir kişinin makineye müdahale ettiği tespit edilmiştir. Aynı anda siyah kıyafetli bir birey ani bir şekilde yer"
+  },
+  {
+   "klip": "oyRnP9p0KIs_trim_31.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Carrying_Overload_with_Forklift"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 31.6,
+   "ozet": "Görüntüde, bir forkliftin güvenli yük sınırını aşacak şekilde üç kasa taşıdığı tespit edilmiştir. Bu durum, yükün dengesizleşmesi ve düşme riski oluşt"
+  },
+  {
+   "klip": "37aSzbWBuxk_trim_35.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 47.1,
+   "ozet": "Görüntü analizinde, ilk bölümde elektrik veya kontrol amaçlı kullanılan bir panonun kapağının açık bırakıldığı tespit edilmiştir. İkinci bölümde ise h"
+  },
+  {
+   "klip": "0zQ9fI30v1E_trim_1.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 25.5,
+   "ozet": "Yedi saniyelik video analizinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam akışı gözlem"
+  },
+  {
+   "klip": "62_bh4b5puY_trim_13.mp4",
+   "kol": "normal",
+   "n_olay": 2,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 45.8,
+   "ozet": "Görüntülerde elektrik veya kontrol panosu bölgesinde açık bırakılmış bir kapak tespit edilmiştir. Ayrıca, vinçle taşınan bir tekerleğin bir araca çarp"
+  },
+  {
+   "klip": "0XutYYk-0Uc_trim_11.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 35.2,
+   "ozet": "Görüntüde, bir makineye müdahale eden bir kişi tespit edilmiştir. Bu kişinin üzerinde yansıtıcı yelek bulunmamaktadır. Olay, yetkisiz erişim ve güvenl"
+  },
+  {
+   "klip": "1tuWxs8fUOk_trim_214.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 38.8,
+   "ozet": "Görüntüde, bir makineye müdahale eden bir kişi tespit edilmiştir. Bu kişi üzerinde yansıtıcı yelek bulunmamaktadır ve olay yetkisiz erişim olarak sını"
+  },
+  {
+   "klip": "MEEGwePfDgM_trim_29.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 27.4,
+   "ozet": "Videonun ilk bölümünde herhangi bir önemli olay tespit edilmemiştir. İkinci bölümde de benzer şekilde kayda değer bir durum veya anomali gözlemlenmemi"
+  },
+  {
+   "klip": "37aSzbWBuxk_trim_1.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 45.8,
+   "ozet": "8 saniyelik video incelemesinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde hareket eden nesne, şüpheli "
+  },
+  {
+   "klip": "YE7VTtHbtQA_trim_3.mp4",
+   "kol": "normal",
+   "n_olay": 2,
+   "isg_kod": [
+    "Opened_Panel_Cover",
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 60.1,
+   "ozet": "Görüntülerde elektrik veya kontrol amaçlı kullanılan bir panonun kapağının açık bırakıldığı tespit edilmiştir. Aynı anda, makineye müdahale eden bir k"
+  },
+  {
+   "klip": "8DiEG0vot_w_trim_2.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 51.1,
+   "ozet": "Görüntü analizinde, elektrik veya kontrol amaçlı kullanılan bir panonun kapağının açık bırakıldığı tespit edilmiştir. Panonun iç kısmında koyu bir oyu"
+  },
+  {
+   "klip": "62_bh4b5puY_trim_6.mp4",
+   "kol": "normal",
+   "n_olay": 2,
+   "isg_kod": [
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 63.1,
+   "ozet": "Görüntülerde, yansıtıcı yelek giymeden makineye müdahale eden bir kişi tespit edilmiştir. Ayrıca, araç destek ayağının kayması sonucu ağır metal parça"
+  },
+  {
+   "klip": "0zQ9fI30v1E_trim_13.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 26.7,
+   "ozet": "8 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen ortamda hareket, çarpışma v"
+  },
+  {
+   "klip": "1tuWxs8fUOk_trim_34.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 30.3,
+   "ozet": "5 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen iç mekân veya dış mekân ort"
+  },
+  {
+   "klip": "X9F1GALAAcE_trim_4.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 42.9,
+   "ozet": "Görüntü analizinde, elektrik veya kontrol amaçlı kullanılan bir panonun kapağının açık bırakıldığı tespit edilmiştir. Bu durum, koyu bir oyuk şeklinde"
+  },
+  {
+   "klip": "oeHrto1r-S4_clip0_trim_1.mp4",
+   "kol": "normal",
+   "n_olay": 3,
+   "isg_kod": [
+    "Opened_Panel_Cover",
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 39.3,
+   "ozet": "Görüntülerde elektrik veya kontrol panosu bölgesinde açık bırakılmış bir kapak tespit edilmiştir. Aynı anda, makineye müdahale eden kişide yansıtıcı y"
+  },
+  {
+   "klip": "62_bh4b5puY_trim_12.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [],
+   "max_sev": 1,
+   "risk": "Orta",
+   "sure": 29.1,
+   "ozet": "Görüntüde, bir konteynerin üstünde duran bir personel vinç kancasını bağlama işlemi gerçekleştirmektedir. Bu durum, yüksekten çalışma riski taşıyan bi"
+  },
+  {
+   "klip": "0a-WuC1Xdl4_trim_4.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 25.6,
+   "ozet": "6 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde hareketli bir nesne, kişi v"
+  },
+  {
+   "klip": "0zQ9fI30v1E_trim_27.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 23.2,
+   "ozet": "8 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen ortamda hareketli nesne, ya"
+  },
+  {
+   "klip": "_n8cIxEpups_trim_7.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 37.5,
+   "ozet": "İncelenen 8 saniyelik video kaydı, iki ayrı ve kopuk bölümden oluşmaktadır. Her iki bölümde de güvenlik operatörünün dikkatini gerektirecek herhangi b"
+  },
+  {
+   "klip": "0kog0iuGxOc_trim_87.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 33.6,
+   "ozet": "Videonun ilk bölümünde herhangi bir önemli olay tespit edilmemiştir. İkinci bölümde de benzer şekilde kayda değer bir durum veya anomali gözlemlenmemi"
+  },
+  {
+   "klip": "3iwe_dM0pc0_trim_16.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Opened_Panel_Cover"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 29.1,
+   "ozet": "Görüntü analizinde, elektrik veya kontrol amaçlı kullanılan bir panonun kapağının açık bırakıldığı tespit edilmiştir. Bu durum, koyu bir oyuk olarak a"
+  },
+  {
+   "klip": "8DiEG0vot_w_trim_4.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 47.1,
+   "ozet": "Görüntüde, bir makineye müdahale eden bir kişi tespit edilmiştir. Bu kişi üzerinde yansıtıcı yelek bulunmamaktadır. Olay, yetkisiz erişim ve güvenlik "
+  },
+  {
+   "klip": "FF5a2dL6Sb0_trim_4.mp4",
+   "kol": "normal",
+   "n_olay": 2,
+   "isg_kod": [
+    "Opened_Panel_Cover",
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Kritik",
+   "sure": 55.1,
+   "ozet": "Görüntüde elektrik veya kontrol amaçlı kullanılan bir panonun kapağının açık bırakıldığı tespit edilmiştir. Aynı anda, makineye müdahale eden bir kişi"
+  },
+  {
+   "klip": "1tuWxs8fUOk_trim_108.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 36.1,
+   "ozet": "Görüntüde, bir makineye müdahale eden bir kişi tespit edilmiştir. Bu kişinin üzerinde yansıma özelliği taşıyan güvenlik yeleği bulunmamaktadır. Olay, "
+  },
+  {
+   "klip": "bxENbC-SPCw_trim_3.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 32.8,
+   "ozet": "8 saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülenen ortamda operasyonel"
+  },
+  {
+   "klip": "zijZ9paskPM_clip0_trim_2.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 19.5,
+   "ozet": "5 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup,"
+  },
+  {
+   "klip": "2qlxTjo_FjE_trim_6.mp4",
+   "kol": "normal",
+   "n_olay": 0,
+   "isg_kod": [],
+   "max_sev": 0,
+   "risk": "Düşük",
+   "sure": 27.6,
+   "ozet": "Görüntü analizi sonucunda, 00:05 saniyelik kayıt süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya riskli olay tespit edilmemiştir. İzle"
+  },
+  {
+   "klip": "oyRnP9p0KIs_trim_52.mp4",
+   "kol": "normal",
+   "n_olay": 1,
+   "isg_kod": [
+    "Unauthorized_Intervention"
+   ],
+   "max_sev": 3,
+   "risk": "Yüksek",
+   "sure": 23.3,
+   "ozet": "Görüntüde, bir makineye müdahale eden bir kişi tespit edilmiştir. Bu kişinin üzerinde yansıtıcı yelek bulunmamaktadır. Olay, yetkisiz erişim kategoris"
+  }
+ ]
+}

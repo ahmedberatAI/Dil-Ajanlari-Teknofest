@@ -1,0 +1,65 @@
+{
+ "_aciklama": "iSafetyBench tek-etiketli MCQ, UZAK servis. MODELI olcer.",
+ "on_kayit": {
+  "n": 150,
+  "tohum": 2026,
+  "kollar": [
+   "vlm",
+   "llm-large"
+  ],
+  "sans_tabani": 0.0625,
+  "secenek": 16
+ },
+ "lisans": "CC BY-NC-SA 4.0 — yalnizca degerlendirme",
+ "uyari": "YouTube kaynakli; dagitim ortami sabit-kamera CCTV. Genelleme stres testi.",
+ "sonuc": {
+  "vlm": {
+   "hazard": {
+    "n": 150,
+    "dogru": 66,
+    "p": 0.44,
+    "ci": [
+     0.363,
+     0.52
+    ],
+    "atlanan": 0,
+    "gecikme_medyan": 4.93
+   },
+   "normal": {
+    "n": 150,
+    "dogru": 79,
+    "p": 0.5266666666666666,
+    "ci": [
+     0.4471,
+     0.6049
+    ],
+    "atlanan": 0,
+    "gecikme_medyan": 8.64
+   }
+  },
+  "llm-large": {
+   "hazard": {
+    "n": 150,
+    "dogru": 82,
+    "p": 0.5466666666666666,
+    "ci": [
+     0.4668,
+     0.6242
+    ],
+    "atlanan": 0,
+    "gecikme_medyan": 4.72
+   },
+   "normal": {
+    "n": 150,
+    "dogru": 73,
+    "p": 0.4866666666666667,
+    "ci": [
+     0.408,
+     0.566
+    ],
+    "atlanan": 0,
+    "gecikme_medyan": 8.05
+   }
+  }
+ }
+}
