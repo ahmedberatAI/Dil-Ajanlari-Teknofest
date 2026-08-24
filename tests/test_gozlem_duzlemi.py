@@ -62,7 +62,11 @@ if o:
     e = o[0]
     c("olay isg_kod tasiyor", getattr(e, "isg_kod", None) == "Carrying_Overload_with_Forklift",
       f"-> {getattr(e,'isg_kod',None)}")
-    c("olay metni SABLON (model nesri degil)", "catalda 3 kasa" in e.event, f"-> {e.event}")
+    # SABLON metni GERCEK TURKCE'dir (operatore gosterilir ve ISG kaliplariyla
+    # eslesmesi gerekir); ASCII'lestirilmis hali IKI sablonu kalıplardan
+    # kopariyordu. Kontrol, degerin metne GIRDIGINI dogrular.
+    c("olay metni SABLON (model nesri degil)",
+      "çatalda 3 kasa" in e.event, f"-> {e.event}")
     c("zaman damgasi tasindi", e.time == "00:04")
     c("isg_kod model_dump()'a SIZMIYOR (K1 sozlesmesi)", "isg_kod" not in e.model_dump())
 
