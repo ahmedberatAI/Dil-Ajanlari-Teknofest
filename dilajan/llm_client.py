@@ -75,6 +75,55 @@ class VLMClient:
         #: D42 — son chat() cagrisinin token kullanimi (olcum icin; yoksa None).
         self.son_kullanim: Optional[Dict[str, int]] = None
 
+
+    # --- SERVIS DAYANIKLILIGI ------------------------------------------------
+    #: son `chat()` cagrisinda kac kez yeniden denendi (olcum/karar-izi icin)
+    son_deneme_sayisi: int = 0
+
+    @staticmethod
+    def _gecici_hata_mi(e: Exception) -> bool:
+        """Hata GECICI mi (yeniden denemeye deger mi)?
+
+        EVET: 5xx, 429, zaman asimi, baglanti kopmasi — servis mesgul/dusuk.
+        HAYIR: 4xx (400/401/404) — ISTEK yanlistir. Ornegin `vlm` aliasi
+        goruntu kabul etmez ve 400 doner; tekrarlamak yalnizca gecikme ekler.
+        """
+        ad = type(e).__name__
+        if ad in ("APITimeoutError", "APIConnectionError", "RateLimitError",
+                  "InternalServerError", "APIStatusError"):
+            kod = getattr(e, "status_code", None)
+            if kod is None:
+                return ad != "APIStatusError"       # timeout/baglanti -> gecici
+            return kod == 429 or 500 <= int(kod) < 600
+        # istemci disi (or. httpx okuma hatasi) — metne bak, temkinli davran
+        m = str(e).lower()
+        return any(x in m for x in ("timeout", "temporarily", "bad gateway",
+                                    "service unavailable", "connection reset",
+                                    "502", "503", "504"))
+
+    def _cagir_yeniden_denemeli(self, kwargs: dict):
+        """`chat.completions.create` — gecici hatalarda ustel geri cekilmeyle tekrar.
+
+        Jitter VAR: tum isciler ayni anda yeniden denerse servis tekrar cokerdi
+        (olcumlerimiz 4 paralel iscide kosuyor).
+        """
+        import random as _rnd
+        import time as _t
+        n = max(0, int(getattr(settings, "yeniden_deneme", 0)))
+        bekle = float(getattr(settings, "yeniden_deneme_bekleme", 1.5))
+        self.son_deneme_sayisi = 0
+        son = None
+        for deneme in range(n + 1):
+            try:
+                return self.client.chat.completions.create(**kwargs)
+            except Exception as e:                      # noqa: BLE001
+                son = e
+                if deneme >= n or not self._gecici_hata_mi(e):
+                    raise
+                self.son_deneme_sayisi = deneme + 1
+                _t.sleep(bekle * (2 ** deneme) * (0.75 + 0.5 * _rnd.random()))
+        raise son                                        # pragma: no cover
+
     # --- dusuk seviyeli ---
     @staticmethod
     def _to_data_url(jpeg_bytes: bytes) -> str:
@@ -165,7 +214,7 @@ class VLMClient:
             }
         if ek:
             kwargs["extra_body"] = ek
-        resp = self.client.chat.completions.create(**kwargs)
+        resp = self._cagir_yeniden_denemeli(kwargs)
         # D42: son cagrinin token kullanimi OLCUM icin saklanir (donus tipi DEGISMEZ ->
         # tum mevcut cagrilar birebir ayni calisir). Servis usage dondurmezse None.
         try:

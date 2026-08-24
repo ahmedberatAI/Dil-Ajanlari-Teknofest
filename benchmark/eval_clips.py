@@ -137,6 +137,12 @@ def _kosum_kunyesi() -> dict:
         # raporlanan sayilar aslinda ACIK kolun sayilari olur.
         # Ayni hata bu dosyada daha once `isg_lens` ve `panel_roi` icin yasandi.
         "isg_slotlari": _s.isg_slotlari,
+        # KODLAMA NORMALIZASYONU kunyeye GIRMELI: normalize ve normalize-olmayan
+        # kollar ayni ara kayit dosyasini paylasirsa, ikinci kosum birincinin
+        # satirlarini devralir ve iki farkli spek TEK OLCUMDE karisir.
+        "kodlama_normalize": _s.kodlama_normalize,
+        "kodlama_fps": _s.kodlama_fps,
+        "kodlama_bit": _s.kodlama_bit,
         "panel_roi_vlm": _s.panel_roi_vlm,
         "panel_koyuluk_esik": _s.panel_koyuluk_esik,
         "forklift_esik": _s.forklift_esik,

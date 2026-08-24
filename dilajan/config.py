@@ -267,6 +267,16 @@ class Settings(BaseSettings):
     # sorusu deneyle ayrilir. Olculdu: bu sette fps tek basina yetkisiz
     # ciftinde MCC +1,000 (bizim gonderdigimiz baytlarda), bit hizi forklift
     # ciftinde +0,882.
+    # SERVIS DAYANIKLILIGI — uzak servis TUM takimlarca paylasiliyor.
+    # OLCULDU (2026-08-24, kapi probu): servis 10 istekte ust uste
+    # `502 Bad Gateway` dondurdu. Yeniden deneme OLMADIGI icin o 10 slot
+    # "olculemedi" olarak kaydedildi. Sunum sirasinda ayni sey olursa
+    # demo bir klipte sessizce bos doner.
+    # SADECE gecici hatalar yeniden denenir (5xx / zaman asimi / baglanti).
+    # 4xx (or. `vlm` goruntu kabul etmiyor -> 400) ASLA denenmez: istek
+    # yanlistir, tekrarlamak yalnizca gecikme ekler.
+    yeniden_deneme: int = 3           # ek deneme sayisi (0 = kapali, eski davranis)
+    yeniden_deneme_bekleme: float = 1.5   # ilk bekleme (s); her denemede 2x + jitter
     kodlama_normalize: bool = False
     kodlama_fps: float = 8.0
     kodlama_bit: str = "800k"
