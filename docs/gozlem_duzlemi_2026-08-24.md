@@ -394,3 +394,78 @@ güvenlidir" sezgisiyle bu ters görünüyor. Bu tesiste çizginin ne olduğunu
   yürüyor (çizgiye uzaklık {değer}/10)"* — nedensel bir hikâye iddia etmez.
 - Yön, çevrilebilir bir bayrak değil, **ayrı bir kural sınıfının tanımında**
   sabittir (`AltEsikKurali`). Böylece "sonuç kötü çıktıysa yönü çevir" kapısı kapalı.
+
+---
+
+# EK-4 — Çift bazlı metriğin gizlediği şey
+
+## 14. Saha kesinliği: kural yalnız kendi çifti içinde ölçülüyordu
+
+Şimdiye kadar raporladığım MCC'ler **çift bazlıdır**: her kural yalnızca kendi
+sınıf çiftinin klipleri içinde değerlendiriliyor. Operatör ise bütün klipleri
+görür. 197 kliplik evrende ölçüm:
+
+| kural | çift MCC | ateşlediği | doğru | **saha kesinliği** |
+|---|---|---|---|---|
+| Carrying_Overload_with_Forklift | +0,851 | 29 | 25 | **0,862** |
+| Opened_Panel_Cover | +0,960 | 57 | 23 | 0,404 |
+| Unauthorized_Intervention | +0,689 | 83 | 19 | 0,229 |
+| Safe_Walkway_Violation | +0,535 | 166 | 25 | 0,151 |
+
+Kural × çift matrisi:
+
+```
+KURAL \ ÇİFT   forklift   yetkisiz    pano       yol
+forklift        29/50      0/50       0/49      0/48    ← hiç sızmıyor
+yetkisiz         4/50     21/50      36/49     22/48
+pano             0/50     21/50      23/49     13/48
+yol             49/50     33/50      46/49     38/48    ← her yerde
+```
+
+## 15. Kamera ayrımı bu tabloyu iki farklı olguya ayırıyor
+
+Kaynak makaleye göre **kamera 14** forklift sınıflarını, **kamera 9** pano /
+yetkisiz müdahale / yaya yolu sınıflarını çekiyor. Yani son üç sınıfın klipleri
+**aynı görüntüdedir**.
+
+Bu ayrımla:
+
+- **Kamera 9 içindeki çapraz ateşleme yanlış olduğu kanıtlanamaz.** Klipler
+  tek etiketlidir; bir klipte hem açık pano hem yeleksiz kişi gerçekten
+  bulunabilir. Bunları "yanlış pozitif" saymak veriden fazlasını iddia etmek olur.
+- **Kameralar arası sızıntı kesinlikle sahtedir.** Forklift kamerasında yaya
+  yolu çizgisi sorusu anlamsızdır; model yine de bir sayı üretir.
+
+Yaya yolu kuralı **kapalıyken** kalan üç kuralın kameralar arası sızıntısı:
+
+| kural | başka kamerada ateşleme |
+|---|---|
+| Carrying_Overload_with_Forklift | 0/29 |
+| Opened_Panel_Cover | 0/57 |
+| Unauthorized_Intervention | 4/83 |
+| **toplam** | **4/169 = %2,4** |
+
+## 16. Yaya yolu slotu SEVK EDİLMİYOR
+
+Slot çalışıyor, ayrılmış kümede doğrulandı (+0,638) ve çift bazlı ölçümü
+pozitif (+0,535). Buna rağmen sevk edilmiyor:
+
+- **forklift kliplerinin 49/50'sinde ateşliyor** — tamamen başka bir kamera.
+- Ateşlediği 166 klipte gerçek ihlal oranı **0,151**.
+- Taranan 10 eşiğin **hiçbirinde** genel kesinlik %15'i geçmiyor; bu bir eşik
+  ayarı meselesi değil.
+
+Kod ve ölçüm kaydı duruyor (§7). Açılmadan önce bir **sahne ön koşulu** (kamera
+görüş muhafızı) eklenmelidir; `dilajan/pano.py:gorus_imzasi` altyapısı bunun için
+hazır ve deterministik pano dedektöründe zaten kullanılmıştı.
+
+## 17. Forklift kuralı neden sızmıyor — genelleştirilebilir ders
+
+"Çatalda kaç kasa taşınıyor?" sorusu forklift olmayan sahnede `GORUNMUYOR`
+ya da `0` döndürüyor; slot **kendi kendini sınırlıyor**. Pano ve yol slotları
+ise her sahnede bir sayı üretiyor, çünkü sorulan bölge (ROI) her karede vardır.
+
+Ders: **ROI ile sınırlanan bir slot, sorduğu nesnenin o karede var olduğunu
+doğrulamaz.** Nesnenin varlığını sorgulayan slotlar kendi kendini sınırlar;
+bölgenin bir özelliğini ölçen slotlar sınırlamaz ve ön koşula ihtiyaç duyar.
+Yetkisiz müdahale kuralına eklenen `makine_basinda_kisi` kapısı tam olarak budur.
