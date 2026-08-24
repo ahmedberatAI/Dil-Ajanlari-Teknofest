@@ -469,3 +469,83 @@ Ders: **ROI ile sınırlanan bir slot, sorduğu nesnenin o karede var olduğunu
 doğrulamaz.** Nesnenin varlığını sorgulayan slotlar kendi kendini sınırlar;
 bölgenin bir özelliğini ölçen slotlar sınırlamaz ve ön koşula ihtiyaç duyar.
 Yetkisiz müdahale kuralına eklenen `makine_basinda_kisi` kapısı tam olarak budur.
+
+---
+
+# EK-5 — Tam değerlendirme, yanlış pozitif anatomisi ve reddedilen sıkılaştırma
+
+## 18. 197 klip, standart değerlendirme (sevk edilen yapılandırma)
+
+| ölçüt | gözlem düzlemi ÖNCESİ | **sevk edilen** |
+|---|---|---|
+| `isg_match` (İSG'ye özgü) | 0,020 | **0,545** |
+| Anomali recall (≥1 olay) | 0,131 | **0,879** |
+| Normal yanlış pozitif | 0,051 | 0,582 |
+| Kategori eşleşme | — | 0,849 |
+| Medyan gecikme | — | 42,7 s |
+
+İSG'ye özgü tespit **27 kat** arttı. Aynı anda normal kliplerdeki yanlış alarm
+%5'ten %58'e çıktı. Bu bir ödünleşme ve gizlenmemeli.
+
+## 19. 57 yanlış pozitifin anatomisi
+
+Kaynak ayrımı: **53'ü deterministik kurallardan**, 1'i anlatı düzleminden,
+2'si ikisinden birden.
+
+| üreten kural | normal klipte ateşleme |
+|---|---|
+| yelek (`Unauthorized_Intervention`) | 32 |
+| pano (`Opened_Panel_Cover`) | 23 |
+| forklift | 4 |
+
+Alt sınıfa göre: `Closed_Panel_Cover` %72 · `Safe_Walkway` %70 ·
+`Authorized_Intervention` %64 · `Safe_Carrying` %28.
+
+### Ama bu ateşlemelerin çoğu YANLIŞ OLDUĞU KANITLANAMAZ
+
+Kamera 9'daki dört sınıf **aynı fiziksel sahnedir** ve klipler **tek
+etiketlidir**. Bir kuralın yanlış pozitifi ancak o kuralın **kendi ekseninde
+etiketli** kliplerde ölçülebilir:
+
+| kural | ölçülebilir eksende | **kesinlik** | ekseninde etiketi olmayan kliplerde |
+|---|---|---|---|
+| pano | TP 23 / FP 0 | **1,000** | 34 ateşleme |
+| yelek | TP 19 / FP 2 | **0,905** | 62 ateşleme |
+| forklift | TP 25 / FP 4 | **0,862** | 0 ateşleme |
+
+Yani üç kural da **ölçülebildiği yerde yüksek kesinlikte**. Yelek kuralı,
+yeleğin gerçekten bulunduğu `Authorized_Intervention` kliplerinde yalnızca
+2/25 ateşliyor — yelek varken doğru şekilde susuyor. Diğer 62 ateşlemesi,
+yelek durumunun **etiketlenmediği** kliplerde.
+
+Bu bir savunma değil, ölçüm çerçevesinin sınırı: sistem gördüğü tüm tehlikeleri
+raporluyor, kıyas kümesi ise klip başına tek tehlike etiketliyor. Kesin cevap
+için tesise özgü çoklu-etiket doğrulaması gerekir (bekleyen iş #12).
+
+## 20. Ön koşul sıkılaştırma DENENDİ ve REDDEDİLDİ
+
+Yelek kuralının ön koşulu şu an *"panonun/makinenin önünde kaç kişi duruyor"*.
+Kamera 9'un dört sınıfı aynı sahne olduğu için koridordan geçen herkes bu kapıyı
+açıyor. Kapı **varlık** soruyor, oysa sınıfın tanımı **müdahale**.
+
+Denenen: *"makineye/panoya eliyle dokunan, kapağını açan kaç kişi var?"*
+
+| kol | İHLAL'de açılma | NORMAL'de açılma |
+|---|---|---|
+| K0 mevcut (önünde duran) | %80,0 | %76,7 |
+| K1 müdahale (eliyle dokunan) | %40,0 | %43,3 |
+
+Ön kayıtlı ölçüt: *normalde ≥%25 azalma **ve** ihlalde ≤%10 kayıp*. Gerçekleşen:
+normalde −%33 (iyi) ama ihlalde **−%40** (bütçenin dört katı). **RET — K0 kalıyor.**
+
+Not: K1 tam hedeflenen yerde işe yarıyordu (`Closed_Panel_Cover` 7→1,
+`Safe_Walkway` 6→2) ama gerçek müdahaleleri de görmüyor. `Authorized_Intervention`
+kliplerinde 10/10 açılıyor — orada gerçekten müdahale var ve yelek slotu
+doğru şekilde "VAR" diyor, yani oradaki FP kapıdan gelmiyor.
+
+## 21. Hata kaydı düzeltmesi sahada çalıştı
+
+Bu prob sırasında servis 10 istekte **502 Bad Gateway** döndürdü. Sonuç
+`__HATA__ InternalServerError: ...` olarak kaydedildi — sessizce "ihlal yok"a
+dönüşmedi. Düzeltme öncesinde bu 10 klip ölçüm tablosunda sıfır hücre olarak
+görünür ve karar-izi `hata=[]` yazardı (bkz. §8.3).
