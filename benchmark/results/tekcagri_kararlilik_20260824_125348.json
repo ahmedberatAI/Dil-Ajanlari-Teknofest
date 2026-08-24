@@ -1,0 +1,574 @@
+{
+ "kunye": {
+  "tarih": "2026-08-24T12:52:33",
+  "T": 0.0,
+  "seed": 1234,
+  "n": 5,
+  "model": "llm-large",
+  "max_tokens": 1200
+ },
+ "satirlar": [
+  {
+   "klip": "holdout/Fighting023",
+   "tekrar": 0,
+   "md5": "8115b9b1",
+   "risk": "Orta",
+   "n_event": 6,
+   "cikti": {
+    "summary": "İç mekân giriş kapısında, beyaz şapkalı bir kişi elinde torba ile içeri girer. Kısa süre sonra beyaz gömlekli başka bir kişiyle fiziksel temas yaşanır; itişme ve kavga benzeri bir durum gözlemlenir. Beyaz şapkalı kişi, torbayı alarak kapıdan dışarı çıkar ve kayıttan kaybolur.",
+    "events": [
+     {
+      "time": "00:09",
+      "event": "Beyaz şapkalı, koyu giysili bir kişi elinde torba ile otomatik kapıdan içeri girer."
+     },
+     {
+      "time": "00:11",
+      "event": "Beyaz gömlekli bir kişi, beyaz şapkalı kişiye doğru yaklaşır ve fiziksel temas başlar."
+     },
+     {
+      "time": "00:12",
+      "event": "İki kişi arasında itişme ve kavga benzeri bir durum yaşanır; beyaz şapkalı kişi duvara doğru itilir."
+     },
+     {
+      "time": "00:18",
+      "event": "Beyaz gömlekli kişi, beyaz şapkalı kişinin yakasından tutar ve onu kontrol etmeye çalışır."
+     },
+     {
+      "time": "00:23",
+      "event": "Beyaz şapkalı kişi, beyaz gömleklinin kontrolünden kurtulur ve torbayı alarak kapıya doğru koşar."
+     },
+     {
+      "time": "00:27",
+      "event": "Beyaz şapkalı kişi kapıdan dışarı çıkar ve görüntüden kaybolur."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "Olay anında güvenlik personeline veya yetkililere bildirim gönderildi.",
+     "Görüntü kaydı, olayın detaylı incelenmesi için arşivlendi.",
+     "Beyaz şapkalı kişinin fiziksel özellikleri ve hareketleri not edildi.",
+     "İlgili bölgeye ek güvenlik önlemi alınması önerildi."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Fighting023",
+   "tekrar": 1,
+   "md5": "08efb51a",
+   "risk": "Orta",
+   "n_event": 6,
+   "cikti": {
+    "summary": "İç mekân giriş kapısında, beyaz şapkalı bir kişi elinde torba ile içeri girer. Kısa süre sonra beyaz gömlekli başka bir kişiyle fiziksel temas yaşanır; itişme ve kavga benzeri bir durum gözlemlenir. Beyaz şapkalı kişi, torbayı alarak kapıdan dışarı çıkar ve kayıttan kaybolur.",
+    "events": [
+     {
+      "time": "00:09",
+      "event": "Beyaz şapkalı, koyu giysili bir kişi elinde torba ile otomatik kapıdan içeri girer."
+     },
+     {
+      "time": "00:11",
+      "event": "Beyaz gömlekli bir kişi, beyaz şapkalı kişiye doğru yaklaşır ve fiziksel temas başlar."
+     },
+     {
+      "time": "00:12",
+      "event": "İki kişi arasında itişme ve kavga benzeri bir mücadele başlar; beyaz şapkalı kişi duvara doğru itilir."
+     },
+     {
+      "time": "00:18",
+      "event": "Mücadele devam eder; beyaz gömlekli kişi, beyaz şapkalı kişinin yakasını tutar veya kontrol etmeye çalışır."
+     },
+     {
+      "time": "00:23",
+      "event": "Beyaz şapkalı kişi, beyaz gömlekli kişiyi iterek serbest kalır ve torbayı alır."
+     },
+     {
+      "time": "00:25",
+      "event": "Beyaz şapkalı kişi, kapıdan dışarı doğru hızlıca yürüyerek kayıttan çıkar."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "Olay anında güvenlik personeline veya yetkililere bildirim gönderildi.",
+     "Görüntü kaydı, olayın detaylı incelenmesi için arşivlendi.",
+     "Beyaz şapkalı kişinin yüzü ve kıyafet özellikleri, şüpheli tanımlama için not edildi.",
+     "Olay sonrası kapı bölgesi ve çevresi güvenlik açısından kontrol edildi.",
+     "İlgili makamlara (polis) olay raporu sunuldu."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Fighting023",
+   "tekrar": 2,
+   "md5": "a9d4adee",
+   "risk": "Orta",
+   "n_event": 6,
+   "cikti": {
+    "summary": "İç mekân giriş kapısında, beyaz şapkalı bir kişi elinde torba ile içeri girer. Kısa süre sonra beyaz gömlekli başka bir kişiyle fiziksel temas yaşanır; itişme ve kavga benzeri bir durum gözlemlenir. Beyaz şapkalı kişi, torbayı alarak kapıdan dışarı çıkar ve kayıttan kaybolur.",
+    "events": [
+     {
+      "time": "00:09",
+      "event": "Beyaz şapkalı, koyu giysili bir kişi elinde torba ile otomatik kapıdan içeri girer."
+     },
+     {
+      "time": "00:11",
+      "event": "Beyaz gömlekli bir kişi, beyaz şapkalı kişiye doğru yaklaşır ve fiziksel temas başlar."
+     },
+     {
+      "time": "00:12",
+      "event": "İki kişi arasında itişme ve kavga benzeri bir durum yaşanır; beyaz şapkalı kişi duvara doğru itilir."
+     },
+     {
+      "time": "00:18",
+      "event": "Beyaz gömlekli kişi, beyaz şapkalı kişinin yakasından tutar ve onu kontrol etmeye çalışır."
+     },
+     {
+      "time": "00:23",
+      "event": "Beyaz şapkalı kişi, torbayı alarak beyaz gömlekli kişiden kurtulur ve kapıya doğru yönelir."
+     },
+     {
+      "time": "00:26",
+      "event": "Beyaz şapkalı kişi, elinde torba ile otomatik kapıdan dışarı çıkar ve görüntüden kaybolur."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "Olay anında güvenlik personeli veya yetkili birim derhal müdahale etmelidir.",
+     "Görüntü kaydı, olayın detaylı incelenmesi ve şüphelinin tespit edilmesi için saklanmalıdır.",
+     "İlgili makamlara (polis) olay bildirimi yapılmalıdır.",
+     "Giriş kapısında güvenlik önlemleri artırılmalı, gerekirse metal dedektörü veya güvenlik görevlisi konulmalıdır."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Fighting023",
+   "tekrar": 3,
+   "md5": "d75dcd24",
+   "risk": "Orta",
+   "n_event": 6,
+   "cikti": {
+    "summary": "İç mekân giriş kapısında, beyaz şapkalı bir kişi elinde torba ile içeri girer. Kısa süre sonra beyaz gömlekli başka bir kişiyle fiziksel temas yaşanır; itişme ve kavga benzeri bir durum gözlemlenir. Beyaz şapkalı kişi, torbayı alarak kapıdan dışarı çıkar ve kayıttan kaybolur.",
+    "events": [
+     {
+      "time": "00:09",
+      "event": "Beyaz şapkalı, koyu giysili bir kişi elinde torba ile otomatik kapıdan içeri girer."
+     },
+     {
+      "time": "00:11",
+      "event": "Beyaz gömlekli bir kişi, beyaz şapkalı kişiye doğru yaklaşır ve fiziksel temas başlar."
+     },
+     {
+      "time": "00:12",
+      "event": "İki kişi arasında itişme ve kavga benzeri bir mücadele başlar; beyaz şapkalı kişi duvara doğru itilir."
+     },
+     {
+      "time": "00:18",
+      "event": "Mücadele devam eder; beyaz gömlekli kişi, beyaz şapkalı kişinin yakasını tutar veya kontrol etmeye çalışır."
+     },
+     {
+      "time": "00:23",
+      "event": "Beyaz şapkalı kişi, torbayı geri alır ve beyaz gömlekli kişiyi iterek kapıya doğru ilerler."
+     },
+     {
+      "time": "00:26",
+      "event": "Beyaz şapkalı kişi, torbayı taşıyarak otomatik kapıdan dışarı çıkar ve görüntüden kaybolur."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "Olay anında güvenlik personeli veya yetkililer hemen müdahale etmelidir.",
+     "Görüntü kaydı, olayın detaylı incelenmesi ve şüphelinin tespit edilmesi için saklanmalıdır.",
+     "İlgili makamlara (polis) olay bildirilmeli ve kayıt teslim edilmelidir.",
+     "Giriş noktasında güvenlik önlemleri artırılmalı, gerekirse metal dedektörü veya güvenlik görevlisi yerleştirilmelidir.",
+     "Olay sonrası mağdur veya tanık ifadeleri alınmalı, varsa diğer kamera açılarından da kayıt kontrol edilmelidir."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Fighting023",
+   "tekrar": 4,
+   "md5": "5a00e41d",
+   "risk": "Orta",
+   "n_event": 6,
+   "cikti": {
+    "summary": "İç mekân giriş kapısında, beyaz şapkalı bir kişi elinde torba ile içeri girer. Kısa süre sonra beyaz gömlekli başka bir kişiyle fiziksel temas yaşanır; itişme ve kavga benzeri bir durum gözlemlenir. Beyaz şapkalı kişi, torbayı alarak kapıdan dışarı çıkar ve kayıttan kaybolur.",
+    "events": [
+     {
+      "time": "00:09",
+      "event": "Beyaz şapkalı, koyu giysili bir kişi elinde torba ile otomatik kapıdan içeri girer."
+     },
+     {
+      "time": "00:11",
+      "event": "Beyaz gömlekli bir kişi, beyaz şapkalı kişiye doğru yaklaşır ve fiziksel temas başlar."
+     },
+     {
+      "time": "00:12",
+      "event": "İki kişi arasında itişme ve kavga benzeri bir durum yaşanır; beyaz şapkalı kişi duvara doğru itilir."
+     },
+     {
+      "time": "00:18",
+      "event": "Beyaz gömlekli kişi, beyaz şapkalı kişinin yakasını tutar ve onu kontrol etmeye çalışır."
+     },
+     {
+      "time": "00:23",
+      "event": "Beyaz şapkalı kişi, torbayı alarak beyaz gömlekli kişiden kurtulur ve kapıya doğru yönelir."
+     },
+     {
+      "time": "00:26",
+      "event": "Beyaz şapkalı kişi, elinde torba ile otomatik kapıdan dışarı çıkar ve görüntüden kaybolur."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "Olay anında güvenlik personeline veya yetkililere bildirim yapılmalı.",
+     "Görüntü kaydı, olayın detaylı incelenmesi için saklanmalı ve ilgili makamlara sunulmalı.",
+     "Giriş kapısında güvenlik önlemleri artırılmalı (örneğin, güvenlik görevlisi veya metal dedektörü).",
+     "Beyaz şapkalı kişinin yüzü ve kıyafet detayları, şüpheli olarak tanımlanmak üzere kaydedilmeli.",
+     "Olay sonrası mağdur veya tanık ifadeleri alınmalı ve gerekli yasal işlemler başlatılmalı."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "tekrar": 0,
+   "md5": "cdfcfeb0",
+   "risk": "Düşük",
+   "n_event": 13,
+   "cikti": {
+    "summary": "İç mekânda, endüstriyel bir alanda, bir forklift, yük taşıyarak hareket etmektedir. Forklift, sağdan sola doğru ilerlerken, arka planda sabit duran makine ve ekipmanlar görülmektedir. Forkliftin hareketi sırasında herhangi bir çarpışma, devrilme veya insanla etkileşim gözlemlenmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Görüntüde boş bir iç mekân alanı ve sabit duran endüstriyel ekipmanlar görülmektedir."
+     },
+     {
+      "time": "00:01",
+      "event": "Sağ taraftan, yük taşıyan bir forklift sahneye girer."
+     },
+     {
+      "time": "00:02",
+      "event": "Forklift, yüküyle birlikte sola doğru hareket eder."
+     },
+     {
+      "time": "00:03",
+      "event": "Forklift, alanın ortasından geçmeye devam eder."
+     },
+     {
+      "time": "00:04",
+      "event": "Forklift, sol tarafa doğru ilerlerken hafifçe döner."
+     },
+     {
+      "time": "00:05",
+      "event": "Forklift, sol taraftaki raf alanına doğru yaklaşır."
+     },
+     {
+      "time": "00:06",
+      "event": "Forklift, raf alanına yükü bırakmak üzere durur."
+     },
+     {
+      "time": "00:07",
+      "event": "Forklift, yükü bıraktıktan sonra geriye doğru hareket eder."
+     },
+     {
+      "time": "00:08",
+      "event": "Forklift, sahnenin sol kenarından çıkar."
+     },
+     {
+      "time": "00:09",
+      "event": "Alan tekrar boş kalır, sadece sabit ekipmanlar görünür."
+     },
+     {
+      "time": "00:10",
+      "event": "Görüntüde herhangi bir hareketlilik yoktur."
+     },
+     {
+      "time": "00:11",
+      "event": "Alan hâlâ boş ve hareketsizdir."
+     },
+     {
+      "time": "00:12",
+      "event": "Görüntüde değişiklik yoktur, alan boş kalır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Forklift operatörünün, yükü taşırken dikkatli olduğu ve güvenli bir şekilde hareket ettiği gözlemlenmiştir.",
+     "Alanın, forklift hareketi için uygun şekilde işaretlendiği ve engelsiz olduğu görülmüştür.",
+     "Herhangi bir acil durum veya riskli durum tespit edilmemiştir.",
+     "Operatörün, forkliftin kullanımında standart prosedürlere uyduğu anlaşılmaktadır."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "tekrar": 1,
+   "md5": "7ac61a10",
+   "risk": "Düşük",
+   "n_event": 12,
+   "cikti": {
+    "summary": "İç mekânda, endüstriyel bir alanda, bir forklift, yük taşıyarak hareket etmektedir. Forklift, sağdan sola doğru ilerlerken, arka planda sabit duran makine ve ekipmanlar görülmektedir. Forkliftin hareketi sırasında herhangi bir çarpışma, devrilme veya insanla etkileşim gözlemlenmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Görüntüde boş bir iç mekân alanı ve sabit duran endüstriyel ekipmanlar görülmektedir."
+     },
+     {
+      "time": "00:01",
+      "event": "Sağ taraftan, yük taşıyan bir forklift sahneye girer."
+     },
+     {
+      "time": "00:02",
+      "event": "Forklift, yükünü taşıyarak sola doğru hareket eder."
+     },
+     {
+      "time": "00:03",
+      "event": "Forklift, alanın ortasından geçmeye devam eder."
+     },
+     {
+      "time": "00:04",
+      "event": "Forklift, sol tarafa doğru ilerlerken hafifçe döner."
+     },
+     {
+      "time": "00:05",
+      "event": "Forklift, sol taraftaki raf alanına doğru yaklaşır."
+     },
+     {
+      "time": "00:06",
+      "event": "Forklift, raf alanına yükü bırakmak üzere durur."
+     },
+     {
+      "time": "00:07",
+      "event": "Forklift, yükü bırakır ve geri çekilmeye başlar."
+     },
+     {
+      "time": "00:08",
+      "event": "Forklift, yükü bıraktıktan sonra geriye doğru hareket eder."
+     },
+     {
+      "time": "00:09",
+      "event": "Forklift, sahnenin sol kenarına doğru ilerler."
+     },
+     {
+      "time": "00:10",
+      "event": "Forklift, sahne dışına doğru hareket eder."
+     },
+     {
+      "time": "00:11",
+      "event": "Forklift tamamen sahne dışına çıkar ve alan tekrar boş kalır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Forklift operatörünün, yükü taşıma ve bırakma sırasında dikkatli olduğu gözlemlenmiştir.",
+     "Alanın temiz ve düzenli olduğu, herhangi bir engel veya tehlike kaynağı bulunmadığı tespit edilmiştir.",
+     "Forkliftin hareketi sırasında herhangi bir insanla etkileşim veya çarpışma riski gözlemlenmemiştir.",
+     "Güvenlik prosedürlerine uygun hareket edildiği için ek bir aksiyon gerekliliği bulunmamaktadır."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "tekrar": 2,
+   "md5": "5ecf0a5c",
+   "risk": "Düşük",
+   "n_event": 13,
+   "cikti": {
+    "summary": "İç mekânda, endüstriyel bir alanda, bir forklift, yük taşıyarak hareket etmektedir. Forklift, sağdan sola doğru ilerlerken, arka planda sabit duran makine ve ekipmanlar görülmektedir. Görüntüde herhangi bir acil durum, çarpışma veya güvenlik ihlali tespit edilmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Görüntüde, iç mekânda, zeminde sarı ve yeşil çizgilerle işaretlenmiş bir alanda, sağ tarafta duran bir forklift ve arka planda çeşitli makine ve raflar görülmektedir."
+     },
+     {
+      "time": "00:01",
+      "event": "Forklift, üzerinde turuncu renkli bir yük taşıyarak harekete geçer ve sola doğru ilerlemeye başlar."
+     },
+     {
+      "time": "00:02",
+      "event": "Forklift, yüküyle birlikte mekânın ortasından geçerek sola doğru devam eder."
+     },
+     {
+      "time": "00:03",
+      "event": "Forklift, sol taraftaki raf ve depolama alanına doğru yaklaşırken, arka planda bir kişi makine başında oturmaktadır."
+     },
+     {
+      "time": "00:04",
+      "event": "Forklift, yükünü taşıyarak sol taraftaki alana doğru ilerlemeye devam eder."
+     },
+     {
+      "time": "00:05",
+      "event": "Forklift, sol taraftaki raf alanına doğru yaklaşır ve yavaşlar."
+     },
+     {
+      "time": "00:06",
+      "event": "Forklift, yükünü bırakmak üzere raf alanına yanaşır."
+     },
+     {
+      "time": "00:07",
+      "event": "Forklift, yükünü raf alanına bırakır ve geriye doğru manevra yapmaya başlar."
+     },
+     {
+      "time": "00:08",
+      "event": "Forklift, yükünü bıraktıktan sonra geriye doğru hareket eder."
+     },
+     {
+      "time": "00:09",
+      "event": "Forklift, geriye doğru hareket ederek mekânın sol tarafında kaybolur."
+     },
+     {
+      "time": "00:10",
+      "event": "Forklift tamamen görüntüden kaybolur, mekân boş kalır."
+     },
+     {
+      "time": "00:11",
+      "event": "Mekân boş olarak görünür, herhangi bir hareket yoktur."
+     },
+     {
+      "time": "00:12",
+      "event": "Mekân boş olarak görünür, herhangi bir hareket yoktur."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Forklift operatörünün, yükü taşırken ve bırakırken dikkatli olduğu görülmektedir. Herhangi bir ek aksiyon gerektiren bir durum tespit edilmemiştir.",
+     "Mekândaki sarı ve yeşil çizgiler, trafik akışını ve güvenli alanları belirtmektedir. Bu çizgilerin korunması ve takip edilmesi önerilir.",
+     "Arka planda oturan kişi, makine başında çalışmaktadır. Bu kişinin, forklift hareketlerine karşı dikkatli olması önerilir."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "tekrar": 3,
+   "md5": "4de11e05",
+   "risk": "Düşük",
+   "n_event": 13,
+   "cikti": {
+    "summary": "İç mekânda, büyük boyutlu makineler ve depolama alanları bulunan bir alanda, bir forklift kamyonet, yük taşıyarak hareket etmektedir. Forklift, sağdan sola doğru ilerlerken, arka planda bir operatör makine başında oturmaktadır. Ortamda herhangi bir acil durum veya tehlike gözlemlenmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Görüntüde, iç mekânda yer alan makineler, depolama alanları ve bir forklift kamyonet görülmektedir. Forklift, sağ tarafta durmaktadır."
+     },
+     {
+      "time": "00:01",
+      "event": "Forklift kamyonet, yükünü taşıyarak hareket etmeye başlar ve soldaki alana doğru ilerler."
+     },
+     {
+      "time": "00:02",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:03",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:04",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:05",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:06",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:07",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:08",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:09",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:10",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:11",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     },
+     {
+      "time": "00:12",
+      "event": "Forklift kamyonet, yükünü taşıyarak sol taraftaki alana doğru devam eder."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Forklift kamyonetin hareketi ve yük taşıma işlemi normal seyretmektedir. Herhangi bir acil durum veya tehlike gözlemlenmemiştir.",
+     "Operatör, makine başında oturmaktadır ve herhangi bir anormallik gözlemlenmemiştir.",
+     "Güvenlik kurallarına uygun olarak hareket edildiği görülmektedir. Ek önlem gerektiren bir durum yoktur."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "tekrar": 4,
+   "md5": "50e09b48",
+   "risk": "Düşük",
+   "n_event": 12,
+   "cikti": {
+    "summary": "İç mekânda, endüstriyel bir alanda, bir forklift, yük taşıyarak hareket etmektedir. Forklift, sağdan sola doğru ilerlerken, arka planda sabit duran makine ve ekipmanlar görülmektedir. Forkliftin hareketi sırasında herhangi bir çarpışma, devrilme veya insanla etkileşim gözlemlenmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Görüntüde boş bir iç mekân alanı ve sabit duran endüstriyel ekipmanlar görülmektedir."
+     },
+     {
+      "time": "00:01",
+      "event": "Sağ taraftan, yük taşıyan bir forklift sahneye girer."
+     },
+     {
+      "time": "00:02",
+      "event": "Forklift, yüküyle birlikte sola doğru hareket eder."
+     },
+     {
+      "time": "00:03",
+      "event": "Forklift, alanın ortasından geçmeye devam eder."
+     },
+     {
+      "time": "00:04",
+      "event": "Forklift, sol tarafa doğru ilerlerken hafifçe döner."
+     },
+     {
+      "time": "00:05",
+      "event": "Forklift, sol taraftaki raf alanına doğru yaklaşır."
+     },
+     {
+      "time": "00:06",
+      "event": "Forklift, raf alanına yükü bırakmak üzere durur."
+     },
+     {
+      "time": "00:07",
+      "event": "Forklift, yükü bırakır ve geri çekilmeye başlar."
+     },
+     {
+      "time": "00:08",
+      "event": "Forklift, yükü bıraktıktan sonra geriye doğru hareket eder."
+     },
+     {
+      "time": "00:09",
+      "event": "Forklift, sahnenin sol kenarına doğru ilerler."
+     },
+     {
+      "time": "00:10",
+      "event": "Forklift, sahne dışına doğru hareket eder."
+     },
+     {
+      "time": "00:11",
+      "event": "Forklift tamamen sahne dışına çıkar ve alan tekrar boş kalır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Forklift operatörünün, yükü taşırken ve bırakırken dikkatli olduğu gözlemlenmiştir. Herhangi bir acil durum veya riskli durum tespit edilmemiştir.",
+     "Alanın düzenli olarak temiz ve düzenli tutulması önerilir.",
+     "Forklift operasyonlarının güvenli bir şekilde devam etmesi için, alanın sürekli olarak izlenmesi önerilir."
+    ]
+   }
+  }
+ ]
+}

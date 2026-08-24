@@ -1,0 +1,112 @@
+{
+  "tur": "on_kayit",
+  "gorev": "D43 - EN IYI KOMBINASYON (yeniden analiz; YENI MODEL CAGRISI YOK)",
+  "zaman": "2026-08-24T11:14:14Z",
+  "veri_kaynaklari_SALT_OKUNUR": [
+    "benchmark/results/evren_izgara_20260824_122459.jsonl",
+    "benchmark/results/evren_kacis_20260824_122433.jsonl",
+    "benchmark/results/evren_cozunurluk_ham_20260824_120530.jsonl",
+    "benchmark/results/evren_pano_ozel_tr_20260824_122707.jsonl",
+    "benchmark/results/evren_pano_ozel_te_20260824_130447.jsonl",
+    "benchmark/results/evren_pano_ozel_tr_posthoc_20260824_131614.jsonl",
+    "benchmark/results/islemsel_prompt_20260819_122138.json  (YEREL TABAN, Qwen3-VL-8B-FP8)"
+  ],
+  "KAPSAM_ENVANTERI_once_ilan": {
+    "not": "Asagidaki kapsam sayimlari MCC/dogruluk HESAPLANMADAN once cikarildi; yalnizca hangi hucrelerin var oldugunu belirler.",
+    "izgara": "forklift {768,1280} x {vlm,llm-large,llm-fast} TAM (50); yelek {768,1280} x 3 TAM; yelek 1920 YALNIZ vlm TAM (llm-large/llm-fast n=8 -> EKSIK)",
+    "DISLANAN": "yelek@1920 llm-large ve llm-fast (n=8/50, yarim kalmis kosum) ve forklift@1920 (hic kosulmadi) ADAY HAVUZUNA ALINMAZ",
+    "kacis": "yelek(50) + pano(49), llm-large@1280, 8 kol: A0,H1,H2,H3,H4,H5,F1,F2 (pano F1/F2 n=34 = yalniz tr)",
+    "pano_ozel": "tr(34) H1..H7 + posthoc H8,H9 ; te(15) YALNIZ H2,H3,H5 -> pano te raporu bu ucle sinirli"
+  },
+  "SECIM_RAPOR_AYRIMI": {
+    "kural": "TUM secim yalniz _tr; manset yalniz _te. te'ye bakip secim YAPILMAZ.",
+    "n_tr": {
+      "forklift": 39,
+      "yelek": 35,
+      "pano": 34
+    },
+    "n_te": {
+      "forklift": 11,
+      "yelek": 15,
+      "pano": 15
+    },
+    "ONCEDEN_KABUL": "te kumeleri KUCUK (11/15/15, pano te'de yalniz 3 pozitif). te TEK BASINA KARAR VERDIRMEZ; yalnizca secimin cokup cokmedigini gosterir."
+  },
+  "ADAY_HAVUZU_TEKIL": {
+    "forklift": "6 hucre (2 coz x 3 model). Esik SABIT >=3 kasa (Onal&Dandil islemsel tanimi) - TARANMAZ.",
+    "yelek": "6 (izgara) + 1 (vlm@1920) + 8 (kacis kollari) + 3 (cozunurluk tekrar kosumu) = 18",
+    "pano": "8 (kacis) + 3 (cozunurluk) + 9 (pano_ozel H1..H9) = 20; H5/H8 sayisal kol icin esik 1..10 taranir ve bu tarama COKLU KARSILASTIRMAYA DAHIL EDILIR"
+  },
+  "KOMBINASYON_KURALLARI_once_ilan": {
+    "K1_UZLASI": "iki kol ayni karari verirse o karar; ayrilirsa VEYA biri kacarsa KARARSIZ. Tum sirasiz kol ciftleri.",
+    "K2_YEDEKLEME": "birincil kol karar verirse onu kullan; kacis/kararsiz ise ikincil kolun karari. Tum SIRALI kol ciftleri.",
+    "K3_COGUNLUK": "3 kol oyu; karar verenler arasinda mutlak cogunluk (>=2 ayni). Beraberlik/karar yok -> KARARSIZ. Tum 3'lu altkumeler.",
+    "K4_SORU_BAZLI_YONLENDIRME": "sinif basina sabit atama (sayma->llm-large, kisi/oznitelik->vlm, pano->?). Dagitim yapilandirmasi olarak DEGERLENDIRILIR, ayri bir arama boyutu DEGIL.",
+    "K5_GUVEN_AGIRLIKLI": "agirlik = 1 - (tr kacis orani). Karar veren kollarin agirliklari etikete gore toplanir, argmax alinir. Agirliklar YALNIZ tr'den. Karar veren yoksa KARARSIZ.",
+    "CIFT_KAYNAGI": "Kombinasyonlar yalnizca AYNI klip kumesinde olculmus kollar arasinda kurulur (esli tasarim). Farkli kosumlardan gelen kollar da eslesir cunku klip kimlikleri aynidir."
+  },
+  "PUANLAMA": {
+    "kacis": "GORUNMUYOR / KISI_YOK / PANO_YOK / HICBIRI = KARARSIZ. Sessizce negatife CEVRILMEZ.",
+    "ana_tablo": "yalniz KARAR VERILEN kliplerden TP/FP/FN/TN ve MCC",
+    "ikincil_tablo": "'sahada dagitim': kararsiz -> alarm yok (negatif). ACIKCA IKINCIL olarak isaretlenir.",
+    "her_zaman": "TP/FP/FN/TN + kararsiz + hata AYRI yazilir. Karar orani = karar verilen / hatasiz klip.",
+    "GA": "Wilson %95 (dogruluk uzerinde). n=35..39'da 0,05 MCC farki GURULTU -> berabere."
+  },
+  "DEJENERELIK_KAPISI": {
+    "D1": "en sik HAM cevap >= %85 -> DEJENERE",
+    "D2": "karar verilenler icinde bir taraf >= %85 -> DEJENERE",
+    "sonuc": "DEJENERE kol MCC ne olursa olsun BASARI SAYILMAZ ve 'en iyi' secilemez"
+  },
+  "COKLU_KARSILASTIRMA": {
+    "yontem": "maks-istatistigi permutasyonu, B=2000, sinif ICINDE etiket permutasyonu",
+    "kritik": "her permutasyonda TUM aday havuzu (tekil + K1..K5 + esik taramasi) YENIDEN puanlanir, max|MCC| alinir",
+    "rapor": "bos dagilimin %95 kuantili + gozlenen en iyinin duzeltilmis p degeri",
+    "seed": 20260824
+  },
+  "BASARI_OLCUTU_hepsi_birden": [
+    "(a) DEJENERE degil",
+    "(b) tr MCC >= +0,40",
+    "(c) tr karar orani >= 0,70",
+    "(d) tr MCC > bos dagilimin max|MCC| %95 kuantili (duzeltilmis p < 0,05)"
+  ],
+  "YEREL_TABAN": {
+    "kaynak": "islemsel_prompt_20260819_122138.json, kol B_islemsel (Qwen3-VL-8B-FP8, yerel)",
+    "yontem": "AYNI tr/te bolunmesinde YENIDEN hesaplanir (eski +0,762 rakami 50 klibin TAMAMINDA idi; elmayla elma icin bolunerek hesaplanacak)",
+    "pano_ek_taban": "deterministik luma dedektoru (pano_kontrol_v3.json A_dar: MCC +0,960, n=49) - VLM DEGIL, kural tabanli"
+  },
+  "TAHMINLER_hesaplamadan_once": {
+    "T1": "forklift K1 uzlasi (herhangi 2 model @1280) tr MCC +0,70..+0,90 araliginda, karar orani 0,70..0,90.",
+    "T2": "K2 yedekleme yelek'te llm-large'i KURTARMAZ: birincil llm-large + ikincil vlm ~= vlm TEK BASINA (fark <= 0,10), cunku llm-large kliplerin cogunda kaciyor ve karari fiilen vlm veriyor.",
+    "T3": "ANA TAHMIN: HICBIR kombinasyon, coklu karsilastirma duzeltmesinden SONRA en iyi TEKIL kolu anlamli sekilde GECMEYECEK. Kombinasyon kazanci n=35'te gurultuye karisacak.",
+    "T4": "pano'da HICBIR VLM kolu/kombinasyonu basari olcutunun 4 maddesini birden gecmeyecek -> deterministik dedektor SART kalacak.",
+    "T5": "forklift'te en iyi uzak-servis yapilandirmasi (tekil veya kombinasyon) YEREL TABANI (ayni bolunmede yeniden hesaplanan) anlamli sekilde GECMEYECEK - berabere cikacak.",
+    "T6": "yelek'te en iyi kol vlm tabanli olacak (llm-large/llm-fast degil)."
+  },
+  "DURUSTLUK_NOTLARI": [
+    "Bu bir YENIDEN ANALIZDIR: veri zaten mevcut. Ben (analiz eden) onceki ozet tablodan bazi tekil MCC degerlerini BILIYORUM (ozet gorev metninde verilmisti). Bu, tekil kollar icin GERCEK bir kor on-kayit DEGILDIR ve boyle sunulmayacaktir.",
+    "KOMBINASYON sonuclari (K1..K5) hicbir yerde daha once hesaplanmadi - bunlar icin on-kayit GERCEKTEN kor.",
+    "pano ROI kirpma kollari (pano_ozel) AYNI VERIDE kalibre edilmis kendi dedektorumuzden gelir; bagimsiz uctan-uca boru hatti DEGILDIR."
+  ],
+  "EK_ON_KAYIT_1": {
+    "zaman": "2026-08-24T14:16:30",
+    "not": "Hicbir MCC/dogruluk hesaplanmadan ONCE eklendi. Yalnizca kapsam/kod ayrintisi netlestirir, hipotez degistirmez.",
+    "K5_KAPSAM": "K5 sinif basina TEK aday uretir (o sinifta ayni klip kumesinde olculmus 3 model kolu uzerinden). Tum altkumeler taranmaz.",
+    "SAYISAL_KOL_ESIGI": "pano H5 ve H8 (0-10 karanlik skoru) icin esik t=1..10 taranir; her esik AYRI bir aday olarak havuza girer ve K1/K2/K3 kombinasyonlarina da AYRI kol olarak katilir. Bu, coklu karsilastirma duzeltmesini BILEREK daha muhafazakar yapar.",
+    "MCC_TANIMSIZ": "karar verilen klip sayisi < 8 ise MCC = 0 sayilir (hem gozlemde hem permutasyonda).",
+    "DEJENERELIK_PERMUTASYONDA": "Dejenerelik kapisi etiketlerden bagimsizdir (yalniz cevap dagilimina bakar); bu yuzden dejenere adaylar permutasyondan ONCE havuzdan cikarilir ve bos dagilim da ayni havuzdan uretilir.",
+    "TE_KAPSAMI": "Bazi kollar YALNIZ tr'de olculmus (pano kacis F1/F2, pano_ozel H1/H4/H6/H7/H8/H9). Secim yine de TUM tr kollari uzerinde yapilir; kazanan te'de olculmemisse bu ACIKCA yazilir ve AYRICA te'de olculebilen en iyi tr adayi raporlanir.",
+    "YELEK_1920": "yelek@1920 yalniz vlm icin tam (n=50). llm-large/llm-fast @1920 (n=8) havuza ALINMAZ.",
+    "MUKERRER": "evren_izgara yelek@1280 kayitlarinda n=51 gorulmustur (1 mukerrer klip). (klip,model,cozunurluk) anahtariyla ILK kayit tutulur."
+  },
+  "TAHMIN_KARNESI": {
+    "zaman": "2026-08-24T14:26:37",
+    "T1": "KISMEN YANLIS. 'forklift K1 uzlasi tr MCC +0,70..+0,90' dedim; gerceklesen +0,932 = ILAN ETTIGIM BANDIN USTUNDE. Karar orani tahminim (0,70..0,90) TUTTU: 0,77.",
+    "T2": "TUTTU, hem de tahmin ettigimden GUCLU. 'K2 yedekleme llm-large'i kurtarmaz, ~vlm tek basina (fark<=0,10)' dedim; gerceklesen fark TAM 0,000 — K2[llm-large->vlm] 35/35 klipte vlm ile BIREBIR ayni karari verdi.",
+    "T3_ANA": "TUTTU. Hicbir kombinasyon en iyi tekil kolu anlamli sekilde gecmedi: forklift +0,085 GA[-0,029,+0,246] p=0,274 · yelek +0,057 GA[+0,000,+0,183] p=0,701 · pano fark 0,000 (kararlar cebirsel olarak OZDES).",
+    "T4": "YANLIS. 'pano'da hicbir VLM kolu 4 olcutu birden gecmez' demistim. OZL:H5 (llm-large, ROI-baglam kirpma, 0-10 KARANLIK skoru, esik>=3..8) DORDUNU DE GECTI: dejenere degil, tr MCC +1,000, karar orani 1,00, bos %95 kuantili +0,523'un uzerinde (duzeltilmis p=0,0005).",
+    "T5": "KISMEN YANLIS. 'forklift'te uzak servis yerel tabani anlamli gecmez' demistim. tr'de esli test uzak servis lehine ANLAMLI cikti (+0,235 GA[+0,048,+0,462] p=0,008). te'de ise anlamli DEGIL (+0,183 GA[-0,092,+0,530] p=0,730). Tutma kumesi (n=11) dogrulamadi.",
+    "T6": "YANLIS. 'yelek'te en iyi kol vlm tabanli olacak' demistim. En iyi kol llm-large@1280 (SISTEM PROMPTU YOK + KACIS SECENEGI YOK), tr +0,885; en iyi vlm kolu +0,732. Not: aradaki fark esli testte anlamli DEGIL (p=0,173), yani 'vlm yenildi' degil 'vlm kazanan degil' demek dogru.",
+    "SKOR": "2 tam isabet (T2, T3-ana) · 1 kismen (T1) · 3 yanlis/kismen yanlis (T4, T5, T6)",
+    "KENDI_HATAM": "pano deterministik tabanini yeniden kurmak icin pano_197.json'daki 'luma' alanindan esik taramaya calistim; ancak luma YALNIZCA dedektorun ATESLEDIGI kliplerde kayitli (negatiflerde None). Tarama gecersizdi ve sahte bir 'H5 ile dedektor 15/15 AYRISIYOR' ciktisi uretti. Fark edildi ve kayitli 'atesledi' karariyla yeniden yapildi: gercek sonuc te'de 15/15 AYNI."
+  }
+}

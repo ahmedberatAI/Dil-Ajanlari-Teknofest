@@ -1,0 +1,158 @@
+================================================================================================
+### FORKLIFT   n_tr=39  n_te=11   aday=72  (dejenere olmayan=72)
+    maks-istatistigi bos dagilim %95 kuantili (tr) = +0.465
+    YEREL TABAN (Qwen3-VL-8B, islemsel prompt): tr MCC +0.697 (karar 1.00, dej=False)  |  te MCC +0.607 (karar 1.00)
+
+  -- TEKIL kollar (dejenere olanlar DAHIL, isaretli) --
+      IZG:llm-fast@1280                                              | tr +0.847 kar1.00 [19/ 1/ 2/17 ks 0] p=0.0005 | te +0.449/0.73/1.00
+      IZG:llm-large@1280                                             | tr +0.796 kar1.00 [20/ 3/ 1/15 ks 0] p=0.0005 | te +0.311/0.64/1.00
+      IZG:llm-large@768                                              | tr +0.692 kar1.00 [19/ 4/ 2/14 ks 0] p=0.0010 | te +0.828/0.91/1.00
+      IZG:vlm@1280                                                   | tr +0.609 kar1.00 [20/ 7/ 1/11 ks 0] p=0.0025 | te +0.463/0.64/1.00
+      IZG:llm-fast@768                                               | tr +0.594 kar1.00 [19/ 6/ 2/12 ks 0] p=0.0035 | te +0.810/0.91/1.00
+      IZG:vlm@768                                                    | tr +0.399 kar1.00 [19/10/ 2/ 8 ks 0] p=0.1299 | te +0.571/0.73/1.00
+
+  -- K1 en iyi 5 (dejenere olmayanlar) --
+      K1[IZG:llm-fast@1280 & IZG:llm-fast@768]                       | tr +0.932 kar0.77 [18/ 0/ 1/11 ks 9] p=0.0005 | te +0.791/0.89/0.82
+      K1[IZG:llm-fast@768 & IZG:llm-large@1280]                      | tr +0.928 kar0.74 [18/ 1/ 0/10 ks10] p=0.0005 | te +0.775/0.88/0.73
+      K1[IZG:llm-fast@1280 & IZG:llm-large@1280]                     | tr +0.887 kar0.92 [19/ 1/ 1/15 ks 3] p=0.0005 | te +0.408/0.70/0.91
+      K1[IZG:llm-fast@1280 & IZG:llm-large@768]                      | tr +0.886 kar0.87 [19/ 0/ 2/13 ks 5] p=0.0005 | te +0.791/0.89/0.82
+      K1[IZG:llm-fast@1280 & IZG:vlm@1280]                           | tr +0.867 kar0.82 [19/ 1/ 1/11 ks 7] p=0.0005 | te +0.600/0.75/0.73
+
+  -- K2 en iyi 5 (dejenere olmayanlar) --
+      K2[IZG:llm-fast@1280 -> IZG:llm-fast@768]                      | tr +0.847 kar1.00 [19/ 1/ 2/17 ks 0] p=0.0005 | te +0.449/0.73/1.00
+      K2[IZG:llm-fast@1280 -> IZG:llm-large@1280]                    | tr +0.847 kar1.00 [19/ 1/ 2/17 ks 0] p=0.0005 | te +0.449/0.73/1.00
+      K2[IZG:llm-fast@1280 -> IZG:llm-large@768]                     | tr +0.847 kar1.00 [19/ 1/ 2/17 ks 0] p=0.0005 | te +0.449/0.73/1.00
+      K2[IZG:llm-fast@1280 -> IZG:vlm@1280]                          | tr +0.847 kar1.00 [19/ 1/ 2/17 ks 0] p=0.0005 | te +0.449/0.73/1.00
+      K2[IZG:llm-fast@1280 -> IZG:vlm@768]                           | tr +0.847 kar1.00 [19/ 1/ 2/17 ks 0] p=0.0005 | te +0.449/0.73/1.00
+
+  -- K3 en iyi 5 (dejenere olmayanlar) --
+      K3[IZG:llm-fast@1280 | IZG:llm-large@1280 | IZG:vlm@1280]      | tr +0.796 kar1.00 [20/ 3/ 1/15 ks 0] p=0.0005 | te +0.311/0.64/1.00
+      K3[IZG:llm-fast@1280 | IZG:llm-large@1280 | IZG:vlm@768]       | tr +0.796 kar1.00 [20/ 3/ 1/15 ks 0] p=0.0005 | te +0.311/0.64/1.00
+      K3[IZG:llm-fast@1280 | IZG:llm-fast@768 | IZG:llm-large@1280]  | tr +0.794 kar1.00 [19/ 2/ 2/16 ks 0] p=0.0005 | te +0.449/0.73/1.00
+      K3[IZG:llm-fast@1280 | IZG:llm-fast@768 | IZG:llm-large@768]   | tr +0.794 kar1.00 [19/ 2/ 2/16 ks 0] p=0.0005 | te +0.607/0.82/1.00
+      K3[IZG:llm-large@1280 | IZG:llm-large@768 | IZG:vlm@1280]      | tr +0.748 kar1.00 [20/ 4/ 1/14 ks 0] p=0.0005 | te +0.571/0.73/1.00
+
+  -- K5 en iyi 5 (dejenere olmayanlar) --
+      K5[IZG:vlm@1280 + IZG:llm-large@1280 + IZG:llm-fast@1280]  ag= | tr +0.796 kar1.00 [20/ 3/ 1/15 ks 0] p=0.0005 | te +0.311/0.64/1.00
+
+================================================================================================
+### YELEK   n_tr=35  n_te=15   aday=1731  (dejenere olmayan=1261)
+    maks-istatistigi bos dagilim %95 kuantili (tr) = +0.756
+    YEREL TABAN (Qwen3-VL-8B, islemsel prompt): tr MCC +0.000 (karar 0.00, dej=True)  |  te MCC +0.000 (karar 0.00)
+
+  -- TEKIL kollar (dejenere olanlar DAHIL, isaretli) --
+      KAC:F2_sissiz_kacissiz                                         | tr +0.885 kar1.00 [21/ 2/ 0/12 ks 0] p=0.0105 | te +0.645/0.80/1.00
+      KAC:F1_sissiz_kacisli                                          | tr +0.775 kar0.34 [ 9/ 1/ 0/ 2 ks23] p=0.0375 | te +0.000/0.67/0.40
+      COZ:llm-large@1920                                             | tr +0.772 kar0.66 [17/ 2/ 0/ 4 ks12] p=0.0375 | te +0.000/0.44/0.60
+      IZG:vlm@768                                                    | tr +0.732 kar0.83 [13/ 1/ 3/12 ks 6] p=0.0770 | te +0.640/0.85/0.87
+      IZG:vlm@1920                                                   | tr +0.707 kar1.00 [18/ 2/ 3/12 ks 0] p=0.0800 | te +0.739/0.87/1.00
+      COZ:llm-large@1280                                             | tr +0.700 kar0.71 [18/ 3/ 0/ 4 ks10] p=0.0815 | te +0.000/0.71/0.47
+      IZG:vlm@1280                                                   | tr +0.686 kar0.91 [15/ 2/ 3/12 ks 3] p=0.0925 | te +0.701/0.86/0.93
+      KAC:H1_kacissiz                                                | tr +0.578 kar1.00 [19/ 5/ 2/ 9 ks 0] p=0.2444 | te +0.185/0.53/1.00
+  DEJ COZ:llm-large@768                                              | tr +0.464 kar0.57 [11/ 6/ 0/ 3 ks15] p=  DEJ  | te +0.167/0.30/0.67
+      KAC:H4_capa                                                    | tr +0.272 kar0.43 [ 8/ 1/ 4/ 2 ks20] p=0.9875 | te +0.000/0.86/0.47
+  DEJ IZG:llm-fast@1280                                              | tr +0.000 kar0.60 [19/ 2/ 0/ 0 ks14] p=  DEJ  | te +0.000/0.50/0.53
+      IZG:llm-fast@1920                                              | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks35] p=1.0000 | te +0.000/1.00/0.27
+  DEJ IZG:llm-fast@768                                               | tr +0.000 kar0.46 [15/ 1/ 0/ 0 ks19] p=  DEJ  | te +0.000/0.67/0.40
+  DEJ IZG:llm-large@1280                                             | tr +0.000 kar0.14 [ 4/ 1/ 0/ 0 ks30] p=  DEJ  | te +0.000/1.00/0.07
+      IZG:llm-large@1920                                             | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks35] p=1.0000 | te +0.000/1.00/0.07
+  DEJ IZG:llm-large@768                                              | tr +0.000 kar0.06 [ 2/ 0/ 0/ 0 ks33] p=  DEJ  | te +0.000/0.00/0.07
+  DEJ KAC:A0_taban                                                   | tr +0.000 kar0.14 [ 4/ 1/ 0/ 0 ks30] p=  DEJ  | te +0.000/1.00/0.07
+  DEJ KAC:H2_iki_asama                                               | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks35] p=  DEJ  | te    OLCULMEDI   
+  DEJ KAC:H3_sistem                                                  | tr +0.000 kar0.34 [10/ 2/ 0/ 0 ks23] p=  DEJ  | te +0.000/0.50/0.27
+  DEJ KAC:H5_tersine                                                 | tr +0.000 kar0.09 [ 0/ 3/ 0/ 0 ks32] p=  DEJ  | te +0.000/0.00/0.13
+
+  -- K1 en iyi 5 (dejenere olmayanlar) --
+      K1[IZG:vlm@1920 & KAC:F2_sissiz_kacissiz]                      | tr +0.932 kar0.86 [18/ 1/ 0/11 ks 5] p=0.0105 | te +0.730/0.86/0.93
+      K1[IZG:vlm@1280 & KAC:F2_sissiz_kacissiz]                      | tr +0.927 kar0.77 [15/ 1/ 0/11 ks 8] p=0.0105 | te +0.693/0.85/0.87
+      K1[IZG:vlm@768 & KAC:F2_sissiz_kacissiz]                       | tr +0.923 kar0.71 [13/ 1/ 0/11 ks10] p=0.0105 | te +0.632/0.83/0.80
+      K1[KAC:F2_sissiz_kacissiz & KAC:H1_kacissiz]                   | tr +0.919 kar0.80 [19/ 1/ 0/ 8 ks 7] p=0.0105 | te +0.559/0.73/0.73
+      K1[IZG:vlm@768 & KAC:H1_kacissiz]                              | tr +0.908 kar0.60 [11/ 1/ 0/ 9 ks14] p=0.0105 | te +0.488/0.75/0.53
+
+  -- K2 en iyi 5 (dejenere olmayanlar) --
+      K2[KAC:F1_sissiz_kacisli -> IZG:vlm@768]                       | tr +0.935 kar0.89 [18/ 1/ 0/12 ks 4] p=0.0105 | te +0.640/0.85/0.87
+      K2[KAC:F1_sissiz_kacisli -> COZ:llm-large@1920]                | tr +0.887 kar0.66 [17/ 1/ 0/ 5 ks12] p=0.0105 | te +0.535/0.70/0.67
+      K2[COZ:llm-large@1920 -> KAC:F2_sissiz_kacissiz]               | tr +0.885 kar1.00 [21/ 2/ 0/12 ks 0] p=0.0105 | te +0.426/0.60/1.00
+      K2[IZG:llm-fast@1280 -> KAC:F2_sissiz_kacissiz]                | tr +0.885 kar1.00 [21/ 2/ 0/12 ks 0] p=0.0105 | te +0.564/0.73/1.00
+      K2[IZG:llm-fast@1920 -> KAC:F2_sissiz_kacissiz]                | tr +0.885 kar1.00 [21/ 2/ 0/12 ks 0] p=0.0105 | te +0.645/0.80/1.00
+
+  -- K3 en iyi 5 (dejenere olmayanlar) --
+      K3[COZ:llm-large@1920 | IZG:vlm@768 | KAC:F2_sissiz_kacissiz]  | tr +0.941 kar1.00 [21/ 1/ 0/13 ks 0] p=0.0105 | te +0.730/0.86/0.93
+      K3[COZ:llm-large@1280 | IZG:vlm@768 | KAC:F2_sissiz_kacissiz]  | tr +0.939 kar0.97 [21/ 1/ 0/12 ks 1] p=0.0105 | te +0.739/0.87/1.00
+      K3[COZ:llm-large@1920 | IZG:vlm@1280 | KAC:F2_sissiz_kacissiz] | tr +0.939 kar0.97 [21/ 1/ 0/12 ks 1] p=0.0105 | te +0.730/0.86/0.93
+      K3[COZ:llm-large@1920 | IZG:vlm@1920 | KAC:F2_sissiz_kacissiz] | tr +0.939 kar0.97 [21/ 1/ 0/12 ks 1] p=0.0105 | te +0.730/0.86/0.93
+      K3[COZ:llm-large@1920 | KAC:F1_sissiz_kacisli | KAC:F2_sissiz_ | tr +0.939 kar0.97 [21/ 1/ 0/12 ks 1] p=0.0105 | te +0.632/0.79/0.93
+
+  -- K5 en iyi 5 (dejenere olmayanlar) --
+      K5[IZG:vlm@1280 + IZG:llm-large@1280 + IZG:llm-fast@1280]  ag= | tr +0.707 kar1.00 [18/ 2/ 3/12 ks 0] p=0.0800 | te +0.739/0.87/1.00
+
+================================================================================================
+### PANO   n_tr=34  n_te=15   aday=10584  (dejenere olmayan=5670)
+    maks-istatistigi bos dagilim %95 kuantili (tr) = +0.523
+    YEREL TABAN (Qwen3-VL-8B, islemsel prompt): tr MCC +0.000 (karar 0.00, dej=True)  |  te MCC +0.000 (karar 0.00)
+
+  -- TEKIL kollar (dejenere olanlar DAHIL, isaretli) --
+      OZL:H5>=3                                                      | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      OZL:H5>=4                                                      | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      OZL:H5>=5                                                      | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      OZL:H5>=6                                                      | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      OZL:H5>=7                                                      | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      OZL:H5>=8                                                      | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      OZL:H8>=3                                                      | tr +0.817 kar1.00 [19/ 1/ 2/12 ks 0] p=0.0005 | te    OLCULMEDI   
+      OZL:H8>=4                                                      | tr +0.817 kar1.00 [19/ 1/ 2/12 ks 0] p=0.0005 | te    OLCULMEDI   
+      OZL:H8>=5                                                      | tr +0.817 kar1.00 [19/ 1/ 2/12 ks 0] p=0.0005 | te    OLCULMEDI   
+      OZL:H8>=6                                                      | tr +0.817 kar1.00 [19/ 1/ 2/12 ks 0] p=0.0005 | te    OLCULMEDI   
+      OZL:H8>=7                                                      | tr +0.817 kar1.00 [19/ 1/ 2/12 ks 0] p=0.0005 | te    OLCULMEDI   
+      OZL:H8>=8                                                      | tr +0.817 kar1.00 [19/ 1/ 2/12 ks 0] p=0.0005 | te    OLCULMEDI   
+      OZL:H3                                                         | tr +0.699 kar1.00 [15/ 0/ 6/13 ks 0] p=0.0030 | te +0.784/0.93/1.00
+      OZL:H6                                                         | tr +0.380 kar0.97 [ 6/ 0/14/13 ks 1] p=0.2689 | te    OLCULMEDI   
+  DEJ OZL:H5>=9                                                      | tr +0.137 kar1.00 [ 1/ 0/20/13 ks 0] p=  DEJ  | te +0.000/0.80/1.00
+  DEJ OZL:H8>=9                                                      | tr +0.137 kar1.00 [ 1/ 0/20/13 ks 0] p=  DEJ  | te    OLCULMEDI   
+  DEJ COZ:llm-large@1280                                             | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ COZ:llm-large@1920                                             | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ COZ:llm-large@768                                              | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ KAC:A0_taban                                                   | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ KAC:F1_sissiz_kacisli                                          | tr +0.000 kar0.03 [ 0/ 0/ 1/ 0 ks33] p=  DEJ  | te    OLCULMEDI   
+  DEJ KAC:F2_sissiz_kacissiz                                         | tr +0.000 kar1.00 [ 0/ 0/21/13 ks 0] p=  DEJ  | te    OLCULMEDI   
+  DEJ KAC:H1_kacissiz                                                | tr +0.000 kar1.00 [ 0/ 0/21/13 ks 0] p=  DEJ  | te +0.000/0.80/1.00
+      KAC:H2_iki_asama                                               | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=1.0000 | te    OLCULMEDI   
+  DEJ KAC:H3_sistem                                                  | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ KAC:H4_capa                                                    | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ KAC:H5_tersine                                                 | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ OZL:H1                                                         | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ OZL:H2                                                         | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ OZL:H4                                                         | tr +0.000 kar0.00 [ 0/ 0/ 0/ 0 ks34] p=  DEJ  | te    OLCULMEDI   
+  DEJ OZL:H5>=1                                                      | tr +0.000 kar1.00 [21/13/ 0/ 0 ks 0] p=  DEJ  | te +0.000/0.20/1.00
+  DEJ OZL:H5>=10                                                     | tr +0.000 kar1.00 [ 0/ 0/21/13 ks 0] p=  DEJ  | te +0.000/0.80/1.00
+  DEJ OZL:H5>=2                                                      | tr +0.000 kar1.00 [21/13/ 0/ 0 ks 0] p=  DEJ  | te +0.000/0.20/1.00
+  DEJ OZL:H7                                                         | tr +0.000 kar0.97 [20/13/ 0/ 0 ks 1] p=  DEJ  | te    OLCULMEDI   
+  DEJ OZL:H8>=1                                                      | tr +0.000 kar1.00 [21/13/ 0/ 0 ks 0] p=  DEJ  | te    OLCULMEDI   
+  DEJ OZL:H8>=10                                                     | tr +0.000 kar1.00 [ 0/ 0/21/13 ks 0] p=  DEJ  | te    OLCULMEDI   
+  DEJ OZL:H8>=2                                                      | tr +0.000 kar1.00 [21/13/ 0/ 0 ks 0] p=  DEJ  | te    OLCULMEDI   
+  DEJ OZL:H9                                                         | tr +0.000 kar1.00 [ 0/ 0/21/13 ks 0] p=  DEJ  | te    OLCULMEDI   
+
+  -- K1 en iyi 5 (dejenere olmayanlar) --
+      K1[OZL:H3 & OZL:H5>=3]                                         | tr +1.000 kar0.82 [15/ 0/ 0/13 ks 6] p=0.0005 | te +0.784/0.93/1.00
+      K1[OZL:H3 & OZL:H5>=4]                                         | tr +1.000 kar0.82 [15/ 0/ 0/13 ks 6] p=0.0005 | te +0.784/0.93/1.00
+      K1[OZL:H3 & OZL:H5>=5]                                         | tr +1.000 kar0.82 [15/ 0/ 0/13 ks 6] p=0.0005 | te +0.784/0.93/1.00
+      K1[OZL:H3 & OZL:H5>=6]                                         | tr +1.000 kar0.82 [15/ 0/ 0/13 ks 6] p=0.0005 | te +0.784/0.93/1.00
+      K1[OZL:H3 & OZL:H5>=7]                                         | tr +1.000 kar0.82 [15/ 0/ 0/13 ks 6] p=0.0005 | te +0.784/0.93/1.00
+
+  -- K2 en iyi 5 (dejenere olmayanlar) --
+      K2[COZ:llm-large@1280 -> OZL:H5>=3]                            | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      K2[COZ:llm-large@1280 -> OZL:H5>=4]                            | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      K2[COZ:llm-large@1280 -> OZL:H5>=5]                            | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      K2[COZ:llm-large@1280 -> OZL:H5>=6]                            | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      K2[COZ:llm-large@1280 -> OZL:H5>=7]                            | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+
+  -- K3 en iyi 5 (dejenere olmayanlar) --
+      K3[COZ:llm-large@1280 | COZ:llm-large@1920 | OZL:H5>=3]        | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      K3[COZ:llm-large@1280 | COZ:llm-large@1920 | OZL:H5>=4]        | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      K3[COZ:llm-large@1280 | COZ:llm-large@1920 | OZL:H5>=5]        | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      K3[COZ:llm-large@1280 | COZ:llm-large@1920 | OZL:H5>=6]        | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+      K3[COZ:llm-large@1280 | COZ:llm-large@1920 | OZL:H5>=7]        | tr +1.000 kar1.00 [21/ 0/ 0/13 ks 0] p=0.0005 | te +0.784/0.93/1.00
+
+  -- K5 en iyi 5 (dejenere olmayanlar) --
+      K5[OZL:H2 + OZL:H3 + OZL:H7]  ag=0.00,1.00,0.97                | tr +0.699 kar1.00 [15/ 0/ 6/13 ks 0] p=0.0030 | te +0.784/0.93/1.00
+
+kaydedildi: /mnt/c/Users/omen/Desktop/DilAjanlariTeknofest/benchmark/results/evren_kombinasyon_sonuc.json

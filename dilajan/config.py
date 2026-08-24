@@ -29,9 +29,47 @@ class Settings(BaseSettings):
     # SOTA secim (2026-06-21 A/B): Qwen3-VL-8B (Qwen3 omurgasi -> akici Turkce, kategori %0->%100).
     # Onceki: Qwen/Qwen2.5-VL-7B-Instruct (hassasiyet-oncelikli yedek; DILAJAN_MODEL_NAME ile gecilir).
     model_name: str = "Qwen/Qwen3-VL-8B-Instruct-FP8"
+
+    # --- D41: GOREVE GORE MODEL (uzak serviste 10 alias acik) ----------------
+    # HEPSI BOS = tek model (model_name) -> yerel davranis BIREBIR AYNI (K2).
+    # Uzak serviste doldurulur; her alan farkli bir alias'a gidebilir.
+    #
+    # NEDEN AYRI MODEL (dokumantasyonun KENDI olcumleri):
+    #   JSON uretimi     : llm-fast 1,000 = llm-large 1,000  -> BUYUK MODEL BOSUNA
+    #   Arac cagirma     : llm-fast 1,000 = llm-large 1,000  -> BUYUK MODEL BOSUNA
+    #   Siniflandirma    : llm-fast 0,900 · llm-large 0,950  (fark 1 gorevden)
+    #   TR-MMLU          : llm-fast %73,3 · llm-large %79,6  -> BILGI isinde buyuk
+    #   Tarih            : llm-fast %84,0 · llm-large %96,0
+    #   Gecikme          : llm-fast medyan 0,91 s
+    # Sistem TUM takimlarca paylasildigi icin buyuk modeli gereksiz mesgul etmek
+    # yalnizca bize degil herkese maliyet yaziyor.
+    #
+    # Sartname acisindan da onemli: "model tabanli karar mekanizmalari" ve
+    # "dinamik analiz" isteniyor; goreve gore model + yonlendirici bunun karsiligi.
+    # OLCULDU (149 klip x 3 alias, hata 0): modeller ZIT YONDE uzmanlasmis.
+    #   llm-large : SAYMA/geometri en iyi (forklift MCC +0,725) AMA kisi/oznitelik
+    #               sorularinda neredeyse hep "GORUNMUYOR" der (yelek 47/50, pano 49/49)
+    #   vlm       : KISI/OZNITELIK'te tek basarili (yelek MCC +0,500 dagitim-durustu;
+    #               yerel model orada TAMAMEN cokmustu) AMA saymada en zayifi (FP=13)
+    # Bu yuzden tek alias DEGIL, SORU TIPINE gore yonlendirme.
+    model_algi: str = ""        # kisi/oznitelik algisi          -> vlm (video-yerli)
+    model_sayim: str = ""       # sayma/geometri sorulari        -> llm-large
+    model_yapi: str = ""        # olay cikarimi, JSON, siniflama -> llm-fast
+    model_ozet: str = ""        # Turkce ozet + aksiyon onerisi  -> llm-large
+    model_diyalog: str = ""     # operator diyalogu (Otonomi %20)-> llm-large
+    model_yonlendirme: str = "" # ajan ici yonlendirme kararlari -> router (8B)
+    model_guvenlik: str = ""    # icerik guvenligi siniflamasi   -> guard (4B)
+    model_gomme: str = ""       # getirme/RAG                    -> bge-m3-embed
     vllm_host: str = "127.0.0.1"
     vllm_port: int = 8000
     api_key: str = "EMPTY"  # yerel vLLM sunucusu anahtari yok sayar
+    # D41: uzak cikarim servisi (yarisma tahsisi). BOS = yerel vLLM (varsayilan).
+    #   .env ->  DILAJAN_API_BASE_URL=https://evren-llmapi.ssyz.org.tr/v1
+    #            DILAJAN_API_KEY=sk-evren-teamNN-...
+    # Dokumantasyonun kendi ornekleri EVREN_API_KEY / EVREN_BASE_URL kullaniyor;
+    # ikisi de desteklenir (bkz. `etkin_api_key`, `base_url`).
+    api_base_url: str = ""
+    api_timeout: float = 1800.0   # dokuman: istemci varsayilani 600 s YETERSIZ
     max_model_len: int = 8192
     gpu_memory_utilization: float = 0.90  # PERF: 0.85->0.90 (VRAM headroom ~21/24GB olculdu) -> daha fazla KV blogu
     max_num_seqs: int = 32     # PERF: es-zamanli dizi tavani (continuous-batching); 0=vLLM varsayilani. Yuksek-hacim icin.
@@ -147,6 +185,80 @@ class Settings(BaseSettings):
                                     # "üst sağ,sağ,alt sağ"). Set edilirse YOLO-geofence: bu bolgelerde
                                     # KISI tespit edilirse "Yasak Bölge İhlali" (Yüksek/Yetkisiz Erişim).
                                     # Deterministik (VLM zone-reasoning guvenilmez); opt-in (bos=kapali).
+    # --- PANO KAPAGI (D39-E, 2026-08-18) -----------------------------------
+    # Elektrik/kontrol panosu kapagi ACIK ve BASIBOS mu? Deterministik: dar ROI'de
+    # kareler boyunca MINIMUM ortalama parlaklik ("acik kapak = karanlik oyuk")
+    # + panonun basinda kisi VAR MI (RT-DETRv2, Apache-2.0).
+    #
+    # NEDEN VLM DEGIL (olculdu): VLM tam karede 0/12, panoya KIRPILMIS halde bile
+    # 1/12 dogru; Qwen3.8-27B 99 klipte 0. Deterministik olcum: %93,2.
+    # NEDEN KISI TERIMI SART: `Authorized_Intervention`da pano da FIZIKSEL OLARAK
+    # aciktir. Yalniz parlaklik -> MCC +0,513 / FP=21. Bilesik -> +0,845 / FP=1.
+    #
+    # ROI ve esik TESISE OZGUDUR; baska kamerada yeniden kalibre edilmelidir.
+    # Bu yuzden varsayilan BOS = KAPALI (K2: bayrak kapaliyken cikti birebir ayni).
+    panel_roi: str = ""              # "x1,y1,x2,y2" (0-1 orani). Bizim tesis: "0.08,0.55,0.21,0.73"
+    # VLM pano SLOTUNUN kirpma bolgesi — deterministik dedektorun
+    # `panel_roi`sinden AYRI tutulur: luma dedektoru DAR bir seride en iyi
+    # calisirken VLM slotu %8 paya ihtiyac duyuyor (olculdu).
+    # BOS = kirpma yok = tam kare (olculdu: DEJENERE, MCC -0,192).
+    panel_roi_vlm: str = ""
+    panel_luma_esik: float = 87.6    # bu esigin ALTINA inen ROI parlakligi -> kapak ACIK
+                                     # (tesisimizde hicbir KAPALI klipte gorulmeyen seviye)
+    panel_kisi_kontrolu: bool = True  # panonun basinda kisi varsa -> YETKILI BAKIM, olay uretme.
+                                     # KAPATMAK yanlis pozitifi 1'den 21'e cikarir (olculdu).
+    panel_severity: str = "Yüksek"   # uretilen olayin onem derecesi
+    # GORUS KILIDI — sabit ROI yalnizca KALIBRE EDILDIGI kamera gorusunde anlamlidir.
+    # OLCULDU (197 klip): kilit YOKKEN kural, ayni tesisin BASKA cercevesindeki
+    # yaya-yolu kliplerinde bosa atesliyor (Safe_Walkway_Violation 17/25,
+    # Normal/Safe_Walkway 12/23) ve kesinlik 0,259'a cokuyor.
+    # `scripts/pano_kalibre.py` ile uretilir. BOS = kilit yok (tek kameralı dagitim).
+    panel_gorus_imza: str = ""
+    panel_gorus_esik: float = 0.60   # Pearson kor. esigi; olculmus ayrim: gorus-ici
+                                     # +0,938 · gorus-arasi +0,175 -> 0,60 genis marj
+
+    # --- FORKLIFT ASIRI YUK (D40, 2026-08-19) -------------------------------
+    # Kaynak makale (Onal & Dandil 2024) etiketi ISLEMSEL tanimliyor:
+    # "2 blocks or less" guvenli, "3 blocks or more" ihlal. Yani karar KASA SAYMAK.
+    #
+    # IKI BAGIMSIZ YOL OLCULDU (50 klip):
+    #   "vlm"      : modele "catalda kac kasa var?" diye sorulur -> MCC +0,762
+    #                (ANLAMSAL soru "asiri yuk var mi?" -> +0,000, DEJENERE)
+    #   "geometri" : turuncu istifin PERSPEKTIF duzeltmeli yuksekligi -> MCC +0,641
+    #                (perspektifsiz ham oran yalnizca +0,280)
+    #   "ikisi"    : ikisi de ihlal derse ihlal (FP dusurur, duyarlilik dusurur;
+    #                OLCULMEDI — acmadan once olculmeli)
+    #
+    # "3 kasa" BU TESISIN konvansiyonudur, genel ISG kurali DEGILDIR.
+    # Varsayilan BOS = KAPALI (K2: bayrak kapaliyken cikti birebir ayni).
+    forklift_yuk: str = ""            # "" | "vlm" | "geometri" | "ikisi"
+    forklift_esik: int = 3            # kaynak makale: >= 3 kasa ihlal
+    forklift_y_ufuk: float = 0.3      # tesise ozgu; etiketsiz kestirildi
+    forklift_f_pers_esik: float = 0.5751   # tesise ozgu
+    forklift_severity: str = "Yüksek"
+
+    # --- D43: GOZLEM DUZLEMI (yapilandirilmis algi + deterministik kural) ------
+    # OLCULDU: mevcut serbest-metin boru hatti 20 guvensiz klibin 0'inda ISG
+    # ihlali uretiyordu; AYNI model AYNI kliplerde ISLEMSEL soru soruldugunda
+    # 12-20/20 dogru karar veriyor. Kayip zinciri:
+    #   K1 betimleme ihlali iddia etti      0/20  <- kayip burada BASLIYOR
+    #   K2 bilgi zorla verilse olaya gecen 11/20  (%45 kayip)
+    #   K3 olaydan eslestiricinin yakaladigi 4/11 (%64 kayip)
+    # Gozlem duzlemi K2 ve K3'u YAPISAL OLARAK ortadan kaldirir: cikarim adimi
+    # yok (cevap tipli), olay metni SABLON (model nesri degil).
+    #
+    # BOS = KAPALI -> mevcut davranis BIREBIR ayni (K2).
+    #   "*"                          -> tum kurallar
+    #   "catal_kasa_sayisi,..."      -> yalniz secilen slotlar
+    isg_slotlari: str = ""
+    # NOT: `forklift_esik` YUKARIDA (D40 blogu) tanimli — burada TEKRAR
+    # ETMIYORUZ. Ayni Settings govdesinde iki kez bildirildiginde ikinci tanim
+    # birincisini SESSIZCE eziyordu: yukaridaki blokta yapilan bir esik
+    # degisikligi hicbir uyari vermeden etkisiz kaliyordu.
+    # `isg_kural.EsikKurali(esik_alani="forklift_esik")` tek tanimi okur.
+    panel_koyuluk_esik: int = 3       # 0-10 olcekte; kalibrasyon tesise ozgu
+    isg_slot_azami_kare: int = 8      # servis siniri 16; deponun diger problari 8
+
     adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)
 
     # --- D33: KKD (BARET) DETERMINISTIK TESPITI ---
@@ -309,9 +421,67 @@ class Settings(BaseSettings):
                 self.frame_min_side = 448
         return self
 
+    def gorev_modeli(self, gorev: str) -> str:
+        """Gorev icin kullanilacak model adi. Tanimli degilse `model_name`.
+
+        gorev: "algi" | "yapi" | "ozet" | "diyalog" | "yonlendirme" |
+               "guvenlik" | "gomme"
+        Bilinmeyen gorev -> `model_name` (sessiz basarisizlik YOK: cagiran taraf
+        yanlis ad verirse varsayilana duser, ASLA baska bir modele kaymaz).
+        """
+        ad = (getattr(self, f"model_{gorev}", "") or "").strip()
+        return ad or self.model_name
+
     @property
     def base_url(self) -> str:
-        return f"http://{self.vllm_host}:{self.vllm_port}/v1"
+        """Model API adresi. Bos ise YEREL vLLM (varsayilan davranis, K5).
+
+        D41 (2026-08-21): yarisma duzenleyicisi ortak bir cikarim servisi tahsis
+        etti (8xH200, BF16, kuantizasyon yok). Servis OpenAI uyumlu oldugundan
+        yalnizca base_url + anahtar degisiyor; cagri yerleri AYNI kaliyor.
+        Sartnamedeki "offline/yerel" ifadesinin iptal edildigi takim tarafindan
+        bildirildi (2026-08-21).
+
+        Oncelik: DILAJAN_API_BASE_URL > EVREN_BASE_URL > yerel vLLM.
+        """
+        import os as _os
+        u = (self.api_base_url or _os.environ.get("EVREN_BASE_URL") or "").strip()
+        return u.rstrip("/") if u else f"http://{self.vllm_host}:{self.vllm_port}/v1"
+
+    @property
+    def etkin_api_key(self) -> str:
+        """Kullanilacak anahtar. ASLA loglanmaz/yazdirilmaz.
+
+        Oncelik: DILAJAN_API_KEY > EVREN_API_KEY > "EMPTY" (yerel vLLM anahtar
+        istemez). Dokumantasyonun kurali: anahtar KODA GOMULMEZ, ortamdan okunur.
+        """
+        import os as _os
+        for v in (self.api_key, _os.environ.get("EVREN_API_KEY", "")):
+            v = (v or "").strip()
+            if v and v != "EMPTY":
+                return v
+        return "EMPTY"
+
+    @property
+    def etkin_timeout(self) -> float:
+        """Istemcinin GERCEKTEN kullanacagi zaman asimi.
+
+        `api_timeout` alani vardi ama HICBIR calisma-zamani yolunda
+        okunmuyordu: `VLMClient` her zaman `request_timeout`u (120 s)
+        kullaniyordu. Dokumantasyon uzak servis icin 600 s'yi bile YETERSIZ
+        sayarken, .env'deki `DILAJAN_API_TIMEOUT=1800` tamamen etkisizdi.
+        Uzun video istekleri 120 s'yi asinca APITimeoutError firliyor, o da
+        gozlem duzleminde "slot cozulemedi"ye ve oradan "ihlal yok"a
+        donusuyordu — yani sessiz olcum kaybi.
+
+        Yerel yolda davranis DEGISMEZ (K2): `request_timeout` dondurulur.
+        """
+        return self.api_timeout if self.uzak_api_mi else self.request_timeout
+
+    @property
+    def uzak_api_mi(self) -> bool:
+        """Uzak servise mi baglaniyoruz? (kunye/raporlama icin)"""
+        return not self.base_url.startswith("http://127.0.0.1") and                not self.base_url.startswith(f"http://{self.vllm_host}:")
 
 
 settings = Settings()

@@ -1,0 +1,927 @@
+{
+  "ortak_spesifikasyon": {
+    "vcodec": "libx264",
+    "profile": "main",
+    "pix_fmt": "yuv420p",
+    "bitrate": "8M",
+    "fps": "24",
+    "preset": "medium",
+    "g": "48"
+  },
+  "siniflar": {
+    "Anomali/Carrying_Overload_with_Forklift": {
+      "n": 25,
+      "once": [
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19605053",
+          "size": "24506317"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "20051463",
+          "size": "27570762"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19728092",
+          "size": "17262081"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19832176",
+          "size": "9916088"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "20558252",
+          "size": "25800607"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19454567",
+          "size": "24318209"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "21251434",
+          "size": "26564293"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "20309477",
+          "size": "25386847"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "17810665",
+          "size": "13357999"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "18543766",
+          "size": "13907825"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "18453849",
+          "size": "11533656"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19707988",
+          "size": "12317493"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19015070",
+          "size": "11884419"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "18493265",
+          "size": "11558291"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19577464",
+          "size": "12235915"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19367462",
+          "size": "9683731"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19249646",
+          "size": "9624823"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19140592",
+          "size": "9570296"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "18818572",
+          "size": "9409286"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "20550070",
+          "size": "10275035"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "21575768",
+          "size": "8198792"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19153914",
+          "size": "7182718"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19954653",
+          "size": "7482995"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "20442266",
+          "size": "28108117"
+        },
+        {
+          "profile": "Constrained Baseline",
+          "pix_fmt": "yuv420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "19957679",
+          "size": "25046888"
+        }
+      ],
+      "sonra": [
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6949253",
+          "size": "8758955"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6951013",
+          "size": "9630049"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6903464",
+          "size": "6112442"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6756325",
+          "size": "3448541"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "7282433",
+          "size": "9216830"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6881799",
+          "size": "8673934"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "7230279",
+          "size": "9113165"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "7058974",
+          "size": "8897249"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6650875",
+          "size": "5057436"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6427930",
+          "size": "4887905"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6321520",
+          "size": "4016799"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6587076",
+          "size": "4185538"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6937007",
+          "size": "4407890"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6400609",
+          "size": "4067054"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6431798",
+          "size": "4086872"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6985601",
+          "size": "3565567"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6543117",
+          "size": "3339716"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6721565",
+          "size": "3430799"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6206126",
+          "size": "3167710"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6451782",
+          "size": "3293097"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6301140",
+          "size": "2461383"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6062304",
+          "size": "2336513"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6768716",
+          "size": "2608776"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6813700",
+          "size": "9439814"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6776484",
+          "size": "8576488"
+        }
+      ]
+    },
+    "Normal/Safe_Carrying": {
+      "n": 25,
+      "once": [
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "5010439",
+          "size": "4458655"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4732648",
+          "size": "3592468"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "295/12",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4832997",
+          "size": "2440216"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4782364",
+          "size": "2396553"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4168225",
+          "size": "6273180"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4095923",
+          "size": "6123406"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "301/12",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4915612",
+          "size": "6234955"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4565539",
+          "size": "5780534"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "5832173",
+          "size": "2956468"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "5597812",
+          "size": "2824701"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "50/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "5668159",
+          "size": "2847117"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4885800",
+          "size": "2344987"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "301/12",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6017709",
+          "size": "1591226"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "151/6",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "7063762",
+          "size": "1864654"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "301/12",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4629146",
+          "size": "7009450"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "301/12",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4622741",
+          "size": "5286674"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4099651",
+          "size": "5760010"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "50/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4585522",
+          "size": "6384758"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "299/12",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4928146",
+          "size": "6680959"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "301/12",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4525989",
+          "size": "5153396"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "50/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4469924",
+          "size": "4545049"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "5022968",
+          "size": "4469854"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "50/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "5596104",
+          "size": "4853309"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "25/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4596598",
+          "size": "3494447"
+        },
+        {
+          "profile": "High",
+          "pix_fmt": "yuvj420p",
+          "fps": "50/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "4429042",
+          "size": "3355445"
+        }
+      ],
+      "sonra": [
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6601703",
+          "size": "5914026"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6599378",
+          "size": "5052649"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6693028",
+          "size": "3451093"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6739220",
+          "size": "3439810"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6738454",
+          "size": "10212970"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6770866",
+          "size": "10191565"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6947964",
+          "size": "8865892"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6841591",
+          "size": "8730155"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6529910",
+          "size": "3366985"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "7026875",
+          "size": "3586634"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "7367046",
+          "size": "3760263"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6567673",
+          "size": "3215424"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6666497",
+          "size": "1805510"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6390634",
+          "size": "1730797"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6601024",
+          "size": "10039059"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6880920",
+          "size": "7920226"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6796493",
+          "size": "9592968"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6823982",
+          "size": "9560684"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "7216498",
+          "size": "9847514"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6795618",
+          "size": "7786647"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6868452",
+          "size": "7047318"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6700131",
+          "size": "6002201"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6796715",
+          "size": "5947126"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6531005",
+          "size": "5034317"
+        },
+        {
+          "profile": "Main",
+          "pix_fmt": "yuv420p",
+          "fps": "24/1",
+          "w": 1920,
+          "h": 1080,
+          "bit_rate": "6575670",
+          "size": "5034498"
+        }
+      ]
+    }
+  }
+}

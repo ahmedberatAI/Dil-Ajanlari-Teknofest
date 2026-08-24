@@ -1,0 +1,1439 @@
+{
+  "kunye": {
+    "tarih": "2026-08-24 12:40:02",
+    "disable_thinking": true,
+    "ayristirici": "sozcuk-sinirli, EN ERKEN eslesme (D42-TANI-2 duzeltmesi)"
+  },
+  "kollar": [
+    {
+      "kol": "router   · guided · thinkingKAPALI",
+      "alias": "router",
+      "guided": true,
+      "dogru": 35,
+      "n": 36,
+      "acc": 0.9722222222222222,
+      "medyan_s": 0.2546298830000069,
+      "ayristirilamadi": 0,
+      "hatalar": [
+        [
+          "D6",
+          "durum",
+          "kisi_oznitelik"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "kisi_oznitelik",
+          "dogru": false,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        }
+      ]
+    },
+    {
+      "kol": "llm-fast · guided · thinkingKAPALI",
+      "alias": "llm-fast",
+      "guided": true,
+      "dogru": 31,
+      "n": 36,
+      "acc": 0.8611111111111112,
+      "medyan_s": 0.3326512870000897,
+      "ayristirilamadi": 0,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "genel"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ],
+        [
+          "K3",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K8",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "D1",
+          "durum",
+          "genel"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "durum",
+          "dogru": false,
+          "ham": "durum"
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        }
+      ]
+    },
+    {
+      "kol": "llm-large· guided · thinkingKAPALI",
+      "alias": "llm-large",
+      "guided": true,
+      "dogru": 28,
+      "n": 36,
+      "acc": 0.7777777777777778,
+      "medyan_s": 0.3286932019998403,
+      "ayristirilamadi": 0,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "genel"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ],
+        [
+          "K3",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K4",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "D1",
+          "durum",
+          "genel"
+        ],
+        [
+          "D2",
+          "durum",
+          "genel"
+        ],
+        [
+          "D3",
+          "durum",
+          "genel"
+        ],
+        [
+          "D7",
+          "durum",
+          "genel"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "durum",
+          "dogru": false,
+          "ham": "durum"
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        }
+      ]
+    },
+    {
+      "kol": "llm-large· SERBEST(duzeltilmis ayristirici) · thinkingKAPALI",
+      "alias": "llm-large",
+      "guided": false,
+      "dogru": 34,
+      "n": 36,
+      "acc": 0.9444444444444444,
+      "medyan_s": 0.33454028399978597,
+      "ayristirilamadi": 0,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "genel"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel"
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "durum",
+          "dogru": false,
+          "ham": "durum"
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma"
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "girdi_tipi: kisi_oznitelik"
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki görünür donanım (emniyet kemeri) olup olmadığını sorgulamaktadır. Bu nedenle doğru soru tipi:\n\n**kisi_oznitelik**"
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin (ziyaretçi) üzerindeki görünür donanım (kask/baret) durumunu (takılı/takılmamış) sorgulamaktadır. Bu nedenle girdi **kisi_oznitelik** soru"
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "girdi_tipi: durum"
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "girdi_tipi: durum"
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "girdi_tipi: durum"
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (sarı bant) iki durumlu bir hâlini (görünür/görünmez) sorgulamaktadır. Bu nedenle soru tipi **durum** kategorisine girer."
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine aittir.\n\n**Gerekçe:** Kullanıcı, klipteki olayların bir özetini istemektedir. Bu, tek bir nesnenin durumunu, bir kişinin donanımı"
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine girer.\n\n**Gerekçe:** Soru, spesifik bir nesnenin sayısını, bir kişinin donanımını veya bir durumun açık/kapalı gibi iki değerli h"
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "girdi_tipi: genel"
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine aittir.\n\n**Gerekçe:** Kullanıcı, belirli bir nesnenin durumunu, bir kişinin donanımını veya sayısal bir ölçümü sorgulamıyor. Bunu"
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine girer.\n\n**Gerekçe:** Kullanıcı, önceki bir konuşmaya atıfta bulunarak bir riskin detaylandırılmasını (açıklanmasını) istemektedir"
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel"
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine aittir.\n\n**Gerekçe:** Soru, belirli bir nesnenin durumunu, bir kişinin donanımını veya sayısal bir ölçümü sorgulamak yerine, bir "
+        }
+      ]
+    },
+    {
+      "kol": "llm-fast · SERBEST(duzeltilmis ayristirici) · thinkingKAPALI",
+      "alias": "llm-fast",
+      "guided": false,
+      "dogru": 32,
+      "n": 36,
+      "acc": 0.8888888888888888,
+      "medyan_s": 0.598578512000131,
+      "ayristirilamadi": 2,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "AYRISTIRILAMADI:bu girdi, bir soru sormamakta; bunun yerine bir vi"
+        ],
+        [
+          "S7",
+          "sayma",
+          "AYRISTIRILAMADI:bu girdi, bir nesnenin (paletlerin) konumsal düzen"
+        ],
+        [
+          "G3",
+          "genel",
+          "durum"
+        ],
+        [
+          "G6",
+          "genel",
+          "sayma"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, \"kaç kasa\" ifadesiyle bir miktar/sayı sorguladığı için bu bir **sayma** sorusudur."
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, görüntüdeki işçi sayısını sorduğu için yanıtı bir **SAYI** olan bir sorudur.\n\nBu nedenle soru tipi: **sayma**"
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, forklift ile yaya arasındaki mesafeyi (bir SAYI/mesafe) sorduğu için bu bir **sayma** soru tipidir."
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (istiflenen yükün) yüksekliğinin başka bir nesneyle (forklift direği) geometrik olarak karşılaştırılmasını ve sonucun \"evet/hayır\" veya b"
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, sarı çizgiye göre kişilerin konumunu ve sayısını sorguladığı için yanıtı bir **SAYI** (kaç kişi) ve **geometrik karşılaştırma** (dışında mı?) içermektedi"
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "AYRISTIRILAMADI:bu girdi, bir soru sormamakta; bunun yerine bir vi",
+          "dogru": false,
+          "ham": "Bu girdi, bir soru sormamakta; bunun yerine bir video klibinin görsel içeriğini betimlemektedir.\n\nGirdi tipi: **klip_betimi**"
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "AYRISTIRILAMADI:bu girdi, bir nesnenin (paletlerin) konumsal düzen",
+          "dogru": false,
+          "ham": "Bu girdi, bir nesnenin (paletlerin) konumsal düzenini ve aralarındaki boşluğun fiziksel durumunu betimlemektedir. \"Aralarındaki boşluk çok dar\" ifadesi, ortamın"
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, \"kaç kez\" ifadesiyle bir **sayı** (frekans) talep etmektedir.\n\n**Soru Tipi:** sayma"
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (vinç kancasının) konumunu veya boyutunu ifade eden bir **SAYI** (metre cinsinden yükseklik) istemektedir.\n\nBu nedenle soru tipi: **sayma"
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki görünür donanım veya kıyafeti (bu durumda baret) sorgulamaktadır.\n\n**Soru Tipi:** kisi_oznitelik"
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki belirli bir güvenlik donanımının (reflektif yelek) varlığını sorgulamaktadır. Tanımlara göre, bir kişinin üzerindeki görünür do"
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki görünür donanımı (yüz siperi) sorgulamaktadır.\n\n**Soru Tipi:** kisi_oznitelik"
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin (forklift operatörü) üzerindeki görünür donanımı (emniyet kemeri) sorgulamaktadır.\n\n**Soru Tipi:** kisi_oznitelik"
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki görünür donanım veya kıyafet (eldiven) ile ilgilidir.\n\n**Soru Tipi:** kisi_oznitelik"
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, çalışanların üzerindeki görünür donanımın (baretsiz olma durumu) tespitine odaklandığı için **kisi_oznitelik** tipine girer."
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bakım personelinin üzerindeki kıyafetleri (turuncu tulum) ve ayağındaki donanımın (iş ayakkabısı) varlığı veya yokluğu hakkında bilgi vermektedir. Tan"
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki belirli bir güvenlik donanımının (paraşüt tipi emniyet kemeri/koşumu) varlığını sorgulamaktadır. Tanımlara göre, bir kişinin üz"
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin (ziyaretçinin) üzerindeki görünür donanım veya kıyafet eksikliğini (başının açık olması/kask takmaması) tanımlamaktadır. Bu nedenle doğru "
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (elektrik panosunun kapağının) iki olası durumdan hangisinde olduğunu sorgulamaktadır (açık/kapalı). Bu nedenle soru tipi **durum**'dur."
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (acil çıkış kapısının) mevcut durumunu (kapalı/açık) sorguladığı için **durum** tipine girer."
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, zeminin ıslak/kuru veya temiz/kirli gibi iki durumlu bir özelliğini sorgulamaktadır. Bu nedenle soru tipi **durum** olarak sınıflandırılır."
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (makinenin) mevcut çalışma durumunu sorgulamaktadır. Yanıtı \"çalışır durumda\" veya \"durdurulmuş\" gibi iki durumlu bir hali ifade etmekted"
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (yangın tüpü dolabının) mevcut fiziksel durumunu ve içeriğinin varlığını/yokluğunu tanımlamaktadır. \"Camın kırık olması\" ve \"dolabın boş "
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Girdi, bir nesnenin (sarı bant) mevcut durumunu (görünür olup olmadığını) sorgulamaktadır. Bu, \"kapak açık/kapalı\", \"ışık yanık/sönük\" gibi iki durumlu hâli ifa"
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum"
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (konveyör bandının koruma muhafazasının) mevcut durumunu (yerinde olup olmadığını) sorgulamaktadır. Yanıtı \"evet/hayır\" veya \"muhafaza ye"
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, bir olayın veya sahnenin genel akışını, nedenlerini veya sonuçlarını anlatan bir **özet** talep etmektedir. Tek bir sayısal veri, belirli bir kişinin "
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir görsel nesnenin durumunu, bir kişinin donanımını veya bir sayısal ölçümü sorgulamamaktadır. Bunun yerine, bir rapora dayalı olarak genel b"
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "durum",
+          "dogru": false,
+          "ham": "Bu girdi, belirli bir görsel nesne, kişi donanımı veya ortam durumu üzerinden sayısal/karşılaştırmalı bir yanıt veya durum tespiti istememektedir. Bunun yerine,"
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir görsel nesneyi, kişiyi veya ortam durumunu analiz etmeyi gerektiren bir soru değil; genel bir talep veya diyalog ögesidir.\n\n**Soru Tipi:**"
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir nesnenin durumunu (açık/kapalı gibi) veya bir kişinin donanımını (baret, yelek gibi) sorgulamamaktadır. Ayrıca \"kaç adet\" veya \"kaç metre\""
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "sayma",
+          "dogru": false,
+          "ham": "Bu girdi, belirli bir görsel nesneyi sayma, bir kişinin donanımını tanımlama veya bir ortam durumunu tespit etme amacı taşımamaktadır. Bunun yerine, bir sürecin"
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, görsel bir nesneyi, kişiyi veya ortam durumunu doğrudan sorgulamadığı için **genel** kategorisine girer.\n\n**Gerekçe:**\n*   Soru, önceki bir bağlama at"
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir sayısal ölçüm, bir kişinin kişisel koruyucu donanım (KKD) kontrolü veya bir nesnenin açık/kapalı gibi iki durumlu fiziksel durumu üzerine "
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir görsel nesneyi, kişiyi veya ortam durumunu doğrudan tanımlamayı veya saymayı hedeflememektedir. Bunun yerine, bir kararın (risk seviyesini"
+        }
+      ]
+    }
+  ]
+}

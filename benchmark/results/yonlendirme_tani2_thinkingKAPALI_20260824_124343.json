@@ -1,0 +1,2374 @@
+{
+  "kunye": {
+    "tarih": "2026-08-24 12:42:13",
+    "disable_thinking": true,
+    "ayristirici": "sozcuk-sinirli, EN ERKEN eslesme (D42-TANI-2 duzeltmesi)"
+  },
+  "kollar": [
+    {
+      "kol": "router   · guided · thinkingKAPALI",
+      "alias": "router",
+      "guided": true,
+      "dogru": 35,
+      "n": 36,
+      "acc": 0.9722222222222222,
+      "medyan_s": 0.25239927500001613,
+      "p90_s": 0.285284522999973,
+      "giris_tok_ort": 297.77777777777777,
+      "cikis_tok_ort": 4.388888888888889,
+      "cikis_tok_top": 158,
+      "ayristirilamadi": 0,
+      "hatalar": [
+        [
+          "D6",
+          "durum",
+          "kisi_oznitelik"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 291,
+            "cikis": 3,
+            "toplam": 294
+          }
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 292,
+            "cikis": 3,
+            "toplam": 295
+          }
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          }
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 299,
+            "cikis": 3,
+            "toplam": 302
+          }
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 292,
+            "cikis": 3,
+            "toplam": 295
+          }
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 310,
+            "cikis": 3,
+            "toplam": 313
+          }
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 307,
+            "cikis": 3,
+            "toplam": 310
+          }
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 296,
+            "cikis": 3,
+            "toplam": 299
+          }
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          }
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 289,
+            "cikis": 8,
+            "toplam": 297
+          }
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 295,
+            "cikis": 8,
+            "toplam": 303
+          }
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 293,
+            "cikis": 8,
+            "toplam": 301
+          }
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 295,
+            "cikis": 8,
+            "toplam": 303
+          }
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 298,
+            "cikis": 8,
+            "toplam": 306
+          }
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 300,
+            "cikis": 8,
+            "toplam": 308
+          }
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 308,
+            "cikis": 8,
+            "toplam": 316
+          }
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 299,
+            "cikis": 8,
+            "toplam": 307
+          }
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 305,
+            "cikis": 8,
+            "toplam": 313
+          }
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          }
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 290,
+            "cikis": 3,
+            "toplam": 293
+          }
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 293,
+            "cikis": 3,
+            "toplam": 296
+          }
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 298,
+            "cikis": 3,
+            "toplam": 301
+          }
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 306,
+            "cikis": 3,
+            "toplam": 309
+          }
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "kisi_oznitelik",
+          "dogru": false,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 304,
+            "cikis": 8,
+            "toplam": 312
+          }
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 300,
+            "cikis": 3,
+            "toplam": 303
+          }
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 300,
+            "cikis": 3,
+            "toplam": 303
+          }
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 296,
+            "cikis": 3,
+            "toplam": 299
+          }
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 293,
+            "cikis": 3,
+            "toplam": 296
+          }
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 295,
+            "cikis": 3,
+            "toplam": 298
+          }
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 300,
+            "cikis": 3,
+            "toplam": 303
+          }
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          }
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 309,
+            "cikis": 3,
+            "toplam": 312
+          }
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 298,
+            "cikis": 3,
+            "toplam": 301
+          }
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 298,
+            "cikis": 3,
+            "toplam": 301
+          }
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 301,
+            "cikis": 3,
+            "toplam": 304
+          }
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          }
+        }
+      ]
+    },
+    {
+      "kol": "llm-fast · guided · thinkingKAPALI",
+      "alias": "llm-fast",
+      "guided": true,
+      "dogru": 28,
+      "n": 36,
+      "acc": 0.7777777777777778,
+      "medyan_s": 0.32876637200001824,
+      "p90_s": 0.3802120450000075,
+      "giris_tok_ort": 278.19444444444446,
+      "cikis_tok_ort": 3.6944444444444446,
+      "cikis_tok_top": 133,
+      "ayristirilamadi": 0,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "genel"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ],
+        [
+          "K1",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K3",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K4",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K5",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K8",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "D1",
+          "durum",
+          "genel"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          }
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 3,
+            "toplam": 283
+          }
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 289,
+            "cikis": 3,
+            "toplam": 292
+          }
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "durum",
+          "dogru": false,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          }
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          }
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 3,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 271,
+            "cikis": 4,
+            "toplam": 275
+          }
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 7,
+            "toplam": 282
+          }
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 4,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 4,
+            "toplam": 281
+          }
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 4,
+            "toplam": 282
+          }
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 279,
+            "cikis": 7,
+            "toplam": 286
+          }
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 290,
+            "cikis": 7,
+            "toplam": 297
+          }
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 4,
+            "toplam": 284
+          }
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 283,
+            "cikis": 7,
+            "toplam": 290
+          }
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 4,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 272,
+            "cikis": 3,
+            "toplam": 275
+          }
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 3,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 3,
+            "toplam": 281
+          }
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          }
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 284,
+            "cikis": 3,
+            "toplam": 287
+          }
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 3,
+            "toplam": 283
+          }
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 283,
+            "cikis": 3,
+            "toplam": 286
+          }
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          }
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 3,
+            "toplam": 277
+          }
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 4,
+            "toplam": 277
+          }
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 3,
+            "toplam": 281
+          }
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          }
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 287,
+            "cikis": 3,
+            "toplam": 290
+          }
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          }
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 4,
+            "toplam": 282
+          }
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 281,
+            "cikis": 3,
+            "toplam": 284
+          }
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 4,
+            "toplam": 277
+          }
+        }
+      ]
+    },
+    {
+      "kol": "llm-large· guided · thinkingKAPALI",
+      "alias": "llm-large",
+      "guided": true,
+      "dogru": 28,
+      "n": 36,
+      "acc": 0.7777777777777778,
+      "medyan_s": 0.33162888399988333,
+      "p90_s": 0.38564183799985585,
+      "giris_tok_ort": 278.19444444444446,
+      "cikis_tok_ort": 4.111111111111111,
+      "cikis_tok_top": 148,
+      "ayristirilamadi": 0,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "genel"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ],
+        [
+          "K3",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K4",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "D1",
+          "durum",
+          "genel"
+        ],
+        [
+          "D2",
+          "durum",
+          "genel"
+        ],
+        [
+          "D3",
+          "durum",
+          "genel"
+        ],
+        [
+          "D7",
+          "durum",
+          "genel"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          }
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 3,
+            "toplam": 283
+          }
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 289,
+            "cikis": 3,
+            "toplam": 292
+          }
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "durum",
+          "dogru": false,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          }
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          }
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 3,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 271,
+            "cikis": 7,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 7,
+            "toplam": 282
+          }
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 4,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 4,
+            "toplam": 281
+          }
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 7,
+            "toplam": 285
+          }
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 279,
+            "cikis": 7,
+            "toplam": 286
+          }
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 290,
+            "cikis": 7,
+            "toplam": 297
+          }
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 7,
+            "toplam": 287
+          }
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 283,
+            "cikis": 7,
+            "toplam": 290
+          }
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 4,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 272,
+            "cikis": 4,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 4,
+            "toplam": 279
+          }
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 3,
+            "toplam": 281
+          }
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          }
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 284,
+            "cikis": 3,
+            "toplam": 287
+          }
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 4,
+            "toplam": 284
+          }
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 283,
+            "cikis": 3,
+            "toplam": 286
+          }
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          }
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 4,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 4,
+            "toplam": 277
+          }
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 4,
+            "toplam": 282
+          }
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 4,
+            "toplam": 281
+          }
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 287,
+            "cikis": 3,
+            "toplam": 290
+          }
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          }
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 4,
+            "toplam": 282
+          }
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 281,
+            "cikis": 3,
+            "toplam": 284
+          }
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 4,
+            "toplam": 277
+          }
+        }
+      ]
+    },
+    {
+      "kol": "llm-large· SERBEST(duzeltilmis ayristirici) · thinkingKAPALI",
+      "alias": "llm-large",
+      "guided": false,
+      "dogru": 34,
+      "n": 36,
+      "acc": 0.9444444444444444,
+      "medyan_s": 0.41543776399998933,
+      "p90_s": 0.942631775000109,
+      "giris_tok_ort": 278.19444444444446,
+      "cikis_tok_ort": 26.25,
+      "cikis_tok_top": 945,
+      "ayristirilamadi": 0,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "kisi_oznitelik"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          }
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 3,
+            "toplam": 283
+          }
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          }
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "kisi_oznitelik",
+          "dogru": false,
+          "ham": "Bu girdi, bir nesnenin (forklift) veya ortamın (depo koridoru) iki durumlu bir hâlini (açık/kapalı, yanık/sönük vb.) sorgulamamaktadır. Ayrıca bir kişinin donan",
+          "kullanim": {
+            "giris": 289,
+            "cikis": 96,
+            "toplam": 385
+          }
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "durum",
+          "dogru": false,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          }
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          }
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "sayma",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 3,
+            "toplam": 278
+          }
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki görünür donanımı (baret) sorguladığı için **kisi_oznitelik** soru tipine girer.",
+          "kullanim": {
+            "giris": 271,
+            "cikis": 39,
+            "toplam": 310
+          }
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 7,
+            "toplam": 282
+          }
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "girdi_tipi: kisi_oznitelik",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 13,
+            "toplam": 287
+          }
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki görünür donanım (emniyet kemeri) olup olmadığını sorgulamaktadır. Bu nedenle doğru soru tipi:\n\n**kisi_oznitelik**",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 44,
+            "toplam": 321
+          }
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 7,
+            "toplam": 285
+          }
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 279,
+            "cikis": 7,
+            "toplam": 286
+          }
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "kisi_oznitelik",
+          "kullanim": {
+            "giris": 290,
+            "cikis": 7,
+            "toplam": 297
+          }
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "girdi_tipi: kisi_oznitelik",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 13,
+            "toplam": 293
+          }
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin (ziyaretçi) üzerindeki görünür donanım (kask/baret) durumunu (takılı/takılmamış) sorgulamaktadır. Bu nedenle girdi **kisi_oznitelik** soru",
+          "kullanim": {
+            "giris": 283,
+            "cikis": 62,
+            "toplam": 345
+          }
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (elektrik panosu) iki durumlu hâlini (açık/kapalı) sorguladığı için **durum** soru tipine girer.",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 47,
+            "toplam": 321
+          }
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "girdi_tipi: durum",
+          "kullanim": {
+            "giris": 272,
+            "cikis": 8,
+            "toplam": 280
+          }
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "girdi_tipi: durum",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 8,
+            "toplam": 283
+          }
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 3,
+            "toplam": 281
+          }
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          }
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 284,
+            "cikis": 3,
+            "toplam": 287
+          }
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (sarı bant) iki durumlu bir hâlini (görünür/görünmez) sorgulamaktadır. Bu nedenle soru tipi **durum** kategorisine girer.",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 51,
+            "toplam": 331
+          }
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 283,
+            "cikis": 3,
+            "toplam": 286
+          }
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          }
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine aittir.\n\n**Gerekçe:** Kullanıcı, klipteki olayların bir özetini istemektedir. Bu, tek bir nesnenin durumunu, bir kişinin donanımı",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 96,
+            "toplam": 370
+          }
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine girer.\n\n**Gerekçe:** Soru, spesifik bir nesnenin sayısını, bir kişinin donanımını veya bir durumun açık/kapalı gibi iki değerli h",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 96,
+            "toplam": 369
+          }
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "girdi_tipi: genel",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 8,
+            "toplam": 286
+          }
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine aittir.\n\n**Gerekçe:** Kullanıcı, belirli bir nesnenin durumunu, bir kişinin donanımını veya sayısal bir ölçümü sorgulamıyor. Bunu",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 96,
+            "toplam": 373
+          }
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 287,
+            "cikis": 3,
+            "toplam": 290
+          }
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          }
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine girer.\n\n**Gerekçe:** Kullanıcı, önceki bir konuşmaya atıfta bulunarak bir riskin detaylandırılmasını (açıklanmasını) istiyor. Bu,",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 96,
+            "toplam": 374
+          }
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "genel",
+          "kullanim": {
+            "giris": 281,
+            "cikis": 3,
+            "toplam": 284
+          }
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi **genel** soru tipine aittir.\n\n**Gerekçe:** Soru, belirli bir nesnenin durumunu, bir kişinin donanımını veya sayısal bir ölçümü sorgulamak yerine, bir ",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 96,
+            "toplam": 369
+          }
+        }
+      ]
+    },
+    {
+      "kol": "llm-fast · SERBEST(duzeltilmis ayristirici) · thinkingKAPALI",
+      "alias": "llm-fast",
+      "guided": false,
+      "dogru": 32,
+      "n": 36,
+      "acc": 0.8888888888888888,
+      "medyan_s": 0.6583193980000033,
+      "p90_s": 0.8543609660000584,
+      "giris_tok_ort": 278.19444444444446,
+      "cikis_tok_ort": 66.69444444444444,
+      "cikis_tok_top": 2401,
+      "ayristirilamadi": 2,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "AYRISTIRILAMADI:bu girdi, bir soru sormamakta; bunun yerine bir vi"
+        ],
+        [
+          "S7",
+          "sayma",
+          "AYRISTIRILAMADI:bu girdi, bir nesnenin (paletlerin) konumsal düzen"
+        ],
+        [
+          "G3",
+          "genel",
+          "durum"
+        ],
+        [
+          "G6",
+          "genel",
+          "sayma"
+        ]
+      ],
+      "kayit": [
+        {
+          "kim": "S1",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, \"kaç kasa\" ifadesiyle bir miktar/sayı sorguladığı için bu bir **sayma** sorusudur.",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 33,
+            "toplam": 306
+          }
+        },
+        {
+          "kim": "S2",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, görüntüdeki işçi sayısını sorduğu için yanıtı bir **SAYI** olan bir sorudur.\n\nBu nedenle soru tipi: **sayma**",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 41,
+            "toplam": 314
+          }
+        },
+        {
+          "kim": "S3",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, forklift ile yaya arasındaki mesafeyi (bir SAYI/mesafe) sorduğu için bu bir **sayma** soru tipidir.",
+          "kullanim": {
+            "giris": 276,
+            "cikis": 39,
+            "toplam": 315
+          }
+        },
+        {
+          "kim": "S4",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (istiflenen yükün) yüksekliğinin başka bir nesneyle (forklift direği) geometrik olarak karşılaştırılmasını ve sonucun \"evet/hayır\" veya b",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 77,
+            "toplam": 357
+          }
+        },
+        {
+          "kim": "S5",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, sarı çizgiye göre kişilerin konumunu ve sayısını sorguladığı için yanıtı bir **SAYI** (kaç kişi) ve **geometrik karşılaştırma** (dışında mı?) içermektedi",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 68,
+            "toplam": 341
+          }
+        },
+        {
+          "kim": "S6",
+          "gercek": "sayma",
+          "tahmin": "AYRISTIRILAMADI:bu girdi, bir soru sormamakta; bunun yerine bir vi",
+          "dogru": false,
+          "ham": "Bu girdi, bir soru sormamakta; bunun yerine bir video klibinin görsel içeriğini betimlemektedir.\n\nGirdi tipi: **klip_betimi**",
+          "kullanim": {
+            "giris": 289,
+            "cikis": 44,
+            "toplam": 333
+          }
+        },
+        {
+          "kim": "S7",
+          "gercek": "sayma",
+          "tahmin": "AYRISTIRILAMADI:bu girdi, bir nesnenin (paletlerin) konumsal düzen",
+          "dogru": false,
+          "ham": "Bu girdi, bir nesnenin (paletlerin) konumsal düzenini ve aralarındaki boşluğun fiziksel durumunu betimlemektedir. \"Aralarındaki boşluk çok dar\" ifadesi, ortamın",
+          "kullanim": {
+            "giris": 286,
+            "cikis": 96,
+            "toplam": 382
+          }
+        },
+        {
+          "kim": "S8",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Girdi, \"kaç kez\" ifadesiyle bir **sayı** (frekans) talep etmektedir.\n\n**Soru Tipi:** sayma",
+          "kullanim": {
+            "giris": 276,
+            "cikis": 35,
+            "toplam": 311
+          }
+        },
+        {
+          "kim": "S9",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (vinç kancasının) konumunu veya boyutunu ifade eden bir **SAYI** (metre cinsinden yükseklik) istemektedir.\n\nBu nedenle soru tipi: **sayma",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 56,
+            "toplam": 331
+          }
+        },
+        {
+          "kim": "K1",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki görünür donanım veya kıyafeti (bu durumda baret) sorgulamaktadır.\n\n**Soru Tipi:** kisi_oznitelik",
+          "kullanim": {
+            "giris": 271,
+            "cikis": 43,
+            "toplam": 314
+          }
+        },
+        {
+          "kim": "K2",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki belirli bir güvenlik donanımının (reflektif yelek) varlığını sorgulamaktadır. Tanımlara göre, bir kişinin üzerindeki görünür do",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 82,
+            "toplam": 357
+          }
+        },
+        {
+          "kim": "K3",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki görünür donanımı (yüz siperi) sorguladığı için **kisi_oznitelik** tipine girer.",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 40,
+            "toplam": 314
+          }
+        },
+        {
+          "kim": "K4",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin (forklift operatörünün) üzerindeki görünür donanımı (emniyet kemeri) sorgulamaktadır.\n\n**Soru Tipi:** kisi_oznitelik",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 47,
+            "toplam": 324
+          }
+        },
+        {
+          "kim": "K5",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki görünür donanım veya kıyafet (bu durumda eldiven) hakkında bilgi istediği için **kisi_oznitelik** soru tipine girer.",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 48,
+            "toplam": 326
+          }
+        },
+        {
+          "kim": "K6",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, çalışanların üzerindeki görünür donanımın (baretsiz olma durumu) tanımlandığı bir senaryodur. Tanımlanan özellik, bir kişinin üzerindeki kıyafet veya ",
+          "kullanim": {
+            "giris": 279,
+            "cikis": 84,
+            "toplam": 363
+          }
+        },
+        {
+          "kim": "K7",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bakım personelinin üzerindeki kıyafetleri (turuncu tulum) ve ayağındaki donanımın (iş ayakkabısı) varlığı veya yokluğu hakkında bilgi vermektedir. Tan",
+          "kullanim": {
+            "giris": 290,
+            "cikis": 96,
+            "toplam": 386
+          }
+        },
+        {
+          "kim": "K8",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin üzerindeki belirli bir güvenlik donanımının (paraşüt tipi emniyet kemeri/koşumu) varlığını sorgulamaktadır. Tanımlara göre, bir kişinin üz",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 87,
+            "toplam": 367
+          }
+        },
+        {
+          "kim": "K9",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "ham": "Bu girdi, bir kişinin (ziyaretçinin) üzerindeki görünür donanım veya kıyafet durumunu (başının açık olması/kask takmaması) tanımlamaktadır. Bu nedenle soru tipi",
+          "kullanim": {
+            "giris": 283,
+            "cikis": 61,
+            "toplam": 344
+          }
+        },
+        {
+          "kim": "D1",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (elektrik panosunun kapağının) iki olası durumdan hangisinde olduğunu sorgulamaktadır. Yanıt \"evet/hayır\" veya \"açık/kapalı\" şeklinde ola",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 76,
+            "toplam": 350
+          }
+        },
+        {
+          "kim": "D2",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (acil çıkış kapısının) mevcut fiziksel durumunu (kapalı/açık) sorgulamaktadır. Tanımlara göre, bir nesnenin iki durumlu hâli (kapak açık/",
+          "kullanim": {
+            "giris": 272,
+            "cikis": 76,
+            "toplam": 348
+          }
+        },
+        {
+          "kim": "D3",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, zeminin ıslak/kuru veya temiz/kirli gibi iki durumlu bir özelliğini sorgulamaktadır. Bu nedenle soru tipi **durum** olarak sınıflandırılır.",
+          "kullanim": {
+            "giris": 275,
+            "cikis": 48,
+            "toplam": 323
+          }
+        },
+        {
+          "kim": "D4",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (makinenin) mevcut çalışma durumunu sorgulamaktadır. Yanıtı \"çalışır durumda\" veya \"durdurulmuş\" gibi iki durumlu bir hali ifade etmekted",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 65,
+            "toplam": 343
+          }
+        },
+        {
+          "kim": "D5",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          }
+        },
+        {
+          "kim": "D6",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (yangın tüpü dolabının) mevcut fiziksel durumunu ve içeriğinin varlığını/yokluğunu tanımlamaktadır. \"Camın kırık olması\" ve \"içinin boş o",
+          "kullanim": {
+            "giris": 284,
+            "cikis": 96,
+            "toplam": 380
+          }
+        },
+        {
+          "kim": "D7",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Girdi, bir nesnenin (sarı bant) mevcut durumunu (görünür olup olmadığını) sorgulamaktadır. Bu, \"kapak açık/kapalı\" veya \"ışık yanık/sönük\" gibi iki durumlu bir ",
+          "kullanim": {
+            "giris": 280,
+            "cikis": 69,
+            "toplam": 349
+          }
+        },
+        {
+          "kim": "D8",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "durum",
+          "kullanim": {
+            "giris": 283,
+            "cikis": 3,
+            "toplam": 286
+          }
+        },
+        {
+          "kim": "D9",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "ham": "Bu girdi, bir nesnenin (konveyör bandının koruma muhafazasının) mevcut durumunu (yerinde olup olmadığını) sorgulamaktadır. Yanıtı \"evet/hayır\" veya \"muhafaza ye",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 83,
+            "toplam": 360
+          }
+        },
+        {
+          "kim": "G1",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, bir olayın veya sahnenin genel akışını, nedenlerini veya sonuçlarını anlatan bir **özet** talep etmektedir. Tek bir sayısal veri, belirli bir kişinin ",
+          "kullanim": {
+            "giris": 274,
+            "cikis": 82,
+            "toplam": 356
+          }
+        },
+        {
+          "kim": "G2",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir görsel nesnenin durumunu, bir kişinin donanımını veya bir sayısal ölçümü sorgulamamaktadır. Bunun yerine, bir rapora dayalı olarak genel b",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 96,
+            "toplam": 369
+          }
+        },
+        {
+          "kim": "G3",
+          "gercek": "genel",
+          "tahmin": "durum",
+          "dogru": false,
+          "ham": "Bu girdi, belirli bir görsel nesne, kişi donanımı veya ortam durumu üzerinden sayısal/karşılaştırmalı bir yanıt veya durum tespiti istememektedir. Bunun yerine,",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 96,
+            "toplam": 374
+          }
+        },
+        {
+          "kim": "G4",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir görsel nesneyi, kişiyi veya ortam durumunu analiz etmeyi gerektiren bir soru değil; genel bir talep veya diyalog ögesidir.\n\n**Soru Tipi:**",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 52,
+            "toplam": 329
+          }
+        },
+        {
+          "kim": "G5",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir nesnenin durumunu (açık/kapalı gibi) veya bir kişinin donanımını (baret, yelek gibi) sorgulamamaktadır. Ayrıca \"kaç adet\" veya \"kaç metre\"",
+          "kullanim": {
+            "giris": 287,
+            "cikis": 96,
+            "toplam": 383
+          }
+        },
+        {
+          "kim": "G6",
+          "gercek": "genel",
+          "tahmin": "sayma",
+          "dogru": false,
+          "ham": "Bu girdi, belirli bir görsel nesneyi sayma, bir kişinin donanımını tanımlama veya bir ortam durumunu tespit etme amacı taşımamaktadır. Bunun yerine, bir sürecin",
+          "kullanim": {
+            "giris": 277,
+            "cikis": 95,
+            "toplam": 372
+          }
+        },
+        {
+          "kim": "G7",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, görsel bir nesneyi, kişiyi veya ortam durumunu doğrudan sorgulamadığı için **genel** kategorisine girer.\n\n**Gerekçe:**\n*   Soru, önceki bir bağlama at",
+          "kullanim": {
+            "giris": 278,
+            "cikis": 96,
+            "toplam": 374
+          }
+        },
+        {
+          "kim": "G8",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir sayısal ölçüm, bir kişinin kişisel koruyucu donanım (KKD) kontrolü veya bir nesnenin açık/kapalı gibi iki durumlu fiziksel durumu üzerine ",
+          "kullanim": {
+            "giris": 281,
+            "cikis": 96,
+            "toplam": 377
+          }
+        },
+        {
+          "kim": "G9",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "ham": "Bu girdi, belirli bir görsel nesneyi, kişiyi veya ortam durumunu doğrudan tanımlamayı veya saymayı hedeflememektedir. Bunun yerine, bir kararın (risk seviyesini",
+          "kullanim": {
+            "giris": 273,
+            "cikis": 96,
+            "toplam": 369
+          }
+        }
+      ]
+    }
+  ]
+}

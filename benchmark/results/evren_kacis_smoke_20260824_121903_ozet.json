@@ -1,0 +1,1046 @@
+{
+  "kaynak": "evren_kacis_smoke_20260824_121903.jsonl",
+  "kunye": {
+    "tur": "kunye",
+    "zaman": "2026-08-24T12:19:03",
+    "git": "bc52ce7",
+    "model": "llm-large",
+    "max_side": 1280,
+    "crf": 26,
+    "temperature": 0.0,
+    "max_tokens": 24,
+    "structured_outputs_choice": true,
+    "deneme": 3,
+    "smoke": 2,
+    "set": "/mnt/c/Users/omen/Desktop/DilAjanlariTeknofest/data/eval_defense",
+    "argv": [
+      "--smoke",
+      "2"
+    ],
+    "sistem_taban": "Sen bir endustriyel is guvenligi kamerasi analiz sistemisin. Sana bir guvenlik kamerasindan alinmis kisa bir video verilir. YALNIZCA GORDUGUNE dayan; varsayim yapma. Ayirt edemiyorsan kacis secenegini kullan.",
+    "sistem_kacis_zor": "Sen bir endustriyel is guvenligi kamerasi analiz sistemisin. Sana bir guvenlik kamerasindan alinmis kisa bir video verilir. YALNIZCA GORDUGUNE dayan; varsayim yapma. Goruntu bulanik, uzak veya kismi olsa bile en olasi secenegi isaretle; kacis secenegini YALNIZCA ilgili nesne karede hic yoksa kullan.",
+    "on_kayit": "D42 — KACIS SECENEGI TAMIRI: llm-large neden hep \"GORUNMUYOR\" diyor?\n\n    python benchmark/evren_kacis.py --kuru               # cagri yok, plani yazdir\n    python benchmark/evren_kacis.py --smoke 2            # her siniftan 2+2 klip\n    python benchmark/evren_kacis.py                      # yelek n=50 + pano n=49\n    python benchmark/evren_kacis.py --analiz <jsonl>     # yeniden cagri YOK, sadece hesap\n\n=====================================================================\n=== ON-KAYIT — KOSUMDAN ONCE ILAN EDILDI, SONUCLARA BAKILMADI     ===\n=====================================================================\n\nOLCULEN SORUN (D41): llm-large @768px, yelek sorusunda 47/50, pano sorusunda 49/49\n\"GORUNMUYOR\" dedi. Ayni model forklift SAYMA sorusunda 50/50 karar verdi.\nYetenek var; bu soru tipinde KACINIYOR.\n\nSABIT KURULUM (tum kollarda AYNI, degistirilmez):\n  model llm-large · servis_videosu(max_side=1280, crf=26) · T=0 · max_tokens=24\n  structured_outputs.choice (kisitli kod cozme) · video yolu (kare yolu DEGIL)\n  KLIP BIR KEZ kodlanir; ayni baytlar TUM kollara gider  -> ESLI (paired) tasarim\n  her soru hatirla=False -> kollar birbirini KIRLETMEZ\n  istekler SIRAYLA; hata basina 2 yeniden deneme\n  Cozunurluk 1280 secildi: D41 taramasi yelek 768->1280 MCC 0,000->0,560\n  (McNemar p=0,0013) gosterdi; pano'da 768/1280/1920 farksizdi. 1280 ORTAK zemin.\n\nIZGARA — 2 SINIF x 6 KOL = 12 HUCRE (sonuclara bakmadan ilan edildi, disina cikilmaz)\n  A0  TABAN     : D41 sorusu + D41 sistem promptu, YALNIZCA cozunurluk 1280.\n                  (768 tabanini 1280'de yeniden olcmeden hicbir hipotez yorumlanamaz)\n  H1  KACISSIZ  : secenek listesinden TUM kacislar (GORUNMUYOR/KISI_YOK) CIKARILDI.\n  H2  IKI ASAMA : (1) \"nesne/kisi var mi?\"  (2) varsa asil soru. Iki cagri.\n  H3  SISTEM    : sistem promptundaki \"Ayirt edemiyorsan kacis secenegini kullan\"\n                  cumlesi TERSINE cevrildi. Soru ve secenekler A0 ile BIREBIR AYNI.\n  H4  CAPA      : soru metnine somut gorsel capa (\"parlak sari-yesil (lime)\").\n  H5  TERSINE   : soru olumsuz soruldu + secenek SIRASI ters (konum yanliligi testi).\n\nZORUNLU SECIM/RAPOR AYRIMI:\n  Klip adlarindaki \"_tr\" (kaynak veri setinin train bolumu) SECIM kumesi,\n  \"_te\" TUTMA kumesidir. TUM kol/hipotez secimi YALNIZ _tr'de yapilir.\n  _te ayrica raporlanir ve secime KARISTIRILMAZ.\n  n(_tr): yelek 35 (21 ihlal/14 normal) · pano 34 (21/13)\n  n(_te): yelek 15 (4/11)  · pano 15 (3/12)\n  -> _te'de pozitif sinif 3-4 klip. ON-KAYIT: _te KARAR VERDIRMEZ, yalnizca\n     \"secim _te'de catirdiyor mu\" diye BAKILIR. _te'den mansetsayi VERILMEZ.\n\nPUANLAMA (D41 ile ayni, degistirilmedi):\n  1. KACIS cevabi (GORUNMUYOR / KISI_YOK / PANO_YOK) KARARSIZ sayilir; sessizce\n     negatife CEVRILMEZ. Ana tablo yalniz KARAR VERILEN kliplerden hesaplanir.\n  2. HATA alan klip puanlanmaz, ayrica yazilir.\n  3. Ikincil \"sahada dagitim\" tablosu (kararsiz -> alarm yok) ACIKCA ikincil.\n  4. TP/FP/FN/TN HER ZAMAN yazilir. Wilson %95 GA verilir.\n  KARAR ORANI = karar verilen / (hatasiz klip). Karar vermeyen model sahada\n  ISE YARAMAZ -> karar orani en az MCC kadar onemli raporlanir.\n\nDEJENERELIK KAPISI (D33 tuzagi — 2 kez dusuldu; ikisinden biri yeterli):\n  D1: en sik HAM cevap, koldaki TUM hatasiz kliplerin >= %85'ini kapliyor\n  D2: KARAR VERILEN klipler icinde bir taraf >= %85\n  DEJENERE kol MCC ne olursa olsun BASARI SAYILMAZ. H1 (kacissiz) bu kapiya\n  OZELLIKLE bakilacak: kacisi kaldirmak sahte-pozitif/negatif uretebilir.\n\nCOKLU KARSILASTIRMA DUZELTMESI (12 hucre deniyoruz):\n  Sinif ICINDE etiketler permute edilir (2000 tur); HER turda 6 kolun MCC'si AYNI\n  permute etiketle yeniden hesaplanir ve max|MCC| alinir -> bos dagilim.\n  Raporlanan: bos max|MCC| dagiliminin %95 kuantili ve gozlenen en iyi kolun\n  duzeltilmis p degeri. Kollar ESLI oldugu icin bu, kollar arasi korelasyonu korur.\n\nBASARI OLCUTU (kosumdan once ilan; hepsi saglanmali):\n  Bir kol \"TAMIR\" sayilir <=> (a) DEJENERE degil, (b) _tr MCC >= +0,40,\n  (c) karar orani >= 0,70, (d) _tr MCC > bos max|MCC| dagiliminin %95 kuantili.\n  A0'a gore ustunluk ayrica esli McNemar ile sinanir (dogruluk ve karar-verme).\n  n~35'te 0,05 MCC farki GURULTUDUR -> berabere denir.\n\n=====================================================================\n=== TAHMINIM (kosumdan ONCE yazildi; sonunda tuttu/tutmadi denir)  ===\n=====================================================================\nT1 A0@1280 yelek karar orani >= 0,50 olacak. Yani \"47/50 GORUNMUYOR\" buyuk olcude\n   768px ARTEFAKTI idi; D41 cozunurluk taramasi bunu zaten ima ediyor (0,000->0,560).\n   Bu tutarsa \"kacis cok kolay\" hipotezi yelekte KISMEN konu disi kalir.\nT2 H1 (kacissiz) yelek: karar orani TANIM GEREGI 1,00. MCC, A0'dan 0,10'dan fazla\n   DUSMEYECEK ve DEJENERE OLMAYACAK. (yelek gorunur bir oznitelik; pano'dan farkli)\nT3 H3 (sistem promptu) yelekte karar oranini A0'a gore >= 0,15 artiracak,\n   ama MCC farki 0,10'un altinda (gurultu) kalacak.\nT4 H4 (lime capasi) yelekte etkisi GURULTU seviyesinde (|dMCC| < 0,10).\nT5 H2 (iki asama) yelekte kliplerin >= %80'inde KISI_VAR diyecek; yani \"once kisiyi\n   bul\" darbogazi 1280'de ANA sebep DEGIL.\nT6 PANO: HICBIR kol TAMIR olcutunu gecmeyecek. Ozellikle H1 (kacissiz) pano'da\n   DEJENERE cikacak (model neredeyse tum kliplere ayni etiketi verecek; D33'te\n   20/20 \"KAPALI\" demisti). Pano darbogazi SORU FORMULASYONU DEGIL, ALGI.\n   Bu tahmin YANLIS cikarsa bu, gorevin en degerli bulgusu olur ve oyle yazilir.\nT7 Genel: en iyi yelek kolunun _tr MCC'si +0,40..+0,70 araliginda olacak ve\n   coklu-karsilastirma duzeltmesinden SAG cikacak; pano'da hicbir kol cikmayacak.\n"
+  },
+  "siniflar": {
+    "yelek": {
+      "kural": "yelek YOK -> ihlal",
+      "d41_taban_768": {
+        "mcc": 0.0,
+        "karar_orani": 0.06,
+        "not": "47/50 GORUNMUYOR (llm-large @768)"
+      },
+      "bolumler": {
+        "te": {
+          "A0_taban": {
+            "ana": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 3,
+              "hata": 0,
+              "n_karar": 1,
+              "mcc": 0.0,
+              "dogruluk": 1.0,
+              "ga95": [
+                0.2065,
+                1.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.5774,
+              "dogruluk": 0.75,
+              "ga95": [
+                0.3006,
+                0.9544
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": false,
+              "D2_karar": true,
+              "en_sik_cevap": "GORUNMUYOR",
+              "en_sik_oran": 0.75,
+              "ham_dagilim": {
+                "GORUNMUYOR": 3,
+                "YELEK_YOK": 1
+              }
+            },
+            "karar_orani": 0.25,
+            "on_tamir_olcutu_abc": false
+          },
+          "H1_kacissiz": {
+            "ana": {
+              "tp": 1,
+              "fp": 1,
+              "fn": 1,
+              "tn": 1,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 1,
+              "fp": 1,
+              "fn": 1,
+              "tn": 1,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": false,
+              "D1_ham_cevap": false,
+              "D2_karar": false,
+              "en_sik_cevap": "YELEK_YOK",
+              "en_sik_oran": 0.5,
+              "ham_dagilim": {
+                "YELEK_YOK": 2,
+                "YELEK_VAR": 2
+              }
+            },
+            "karar_orani": 1.0,
+            "on_tamir_olcutu_abc": false
+          },
+          "H2_iki_asama": {
+            "ana": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 4,
+              "hata": 0,
+              "n_karar": 0,
+              "mcc": 0.0,
+              "dogruluk": 0.0,
+              "ga95": [
+                0.0,
+                0.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": true,
+              "D2_karar": false,
+              "en_sik_cevap": "KISI_YOK",
+              "en_sik_oran": 1.0,
+              "ham_dagilim": {
+                "KISI_YOK": 4
+              }
+            },
+            "karar_orani": 0.0,
+            "on_tamir_olcutu_abc": false
+          },
+          "H3_sistem": {
+            "ana": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 2,
+              "hata": 0,
+              "n_karar": 2,
+              "mcc": 0.0,
+              "dogruluk": 1.0,
+              "ga95": [
+                0.3424,
+                1.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 1.0,
+              "dogruluk": 1.0,
+              "ga95": [
+                0.5101,
+                1.0
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": false,
+              "D2_karar": true,
+              "en_sik_cevap": "YELEK_YOK",
+              "en_sik_oran": 0.5,
+              "ham_dagilim": {
+                "YELEK_YOK": 2,
+                "GORUNMUYOR": 2
+              }
+            },
+            "karar_orani": 0.5,
+            "on_tamir_olcutu_abc": false
+          },
+          "H4_capa": {
+            "ana": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 2,
+              "hata": 0,
+              "n_karar": 2,
+              "mcc": 0.0,
+              "dogruluk": 1.0,
+              "ga95": [
+                0.3424,
+                1.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 1.0,
+              "dogruluk": 1.0,
+              "ga95": [
+                0.5101,
+                1.0
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": false,
+              "D2_karar": true,
+              "en_sik_cevap": "YELEK_YOK",
+              "en_sik_oran": 0.5,
+              "ham_dagilim": {
+                "YELEK_YOK": 2,
+                "GORUNMUYOR": 2
+              }
+            },
+            "karar_orani": 0.5,
+            "on_tamir_olcutu_abc": false
+          },
+          "H5_tersine": {
+            "ana": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 4,
+              "hata": 0,
+              "n_karar": 0,
+              "mcc": 0.0,
+              "dogruluk": 0.0,
+              "ga95": [
+                0.0,
+                0.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": true,
+              "D2_karar": false,
+              "en_sik_cevap": "GORUNMUYOR",
+              "en_sik_oran": 1.0,
+              "ham_dagilim": {
+                "GORUNMUYOR": 4
+              }
+            },
+            "karar_orani": 0.0,
+            "on_tamir_olcutu_abc": false
+          },
+          "__post_hoc_kacis_kosullu": {
+            "H1_kacissiz": {
+              "A0_kactiginda": {
+                "n_klip": 3,
+                "n_karar": 3,
+                "dogru": 1,
+                "dogruluk": 0.3333,
+                "ga95": [
+                  0.0615,
+                  0.7923
+                ],
+                "ihlal_dedi": 1,
+                "ihlal_degil_dedi": 2,
+                "gercek_ihlal": 1
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 1,
+                "n_karar": 1,
+                "dogru": 1,
+                "dogruluk": 1.0,
+                "ga95": [
+                  0.2065,
+                  1.0
+                ],
+                "ihlal_dedi": 1,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 1
+              }
+            },
+            "H2_iki_asama": {
+              "A0_kactiginda": {
+                "n_klip": 3,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 1,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              }
+            },
+            "H3_sistem": {
+              "A0_kactiginda": {
+                "n_klip": 3,
+                "n_karar": 1,
+                "dogru": 1,
+                "dogruluk": 1.0,
+                "ga95": [
+                  0.2065,
+                  1.0
+                ],
+                "ihlal_dedi": 1,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 1
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 1,
+                "n_karar": 1,
+                "dogru": 1,
+                "dogruluk": 1.0,
+                "ga95": [
+                  0.2065,
+                  1.0
+                ],
+                "ihlal_dedi": 1,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 1
+              }
+            },
+            "H4_capa": {
+              "A0_kactiginda": {
+                "n_klip": 3,
+                "n_karar": 1,
+                "dogru": 1,
+                "dogruluk": 1.0,
+                "ga95": [
+                  0.2065,
+                  1.0
+                ],
+                "ihlal_dedi": 1,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 1
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 1,
+                "n_karar": 1,
+                "dogru": 1,
+                "dogruluk": 1.0,
+                "ga95": [
+                  0.2065,
+                  1.0
+                ],
+                "ihlal_dedi": 1,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 1
+              }
+            },
+            "H5_tersine": {
+              "A0_kactiginda": {
+                "n_klip": 3,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 1,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              }
+            }
+          },
+          "__mcnemar_A0": {
+            "H1_kacissiz": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 3,
+                "p": 0.25
+              }
+            },
+            "H2_iki_asama": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 1,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              }
+            },
+            "H3_sistem": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 1,
+                "p": 1.0
+              }
+            },
+            "H4_capa": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 1,
+                "p": 1.0
+              }
+            },
+            "H5_tersine": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 1,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              }
+            }
+          },
+          "__coklu_karsilastirma": {
+            "tur": 2000,
+            "bos_maks_q50": 0.0,
+            "bos_maks_q90": 1.0,
+            "bos_maks_q95": 1.0,
+            "bos_maks_q99": 1.0,
+            "gozlenen_abs_mcc": {
+              "A0_taban": 0.0,
+              "H1_kacissiz": 0.0,
+              "H2_iki_asama": 0.0,
+              "H3_sistem": 0.0,
+              "H4_capa": 0.0,
+              "H5_tersine": 0.0
+            },
+            "duzeltilmis_p": {
+              "A0_taban": 1.0,
+              "H1_kacissiz": 1.0,
+              "H2_iki_asama": 1.0,
+              "H3_sistem": 1.0,
+              "H4_capa": 1.0,
+              "H5_tersine": 1.0
+            }
+          },
+          "__n": {
+            "klip": 4,
+            "ihlal": 2,
+            "normal": 2
+          }
+        }
+      }
+    },
+    "pano": {
+      "kural": "kapak ACIK -> ihlal",
+      "d41_taban_768": {
+        "mcc": 0.0,
+        "karar_orani": 0.0,
+        "not": "49/49 GORUNMUYOR (llm-large @768/1280/1920 AYNI)"
+      },
+      "bolumler": {
+        "te": {
+          "A0_taban": {
+            "ana": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 4,
+              "hata": 0,
+              "n_karar": 0,
+              "mcc": 0.0,
+              "dogruluk": 0.0,
+              "ga95": [
+                0.0,
+                0.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": true,
+              "D2_karar": false,
+              "en_sik_cevap": "GORUNMUYOR",
+              "en_sik_oran": 1.0,
+              "ham_dagilim": {
+                "GORUNMUYOR": 4
+              }
+            },
+            "karar_orani": 0.0,
+            "on_tamir_olcutu_abc": false
+          },
+          "H1_kacissiz": {
+            "ana": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": true,
+              "D2_karar": true,
+              "en_sik_cevap": "KAPALI",
+              "en_sik_oran": 1.0,
+              "ham_dagilim": {
+                "KAPALI": 4
+              }
+            },
+            "karar_orani": 1.0,
+            "on_tamir_olcutu_abc": false
+          },
+          "H2_iki_asama": {
+            "ana": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 4,
+              "hata": 0,
+              "n_karar": 0,
+              "mcc": 0.0,
+              "dogruluk": 0.0,
+              "ga95": [
+                0.0,
+                0.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": true,
+              "D2_karar": false,
+              "en_sik_cevap": "PANO_YOK",
+              "en_sik_oran": 1.0,
+              "ham_dagilim": {
+                "PANO_YOK": 4
+              }
+            },
+            "karar_orani": 0.0,
+            "on_tamir_olcutu_abc": false
+          },
+          "H3_sistem": {
+            "ana": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 4,
+              "hata": 0,
+              "n_karar": 0,
+              "mcc": 0.0,
+              "dogruluk": 0.0,
+              "ga95": [
+                0.0,
+                0.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": true,
+              "D2_karar": false,
+              "en_sik_cevap": "GORUNMUYOR",
+              "en_sik_oran": 1.0,
+              "ham_dagilim": {
+                "GORUNMUYOR": 4
+              }
+            },
+            "karar_orani": 0.0,
+            "on_tamir_olcutu_abc": false
+          },
+          "H4_capa": {
+            "ana": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 4,
+              "hata": 0,
+              "n_karar": 0,
+              "mcc": 0.0,
+              "dogruluk": 0.0,
+              "ga95": [
+                0.0,
+                0.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": true,
+              "D2_karar": false,
+              "en_sik_cevap": "GORUNMUYOR",
+              "en_sik_oran": 1.0,
+              "ham_dagilim": {
+                "GORUNMUYOR": 4
+              }
+            },
+            "karar_orani": 0.0,
+            "on_tamir_olcutu_abc": false
+          },
+          "H5_tersine": {
+            "ana": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0,
+              "kararsiz": 4,
+              "hata": 0,
+              "n_karar": 0,
+              "mcc": 0.0,
+              "dogruluk": 0.0,
+              "ga95": [
+                0.0,
+                0.0
+              ]
+            },
+            "ikincil_dagitim": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2,
+              "kararsiz": 0,
+              "hata": 0,
+              "n_karar": 4,
+              "mcc": 0.0,
+              "dogruluk": 0.5,
+              "ga95": [
+                0.15,
+                0.85
+              ]
+            },
+            "dejenere_kapisi": {
+              "dejenere": true,
+              "D1_ham_cevap": true,
+              "D2_karar": false,
+              "en_sik_cevap": "GORUNMUYOR",
+              "en_sik_oran": 1.0,
+              "ham_dagilim": {
+                "GORUNMUYOR": 4
+              }
+            },
+            "karar_orani": 0.0,
+            "on_tamir_olcutu_abc": false
+          },
+          "__post_hoc_kacis_kosullu": {
+            "H1_kacissiz": {
+              "A0_kactiginda": {
+                "n_klip": 4,
+                "n_karar": 4,
+                "dogru": 2,
+                "dogruluk": 0.5,
+                "ga95": [
+                  0.15,
+                  0.85
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 4,
+                "gercek_ihlal": 2
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 0,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              }
+            },
+            "H2_iki_asama": {
+              "A0_kactiginda": {
+                "n_klip": 4,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 0,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              }
+            },
+            "H3_sistem": {
+              "A0_kactiginda": {
+                "n_klip": 4,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 0,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              }
+            },
+            "H4_capa": {
+              "A0_kactiginda": {
+                "n_klip": 4,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 0,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              }
+            },
+            "H5_tersine": {
+              "A0_kactiginda": {
+                "n_klip": 4,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              },
+              "A0_karar_verdiginde": {
+                "n_klip": 0,
+                "n_karar": 0,
+                "dogru": 0,
+                "dogruluk": null,
+                "ga95": [
+                  0.0,
+                  0.0
+                ],
+                "ihlal_dedi": 0,
+                "ihlal_degil_dedi": 0,
+                "gercek_ihlal": 0
+              }
+            }
+          },
+          "__mcnemar_A0": {
+            "H1_kacissiz": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 4,
+                "p": 0.125
+              }
+            },
+            "H2_iki_asama": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              }
+            },
+            "H3_sistem": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              }
+            },
+            "H4_capa": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              }
+            },
+            "H5_tersine": {
+              "dogruluk": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              },
+              "karar_verme": {
+                "b_A_dogru_B_yanlis": 0,
+                "b_B_dogru_A_yanlis": 0,
+                "p": 1.0
+              }
+            }
+          },
+          "__coklu_karsilastirma": {
+            "tur": 2000,
+            "bos_maks_q50": 0.0,
+            "bos_maks_q90": 0.0,
+            "bos_maks_q95": 0.0,
+            "bos_maks_q99": 0.0,
+            "gozlenen_abs_mcc": {
+              "A0_taban": 0.0,
+              "H1_kacissiz": 0.0,
+              "H2_iki_asama": 0.0,
+              "H3_sistem": 0.0,
+              "H4_capa": 0.0,
+              "H5_tersine": 0.0
+            },
+            "duzeltilmis_p": {
+              "A0_taban": 1.0,
+              "H1_kacissiz": 1.0,
+              "H2_iki_asama": 1.0,
+              "H3_sistem": 1.0,
+              "H4_capa": 1.0,
+              "H5_tersine": 1.0
+            }
+          },
+          "__n": {
+            "klip": 4,
+            "ihlal": 2,
+            "normal": 2
+          }
+        }
+      }
+    }
+  }
+}

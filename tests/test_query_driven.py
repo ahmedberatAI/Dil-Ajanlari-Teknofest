@@ -35,6 +35,12 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from dilajan import config as C  # noqa: E402
+from tests.taban import taban_uygula
+
+# TABAN DAVRANIS TESTI: gozlem duzlemi ve dedektorler ACIKCA kapali.
+# Ortamdan miras alinmaz — sevk yapilandirmasi .env'e yazildiginda
+# bu testler kirilmamalidir (bir kez kirildi).
+taban_uygula()
 from dilajan import llm_client, prompts  # noqa: E402
 from dilajan.agent import graph as G  # noqa: E402
 from dilajan.config import Settings, request_config, settings  # noqa: E402

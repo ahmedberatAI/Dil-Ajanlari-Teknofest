@@ -1,0 +1,1548 @@
+{
+ "kol": "boru",
+ "kunye": {
+  "zaman": "2026-08-24T15:27:28",
+  "git_commit": "bc52ce7",
+  "argv": [
+   "benchmark/bilgi_kaybi_prob.py",
+   "--kol",
+   "boru"
+  ],
+  "base_url": "https://evren-llmapi.ssyz.org.tr/v1",
+  "uzak_api": true,
+  "model_name": "llm-large",
+  "gorev_modelleri": {
+   "algi": "vlm",
+   "sayim": "llm-fast",
+   "yapi": "llm-fast",
+   "ozet": "llm-fast",
+   "diyalog": "llm-fast"
+  },
+  "mock_mode": false,
+  "temperature": 0.2,
+  "fps_sample": 2.0,
+  "frame_max_side": 768,
+  "max_frames_per_segment": 12,
+  "isg_lens": false,
+  "threat_interpretation": true,
+  "single_pass_perceive": false,
+  "verify_events": true,
+  "spatial_grounding": true,
+  "adaptive_reexamine": true,
+  "panel_roi": "",
+  "forklift_yuk": "",
+  "use_detector": false
+ },
+ "satirlar": [
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te1.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "hata": "",
+   "sure_s": 22.5,
+   "desc": [
+    "### 1) Ortam ve Beklenen Normal\n**Mekan:** İç mekan, geniş tavanlı kapalı alan, lojistik veya depolama sahası.\n**Beklenen Normal:** Bu alanda forkliftlerin yük taşıması, paletlerin yerleştirilmesi, personelin makinelere yakın çalışması ve araçların belirlenen güzergahlarda seyretmesi olağandır.\n\n### 2) Sapmalar\n**SAPMA VAR.**\n\n*   **00:02 - 00:03:** Görüntünün merkezinde ilerleyen sarı renkli forklift, sağ tarafındaki mavi makineye yakın duran masada oturan kişiyi fark edemeden veya manevrayı tamamlamadan önce ona yaklaşmaktadır.\n*   **00:03:** Forklift ile masa arasında ciddi bir yakınlık oluşmuştur. Forkliftin ön kısmının veya yükünün, masadaki kişiye çarptığı veya çok şiddetli bir şekilde sürtündüğü görülmektedir.\n*   **00:03 - 00:04:** Çarpışmanın hemen ardından, masada oturan kişi yerinden fırlamış, sandalyesi geriye doğru savrulmuş ve kişi zemin üzerine düşerek hareketsiz hale gelmiş/görüntüden kaybolmuştur. Forkliftin duruşu ve yön değiştirmesi bir kazayı işaret eder.\n\n### 3) Güvenlik Analisti Yorumu\nGörüntülerde **Forklift Kazası / Ciddi Yaralanma Riski** mevcuttur.\n\nAnlık analizde, forkliftin operasyon sırasında insan faktörünü hesaba katamadığı veya kör noktaya girdiği görülüyor. Araç, çalışma istasyonunda bulunan personeli ez"
+   ],
+   "ext_ham": [
+    "```json\n{\n  \"events\": [\n    {\n      \"time\": \"00:03\",\n      \"event\": \"Forkliftin masada oturan kişiye çarpması ve kişinin yere düşerek hareketsiz kalması\",\n      \"severity\": \"Kritik\",\n      \"category\": \"Kaza\"\n    }\n  ]\n}\n```"
+   ],
+   "n_cagri": 9,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n### 1) Ortam ve Beklenen Normal\n**Mekan:** İç mekan, geniş tavanlı kapalı alan"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bu güvenlik kamerası karelerini dikkatle incele. İddia edilen YÜKSEK ÖNEMLİ olay: \"Forkliftin masada oturan kişiye çarpması ve kişinin yere düşerek hareketsiz k"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu güvenlik kamerası karelerini dikkatle incele. İddia edilen YÜKSEK ÖNEMLİ olay: \"Forkliftin masada oturan kişiye çarpması ve kişinin yere düşerek hareketsiz k"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bu güvenlik kamerası karelerinde şu gözlem var: \"Forkliftin masada oturan kişiye çarpması ve kişinin yere düşerek hareketsiz kalması\". Bu GERÇEKTEN dikkate değe"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu güvenlik kamerası karelerinde şu gözlem var: \"Forkliftin masada oturan kişiye çarpması ve kişinin yere düşerek hareketsiz kalması\". Bu GERÇEKTEN dikkate değe"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n- [00:03] Forkl"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik/savunma tesisi OPERASYON MERKEZIsin. Tespit edilen olaylara göre, aşağidaki operasyonel fonksiyonlardan UYGUN olanlari seçip çağiracaksin.\n\nKULLANI"
+    }
+   ],
+   "summary": "Görüntüde, bir forkliftin masada oturan bir kişiye çarptığı ve kişinin yere düşerek hareketsiz kaldığı tespit edilmiştir. Bu olay, iç mekânda gerçekleşen ciddi bir fiziksel kazayı işaret etmektedir. Olay anında herhangi bir müdahale veya hareketlilik görüntülenmemiştir.",
+   "events": [
+    {
+     "time": "00:03",
+     "event": "Forkliftin masada oturan kişiye çarpması ve kişinin yere düşerek hareketsiz kalması",
+     "severity": "Orta",
+     "category": "Kaza"
+    }
+   ],
+   "risk": "Kritik",
+   "actions": [
+    "Acil durum ekiplerini (112) ve sahada bulunan ilk yardım ekibini derhal olay yerine yönlendirin.",
+    "Olay bölgesini izole edin ve forkliftin çalışmasını durdurun.",
+    "Olay anını ve sonrasını içeren tüm kamera kayıtlarını yedekleyin ve koruma altına alın."
+   ],
+   "trace": [
+    "ingest: 00:10 video, 1 segment, 20 kare",
+    "perceive: 1 olay (1 ham, 1 segment, 1 paralel)",
+    "reexamine: belirsiz olaylar yeniden-incelendi (↑0 ciddi, ↓0 rutin)",
+    "reason: risk=Kritik, 3 aksiyon önerisi",
+    "act: 5 operasyonel fonksiyon çağrildi: ['saglik_ekibi_yonlendir', 'acil_durdurma_tetikle', 'alan_guvenligini_sagla', 'yonetici_bilgilendir', 'olay_kaydi_olustur']"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr11.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "hata": "",
+   "sure_s": 6.0,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir iç mekândır; yüksek tavanlı, beton zeminli ve üzerinde sarı yol çizgileri bulunan büyük bir alandır. Alan, çeşitli büyük boyutlu mavi ve beyaz makinalar, metal raflar, paletler ve depolama alanlarıyla doludur. Bu özellikler tipik bir imalat tesisi veya ağır işleme atölyesini işaret eder. Beklenen normal; personelin makinalarda çalışması, forkliftlerin yük taşıması ve genel operasyonel faaliyetlerin devam etmesidir.\n\n**2) Sapmalar:**\n*   **Zaman Damgası:** 00:00 - 00:06\n    *   **Olay:** Sol üst köşede, turuncu renkli bir forklift, üzerindeki yüklü paleti kaldırarak geriye doğru manevra yapmaktadır. Ardından sağa dönerek ilerlemektedir.\n    *   **Değerlendirme:** Forkliftin yük taşımak için hareket etmesi, bu tür bir ortamda rutin bir operasyondur. Sadece araç hareketi olduğu için bu bir sapma değildir.\n*   **Diğer Kareler:** Görüntünün diğer bölümlerinde herhangi bir hareketlilik, düşme, çarpışma veya şüpheli davranış gözlemlenmemiştir. Makinaların yanında duran personel sabittir.\n\n**Sonuç:** SAPMA YOK\n\n**3) Güvenlik Analisti Yorumu:**\nGörüntüler incelendiğinde, ortamda herhangi bir güvenlik ihlali, kazaya karışma veya şiddet içeren bir durum tespit edilmemiştir. Sol taraftaki forkliftin operasyonu standart prosedürlere uygun şekilde gerçekleşmektedir. Personeller kendi"
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir iç mekândır; yüksek tavanl"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "10 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını normal izleme modunda sürdürün.",
+    "Sistem kayıtlarını arşivleyin."
+   ],
+   "trace": [
+    "ingest: 00:10 video, 1 segment, 20 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr27.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "hata": "",
+   "sure_s": 7.3,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı**, yüksek tavanlı, beton zeminli ve üzerinde sarı yol çizgileri bulunan büyük ölçekli bir çalışma alanını göstermektedir. Arka planda çeşitli makinalar, raflar ve depolama üniteleri görülmektedir. Bu alandaki olağan aktiviteler arasında personelin yürüyerek dolaşması, iş istasyonlarında oturarak çalışması ve forklift gibi araçlarla yük taşımacılığı yapılmasıdır.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\n(Tüm karelerdeki faaliyetler; forkliftin yük taşıması, personelin makine başında oturması ve arka planda bir kişinin yürümesi gibi rutin operasyonel süreçlere aittir. Acil durum, şiddet, düşme veya tehlike işaretine rastlanmamıştır.)\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü içerisinde herhangi bir güvenlik ihlali, anomali veya tehdit unsuru tespit edilmemiştir. Sahne tamamen kontrollü ve standart işletme prosedürleri çerçevesinde ilerlemektedir. Operasyonda müdahale gerektiren bir durum bulunmamaktadır."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:05 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:05 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:05) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı**, yüks"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "5 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen ortamda hareket eden kişi, araç veya tehlikeli bir nesne bulunmamaktadır. Operasyonel durum normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Gözetim sistemlerinin normal çalışma durumunu koruyun ve izlemeye devam edin.",
+    "Sistem loglarını ve kayıt arşivini standart prosedür gereği saklayın."
+   ],
+   "trace": [
+    "ingest: 00:05 video, 1 segment, 10 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr36.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "hata": "",
+   "sure_s": 8.0,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, beton zeminli ve içinde çeşitli büyük makinelerin bulunduğu geniş bir **kapalı iç mekândır**. Bu alanda görülen olağandışı olmayan rutin aktivite; forkliftlerin yük taşıması, personelin makine başlarında çalışması veya alan içinde hareket etmesidir.\n\n**2) Sapmalar:**\n*   **Zaman Damgası:** [00:00 - 00:04]\n    *   **Durum:** SAPMA YOK.\n    *   **Açıklama:** Görüntüdeki tüm aktiviteler rutin işleyişe uygundur. Bir forklift, üzerinde yüklendiği turuncu kutuları taşıyarak güvenli bir şekilde manevra yapmakta ve ilerlemektedir. Makinelerin yanında bulunan personel sabit pozisyonlarda durmakta veya çalışma faaliyetlerini sürdürmektedir. Görüntüde herhangi bir düşme, çarpışma, itiş kakış, yangın veya şüpheli bir davranış tespit edilmemiştir.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü içerisinde herhangi bir güvenlik ihlali, tehlike arz eden durum veya anomali bulunmamaktadır. Sahne tamamen kontrollü ve planlanmış lojistik operasyonlarını yansıtmaktadır. Operatörün yükü dengeli tuttuğu ve çevreye dikkat ettiği görülmektedir. İzlenecek bir risk yoktur."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:04 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:04 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:04) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, beton zeminli ve içi"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "4 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam izlenmiş olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistemin kayıt ve algılama fonksiyonlarının çalışır durumda olduğunu doğrulayın."
+   ],
+   "trace": [
+    "ingest: 00:04 video, 1 segment, 8 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr43.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "hata": "",
+   "sure_s": 5.3,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, beton zeminli ve üzerinde büyük mavi pres makineleri ile metal raflar bulunan geniş bir **kapalı iç mekândır**. Bu tip ortamlarda görülen olağan aktiviteler arasında forkliftlerin yük taşıması, personelin makine başlarında çalışması veya alan içinde güvenli hatlarda yürüyerek geçiş sağlaması bulunur.\n\n**2) Sapmalar:**\n*   **Zaman Damgası:** 00:00 - 00:03\n*   **Durum:** SAPMA YOK.\n    *   Sol taraftaki sarı forklift, ışıkları yanık haldeyken alanda ilerlemektedir.\n    *   Sağ taraftaki makine başında bir personel oturmakta, diğer kişiler ise arka planda yürümektedir.\n    *   Hiçbirinde düşme, çarpışma, şiddet uygulaması veya tehlike oluşturacak ani bir davranış görülmemektedir.\n\n**3) Güvenlik Analisti Yorumu:**\nGörüntülerdeki faaliyetler tamamen rutindir. Forkliftin hareketi ve personelin konumu, bu tip bir çalışma alanında beklendiği gibidir. Aciliyet gerektiren, şüpheli veya tehlikeli bir durum tespit edilmemiştir. İzleme işlemine devam ediniz."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:03 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:03 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:03) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, beton zeminli ve üze"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Video analizinde 00:03 saniyelik kayıt süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam akışı gözlemlenmiş, operatörün dikkatini çekecek özel bir olay yaşanmamıştır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını normal izleme modunda devam ettirin.",
+    "Sistem loglarını kayıt altına alın ve izlemeye devam edin."
+   ],
+   "trace": [
+    "ingest: 00:03 video, 1 segment, 6 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_te1.mp4",
+   "cift": "forklift",
+   "ihlal": false,
+   "alt": "Normal/Safe_Carrying",
+   "hata": "",
+   "sure_s": 5.9,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı**, muhtemelen bir **endüstriyel atölye veya depolama alanını** göstermektedir. Zemin beton olup üzerinde sarı yönlendirme çizgileri bulunmaktadır. Arka planda çeşitli büyük boyutlu makineler, raflar ve metal paletler görülmektedir. Bu ortamdaki olağan beklenti; forkliftlerin yük taşıması, personelin makine başlarında çalışması veya alanda güvenliği sağlayarak gezmesidir.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\n(Not: Görüntüdeki forkliftin yük taşıyarak hareket etmesi ve sağ taraftaki makinedeki personelin oturmuş olması, belirtilen talimatlar doğrultusunda rutin çalışma faaliyetleri kapsamında değerlendirilmiştir ve herhangi bir tehlike, kaza veya şiddet unsuru içermediği için sapma olarak kaydedilmemiştir.)\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü incelendiğinde, sahne tamamen işleyişin rutinine uygun seyretmektedir. Forklift operatörü, yükü (iki adet turuncu kutulu palet) güvenli bir şekilde kaldırmış ve belirlenen güzergah üzerinden ilerlemektedir. Makine başındaki personel sabit pozisyonda kalarak görevini sürdürmektedir. Ani bir duruş, kaçışma, yere yığılan birey veya fiziksel çatışmaya dair hiçbir görsel kanıt bulunmamaktadır. Sahne, izole edilmiş bir endüstriyel operasyonun standart akışını yansıtmaktadır."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:07) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı**, muht"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Yedi saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir aktivite gözlemlenmemiştir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem loglarını ve kamera bağlantılarını periyodik olarak kontrol edin."
+   ],
+   "trace": [
+    "ingest: 00:07 video, 1 segment, 14 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr11.mp4",
+   "cift": "forklift",
+   "ihlal": false,
+   "alt": "Normal/Safe_Carrying",
+   "hata": "",
+   "sure_s": 5.1,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, beton zeminli ve üzerinde sarı yönlendirme çizgileri bulunan geniş bir **kapalı iç mekândır**. Arka planda büyük mavi ve beyaz renkli pres benzeri makineler ile metal raflar görülmektedir. Bu ortamdaki beklenen normal; forkliftlerin yük taşıması, personelin makine başlarında çalışması veya alan içinde güvenli mesafelerde hareket etmesidir.\n\n**2) Sapmalar:**\n*   **Zaman Damgası:** [00:00 - 00:04]\n    *   **Durum:** Sadece rutin faaliyetler gözlenmektedir. Sol taraftan başlayan sarı forklift, üzerindeki yükü taşıyarak alandan geçmektedir. Sağ taraftaki makine başındaki personel sabit pozisyonda durmaktadır. Zeminde tehlike arz eden bir engel, duman, yangın veya herhangi bir şiddet olayına dair iz bulunmamaktadır.\n    *   **Sonuç:** SAPMA YOK\n\n**3) Güvenlik Analisti Yorumu:**\nBelirtilen zaman dilimi içerisinde herhangi bir güvenlik ihlali, kazaya işaret eden durum veya olağandışı bir davranış tespit edilmemiştir. Forklift operasyonu standart prosedüre uygun şekilde gerçekleşmekte olup, çevredeki personel ile arasında güvenli mesafe korunmuştur. Durum stabil ve güvenlidir."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:04 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:04 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:04) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, beton zeminli ve üze"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Video analizinde 4 saniyelik kayıt süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün müdahalesini gerektirecek bir olay yaşanmamıştır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını normal izleme modunda devam ettirin.",
+    "Sistemin kayıt ve algılama fonksiyonlarının çalışır durumda olduğunu doğrulayın."
+   ],
+   "trace": [
+    "ingest: 00:04 video, 1 segment, 8 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr20.mp4",
+   "cift": "forklift",
+   "ihlal": false,
+   "alt": "Normal/Safe_Carrying",
+   "hata": "",
+   "sure_s": 9.8,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**  \nGörüntüde geniş bir iç mekân görülüyor; beton zemin, endüstriyel makineler, paletler, kutular ve forklift benzeri araçlar mevcut. Bu tür düzenekler genellikle üretim, montaj veya depolama amaçlı kullanılan kapalı alanlarda karşımıza çıkar. Burada olağan aktiviteler arasında personelin makinelere yaklaşması, forklift ile mal taşıması, oturarak çalışma veya yürüyerek bölge içinde hareket etmesi bulunur. Oturma pozisyonundaki kişiler, sandalye veya iş istasyonunda çalışırken görülebilir — bu durumlar rutin kabul edilir.\n\n---\n\n**2) Sapmalar:**  \n**SAPMA YOK**  \n\nHer iki karede de herhangi bir acil durum, şiddet, düşme, yangın, çatışma veya beklenmedik hareket izlenmemektedir. Forklift sabit konumda durmakta, sağ tarafta oturan kişi aynı pozisyonda kalmaktadır. Zaman farkı olan 1 saniye boyunca hiçbir değişiklik, ani hareket veya tehlike göstergesi yoktur. Tüm unsurlar beklendiği şekilde davranmaktadır.\n\n---\n\n**3) Güvenlik Analisti Yorumu:**  \nGörüntülerde ciddi bir tehdit, saldırı, kazaya işaret eden bir durum veya insan hayatını riske atan bir olay tespit edilmemiştir. Mevcut faaliyetler tamamen rutin düzeydedir. Personelin oturuşu, forkliftin hareketsizliği ve çevredeki nesnelerin yerinde kalması, güvenliğin sağlam olduğu bir ortamı yansıtmaktadır. Ek önlem gerektiren bir unsur bulunmamaktadır.",
+    "### 1) Ortam ve Beklenen Normal\n**Mekan Tanımı:** İç mekan, geniş bir çalışma alanı (endüstriyel görünümlü).\n**Beklenen Normal:** Genellikle sabit makinelerin bulunduğu alanda personel hareketliliği, forklift ile yük taşımacılığı ve makine başlarında oturarak yapılan işlemlerin görülmesi beklenir.\n\n### 2) Sapmalar (Olay Tespitleri)\n**SAPMA YOK.**\n\n*Gözlemsel Açıklama:* Verilen kareler (00:00 - 00:05) arasında herhangi bir tehlike, kaza, düşme veya şiddet içeren bir durum tespit edilmemiştir. Sol üst köşede bir forkliftin yükleyici olduğu bölgeden geçerek ilerlediği, sağ taraftaki makinede bir personelin oturduğu görülmektedir. Bu aktiviteler ortam için rutin kabul edilir. İstenilen \"ani düşme\", \"yaralanma\" veya \"çarpışma\" gibi sapmalar gerçekleşmemiştir.\n\n### 3) Güvenlik Analisti Yorumu\nGörüntülerde ciddi bir güvenlik ihlali veya acil müdahale gerektiren bir durum bulunmamaktadır. Forkliftin hareketi kontrollüdür ve personel güvenli konumdadır. Sistem açısından herhangi bir alarm tetikleme gerekçesi yoktur."
+   ],
+   "ext_ham": [
+    "{\"events\": []}",
+    "{\"events\": []}"
+   ],
+   "n_cagri": 7,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "[Kare zamanı: 00:10]"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:10-00:11 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:10-00:11) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**  \nGörüntüde geniş bir iç mekân görülüyor; bet"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n### 1) Ortam ve Beklenen Normal\n**Mekan Tanımı:** İç mekan, geniş bir çalışma "
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "11 saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülenen ortamda operasyonel süreçlerin normal seyrettiği ve herhangi bir müdahale gerektiren bir durumun yaşanmadığı gözlemlenmiştir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Sistemi normal izleme modunda tutun ve kayıtları arşivleyin.",
+    "Kamera açılarının ve sensörlerin çalışmaya devam ettiğini periyodik olarak doğrulayın."
+   ],
+   "trace": [
+    "ingest: 00:11 video, 2 segment, 22 kare",
+    "perceive: 0 olay (0 ham, 2 segment, 2 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_te10.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "hata": "",
+   "sure_s": 8.7,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**  \nGörüntü, geniş bir **iç mekân** olarak tanımlanabilir. Zemin beton, duvarlar metal panel kaplıdır; üzerinde sarı çizgilerle belirlenmiş yürüyüş yolları vardır. Büyük boyutlu makineler, kontrol panelleri, paletler, metal parçalar ve güvenlik bariyerleri görülmektedir. Bu özellikler, endüstriyel bir çalışma alanına işaret eder ancak “fabrika” veya “üretim hattı” gibi spesifik terminoloji kullanılmamalıdır.  \n\nBeklenen normal: Personelin makinelere yakın oturarak çalışması, araçların (örneğin AGV benzeri otomatik taşıma robotlarının) yol boyunca hareket etmesi, diğer personelin uzakta duruşu veya işlevsel pozisyonlarda bulunması rutindir. Oturma, çalışma, cihaz izleme, malzeme taşıma gibi aktiviteler olağandır.\n\n---\n\n**2) Sapma Analizi:**  \nHer iki karede de (00:10 ve 00:11):\n\n- Sol taraftaki mavi-mor makinenin önünde oturan kişi, aynı pozisyonda kalmıştır. Hareketi yoktur ama bu, rutin çalışma davranışıdır (sandalyede oturmak normaldir).\n- Arka planda sol üst köşede başka bir kişi ayakta durmaktadır – herhangi bir ani hareket, düşme, çarpışma veya şiddet göstergesi yoktur.\n- Ortadaki gri renkli otomatik taşıma aracı (AGV), sabit konumdadır; hareket halinde olmadığı için kaza veya çarpışma ihtimali yoktur.\n- Zeminde serbestçe dağılmış nesneler, devrilmiş ekipman, kan lekesi,",
+    "### 1) Ortam ve Beklenen Normal\n**Mekan:** İç mekan, geniş tavanlı kapalı alan, beton zemin üzerinde sarı/green çizgili yollar bulunan endüstriyel tip çalışma sahası.\n**Beklenen Normal:** Bu alanda ağır makinelerin bulunduğu bir işyerinde personelin makinelere yük bindirmesi, parça takıp çıkarması, kontrol panelinden işlem yapması veya oturarak izleme görevi yürütmesi beklenir. Makinelerin çalışmaya devam etmesi ve personelin güvenli mesafede bulunması rutin kabul edilir.\n\n### 2) Sapmalar\n**SAPMA YOK.**\nGörüntülerdeki tüm aktiviteler (personelin makineye yaklaşması, oturması, el hareketleri ile cihazı yönetmeye çalışması) rutin iş süreçlerinin bir parçasıdır. Ani bir düşme, yere yığılma, şiddet uygulaması veya tehlikeli bir durum gözlemlenmemiştir.\n\n### 3) Güvenlik Analisti Yorumu\nOlay örgüsü incelendiğinde herhangi bir güvenlik ihlali veya acil müdahale gerektiren bir durum tespit edilmemiştir. Operatör, sol taraftaki mavi renkli pres benzeri makinenin yanındaki döner tabureye oturmuş halde bulunmaktadır. Personel, makinenin alt kısmına doğru eğilerek elleriyle bir ayarlama veya parça yerleştirme işlemi gerçekleştirmektedir. Arka plandaki diğer personel de kendi istasyonunda sakin bir şekilde durmaktadır. Zaman içindeki hareketlilik tamamen kontrollü ve işlevseldir; panik, kaosu veya fiziksel çatışmayı işaret eden hiçbir belirti yoktur. Durum tamamen güvenlidir."
+   ],
+   "ext_ham": [
+    "{\"events\": []}",
+    "{\"events\": []}"
+   ],
+   "n_cagri": 7,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "[Kare zamanı: 00:10]"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:10-00:11 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:10-00:11) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**  \nGörüntü, geniş bir **iç mekân** olarak tanı"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n### 1) Ortam ve Beklenen Normal\n**Mekan:** İç mekan, geniş tavanlı kapalı alan"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "11 saniyelik video analizinde herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülerde sakin bir ortam akışı gözlemlenmiş olup, operatörün dikkatini gerektirecek bir durum bulunmamaktadır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını normal izleme modunda sürdürün.",
+    "Sistem kayıtlarını arşivleyin."
+   ],
+   "trace": [
+    "ingest: 00:11 video, 2 segment, 21 kare",
+    "perceive: 0 olay (0 ham, 2 segment, 2 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr2.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "hata": "",
+   "sure_s": 6.9,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, metal duvarlara sahip geniş bir **kapalı iç mekândır**. Zemin beton olup sarı ve yeşil çizgilerle belirlenmiş yürüyüş yolları bulunmaktadır. Alan içerisinde büyük boyutlu mavi ve beyaz renkli endüstriyel makineler, paletler üzerinde dizili malzemeler ve ortada yere bırakılmış metal rulo görülmektedir. Duvarlarda \"MANUAL DEPOT\" ibaresi okunmaktadır. Bu özellikler, bir atölye, depolama alanı veya benzeri bir çalışma sahasına işaret etmektedir. Beklenen normal; personelin makinelere bakımı, malzeme taşıma veya alanda yürüyerek işlerini takip etmesidir.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\nBelirtilen zaman aralığında (00:00 - 00:07), görüntüdeki tüm bireylerin davranışı rutin faaliyetler çerçevesindedir. Sol taraftaki makinenin yanında bulunan personel oturmakta veya makineye müdahale etmekte, uzak plandaki koridorda bulunan kişiler ise sabit durmakta veya yavaşça hareket etmektedir. Ani bir düşme, yere yığılma, şiddet uygulaması, koşuşturma veya tehlike arz eden herhangi bir durum gözlemlenmemiştir.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü açısından değerlendirildiğinde, mevcut karelerde herhangi bir güvenlik ihlali, kazaya karışma veya saldırı izine rastlanmamaktadır. Sahne sakin seyretmektedir; personeller kendi bölgelerinde görevlerini sürdürmektedir. Görüntüde bir tehdit unsuru bulunmadığı"
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:07) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, metal duvarlara sahi"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Yedi saniyelik video analizinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Gözetim sistemlerinin normal çalışma durumunu koruyun ve izlemeye devam edin.",
+    "Kayıt dosyasını arşivleyin ve sistem loglarını güncelleyin."
+   ],
+   "trace": [
+    "ingest: 00:07 video, 1 segment, 14 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr35.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "hata": "",
+   "sure_s": 7.7,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş tavanlı, metal duvarlı ve içinde büyük mavi/endüstriyel makinelerin bulunduğu kapalı bir **iç mekândır**. Zeminde sarı çizgilerle belirlenmiş bir yürüyüş yolu bulunmaktadır. Bu alanda görülen olağandışı durum yoktur; personelin makinelere bakmadan, güvenli güzergah üzerinde yürümesi beklenen rutindir.\n\n**2) Sapmalar:**\nSAPMA YOK\n\n**3) Güvenlik Analisti Yorumu:**\nGörüntülerde herhangi bir şiddet, tehlike veya acil durum belirtisi bulunmamaktadır. Sadece personel, tesis içi yaya yolunu kullanarak ilerlemektedir. Makineler çalışır durumda veya pasif haldedir ancak herhangi bir kazaya işaret eden bir durum gözlenmemiştir. Durum tamamen güvenlidir.",
+    "**1) ORTAM VE BEKLENEN NORMAL:**\nGörüntü, yüksek tavanlı, metal duvarlı ve içinde büyük mavi/endüstriyel makinelerin bulunduğu geniş bir **kapalı iç mekândır**. Zemin beton olup sarı/green renkli yol çizgileri ile ayrılmıştır. Duvarlarda \"MANUEL DEPO\" ibaresi görülebilmektedir. Bu ortamdaki olağandışı olmayan durumlar arasında personelin belirlenen koridorlardan yürüyerek geçişi, makinelerin çalışması veya sessizliği, malzemelerin palet üzerinde bekletilmesi yer alır.\n\n**2) SAPMALAR:**\n**SAPMA YOK.**\n(Not: Arka planda koridorda yürüyen bir personel bulunmaktadır ancak bu hareket rutin bir işleyişe aittir; herhangi bir düşme, saldırı, yangın veya tehlike işaretine rastlanmamıştır.)\n\n**3) GÜVENLİK ANALİSTİ YORUMU:**\nOlay örgüsü açısından değerlendirildiğinde; görüntüdeki tüm unsurlar (personel hareketleri, makine konumları, zemindeki objeler) mevcut düzenin parçasıdır. Personelin koridordaki ilerleyişi kontrollüdür ve ani bir duruş, yere yığılma veya panik davranışı sergilenmemiştir. Ortamda şiddet, çatışma veya acil müdahale gerektiren bir durumun izi bulunmamaktadır. Durum stabil ve güvenlidir."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```",
+    "{\"events\": []}"
+   ],
+   "n_cagri": 7,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş tavanlı, metal duvarlı ve için"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:10-00:13 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:10-00:13 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:10-00:13) sahne açiklamasi var:\n---\n**1) ORTAM VE BEKLENEN NORMAL:**\nGörüntü, yüksek tavanlı, metal duvarlı ve içi"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "13 saniyelik video incelemesinde herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülerde akışkan ve normal bir ortam izlenimi hakimdir. Operatörün dikkatini gerektirecek özel bir durum bulunmamaktadır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem loglarını ve kamera bağlantılarının sağlıklı çalıştığını doğrulayın."
+   ],
+   "trace": [
+    "ingest: 00:13 video, 2 segment, 25 kare",
+    "perceive: 0 olay (0 ham, 2 segment, 2 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr62.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "hata": "",
+   "sure_s": 6.4,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı**, muhtemelen bir atölye veya işleme alanını göstermektedir. Zemin beton olup sarı ve yeşil güvenlik şeritleri ile işaretlenmiş, alanda büyük mavi ve gri renkli endüstriyel makineler bulunmaktadır. Bu ortamdaki beklenen normal; personelin makinelere yakın durarak çalışma, kontrol paneli kullanma veya malzeme taşıma faaliyetlerini sürdürmesidir.\n\n**2) Sapmalar:**\nSAPMA YOK\n\n**3) Güvenlik Analisti Yorumu:**\nVerilen kareler arasında herhangi bir güvenlik ihlali, tehlike veya anomali tespit edilmemiştir. Ön plandaki personel, kırmızı-siyah üniformasıyla makinenin önünde durmakta ve makineye müdahale etmekte (operasyon yapmak); arkadaki diğer personel de kendi alanında çalışmaktadır. Hareketler kontrollüdür, ani bir düşme, kaosu veya fiziksel çatışma izlenmemiştir. Sahne tamamen rutin operasyonel süreçlere uygun görünmektedir."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı**, muht"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "10 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen ortamda hareketli nesne, yangın, yaralı kişi veya izinsiz giriş gibi kritik bir olay yaşanmamıştır. Operasyonel süreçler normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem kayıtlarını arşivlemeye devam edin."
+   ],
+   "trace": [
+    "ingest: 00:10 video, 1 segment, 20 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr77.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "hata": "",
+   "sure_s": 9.5,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, geniş iç mekan bir tesisi (endüstriyel alan/fabrika benzeri yapı) göstermektedir. Zeminde sarı/green güvenlik şeritleri, büyük mavi makinalar ve metal yığınları bulunmaktadır. Arka planda \"MANUEL DEPO\" tabelası görülmektedir. Bu alandaki beklenti; personelin makinelerin etrafında çalışması, koridorda yürüyerek geçiş sağlaması ve rutin operasyonların devam etmesidir.\n\n**2) Sapmalar:**\n*   **00:00 - 00:02:** Sol alt köşedeki mavi makinenin yanında iki personel ayakta durmakta, biri oturmuş halde bulunmaktadır. Arka plandaki koridorda uzakta bir figür belirmektedir. Durum rutindir.\n*   **00:03 - 00:06:** Koridordaki figür (personel), arka plandan ön tarafa doğru yürümekte olup, yolun ortasında ilerlemektedir. Makine başındaki kişiler pozisyonlarını korumaktadır.\n*   **00:07 - 00:09:** Personeller yerlerinde durmaya devam etmekte, koridordan geçen kişi kadrajdan çıkmaya başlamıştır.\n\n**Sonuç:** SAPMA YOK.\n\n**3) Güvenlik Analisti Yorumu:**\nGörüntülerde herhangi bir tehlike, şiddet, düşme, itiş kakış veya acil durum belirtisi bulunmamaktadır. Sahne tamamen sakin ve kontrollüdür. Personel hareketleri işleyişe uygun, makine çevresindeki aktiviteler ise durağandır. İzlenecek özel bir güvenlik aksiyonu gerekmemektedir."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:09 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:09 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:09) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, geniş iç mekan bir t"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "9 saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya riskli olay tespit edilmemiştir. Görüntülenen iç mekân ortamında hareketlilik veya olağandışı bir aktivite gözlemlenmemiştir. Operasyonel süreçler normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Gözetim sistemini normal izleme modunda tutun.",
+    "Kayıt verilerini arşivlemeye devam edin."
+   ],
+   "trace": [
+    "ingest: 00:09 video, 1 segment, 18 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te1.mp4",
+   "cift": "yetki",
+   "ihlal": false,
+   "alt": "Normal/Authorized_Intervention",
+   "hata": "",
+   "sure_s": 6.2,
+   "desc": [
+    "### 1) Ortam ve Beklenen Normal\n**Mekan:** İç mekan, geniş bir çalışma alanı (endüstriyel görünümlü).\n**Beklenen Normal:** Büyük mavi makine önünde toplanmış personel ile makinenin kontrol panelinde işlem yapan bireylerin bulunması; zemindeki sarı/green çizgilerin belirlenen yollar olması ve ortamdaki diğer sabit objelerin (sandalye, tekerlekli platform vb.) yerinde durması.\n\n### 2) Sapmalar\n**SAPMA YOK.**\nGörüntüler incelendiğinde, belirtilen zaman aralığında herhangi bir düşme, çarpışma, yangın, şiddet içeren hareket veya beklenmedik bir tehlike durumu tespit edilmemiştir. Personelin konumu ve davranışı (makineye bakma, el hareketleri), işyerindeki rutin çalışma faaliyetleriyle örtüşmektedir.\n\n### 3) Güvenlik Analisti Yorumu\nOlay örgüsü içerisinde ciddi bir güvenlik ihlali veya acil durum teşkil eden bir anomali saptanamamıştır. Makine başındaki personelin hareketleri, cihaz üzerinde rutin ayarlama veya bakım faaliyeti yürütüyor olduklarını işaret etmektedir. Zaman damgası **00:04** civarında kaydedilen hareketlilik, bir kazadan ziyade operasyonel bir müdahale veya iletişim hareketi olarak değerlendirilmektedir. Sahne stabil olup, operatörden herhangi bir müdahale gerektiren bir durum talep edilmez."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:07) sahne açiklamasi var:\n---\n### 1) Ortam ve Beklenen Normal\n**Mekan:** İç mekan, geniş bir çalışma alanı ("
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Yedi saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya riskli olay tespit edilmemiştir. Görüntülenen iç mekân veya dış mekân ortamında hareketlilik, nesne çarpışması veya acil durum işaretleri bulunmamaktadır. Operasyonel süreçler normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem loglarını ve kamera bağlantı durumunu periyodik olarak kontrol edin."
+   ],
+   "trace": [
+    "ingest: 00:07 video, 1 segment, 14 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr11.mp4",
+   "cift": "yetki",
+   "ihlal": false,
+   "alt": "Normal/Authorized_Intervention",
+   "hata": "",
+   "sure_s": 5.4,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı**, muhtemelen büyük ölçekli bir işleme tesisi veya atölyeyi göstermektedir. Zeminde sarı ve yeşil renkli çizgilerle belirlenmiş güvenli yürüyüş yolları bulunmaktadır. Sol tarafta büyük mavi endüstriyel makineler, ortada ise döner bir tabure ve diğer teçhizatlar görülmektedir. Bu ortamda beklenen normal; personelin makinelere bakması, malzeme taşıması veya işaretlenmiş yollarda yürümektir.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\nVerilen kareler (00:00 - 00:04) arasında herhangi bir tehlike, kaza, düşme, şiddet uygulaması veya rutin dışı bir durum tespit edilmemiştir.\n*   Arka planda bir personel yürüyerek ilerlemektedir (rutin hareket).\n*   Ön plandaki personel makinenin yanında çalışmaktadır (rutin çalışma).\n*   Makinelerin etrafında toz bulutları veya duman oluşumu görülmemektedir.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü açısından değerlendirildiğinde, sahne tamamen kontrollü ve güvenlidir. Personeller kendi bölgelerinde olup, makine parkuru ile insan trafiği arasındaki ayrım korunmuştur. Görüntüdeki tüm aktiviteler (yürüme, çalışma), tesisin işleyişine uygun standart prosedürler çerçevesindedir. Acil müdahale gerektiren hiçbir unsur bulunmamaktadır."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:04 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:04 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:04) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı**, muht"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Video analizi sırasında 4 saniyelik kayıt süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya riskli olay tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir durum bulunmamaktadır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem loglarını normal aralıklarla kontrol etmeye devam edin."
+   ],
+   "trace": [
+    "ingest: 00:04 video, 1 segment, 8 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_te12.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "hata": "",
+   "sure_s": 6.9,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekan bir endüstriyel tesise ait yüksek tavanlı bir alandır. Zemin beton olup sarı ve yeşil güvenlik çizgileri ile işaretlenmiştir. Sol tarafta büyük mavi ve beyaz renkli makinalar, orta planda turuncu bir konveyör benzeri sistem bulunmaktadır. Sağ tarafta cam duvarlı ofis veya kontrol odaları görülmektedir. Bu ortamdaki beklenen normal; personelin belirlenen koridorlarda yürüyerek işlevlerini sürdürmesi, makinelerin çalışması ve genel operasyonel faaliyetlerin devam etmesidir.\n\n**2) Sapmalar:**\nSAPMA YOK\n\n**3) Güvenlik Analisti Yorumu:**\nVerilen kareler incelendiğinde, ortamda herhangi bir şiddet, tehlike veya anormal bir durum tespit edilmemiştir.\n*   **Zaman Damgası 00:00 - 00:03:** Arka plandaki koridorda kırmızı-siyah üniformalı personel yürümekte, sol üst köşedeki makine başındaki personel oturmakta veya durmaktadır. Hareketler sakin ve kontrollüdür.\n*   **Zaman Damgası 00:04 - 00:06:** Sağ taraftaki cam kapılı bölmeden gri ceketli bir personel içeri girmektedir. Bu, tesiste yetkili kişilerin dolaşımına uygun standart bir davranıştır.\n*   Genel olarak tüm bireylerin hareketleri rutin işleyişe uygundur; kimse yere düşmemiş, panik yapmamış veya birbirleriyle fiziksel çatışmaya girmemiştir. Durum güvenlidir."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekan bir endüstriyel tesis"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "10 saniyelik video analizinde herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülenen ortamda operasyonel süreçlerin normal seyrinde devam ettiği gözlemlenmiştir. Operatörün dikkatini gerektirecek acil bir durum bulunmamaktadır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Kayıt verilerini arşivleme prosedürüne uygun şekilde saklayın."
+   ],
+   "trace": [
+    "ingest: 00:10 video, 1 segment, 20 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr112.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "hata": "",
+   "sure_s": 8.3,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekanında büyük boyutlu makinelerin, kontrol ünitelerinin ve sarı/green renkli yol çizgilerinin bulunduğu bir **endüstriyel çalışma alanıdır**. Bu ortamdaki olağandışı durumlar arasında personelin makinelere müdahale etmesi, malzeme taşıması veya belirlenen koridorlarda yürüyerek işlevlerini sürdürmesidir.\n\n**2) Sapmalar:**\n*   **Zaman Damgası:** 00:00 - 00:08\n*   **Durum:** SAPMA YOK.\n    *   Açıklama: Görüntüdeki personel, makineye yakın alanda durmakta ve elindeki uzun bir nesne ile makinenin belirli bir noktasına müdahale etmektedir. Bu hareket, makine ayarı, temizliği veya bakımı gibi rutin operasyonel faaliyetlerle uyumlu görünmektedir. Ani bir düşme, yere yığılma, koşuşma, çatışma veya tehlike işaretleri yoktur.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü incelendiğinde, sahne tamamen kontrollü ve rutin bir iş akışını yansıtmaktadır. Personelin hareketlerinde panik, acelecilik veya şiddet içerikli bir unsur bulunmamaktadır. Makine üzerindeki işlem, standart prosedürlerin bir parçası olarak değerlendirilir. Dolayısıyla herhangi bir güvenlik ihlali, kazaya karışma veya saldırı senaryosu tespit edilememiştir. Durum izlenmeye devam edilmeli ancak şu an için alarm gerektiren bir durum söz konusu değildir."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:08 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:08 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:08) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekanında büyük boyutlu mak"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "8 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen iç mekân ortamında hareketlilik veya olağandışı bir aktivite gözlemlenmemiştir. Operasyonel süreçler normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem kayıtlarını arşivlemeye devam edin."
+   ],
+   "trace": [
+    "ingest: 00:08 video, 1 segment, 16 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr128.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "hata": "",
+   "sure_s": 4.3,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekanlarda bulunan büyük makinelerin, sarı güvenlik çizgilerinin ve endüstriyel düzeneklerin yer aldığı bir **endüstriyel tesis içindeki çalışma alanıdır**. Bu alanda görülen olağan aktiviteler; personelin makinelere yakın durarak iş takibi yapması, makinelerin çalışması ve zemindeki sabit objelerin yerinde kalmasıdır.\n\n**2) Sapmalar:**\nSAPMA YOK\n\n**3) Güvenlik Analisti Yorumu:**\nVerilen kareler arasında herhangi bir tehlike, şiddet olayı, düşme veya anormal davranış tespit edilmemiştir. Personel, makineye yakın konumda durmakta olup hareketsizdir; bu durum endüstriyel ortamlarda sıkça karşılaşılan rutin bir izleme veya bekleme halidir. Zemindeki nesneler ve ekipmanlar yerindedir. Sahne tamamen güvenlidir."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:03 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:03 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:03) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekanlarda bulunan büyük ma"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "3 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen iç mekân veya dış mekân ortamında hareket, çarpışma veya tehlikeli bir olay yaşanmamıştır. Operasyonel süreçler normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem kayıtlarını arşivleyin."
+   ],
+   "trace": [
+    "ingest: 00:03 video, 1 segment, 6 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr35.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "hata": "",
+   "sure_s": 5.7,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekan alanına sahip, beton zemin üzerinde sarı ve yeşil renklerle belirlenmiş yollar bulunan, büyük mavi ve beyaz renkli makine tezgahlarının sıralandığı bir **endüstriyel tesistir**. Bu alanda görülen olağan aktiviteler; personelin çalışma istasyonlarında oturarak makineleri işletmesi, belirlenen koridorlarda yürüyerek işyerinde dolaşması ve ortamdaki sabit ekipmanların çalışmasıdır.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\n\n*   **Analiz Notu:** Belirtilen 00:03 zaman damgasındaki hareketlilik incelendiğinde; sağ taraftaki yeşil koridorda ilerleyen personel, yürüyüş yönünde hafif bir vücut eğimi yaparak hızlanmakta ancak ayağı takılmakta, dengesi bozulmamaktadır. Hareketi doğal bir yürüme ritmini korumaktadır ve ani bir düşme, çökme veya yere yığılma gerçekleşmemiştir. Diğer bireylerin konumu ve davranışı da değişiklik göstermemiştir.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü içerisinde herhangi bir şiddet unsuru, fiziksel saldırı, düşme kazası veya tıbbi aciliyet gerektiren bir durum tespit edilmemiştir. Sahne tamamen rutin operasyonel faaliyetlerden oluşmaktadır. Personeller kendi görev bölgelerindedir ve güvenli bir şekilde hareket etmektedir. İzlenecek ek bir önlem gerekmez."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:05 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:05 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:05) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekan alanına sahip, beton "
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Görüntü analizi sırasında 5 saniyelik kayıt süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. İzlenen mekân ve kişilerde operasyonel sürekliliği bozacak bir aksaklık gözlemlenmemiştir. Durum normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Kayıt verilerini arşivleme prosedürüne uygun olarak saklayın."
+   ],
+   "trace": [
+    "ingest: 00:05 video, 1 segment, 10 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr58.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "hata": "",
+   "sure_s": 5.8,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç hacimli, yüksek tavanlı, beton zemine sahip ve üzerinde sarı/green renkli yol çizgileri bulunan bir **kapalı çalışma alanıdır**. Zemindeki işaretlemeler ve duvarlara monte edilmiş büyük mavi endüstriyel makineler ile metal yığınları, buranın bir işleme tesisi veya benzeri bir üretim ortamı olduğunu göstermektedir. Bu ortamdaki beklenti; personelin makinelere bağlı olarak çalışması, araçların belirlenen koridorlarda ilerlemesi ve genel işleyişin düzenli olmasıdır.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\n(Not: Kareler arasında herhangi bir tehlike, düşme, saldırı veya anormal durum tespit edilmemiştir. Operatör makinesinde oturmakta, robotik temizlik cihazı ise kendi rotasında sorunsuz şekilde çalışmaktadır.)\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü incelendiğinde, sahne tamamen kontrollü ve rutindedir. Sol taraftaki operasyon noktasında bir personel, kendisine tahsis edilen makinenin kontrol panelinde oturarak monitörü izlemektedir; bu pozisyon ve davranışı iş prosedürleri çerçevesinde normal kabul edilir. Alanın merkezinden geçen disk şeklindeki mobil cihaz (muhtemelen otonom bir süpürge), önceden tanımlanmış güzergahında engelsiz hareket etmektedir. Personel ile makine arasındaki konumlanma güvenlidir, herhangi bir çarpışma riski veya panik hali yoktur. Sahne, standart bir vardiyalık çalışma sürecini yansıtmaktadır."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:05 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:05 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:05) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç hacimli, yüksek tavanlı, be"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Görüntü analizi sırasında 5 saniyelik süre boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. İç mekân veya dış mekân fark etmeksizin, kamera açısında hareket eden nesne, kişi veya riskli bir olay gözlemlenmemiştir. Operasyonel durum normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem kayıtlarını arşivleyin."
+   ],
+   "trace": [
+    "ingest: 00:05 video, 1 segment, 10 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te10.mp4",
+   "cift": "pano",
+   "ihlal": false,
+   "alt": "Normal/Closed_Panel_Cover",
+   "hata": "",
+   "sure_s": 4.3,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, büyük makinaların bulunduğu geniş tavanlı bir **kapalı iç mekândır**. Zemin beton olup üzerinde sarı ve yeşil renkli yol çizgileri mevcuttur. Bu tür ortamlarda personel hareketliliği, makinelerin çalışması ve malzeme taşımacılığı gibi rutin faaliyetlerin görülmesi beklenir.\n\n**2) Sapmalar:**\n*   **Zaman Damgası:** [00:00 - 00:02]\n    *   **Durum:** SAPMA YOK.\n    *   **Açıklama:** Görüntüdeki tüm bireyler ayakta durmakta veya yürümektedir. Makineler sabittir. Yerleşik objelerde (malzemeler, tezgahlar) herhangi bir değişim veya tehlike arz eden bir durum (duman, yangın, devrilme vb.) gözlemlenmemiştir.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü içinde şiddet, çatışma, düşme veya acil müdahale gerektiren bir durum tespit edilmemiştir. Sahne tamamen sakin ve rutindir."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:02 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:02 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:02) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, büyük makinaların bulunduğu geniş ta"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "İki saniyelik video analizinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntüde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını normal izleme modunda sürdürün.",
+    "Sistem loglarını güncelleyerek 'olaysız' durumunu kaydedin."
+   ],
+   "trace": [
+    "ingest: 00:02 video, 1 segment, 4 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr1.mp4",
+   "cift": "pano",
+   "ihlal": false,
+   "alt": "Normal/Closed_Panel_Cover",
+   "hata": "",
+   "sure_s": 8.6,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, beton zeminli ve üzerinde sarı/green güvenlik çizgileri bulunan geniş bir **kapalı iç mekândır**. Alan içerisinde büyük boyutlu mavi ve beyaz renkli endüstriyel makineler, metal raflar ve iş istasyonları bulunmaktadır. Bu tip ortamlarda görülen olağan aktiviteler arasında personelin makinelere yaklaşarak işlem yapması, malzeme taşıması, alan içinde güvenli hatlar boyunca yürüyerek dolaşması ve diğer personel ile iletişim kurmasıdır.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\n\n*   **Analiz Detayı:** 00:00 - 00:06 saniye arasındaki tüm karelerde herhangi bir tehlike, kaza, şiddet veya düzensizlik gözlenmemiştir.\n    *   Mavi üniformalı personel, elinde tuttuğu tekerlek şeklindeki ağır yükü (muhtemelen sargılı tel veya boru bobini) kontrollü bir şekilde iterek/meyillendirerek alandan geçmektedir.\n    *   Yeşil yelekli personel, sol alt köşeden girip merkezdeki çalışma alanına doğru yürümekte ve ardından mavi üniformalı personelle karşılaştığında yan yana gelerek konuşmaktadır.\n    *   Arka planda başka bir personel de kendi alanında çalışmaya devam etmektedir.\n    *   Hareketler dengeli, niyetli ve güvenliğe uygun seyretmektedir. Ani bir düşme, çarpışma veya panik yoktur.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü tamamen rutin operasyonel faaliyetleri yansıtmaktadır. Personeller arası etkileşim, muhtemelen iş"
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:06 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:06 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:06) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, beton zeminli ve üze"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "6 saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülerde sakin bir ortam izlenmiş olup, operatörün dikkatini gerektirecek bir durum oluşmamıştır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Gözetim sistemini normal çalışma modunda tutun.",
+    "Kayıtları arşivleme prosedürüne uygun olarak saklayın."
+   ],
+   "trace": [
+    "ingest: 00:06 video, 1 segment, 12 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_te11.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "hata": "",
+   "sure_s": 6.8,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, geniş iç mekan bir endüstriyel tesisi (fabrika veya atölye benzeri yapı) göstermektedir. Zemin üzerinde sarı/green renkli trafik şeritleri, büyük mavi makine tezgahları, metal yığınları ve bir forklift bulunmaktadır. Bu ortamdaki beklenti; personelin makinelerde çalışması, forkliftlerin yük taşıması veya koridorlarda yürüyerek geçiş sağlamasıdır.\n\n**2) Sapmalar:**\nSAPMA YOK.\n(Not: Görüntüdeki tüm hareketler -personellerin makinelerin başında bulunması, forkliftin konumu ve arka plandaki yürüyen kişi- rutin işleyiş kapsamında değerlendirilmektedir. Ani bir düşme, çatışma veya tehlike teşkil eden bir durum gözlemlenmemiştir.)\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü içinde herhangi bir güvenlik ihlali, şiddet unsuru veya acil müdahale gerektiren bir durum tespit edilmemiştir. Sahne, tipik bir üretim sahasının günlük faaliyetlerini yansıtmaktadır. Operasyonel süreklilik korunmaktadır."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:07) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, geniş iç mekan bir e"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "7 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen ortamda hareket eden nesne, kişi veya tehlikeli bir olay bulunmamaktadır. Operasyonel durum normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistemin kayıt ve izleme fonksiyonlarının çalışır durumda olduğunu doğrulayın."
+   ],
+   "trace": [
+    "ingest: 00:07 video, 1 segment, 14 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr108.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "hata": "",
+   "sure_s": 6.3,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, metal duvarlara sahip geniş bir **kapalı iç mekândır**. Zeminde sarı ve yeşil renklerle belirlenmiş yürüyüş yolları bulunmaktadır. Alan, büyük mavi ve beyaz renkli endüstriyel makineler ile doludur. Bu düzen, tipik bir imalat tesisi veya atölye ortamına işaret etmektedir. Beklenen normal; personelin makinelere bakımı, malzeme taşımacılığı veya alanda güvenli hatlar boyunca yürüyerek geçiş sağlamasıdır.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\nBelirtilen zaman aralığında (00:00 - 00:09), görüntüdeki tüm bireylerin davranışları rutin işleyiş sınırları içerisindedir. Sol taraftaki makinede duran personel sabittir, alt kısımdaki personel makineye müdahale ederken hareket halindedir, sağ taraftan geçen personel ise çizgili yol üzerinde yürümektedir. Ani bir düşme, yere yığılma, şiddet uygulaması veya tehlike arz eden herhangi bir durum gözlemlenmemiştir.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü açısından değerlendirildiğinde, sahnede herhangi bir güvenlik ihlali, kazaya karışma veya saldırganlık örneği bulunmamaktadır. Personeller kendi görev bölgeleri içinde veya izin verilen güzergahlarda hareket etmektedir. Makinelerin çalıştığı ve personelin aktif olduğu ancak kontrol altında olduğu görülen standart bir çalışma anıdır. Acil bir müdahale gerektiren bir durum mevcut değildir."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:09 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:09 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:09) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, metal duvarlara sahi"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Görüntü analizi sırasında 00:09 saniyelik kayıt süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya riskli olay tespit edilmemiştir. İzlenen mekânda hareketlilik veya olağandışı bir aktivite gözlemlenmemiştir. Operatörün dikkatini gerektirecek bir durum mevcut değildir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Kayıt dosyasını arşivlemek için normal prosedürü uygulayın."
+   ],
+   "trace": [
+    "ingest: 00:09 video, 1 segment, 18 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr128.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "hata": "",
+   "sure_s": 6.1,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekan, yüksek tavanlı, beton zeminli ve sarı/green renkli yol çizgileri ile işaretlenmiş büyük bir kapalı alandır. İçerisinde ağır sanayi tipi makineler, kontrol panelleri ve metal yığınları bulunmaktadır. Bu ortamda görülen olağan aktiviteler; personelin makinelere oturarak çalışması, makine parçalarının işlenmesi ve arka planda beliren kişilerin koridorda yürüyerek geçmesidir.\n\n**2) Sapmalar:**\nSAPMA YOK\n\n**3) Güvenlik Analisti Yorumu:**\nGörüntüler incelendiğinde herhangi bir güvenlik ihlali, şiddet olayı, düşme veya tehlike teşkil eden bir durum tespit edilmemiştir. Sol taraftaki personel makinesinde oturmuş halde rutin çalışma pozisyonundadır. Arka plandaki bireylerin yürüyüşü normaldir. Zemindeki nesneler sabittir ve herhangi bir kaotik durum söz konusu değildir. Durum tamamen güvenlidir.",
+    "**1) Ortam ve Beklenen Normal:**  \nGörüntüde kapalı, geniş bir iç mekân görülüyor. Zemin beton, üzerinde sarı ve yeşil çizgilerle belirlenmiş yol/hattlar var. Sol tarafta büyük mavi-sarı renkli endüstriyel makineler, ortada döner tabanlı bir cihaz, sağda camlı ofis benzeri yapılar ve duvarlarda kırmızı yangın tüpleri mevcut. Arka planda uzun koridor şeklinde alan devam ediyor. Bu tür düzenekler genellikle üretim, montaj veya depolama amaçlı kullanılan kapalı tesislerde karşımıza çıkar.  \n\nBeklenen normal: Makinelerin çalışması, personelin makine başında oturup işlem yapması, koridorda yürüyerek geçiş yapılması, malzeme taşıma veya kontrol işlemlerinin rutin şekilde gerçekleşmesi. Oturma, çalışma, yürüme gibi aktiviteler bu ortamda olağandır.\n\n---\n\n**2) Sapmalar (Sadece Açıkça Görülen):**  \n→ **SAPMA YOK**\n\nHiçbir karede duman, yangın, patlama, çarpışma, düşme, yerde hareketsiz kişi, kavga, saldırı, silah, yetkisiz giriş veya başka bir anomali gözlenmemektedir.  \n- Ön plandaki kişi sandalyede oturmuş halde, makineye odaklanmış durumda → rutin çalışma.  \n- Arka plandaki kişi koridorda yürüyor → rutin geçiş.  \n- Yerdeki nesneler (malzeme kutusu, araçlar, tekerlekli platform) sabit konumda, hareket etmiyor veya tehlike yaratmıyor.  \n- Kimse yere düşmemiş, çökmemiş, hareketsiz yatmamıştır.  \n- Hiçbir"
+   ],
+   "ext_ham": [
+    "{\"events\": []}",
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 7,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "[Kare zamanı: 00:10]"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:10-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:10-00:10) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**  \nGörüntüde kapalı, geniş bir iç mekân görülü"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekan, yüksek tavanlı, beto"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "10 saniyelik video analizinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde hareket eden nesne, yangın, yaralı kişi veya izinsiz giriş gibi dikkat gerektiren bir olay gözlemlenmemiştir. Sahne genel olarak sakin ve normal işleyişe uygun görünmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını normal izleme modunda devam ettirin.",
+    "Sistem loglarını ve kayıt sürelerini doğrulayın."
+   ],
+   "trace": [
+    "ingest: 00:10 video, 2 segment, 21 kare",
+    "perceive: 0 olay (0 ham, 2 segment, 2 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr176.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "hata": "",
+   "sure_s": 14.9,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekan bir endüstriyel tesise aittir. Sol tarafta büyük mavi ve beyaz renkli makinalar, ortada metal rulo ve paletler, sağ tarafta ise yeşil şeritle işaretlenmiş bir yürüyüş yolu bulunmaktadır. Duvarlarda \"MAMUL DEPOT\" tabelası görülmektedir. Bu ortamda beklenen normal; personelin belirlenen yollarda yürümesi, makinelerin çalışması ve lojistik faaliyetlerin devam etmesidir.\n\n**2) Sapmalar:**\n*   **Zaman Damgası: 00:00 - 00:02:** Sağ taraftaki yeşil koridorda, uzak planda bir personel yürümekte olup herhangi bir anormallik görülmemektedir.\n*   **Zaman Damgası: 00:03:** Koridorun orta kısmında, makinelere yakın alanda bulunan sarı renkli tekerlekli seyyar masanın üzerinde biriken toz bulutu veya ince parçacıklar havaya karışmış ve aşağı doğru yayılmıştır. Bu durum, bir sarsıntı, çarpma sonucu oluşan toz kalkması veya benzeri bir fiziksel müdahaleye işaret edebilir.\n*   **Zaman Damgası: 00:03 - 00:05:** Havadaki toz/partikül dağılımı devam ederken, sahnede ani bir hareketlilik, düşme veya devrilme olayı net olarak izlenmemiştir. Sadece hava içindeki partiküllerin hareketi dikkat çekicidir.\n\n**3) Güvenlik Analisti Yorumu:**\nGörüntüdeki en belirgin anomali, 0",
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç hacimli, yüksek tavanlı, metal duvar kaplamalı ve beton zeminli bir **kapalı çalışma alanıdır**. Zemin üzerinde sarı ve yeşil renkli yol çizgileri bulunmaktadır. Alanın sol tarafında büyük mavi ve beyaz endüstriyel makineler, ortasında ise paletler ve malzemeler görülmektedir. Arka planda \"MAMUL DEPOT\" ibaresi taşıyan bir tabela mevcuttur. Bu ortamda beklenen normal; personelin belirlenen koridorlar üzerinden yürüyerek işlevlerini sürdürmesi, makinalarda çalışılması veya malzeme taşınmasıdır.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\nVerilen kareler arasında herhangi bir tehlike, kazaya işaret eden durum, düşme, itiş kakış veya olağandışı bir hareketlilik tespit edilmemiştir. Sadece arka planda bir personelin koridorda yürüdüğü görülüyor ki bu rutin bir faaliyettir.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü açısından değerlendirildiğinde; ortam sakin ve kontrol altındadır. Personellerin konumlanışı ve hareketleri standart prosedüre uygundur. Makinelerin etrafında izole edilmiş bölgelere girilmesi veya tehlikeli alanlarda beklenmesi gibi ihlal teşkil edecek bir durum gözlemlenmemiştir. Ek bir müdahale gerektiren bir güvenlik riski bulunmamaktadır."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": [{\"time\": \"00:03\", \"event\": \"Seyyar masa üzerinde ani toz/partikül kalkması ve havaya yayılması\", \"severity\": \"Orta\", \"category\": \"Anomali\"}]}\n```",
+    "{\"events\": []}"
+   ],
+   "n_cagri": 9,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:10-00:14 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:10-00:14 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:10-00:14) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekan bir endüstriyel tesis"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç hacimli, yüksek tavanlı, me"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bu güvenlik kamerası karelerinde şu gözlem var: \"Seyyar masa üzerinde ani toz/partikül kalkması ve havaya yayılması\". Bu GERÇEKTEN dikkate değer/anormal bir ola"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu güvenlik kamerası karelerinde şu gözlem var: \"Seyyar masa üzerinde ani toz/partikül kalkması ve havaya yayılması\". Bu GERÇEKTEN dikkate değer/anormal bir ola"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n- [00:03] Seyya"
+    }
+   ],
+   "summary": "Görüntülerde, seyyar bir masa üzerinde ani bir toz veya partikül kalkışı ve bunun havaya yayılması olayı tespit edilmiştir. Bu durum, ortamda beklenmedik bir fiziksel değişim olarak kaydedilmiştir. Olayın kaynağı ve etkileri görüntü kalitesi ve süresi nedeniyle tam olarak netleşmemiştir.",
+   "events": [
+    {
+     "time": "00:03",
+     "event": "Seyyar masa üzerinde ani toz/partikül kalkması ve havaya yayılması",
+     "severity": "Orta",
+     "category": "Anomali"
+    }
+   ],
+   "risk": "Orta",
+   "actions": [
+    "İlgili bölgedeki havalandırma sistemlerini kontrol edin ve gerekirse maksimum seviyeye getirin.",
+    "Olay anında bölgede bulunan kişilerin durumu hakkında bilgi toplayın ve gerekirse tahliye talimatı verin.",
+    "Toz kaynağını belirlemek ve yayılmanın durdurulması için ilgili birimi (bakım veya güvenlik) bilgilendirin."
+   ],
+   "trace": [
+    "ingest: 00:14 video, 2 segment, 27 kare",
+    "perceive: 1 olay (1 ham, 2 segment, 2 paralel)",
+    "reexamine: belirsiz olaylar yeniden-incelendi (↑0 ciddi, ↓0 rutin)",
+    "reason: risk=Orta, 3 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr59.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "hata": "",
+   "sure_s": 6.5,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, geniş iç mekan bir endüstriyel tesisi (fabrika veya atölye benzeri yapı) göstermektedir. Zeminde sarı/green güvenlik şeritleri, duvarlarda \"MANUEL DEPO\" tabelası ve çeşitli büyük boyutlu makineler bulunmaktadır. Bu ortamdaki beklenen normal; personelin makinelere bakması, koridorda yürüyerek işyeri içinde seyahat etmesi ve genel çalışma faaliyetlerinin devam etmesidir.\n\n**2) Sapmalar:**\nSAPMA YOK.\n*   **Analiz:** Verilen tüm kareler (00:00 - 00:06) arasında herhangi bir tehlike, kazaya karışma, düşme veya şiddet içeren bir olay gözlenmemiştir. Arka plandaki koridorda görülen bireyin yürümesi ve sol taraftaki makinedeki personelin çalışmaya devam etmesi, bu ortam için tamamen rutin ve beklendiği üzere gerçekleşen aktivitelerdir.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü açısından değerlendirildiğinde, sahnede herhangi bir güvenlik ihlali, saldırı, çatışma veya acil sağlık durumu teşkil edecek bir durum bulunmamaktadır. Personeller kendi bölgelerinde olup, ortam sakin ve kontrol altındadır. İzlenecek özel bir aksiyon gerekmez."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:07) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, yüksek tavanlı, geniş iç mekan bir e"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "Yedi saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülenen ortamda sakin bir seyir izlenmiş olup, operatörün dikkatini gerektirecek bir durum oluşmamıştır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Sistemi normal izleme modunda tutun.",
+    "Kayıt dosyasını arşivleyin."
+   ],
+   "trace": [
+    "ingest: 00:07 video, 1 segment, 14 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Walkway/4_te1.mp4",
+   "cift": "yol",
+   "ihlal": false,
+   "alt": "Normal/Safe_Walkway",
+   "hata": "",
+   "sure_s": 7.9,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı** (endüstriyel tesis benzeri alan) göstermektedir. Zeminde sarı ve yeşil güvenlik şeritleri ile belirlenmiş yollar bulunmaktadır. Alan içinde büyük boyutlu mavi ve beyaz renkli makinalar, kontrol panelleri ve metal yığınları görülmektedir. Beklenen normal; personelin makinaların yanında durarak iş takibi yapması, makinelerin çalışması ve koridorlarda güvenli şekilde yürüyerek geçiş yapılmasıdır.\n\n**2) Sapmalar:**\n*   **00:00 - 00:06:** Sahne boyunca herhangi bir sapma, tehlike veya anomali tespit edilmemiştir. Personel makinenin önünde durmakta, ardından kısa bir süre sonra yürümeye başlamaktadır. Bu davranışlar rutin çalışma prosedürleri kapsamında değerlendirilir.\n    *   **Sonuç: SAPMA YOK.**\n\n**3) Güvenlik Analisti Yorumu:**\nBelirtilen zaman dilimi içerisinde herhangi bir güvenlik ihlali, kazaya işaret eden durum veya şiddet içerikli bir olay gözlemlenmemiştir. Operasyonel süreçlerin sorunsuz ilerlediği görülmektedir."
+   ],
+   "ext_ham": [
+    "{\"events\": []}"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:07) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir **kapalı iç mekânı** (endü"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "7 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem loglarını ve kamera bağlantılarının sağlıklı çalıştığını doğrulayın."
+   ],
+   "trace": [
+    "ingest: 00:07 video, 1 segment, 14 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr15.mp4",
+   "cift": "yol",
+   "ihlal": false,
+   "alt": "Normal/Safe_Walkway",
+   "hata": "",
+   "sure_s": 6.4,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**  \nGörüntü, kapalı bir iç mekândır. Zemin beton olup sarı ve yeşil çizgilerle belirlenmiş yol/hattlar bulunmaktadır. Sol tarafta büyük mavi-sarı renkli endüstriyel makinalar, ortada metal parçalar, paletler ve taşıma araçları görülmektedir. Sağ tarafta cam duvarlı ofis benzeri alanlar ve kırmızı itfaiye tüpleri mevcuttur. Bu tür düzenlemeler genellikle üretim, montaj veya depolama amaçlı endüstriyel tesislerde görülür.  \n\nBeklenen normal: Makinelerin çalışması, personelin oturarak veya ayakta işlem yapması, malzemelerin yerleştirilmesi, koridorlarda yürüyüş gibi rutin faaliyetlerin devam etmesidir.\n\n---\n\n**2) Sapma Tespiti:**  \n[SAPMA YOK]\n\nGörüntüdeki tüm unsurlar beklenen normale uygundur:\n- Bir kişi sol alt köşede sandalyede oturmaktadır → rutin çalışma pozisyonu.\n- Arka planda uzakta başka bir kişi yürümektedir → rutin hareket.\n- Yerdeki nesneler (metal halka, palet, tekerlekli platform) sabittir, hareket etmemekte veya tehlike yaratmamaktadır.\n- Yangın, duman, çarpışma, düşme, kavga, silah, yetkisiz giriş gibi herhangi bir anomali gözlenmemektedir.\n\n---\n\n**3) Güvenlik Analisti Yorumu:**  \nHerhangi bir sapma olmadığından, olaya dair özel bir yorum gerekmez. Sahne, tipik bir endüstriyel ortamda günlük operasyonların sorunsuz ilerlediği bir anı yansıtmaktadır. Personeller",
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekanlarda bulunan büyük makinelerin, sarı/green renkli zemin şeritlerinin ve endüstriyel düzeneklerin yer aldığı bir **endüstriyel tesis içindeki çalışma alanıdır**. Bu ortamdaki beklenen normal; personelin makinelere oturarak çalışması, belirlenen güzergahlar üzerinde yürüyerek geçiş sağlaması ve genel iş akışının aksamadan devam etmesidir.\n\n**2) Sapmalar:**\n**SAPMA YOK.**\n*   Sol taraftaki mavi makinenin önünde oturan personel sabit pozisyonda çalışmaktadır.\n*   Sağ taraftaki yeşil koridorda yürüyen personel, normal bir hızla ilerleyip görüntünün dışına çıkmıştır.\n*   Zemindeki nesneler (metal bobin vb.) yerinde durmakta olup herhangi bir tehlike arz eden hareketlilik yoktur.\n*   Yangın, duman, düşme, kavga veya şiddet içeren hiçbir durum gözlemlenmemiştir.\n\n**3) Güvenlik Analisti Yorumu:**\nOlay örgüsü içerisinde herhangi bir güvenlik ihlali, acil durum veya anomali tespit edilmemiştir. Sahne tamamen rutindir; operasyonel süreçler planlandığı şekilde işlemekte ve personel güvenli davranış kurallarına uygun hareket etmektedir. İzlenecek özel bir aksiyon gerekmemektedir."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```",
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 7,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "[Kare zamanı: 00:10]"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:10-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:10-00:10) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**  \nGörüntü, kapalı bir iç mekândır. Zemin beto"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:10 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:10) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş iç mekanlarda bulunan büyük ma"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "10 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen ortamda hareket eden nesne veya kişiye ait riskli bir eylem gözlemlenmemiştir. Genel durum normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Kayıt dosyasını arşivleyin ve sistem loglarına 'Olay Yok' olarak işaretleyin."
+   ],
+   "trace": [
+    "ingest: 00:10 video, 2 segment, 21 kare",
+    "perceive: 0 olay (0 ham, 2 segment, 2 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr35.mp4",
+   "cift": "yol",
+   "ihlal": false,
+   "alt": "Normal/Safe_Walkway",
+   "hata": "",
+   "sure_s": 5.8,
+   "desc": [
+    "**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir iç mekândır. Zemin beton olup sarı ve yeşil renkli güvenlik çizgileri ile işaretlenmiş yollar bulunur. Alan içinde büyük boyutlu mavi ve beyaz endüstriyel makineler, kontrol panelleri, metal rulo paletleri ve çalışma masaları mevcuttur. Bu özellikler tipik bir imalat tesisi veya atölye ortamına aittir. Beklenen normal; personelin makinelere bakımı, malzemelerin taşınması veya alan içinde güvenli güzergahlar üzerinden yürüyerek geçiş yapmasıdır.\n\n**2) Sapmalar:**\nSAPMA YOK.\n\n**3) Güvenlik Analisti Yorumu:**\nVerilen kareler arasında herhangi bir güvenlik ihlali, şiddet olayı, düşme, yaralanma veya acil durum tespit edilmemiştir. Personel, belirlenen koridorlarda ve çalışma alanlarında rutin faaliyetlerini sürdürmektedir. Makinelerin yanında bulunan personel operasyonel pozisyonda durmakta, diğer bireyler ise alandan geçiş yapmaktadır. Hiçbir kişide ani hareket, panik veya düzensiz davranış gözlemlenmemiştir. Durum tamamen kontrollü ve güvenlidir."
+   ],
+   "ext_ham": [
+    "```json\n{\"events\": []}\n```"
+   ],
+   "n_cagri": 4,
+   "tum_cagrilar": [
+    {
+     "tur": "chat",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "analyze_frames",
+     "instr_bas": "Bu kareler bir güvenlik kamerasinin 00:00-00:07 aralığindan, zaman damgali ve kronolojik sirayla verilmiştir. Görüntü düşük çözünürlüklü olabilir; yine de dikka"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Aşağida bir güvenlik kamerasi segmentinin (00:00-00:07) sahne açiklamasi var:\n---\n**1) Ortam ve Beklenen Normal:**\nGörüntü, geniş bir iç mekândır. Zemin beton o"
+    },
+    {
+     "tur": "chat",
+     "instr_bas": "Bir güvenlik operatörü için video analiz raporu hazirliyorsun.\nAşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:\n\n(Önemli bir ola"
+    }
+   ],
+   "summary": "8 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen ortamda hareket, çarpışma veya acil durum belirtisi içeren bir olay yaşanmamıştır. Operasyonel süreçler normal seyretmektedir.",
+   "events": [],
+   "risk": "Düşük",
+   "actions": [
+    "Görüntü akışını standart izleme modunda devam ettirin.",
+    "Sistem loglarını güncel tutun ve normal operasyon kaydını oluşturun."
+   ],
+   "trace": [
+    "ingest: 00:08 video, 1 segment, 15 kare",
+    "perceive: 0 olay (0 ham, 1 segment, 1 paralel)",
+    "reason: risk=Düşük, 2 aksiyon önerisi",
+    "act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)"
+   ]
+  }
+ ]
+}

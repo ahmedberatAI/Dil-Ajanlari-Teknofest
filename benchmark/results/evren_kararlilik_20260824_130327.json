@@ -1,0 +1,104 @@
+{
+  "model": "llm-large",
+  "tekrar": 2,
+  "kayit": [
+    {
+      "klip": "1_te10.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "1_te3.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "1_te4.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "1_te5.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "1_tr18.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "1_tr2.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "5_te1.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "5_te11.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "5_te12.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "5_te13.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "5_te14.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    },
+    {
+      "klip": "5_te15.mp4",
+      "cevaplar": [
+        "GORUNMUYOR",
+        "GORUNMUYOR"
+      ],
+      "kararli": true
+    }
+  ],
+  "kararli_klip": 12,
+  "n": 12
+}

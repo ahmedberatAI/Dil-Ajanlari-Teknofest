@@ -1,0 +1,506 @@
+{
+  "onkayit_dosyasi": "evren_cozunurluk_onkayit_20260824_112827.json",
+  "analiz_zamani": "20260824_120530",
+  "toplam_istek": 297,
+  "kollar": {
+    "pano": {
+      "768": {
+        "klip_sayisi": 49,
+        "BIRINCIL_cekimser_negatif": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 24,
+          "TN": 25,
+          "n": 49,
+          "dogruluk": 0.5102,
+          "wilson95": [
+            0.3747,
+            0.6442
+          ],
+          "MCC": null,
+          "cekimser": 49,
+          "hata": 0
+        },
+        "IKINCIL_yalnizca_karar": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 0,
+          "TN": 0,
+          "n": 0,
+          "dogruluk": null,
+          "wilson95": [
+            0.0,
+            0.0
+          ],
+          "MCC": null,
+          "cekimser": 49,
+          "hata": 0
+        },
+        "cevap_dagilimi": {
+          "GORUNMUYOR": 49
+        },
+        "DEJENERE": true,
+        "en_bol_etiket": "GORUNMUYOR",
+        "en_bol_oran": 1.0,
+        "bayt_ort": 126484,
+        "bayt_toplam_MB": 6.2,
+        "giris_tok_ort": 2032,
+        "giris_tok_toplam": 99594,
+        "gecikme_ort_s": 1.39,
+        "gecikme_medyan_s": 1.13
+      },
+      "1280": {
+        "klip_sayisi": 49,
+        "BIRINCIL_cekimser_negatif": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 24,
+          "TN": 25,
+          "n": 49,
+          "dogruluk": 0.5102,
+          "wilson95": [
+            0.3747,
+            0.6442
+          ],
+          "MCC": null,
+          "cekimser": 49,
+          "hata": 0
+        },
+        "IKINCIL_yalnizca_karar": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 0,
+          "TN": 0,
+          "n": 0,
+          "dogruluk": null,
+          "wilson95": [
+            0.0,
+            0.0
+          ],
+          "MCC": null,
+          "cekimser": 49,
+          "hata": 0
+        },
+        "cevap_dagilimi": {
+          "GORUNMUYOR": 49
+        },
+        "DEJENERE": true,
+        "en_bol_etiket": "GORUNMUYOR",
+        "en_bol_oran": 1.0,
+        "bayt_ort": 871806,
+        "bayt_toplam_MB": 42.7,
+        "giris_tok_ort": 4963,
+        "giris_tok_toplam": 243210,
+        "gecikme_ort_s": 3.86,
+        "gecikme_medyan_s": 3.2
+      },
+      "1920": {
+        "klip_sayisi": 49,
+        "BIRINCIL_cekimser_negatif": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 24,
+          "TN": 25,
+          "n": 49,
+          "dogruluk": 0.5102,
+          "wilson95": [
+            0.3747,
+            0.6442
+          ],
+          "MCC": null,
+          "cekimser": 49,
+          "hata": 0
+        },
+        "IKINCIL_yalnizca_karar": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 0,
+          "TN": 0,
+          "n": 0,
+          "dogruluk": null,
+          "wilson95": [
+            0.0,
+            0.0
+          ],
+          "MCC": null,
+          "cekimser": 49,
+          "hata": 0
+        },
+        "cevap_dagilimi": {
+          "GORUNMUYOR": 49
+        },
+        "DEJENERE": true,
+        "en_bol_etiket": "GORUNMUYOR",
+        "en_bol_oran": 1.0,
+        "bayt_ort": 3328612,
+        "bayt_toplam_MB": 163.1,
+        "giris_tok_ort": 9669,
+        "giris_tok_toplam": 473808,
+        "gecikme_ort_s": 11.4,
+        "gecikme_medyan_s": 9.29
+      },
+      "KARAR": {
+        "1280": {
+          "MCC_768": null,
+          "MCC_1280": null,
+          "delta": null,
+          "esik": 0.15,
+          "dejenere": true,
+          "YARDIM_ETTI": false
+        },
+        "1920": {
+          "MCC_768": null,
+          "MCC_1920": null,
+          "delta": null,
+          "esik": 0.15,
+          "dejenere": true,
+          "YARDIM_ETTI": false
+        }
+      }
+    },
+    "yelek": {
+      "768": {
+        "klip_sayisi": 50,
+        "BIRINCIL_cekimser_negatif": {
+          "TP": 13,
+          "FP": 13,
+          "FN": 12,
+          "TN": 12,
+          "n": 50,
+          "dogruluk": 0.5,
+          "wilson95": [
+            0.3664,
+            0.6336
+          ],
+          "MCC": 0.0,
+          "cekimser": 20,
+          "hata": 0
+        },
+        "IKINCIL_yalnizca_karar": {
+          "TP": 13,
+          "FP": 13,
+          "FN": 0,
+          "TN": 4,
+          "n": 30,
+          "dogruluk": 0.5667,
+          "wilson95": [
+            0.392,
+            0.7262
+          ],
+          "MCC": 0.343,
+          "cekimser": 20,
+          "hata": 0
+        },
+        "cevap_dagilimi": {
+          "YELEK_YOK": 26,
+          "GORUNMUYOR": 13,
+          "KISI_YOK": 7,
+          "YELEK_VAR": 4
+        },
+        "DEJENERE": false,
+        "en_bol_etiket": "YELEK_YOK",
+        "en_bol_oran": 0.52,
+        "bayt_ort": 234984,
+        "bayt_toplam_MB": 11.7,
+        "giris_tok_ort": 3658,
+        "giris_tok_toplam": 182904,
+        "gecikme_ort_s": 1.64,
+        "gecikme_medyan_s": 1.46
+      },
+      "1280": {
+        "klip_sayisi": 50,
+        "BIRINCIL_cekimser_negatif": {
+          "TP": 19,
+          "FP": 5,
+          "FN": 6,
+          "TN": 20,
+          "n": 50,
+          "dogruluk": 0.78,
+          "wilson95": [
+            0.6476,
+            0.8725
+          ],
+          "MCC": 0.5604,
+          "cekimser": 18,
+          "hata": 0
+        },
+        "IKINCIL_yalnizca_karar": {
+          "TP": 19,
+          "FP": 5,
+          "FN": 0,
+          "TN": 8,
+          "n": 32,
+          "dogruluk": 0.8438,
+          "wilson95": [
+            0.6825,
+            0.9314
+          ],
+          "MCC": 0.698,
+          "cekimser": 18,
+          "hata": 0
+        },
+        "cevap_dagilimi": {
+          "YELEK_YOK": 24,
+          "GORUNMUYOR": 10,
+          "YELEK_VAR": 8,
+          "KISI_YOK": 8
+        },
+        "DEJENERE": false,
+        "en_bol_etiket": "YELEK_YOK",
+        "en_bol_oran": 0.48,
+        "bayt_ort": 1701327,
+        "bayt_toplam_MB": 85.1,
+        "giris_tok_ort": 8927,
+        "giris_tok_toplam": 446380,
+        "gecikme_ort_s": 5.32,
+        "gecikme_medyan_s": 5.45
+      },
+      "1920": {
+        "klip_sayisi": 50,
+        "BIRINCIL_cekimser_negatif": {
+          "TP": 21,
+          "FP": 7,
+          "FN": 4,
+          "TN": 18,
+          "n": 50,
+          "dogruluk": 0.78,
+          "wilson95": [
+            0.6476,
+            0.8725
+          ],
+          "MCC": 0.5641,
+          "cekimser": 18,
+          "hata": 0
+        },
+        "IKINCIL_yalnizca_karar": {
+          "TP": 21,
+          "FP": 7,
+          "FN": 0,
+          "TN": 4,
+          "n": 32,
+          "dogruluk": 0.7812,
+          "wilson95": [
+            0.6125,
+            0.8898
+          ],
+          "MCC": 0.5222,
+          "cekimser": 18,
+          "hata": 0
+        },
+        "cevap_dagilimi": {
+          "YELEK_YOK": 28,
+          "GORUNMUYOR": 8,
+          "KISI_YOK": 10,
+          "YELEK_VAR": 4
+        },
+        "DEJENERE": false,
+        "en_bol_etiket": "YELEK_YOK",
+        "en_bol_oran": 0.56,
+        "bayt_ort": 6350883,
+        "bayt_toplam_MB": 317.5,
+        "giris_tok_ort": 12438,
+        "giris_tok_toplam": 621939,
+        "gecikme_ort_s": 14.64,
+        "gecikme_medyan_s": 13.9
+      },
+      "KARAR": {
+        "1280": {
+          "MCC_768": 0.0,
+          "MCC_1280": 0.5604,
+          "delta": 0.5604,
+          "esik": 0.15,
+          "dejenere": false,
+          "YARDIM_ETTI": true
+        },
+        "1920": {
+          "MCC_768": 0.0,
+          "MCC_1920": 0.5641,
+          "delta": 0.5641,
+          "esik": 0.15,
+          "dejenere": false,
+          "YARDIM_ETTI": true
+        }
+      }
+    }
+  },
+  "ON_KAYIT": {
+    "baslik": "EVREN cozunurluk taramasi — ON KAYIT (sonuclara BAKILMADAN yazildi)",
+    "zaman": "20260824_112827",
+    "soru": "Daha yuksek cozunurluk zayif siniflarda (pano, yelek) MCC'yi arttiriyor mu?",
+    "sabitler": {
+      "model": "llm-large",
+      "temperature": 0.0,
+      "max_tokens": 8,
+      "kisitli_kod_cozme": "extra_body.structured_outputs.choice (D40 kusuru: guided_choice ATIL)",
+      "gonderim": "dilajan.video.servis_videosu ile mp4, tek video_url, sistem promptu YOK",
+      "istek_duzeni": "SIRAYLA (paralel yok). Her klip icin 768->1280->1920 ARDISIK: boylece uc kol AYNI servis yuku altinda olculur (zaman kaymasi confound'u kapanir)."
+    },
+    "kollar": [
+      {
+        "max_side": 768,
+        "crf": 28
+      },
+      {
+        "max_side": 1280,
+        "crf": 26
+      },
+      {
+        "max_side": 1920,
+        "crf": 24
+      }
+    ],
+    "siniflar": {
+      "pano": {
+        "poz_dizin": "Anomali/Opened_Panel_Cover (24)",
+        "neg_dizin": "Normal/Closed_Panel_Cover (25)",
+        "soru": "Elektrik/kontrol panosunun kapagi acik mi?",
+        "secenekler": [
+          "ACIK",
+          "KAPALI",
+          "GORUNMUYOR"
+        ],
+        "pozitif_cevap": "ACIK",
+        "negatif_cevap": "KAPALI",
+        "cekimser": [
+          "GORUNMUYOR"
+        ]
+      },
+      "yelek": {
+        "poz_dizin": "Anomali/Unauthorized_Intervention (25)",
+        "neg_dizin": "Normal/Authorized_Intervention (25)",
+        "soru": "Makinenin/panonun basinda duran kiside yesil reflektif yelek var mi?",
+        "secenekler": [
+          "YELEK_VAR",
+          "YELEK_YOK",
+          "KISI_YOK",
+          "GORUNMUYOR"
+        ],
+        "pozitif_cevap": "YELEK_YOK",
+        "negatif_cevap": "YELEK_VAR",
+        "cekimser": [
+          "KISI_YOK",
+          "GORUNMUYOR"
+        ]
+      }
+    },
+    "metrikler": {
+      "her_zaman": "TP/FP/FN/TN + dogruluk + Wilson %95 GA + MCC + cekimser sayisi + hata sayisi",
+      "BIRINCIL": "cekimser -> NEGATIF esleme (tum n kullanilir; sahada 'kanit yoksa alarm yok' davranisi)",
+      "IKINCIL": "yalnizca-karar-verilen 2x2 (cekimserler DISLANIR, n azalir ve RAPORLANIR)",
+      "not": "Cekimserler ASLA sessizce negatif sayilmaz: her iki esleme de ayri raporlanir (kural 5)."
+    },
+    "DEJENERELIK_KAPISI": "Bir kol, o sinifin kliplerinin >=%85'ine AYNI etiketi veriyorsa DEJENERE isaretlenir ve MCC ne olursa olsun BASARI SAYILMAZ.",
+    "KARAR_OLCUTU_ONCEDEN": "Yuksek cozunurluk 'YARDIM ETTI' denmesi icin BIRINCIL MCC, 768 koluna gore DELTA >= +0,15 artmali VE kol DEJENERE olmamali. delta < +0,15 ise sonuc: '768 YETER (yuksek cozunurluk parasini hak etmiyor)'. n~50'de +0,05 GURULTUDUR.",
+    "yan_olcumler": "her kol icin gonderilen bayt, giris token, istek gecikmesi (ortalama+medyan)",
+    "hata_politikasi": "Istisna -> 5 s sonra 1 kez yeniden dene; yine hata ise 'HATA' olarak AYRI sayilir, negatif/pozitif YAPILMAZ.",
+    "beklenti_onceden": "Yerel tabanda pano ve yelek MCC=0,000 ve DEJENERE idi. Bugun ayni klipte 1080p ve 768px AYNI cevabi verdi. Onceden tahminim: cozunurluk MCC'yi anlamli arttirmayacak."
+  },
+  "ESLI_TEST_POSTHOC": {
+    "NOT": "ON KAYITTA YOKTU — sonuclar gorulduKTEN SONRA eklendi (POST-HOC). Karar olcutu yine de on kayittaki delta>=+0,15 kuralidir; bu test yalnizca DESTEKLEYICI.",
+    "esleme": "cekimser -> negatif (BIRINCIL)",
+    "testler": {
+      "pano 768vs1280": {
+        "ikisi_dogru": 25,
+        "yalniz_768": 0,
+        "yalniz_1280": 0,
+        "ikisi_yanlis": 24,
+        "dogruluk_farki": 0.0,
+        "fark_GA95": [
+          -0.0015,
+          0.0015
+        ],
+        "mcnemar_p_exact": 1.0,
+        "anlamli_p05": false
+      },
+      "pano 1280vs1920": {
+        "ikisi_dogru": 25,
+        "yalniz_1280": 0,
+        "yalniz_1920": 0,
+        "ikisi_yanlis": 24,
+        "dogruluk_farki": 0.0,
+        "fark_GA95": [
+          -0.0015,
+          0.0015
+        ],
+        "mcnemar_p_exact": 1.0,
+        "anlamli_p05": false
+      },
+      "pano 768vs1920": {
+        "ikisi_dogru": 25,
+        "yalniz_768": 0,
+        "yalniz_1920": 0,
+        "ikisi_yanlis": 24,
+        "dogruluk_farki": 0.0,
+        "fark_GA95": [
+          -0.0015,
+          0.0015
+        ],
+        "mcnemar_p_exact": 1.0,
+        "anlamli_p05": false
+      },
+      "yelek 768vs1280": {
+        "ikisi_dogru": 23,
+        "yalniz_768": 2,
+        "yalniz_1280": 16,
+        "ikisi_yanlis": 9,
+        "dogruluk_farki": 0.28,
+        "fark_GA95": [
+          0.127,
+          0.4143
+        ],
+        "mcnemar_p_exact": 0.0013,
+        "anlamli_p05": true
+      },
+      "yelek 1280vs1920": {
+        "ikisi_dogru": 33,
+        "yalniz_1280": 6,
+        "yalniz_1920": 6,
+        "ikisi_yanlis": 5,
+        "dogruluk_farki": 0.0,
+        "fark_GA95": [
+          -0.1368,
+          0.1368
+        ],
+        "mcnemar_p_exact": 1.0,
+        "anlamli_p05": false
+      },
+      "yelek 768vs1920": {
+        "ikisi_dogru": 24,
+        "yalniz_768": 1,
+        "yalniz_1920": 15,
+        "ikisi_yanlis": 10,
+        "dogruluk_farki": 0.28,
+        "fark_GA95": [
+          0.1386,
+          0.4051
+        ],
+        "mcnemar_p_exact": 0.0005,
+        "anlamli_p05": true
+      }
+    }
+  },
+  "SONUC": {
+    "soru": "Daha yuksek cozunurluk zayif siniflarda MCC'yi arttirdi mi?",
+    "pano": {
+      "cevap": "HAYIR — HIC.",
+      "ayrinti": "Uc kolun UCU DE 49/49 klipte 'GORUNMUYOR' dedi. Esli karsilastirmada TEK BIR KLIP bile farkli cevaplanmadi (uyumsuz cift = 0, p=1,0). MCC tanimsiz (tahmin varyansi sifir), UC KOL DA DEJENERE. 1920 native cozunurlukte bile model panoyu HIC bulamadi -> DARBOGAZ COZUNURLUK DEGIL, CERCEVELEME/ROI.",
+      "MCC_768": null,
+      "MCC_1280": null,
+      "MCC_1920": null,
+      "delta": 0.0
+    },
+    "yelek": {
+      "cevap": "EVET — ama 1280'de DOYUYOR.",
+      "MCC_768": 0.0,
+      "MCC_1280": 0.5604,
+      "MCC_1920": 0.5641,
+      "delta_768_1280": 0.5604,
+      "delta_1280_1920": 0.0037,
+      "esik": 0.15,
+      "ayrinti": "768 -> 1280 gecisi on kayit esigini (+0,15) FAZLASIYLA asti: MCC 0,000 -> 0,560, dogruluk 0,500 -> 0,780 (+28 puan, GA95 [+0,127,+0,414], McNemar p=0,0013; 16 klip duzeldi, 2 bozuldu). 1280 -> 1920 gecisi ise SIFIR net kazanc: MCC +0,004 (GURULTU), 6 klip duzeldi 6 klip bozuldu, p=1,0.",
+      "uyari": "768 kolu DEJENERELIK KAPISINI GECTI (en bol etiket %52) ama MCC TAM 0,000 — yani cesitli cevap veriyor, cesitlilik GERCEKLE ILGISIZ. 'Dejenere degil' = 'bilgilendirici' DEMEK DEGIL."
+    },
+    "TAVSIYE": "1280 KULLAN. 1920, 1280'e gore 3,8x bayt ve 2,8x gecikme maliyeti karsiliginda OLCULEBILIR SIFIR kazanc veriyor. 768 ise yelek sinifinda bilgiyi TAMAMEN kaybettiriyor.",
+    "ON_KAYIT_BEKLENTIM_YANLIS_CIKTI": "On kayitta 'cozunurluk MCC'yi anlamli arttirmayacak' yazmistim. Yelek sinifinda YANILDIM (+0,56 MCC). Pano sinifinda tahminim dogruydu. BILDIRIYORUM."
+  }
+}

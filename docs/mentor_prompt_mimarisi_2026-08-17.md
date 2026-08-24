@@ -109,3 +109,33 @@ Mentörün mimarisinin **altyapısı** doğruydu ve iki gerçek eksiği kapattı
 > (+0,031) **daha iyi**. Sebebi ölçtük: `class2` ve `class5` **aynı görüntü**,
 > Anomali/Normal görsel AUC'si **0,538** — ayırt edici sinyal veride zayıf.
 > Format mühendisliği bunu düzeltemiyor.
+
+---
+
+# ⚠️ DÜZELTME (2026-08-19) — bu belgedeki ölçüm GEÇERSİZDİR
+
+Yukarıdaki ölçüm `guided_choice` ile "zorunlu seçim" yaptığını varsayıyordu.
+**Yapmıyordu.**
+
+vLLM 0.23, `extra_body` içindeki eski `guided_choice` alanını **sessizce yok
+sayıyor** — hata da uyarı da vermiyor, serbest metin döndürüyor. Doğrudan ölçüldü:
+aynı isteğin kısıt açık ve kapalı çıktıları **birebir aynı**. Doğru alan
+`structured_outputs: {"choice": [...]}`.
+
+**Sonuç: mentörün kapalı-seçenek mimarisi bu koşumda HİÇ TEST EDİLMEMİŞTİR.**
+Yukarıdaki "6-yönlü MCC +0,031", "ikili MCC +0,071 / recall %1" sayıları kısıtsız
+koşmuş bir modelin serbest metin çıktılarının ayrıştırılmasıdır.
+
+Dolayısıyla bu belgedeki şu sonuçlar **geri çekilmiştir**:
+- *"darboğaz format değil, algı"*
+- *"serbest metin, zorunlu seçimden daha iyi çalışıyor"*
+- *"`guided_choice` artık üretim yolunda"* (kalıcı kazanım maddesi 1)
+
+`dilajan/llm_client.py` onarıldı ve adil test yapıldı:
+**`docs/mentor_prompt_cevabi_2026-08-19.md`**
+
+Yeni sonuç kısmen mentör lehinedir: gözlemlenebilir bir soru sorulduğunda forklift
+sınıfında model **0,000 → +0,762**'ye çıkıyor (p = 6,6×10⁻⁵), ve bu sonuç
+yeniden-kodlama kontrolünden de geçiyor. Yelek ve pano sınıflarında ise model
+kişiyi/panoyu **göremiyor** (50/50 `KISI_YOK`, 49/49 `GORUNMUYOR`) — orada
+"algı sınırı" sonucu bu sefer **haklı gerekçeyle** duruyor.

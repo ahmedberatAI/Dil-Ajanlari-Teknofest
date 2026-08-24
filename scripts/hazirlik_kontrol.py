@@ -177,11 +177,14 @@ def main() -> int:
     # ---------------- KKD DEDEKTORU ----------------
     print("\n[KKD] Dedektor hazir mi?")
 
-    @kontrol("yolo11n-ppe.pt agirligi mevcut", kritik=False)
+    @kontrol("KKD 'baret' kiti GERCEKTEN kullanilabilir", kritik=False)
     def _():
+        # D39-D: eskiden yalnizca DOSYAYA bakiliyordu; `ultralytics` (opsiyonel,
+        # AGPL-3.0) kurulu degilken "var" deyip sessizce hicbir sey tespit
+        # etmiyordu. Artik sebep raporlanir.
         from dilajan import detector
-        v = detector.ppe_available()
-        return v, ("var" if v else "YOK — python scripts/train_ppe.py")
+        neden = detector.kkd_neden_yok("baret")
+        return neden is None, ("hazir" if neden is None else f"KAPALI — {neden}")
 
     @kontrol("agirlik yokken FAIL-OPEN (cokme yok)")
     def _():

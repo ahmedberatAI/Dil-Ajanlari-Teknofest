@@ -1,0 +1,485 @@
+{
+ "kunye": {
+  "tarih": "2026-08-24T12:44:01",
+  "model_name": "llm-large",
+  "base_url": "https://evren-llmapi.ssyz.org.tr/v1",
+  "n_samples": 1,
+  "frame_max_side": 768,
+  "not": "boru hatti kendi ic T/max_tokens degerlerini kullanir"
+ },
+ "satirlar": [
+  {
+   "klip": "holdout/Explosion001",
+   "anomali": true,
+   "sure_s": 6.99,
+   "cagri_sayisi": 1,
+   "girdi_token": 1001,
+   "cikti_token": 312,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 3.04,
+     "ptok": 1001,
+     "ctok": 312
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 269
+   },
+   "cikti": {
+    "summary": "Video, 21 saniye boyunca altı ayrı ve kopuk sahneyi içermektedir. Tüm bölümler boyunca herhangi bir güvenlik ihlali, tehlikeli durum veya dikkat çekici olay tespit edilmemiştir. Görüntülerde normal akışa uygun hareketlilik gözlemlenmiş, acil bir durum kaydedilmemiştir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Sistemi normal izleme modunda tutun ve kayıtları arşivleyin.",
+     "Kamera açılarının ve kayıt kalitesinin standartlara uygunluğunu periyodik olarak kontrol edin.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Fighting023",
+   "anomali": true,
+   "sure_s": 12.98,
+   "cagri_sayisi": 1,
+   "girdi_token": 976,
+   "cikti_token": 263,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 2.89,
+     "ptok": 976,
+     "ctok": 263
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 287
+   },
+   "cikti": {
+    "summary": "Analiz edilen 34 saniyelik video, beş ayrı ve kopuk bölümden oluşmaktadır. Her bir bölümde (Bölüm 1'den Bölüm 5'e kadar) güvenlik açısından önemli bir olay, tehdit veya anormal durum tespit edilmemiştir. Görüntülerde herhangi bir acil durum, ihlal veya riskli davranış gözlemlenmemiştir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Sistemi normal izleme modunda tutun.",
+     "Kayıtları standart arşivleme prosedürüne göre saklayın.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "holdout/RoadAcc021",
+   "anomali": true,
+   "sure_s": 13.64,
+   "cagri_sayisi": 1,
+   "girdi_token": 754,
+   "cikti_token": 255,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 2.89,
+     "ptok": 754,
+     "ctok": 255
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 314
+   },
+   "cikti": {
+    "summary": "5 saniyelik video süresi boyunca kamera görüntüsünde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen ortamda hareketli nesne, yangın, yaralı kişi veya izinsiz giriş gibi dikkat gerektiren bir olay yaşanmamıştır. Operatörün dikkatini gerektirecek bir durum bulunmamaktadır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını normal izleme modunda devam ettirin.",
+     "Sistem loglarını ve kamera bağlantılarını standart periyodik kontrol için doğrulayın.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Shooting001",
+   "anomali": true,
+   "sure_s": 7.68,
+   "cagri_sayisi": 1,
+   "girdi_token": 901,
+   "cikti_token": 244,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 2.39,
+     "ptok": 901,
+     "ctok": 244
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 260
+   },
+   "cikti": {
+    "summary": "Videonun ilk bölümünde herhangi bir önemli olay tespit edilmemiştir. İkinci bölümde de benzer şekilde kayda değer bir durum veya anomali gözlemlenmemiştir. Toplam 8 saniyelik görüntü süresi boyunca güvenlik açısından dikkat çekici bir aktivite bulunmamaktadır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını standart izleme modunda devam ettirin.",
+     "Kayıt dosyasını arşivleyin ve normal prosedürü sürdürün.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_6te10",
+   "anomali": false,
+   "sure_s": 6.14,
+   "cagri_sayisi": 1,
+   "girdi_token": 754,
+   "cikti_token": 236,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 1.62,
+     "ptok": 754,
+     "ctok": 236
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 206
+   },
+   "cikti": {
+    "summary": "İki saniyelik video analizinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını standart izleme modunda devam ettirin.",
+     "Sistem loglarını ve kayıt arşivini normal prosedür doğrultusunda saklayın."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_939",
+   "anomali": false,
+   "sure_s": 17.17,
+   "cagri_sayisi": 1,
+   "girdi_token": 754,
+   "cikti_token": 230,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 3.78,
+     "ptok": 754,
+     "ctok": 230
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 213
+   },
+   "cikti": {
+    "summary": "27 saniyelik video analizinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam akışı gözlemlenmiş, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını standart izleme modunda devam ettirin.",
+     "Sistem loglarını normal aralıklarla kontrol etmeye devam edin.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "isg/Forklift_asiri_yuk",
+   "anomali": true,
+   "sure_s": 15.17,
+   "cagri_sayisi": 3,
+   "girdi_token": 4141,
+   "cikti_token": 656,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 6.84,
+     "ptok": 1864,
+     "ctok": 400
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.64,
+     "ptok": 1523,
+     "ctok": 11
+    },
+    {
+     "model": "llm-large",
+     "sure": 2.37,
+     "ptok": 754,
+     "ctok": 245
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 294
+   },
+   "cikti": {
+    "summary": "11 saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir aktivite gözlemlenmemiştir. Mevcut veriler ışığında izlenen alanın durumu normal seyretmektedir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını standart izleme modunda devam ettirin.",
+     "Sistem kayıtlarını arşivleyin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Yaya_yolu_ihlali",
+   "anomali": true,
+   "sure_s": 20.74,
+   "cagri_sayisi": 1,
+   "girdi_token": 754,
+   "cikti_token": 224,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 2.1,
+     "ptok": 754,
+     "ctok": 224
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 220
+   },
+   "cikti": {
+    "summary": "15 saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir durum bulunmamaktadır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Gözetim sistemini normal çalışma modunda tutun ve izlemeye devam edin.",
+     "Kayıt dosyasını arşivleyin ve sistem loglarını güncelleyin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_acik",
+   "anomali": true,
+   "sure_s": 14.61,
+   "cagri_sayisi": 1,
+   "girdi_token": 754,
+   "cikti_token": 318,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 2.37,
+     "ptok": 754,
+     "ctok": 318
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 315
+   },
+   "cikti": {
+    "summary": "12 saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir aktivite gözlemlenmemiştir. İncelenen zaman aralığında sistem tarafından uyarı gerektiren bir durum kaydedilmemiştir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Sistemi normal izleme modunda tutun ve otomatik algılama fonksiyonlarının aktif kalmasını sağlayın.",
+     "Kayıt dosyasını arşivleyin ve sonraki denetimler için saklayın."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "anomali": false,
+   "sure_s": 13.18,
+   "cagri_sayisi": 1,
+   "girdi_token": 754,
+   "cikti_token": 296,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 3.51,
+     "ptok": 754,
+     "ctok": 296
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 224
+   },
+   "cikti": {
+    "summary": "12 saniyelik video analizinde herhangi bir anormal durum, güvenlik ihlali veya riskli olay tespit edilmemiştir. Görüntülerde sakin bir ortam akışı gözlemlenmiş olup, operatörün dikkatini gerektiren bir durum bulunmamaktadır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını normal izleme modunda devam ettirin.",
+     "Sistem kayıtlarını standart arşivleme prosedürüne göre saklayın."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_yaya_yolu",
+   "anomali": false,
+   "sure_s": 16.86,
+   "cagri_sayisi": 1,
+   "girdi_token": 754,
+   "cikti_token": 259,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 1.7,
+     "ptok": 754,
+     "ctok": 259
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 216
+   },
+   "cikti": {
+    "summary": "16 saniyelik video incelemesinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam akışı gözlemlenmiş, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını standart izleme modunda devam ettirin.",
+     "Sistem kayıtlarını arşivleyin ve normal operasyon loguna ekleyin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_kapali",
+   "anomali": false,
+   "sure_s": 8.17,
+   "cagri_sayisi": 1,
+   "girdi_token": 754,
+   "cikti_token": 236,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 1.57,
+     "ptok": 754,
+     "ctok": 236
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 224
+   },
+   "cikti": {
+    "summary": "6 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülenen ortamda hareketlilik veya olağandışı bir olay yaşanmamıştır. Operasyonel durum normal seyretmektedir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Gözetim sistemlerinin normal çalışma durumunu koruyun ve izlemeye devam edin.",
+     "Kayıt verilerini standart arşivleme prosedürüne göre saklayın."
+    ]
+   }
+  }
+ ]
+}

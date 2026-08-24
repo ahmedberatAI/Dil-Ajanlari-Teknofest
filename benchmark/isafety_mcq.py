@@ -97,7 +97,9 @@ def _sor(istemci: VLMClient, frames, secenekler: List[str]) -> Optional[int]:
         model=istemci.model,
         messages=[{"role": "user", "content": icerik}],
         temperature=0.0, max_tokens=4,
-        extra_body={"guided_choice": harfler},
+        # D40 KUSUR (2026-08-19): vLLM 0.23 eski `guided_choice` alanini SESSIZCE
+        # yok sayiyor (hata vermiyor, serbest metin donuyor). Dogrusu:
+        extra_body={"structured_outputs": {"choice": harfler}},
     )
     cevap = (resp.choices[0].message.content or "").strip().upper()[:1]
     return HARFLER.index(cevap) if cevap in harfler else None

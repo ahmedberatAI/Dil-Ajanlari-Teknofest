@@ -176,15 +176,28 @@ def _hakem_puanla(istemci, **kw) -> dict:
             "gerekce": str(d.get("gerekce", ""))[:200]}
 
 
-def main() -> None:
-    istemci = VLMClient()
+def main(model: str | None = None, hakem_modeli: str | None = None,
+         sicaklik: float = 0.0, cikti: str | None = None) -> dict:
+    """D42 — MODEL SECIMI ARTIK PARAMETRIK.
+
+    Eskiden hem asistan hem hakem SABIT `VLMClient()` (yani `settings.model_name`)
+    idi; uzak serviste 10 alias acikken hangi alias'in operator diyalogunda daha
+    iyi oldugu OLCULEMIYORDU. VARSAYILANLAR eski davranisi BIREBIR korur
+    (model=None -> settings.model_name, sicaklik=0.0).
+    """
+    istemci = VLMClient().model_ile(hakem_modeli)
     satirlar = []
+    kunye = {"asistan_modeli": model or VLMClient().model,
+             "hakem_modeli": istemci.model, "sicaklik": sicaklik,
+             "hakem_sicaklik": 0.0, "max_tokens": 400, "hakem_max_tokens": 220,
+             "n_senaryo": len(SENARYOLAR) + len(COK_TURLU)}
+    print(f"KUNYE: {json.dumps(kunye, ensure_ascii=False)}")
 
     print("=" * 72)
     print("SERTLESTIRILMIS TEK-TUR (her senaryoda bir TUZAK var)")
     print("=" * 72)
     for kod, mesaj, tuzak, beklenen in SENARYOLAR:
-        yanit = chat_agent.respond(CONTEXT, [], mesaj, temperature=0.0)
+        yanit = chat_agent.respond(CONTEXT, [], mesaj, temperature=sicaklik, model=model)
         p = _hakem_puanla(istemci, kod=kod, mesaj=mesaj, tuzak=tuzak,
                           beklenen=beklenen, yanit=yanit)
         satirlar.append({"tur": "tek", "kod": kod, "mesaj": mesaj,
@@ -201,7 +214,7 @@ def main() -> None:
     print("=" * 72)
     gecmis: list = []
     for mesaj, beklenen in COK_TURLU:
-        yanit = chat_agent.respond(CONTEXT, gecmis, mesaj, temperature=0.0)
+        yanit = chat_agent.respond(CONTEXT, gecmis, mesaj, temperature=sicaklik, model=model)
         p = _hakem_puanla(istemci, kod="cok_turlu", mesaj=mesaj,
                           tuzak="Onceki turlarin baglami korunmali.",
                           beklenen=beklenen, yanit=yanit)
@@ -240,19 +253,28 @@ def main() -> None:
     if std(tek, "gorev") == 0 and ort(tek, "gorev") == 5:
         print("\n  UYARI: bu test de TAVANA vurdu (5,00 / std 0) — daha da sertlestirilmeli.")
 
-    yol = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       "results", "dialogue_hard.json")
+    cikti_verisi = {"kunye": kunye, "baglam": CONTEXT, "satirlar": satirlar,
+                    "ozet": {"tek_gorev": ort(tek, "gorev"),
+                             "tek_dogallik": ort(tek, "dogallik"),
+                             "cok_gorev": ort(cok, "gorev"),
+                             "cok_dogallik": ort(cok, "dogallik"),
+                             "tuzaga_dusulen": len(dusuk), "n": len(satirlar)}}
+    yol = cikti or os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "results", "dialogue_hard.json")
     os.makedirs(os.path.dirname(yol), exist_ok=True)
     with open(yol, "w", encoding="utf-8") as f:
-        json.dump({"baglam": CONTEXT, "satirlar": satirlar,
-                   "ozet": {"tek_gorev": ort(tek, "gorev"),
-                            "tek_dogallik": ort(tek, "dogallik"),
-                            "cok_gorev": ort(cok, "gorev"),
-                            "cok_dogallik": ort(cok, "dogallik"),
-                            "tuzaga_dusulen": len(dusuk), "n": len(satirlar)}},
-                  f, ensure_ascii=False, indent=2)
-    print(f"\nKaydedildi: {os.path.relpath(yol, os.path.dirname(os.path.dirname(yol)))}")
+        json.dump(cikti_verisi, f, ensure_ascii=False, indent=2)
+    print(f"\nKaydedildi: {yol}")
+    return cikti_verisi
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    ap = argparse.ArgumentParser(description="Sertlestirilmis diyalog/otonomi testi")
+    ap.add_argument("--model", default=None,
+                    help="asistan alias'i (llm-large | llm-fast | router). Bos = settings.model_name")
+    ap.add_argument("--hakem", default=None, help="hakem alias'i. Bos = settings.model_name")
+    ap.add_argument("--sicaklik", type=float, default=0.0, help="asistan sicakligi (varsayilan 0.0)")
+    ap.add_argument("--cikti", default=None, help="sonuc JSON yolu")
+    a = ap.parse_args()
+    main(model=a.model, hakem_modeli=a.hakem, sicaklik=a.sicaklik, cikti=a.cikti)

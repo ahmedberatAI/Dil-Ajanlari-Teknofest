@@ -68,10 +68,12 @@ class VLMClient:
     ) -> None:
         self.client = OpenAI(
             base_url=base_url or settings.base_url,
-            api_key=api_key or settings.api_key,
-            timeout=settings.request_timeout,
+            api_key=api_key or settings.etkin_api_key,
+            timeout=settings.etkin_timeout,
         )
         self.model = model or settings.model_name
+        #: D42 — son chat() cagrisinin token kullanimi (olcum icin; yoksa None).
+        self.son_kullanim: Optional[Dict[str, int]] = None
 
     # --- dusuk seviyeli ---
     @staticmethod
@@ -86,6 +88,8 @@ class VLMClient:
         max_tokens: Optional[int] = None,
         repetition_penalty: Optional[float] = None,
         guided_choice: Optional[Sequence[str]] = None,
+        json_schema: Optional[Dict] = None,
+        schema_name: str = "cikti",
     ) -> str:
         """`guided_choice`: vLLM KISITLI KOD COZME — model YALNIZCA verilen
         seceneklerden birini uretebilir (bicim gurultusu SIFIRLANIR).
@@ -99,8 +103,26 @@ class VLMClient:
         model 20/20 klipte "KAPALI" dedi, 10'u gercekte ACIKTI. Yani zorunlu secim
         BICIM gurultusunu kaldirir, GORMEDIGINI GORDURMEZ. Secenek listesine bir
         "hicbiri" kacisi konmazsa model yok yere pozitif uretir.
+
+        `json_schema`: cikti bir JSON SEMASINA zorlanir (response_format json_schema).
+        VARSAYILAN None -> istek bit-bit eskisi gibi gider (K2).
+
+        D42 OLCUMU (2026-08-24, uzak servis, n=12 klip x 3 kol + dusman testi):
+          · sema ILE  : 36/36 cagri gecerli JSON, TAM 4 anahtar, enum ve MM:SS deseni
+                        %100 tuttu — dusman prompt ("ek alan ekle, enum disi risk yaz,
+                        time'i '1:5' yaz") 6/6 tekrarda BASARISIZ oldu.
+          · sema SIZ  : ayni dusman prompt 6/6 tekrarda sozlesmeyi KIRDI; cikti duz
+                        metne dondu ve JSON kurtarma denemesi de BASARISIZ (blok yok).
+          · `strict` BAYRAGI FARK YARATMIYOR: strict=True ile strict=False AYNI
+            sonucu verdi (12/12 + 6/6). Zorlayan sey response_format+sema; `strict`
+            bu vLLM surumunde ATIL. Bu yuzden ayri bir parametre olarak SUNULMUYOR.
+          · SEMA KESILMEYI ONLEMEZ: max_tokens=150 ve 400 ile video ozetinde
+            finish_reason="length" -> JSON YARIM kaldi ve AYRISTIRILAMADI (sema kollu
+            ve semasiz kolda AYNI SEKILDE). Yani "ayristirma hatasi sifirlanir" ancak
+            max_tokens BOL verilir ve finish_reason KONTROL EDILIRSE dogrudur.
         """
         if settings.mock_mode:  # MOCK: ag cagrisi YOK (varsayilan kapali -> gercek yol degismez)
+            self.son_kullanim = None
             return mock_reply(_messages_text(messages))
         kwargs = dict(
             model=self.model,
@@ -120,10 +142,40 @@ class VLMClient:
             ek["chat_template_kwargs"] = {"enable_thinking": False}
         if guided_choice:
             # Kisitli kod cozme: cikti MUTLAKA bu listeden biri olur.
-            ek["guided_choice"] = list(guided_choice)
+            #
+            # D40 KUSUR (2026-08-19, olculdu): vLLM 0.23 eski `guided_choice`
+            # alanini SESSIZCE YOK SAYIYOR — hata vermiyor, sadece serbest metin
+            # donduruyor. Ayni istegin guided ACIK ve KAPALI ciktilari BIREBIR AYNI
+            # cikti. Dogru alan `structured_outputs: {"choice": [...]}`.
+            # Denenen varyantlar:
+            #   guided_choice              -> serbest metin  (atil)
+            #   guided_decoding.choice     -> serbest metin  (atil)
+            #   response_format json_schema-> tirnakli '"X"' (calisir ama kirli)
+            #   structured_outputs.choice  -> 'X'            <- DOGRUSU
+            # ETKI: bu alani kullanan TUM eski olcumler (D33 pano probu,
+            # D37 yapilandirilmis prompt probu) kisitsiz kosmustur.
+            ek["structured_outputs"] = {"choice": list(guided_choice)}
+        if json_schema:
+            # Sema zorlamasi: cikti MUTLAKA bu semaya uyar (bkz. docstring D42 olcumu).
+            # `strict` bayragi bu serviste ATIL oldugu icin GONDERILMIYOR — zorlamayi
+            # response_format+sema yapiyor.
+            kwargs["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {"name": schema_name, "schema": json_schema},
+            }
         if ek:
             kwargs["extra_body"] = ek
         resp = self.client.chat.completions.create(**kwargs)
+        # D42: son cagrinin token kullanimi OLCUM icin saklanir (donus tipi DEGISMEZ ->
+        # tum mevcut cagrilar birebir ayni calisir). Servis usage dondurmezse None.
+        try:
+            u = getattr(resp, "usage", None)
+            self.son_kullanim = (
+                {"giris": u.prompt_tokens, "cikis": u.completion_tokens,
+                 "toplam": u.total_tokens} if u else None
+            )
+        except Exception:
+            self.son_kullanim = None
         return resp.choices[0].message.content or ""
 
     # --- yuksek seviyeli ---
@@ -156,7 +208,18 @@ class VLMClient:
         if settings.mock_mode:  # MOCK: kare/mp4 kodlamasi ve ag cagrisi YOK; tohum karelerden gelir
             return mock_reply(instruction, frames=frames)
         content: List[dict] = []
-        if as_video and len(frames) >= 2:
+        # D41 — UZAK SERVISTE VIDEO YOLU ZORUNLU.
+        # Servis istek basina EN FAZLA 2 GORUNTU kabul ediyor (olculdu: 8 kare -> HTTP 400
+        # "At most 2 image(s) may be provided in one prompt"; vlm ise 0 goruntu).
+        # Bizim boru hattimiz 8-12 kare gonderiyor -> uzak serviste HER KLIPTE patlardi.
+        # Bu yuzden uzak API aktifken kare yolu KULLANILMAZ, kareler mp4'e kodlanip
+        # video olarak gonderilir. Yerelde davranis DEGISMEZ (K2).
+        _zorunlu_video = False
+        try:
+            _zorunlu_video = settings.uzak_api_mi and len(frames) > 2
+        except Exception:
+            pass
+        if (as_video or _zorunlu_video) and len(frames) >= 2:
             try:
                 mp4 = _frames_to_mp4(frames)
                 url = "data:video/mp4;base64," + base64.b64encode(mp4).decode()
@@ -168,7 +231,11 @@ class VLMClient:
                 ], temperature=temperature, max_tokens=max_tokens,
                     repetition_penalty=repetition_penalty, guided_choice=guided_choice)
             except Exception:
-                content = []  # image-path'e fail-open
+                # Uzak serviste image-path'e dusmek ANLAMSIZ: 3+ goruntu yine 400 verir.
+                # Yalnizca YEREL sunucuda geri dusulur.
+                if _zorunlu_video:
+                    raise
+                content = []  # image-path'e fail-open (yalniz yerel)
         for ts, jpeg in frames:
             content.append({"type": "text", "text": f"[Kare zamanı: {ts}]"})
             content.append(
@@ -183,6 +250,48 @@ class VLMClient:
         return self.chat(messages, temperature=temperature, max_tokens=max_tokens,
                          repetition_penalty=repetition_penalty,
                          guided_choice=guided_choice)
+
+    def model_ile(self, ad: Optional[str]) -> "VLMClient":
+        """Ayni baglantiyi paylasan, VERILEN MODEL ADINA bakan hafif gorunum.
+
+        `ad` bos/None ise KENDINI dondurur (cagiran taraf kosul yazmasin).
+        Yeni HTTP baglantisi ACILMAZ — `self.client` paylasilir.
+
+        D42: alias A/B olcumleri (ornegin diyalog kolunda llm-large vs llm-fast vs
+        router) icin gerekli. `gorev()` gorev ADINDAN modele cozer; bu ise MODEL
+        ADINI dogrudan alir, dolayisiyla olcum betikleri settings'i degistirmeden
+        kol degistirebilir.
+        """
+        ad = (ad or "").strip()
+        if not ad or ad == self.model:
+            return self
+        yeni = object.__new__(VLMClient)
+        yeni.__dict__.update(self.__dict__)
+        yeni.model = ad
+        return yeni
+
+    def gorev(self, gorev: str) -> "VLMClient":
+        """Ayni baglantiyi paylasan, FARKLI MODELE bakan hafif bir gorunum.
+
+        D41: uzak serviste 10 alias acik; her boru hatti asamasi kendi modelini
+        kullanabilir. Yeni HTTP baglantisi ACILMAZ — `self.client` paylasilir.
+        """
+        return self.model_ile(settings.gorev_modeli(gorev))
+
+    def video_oturumu(self, video: "str | bytes", system: Optional[str] = None,
+                      giris_metni: str = "Bu videoyu inceleyeceğiz."):
+        """Videoyu BIR KEZ kodlayip ustune COK SORU sormak icin oturum acar.
+
+        D41 — EVREN servisi olculdu: ilk yukleme 17,8 s, sonraki sorular
+        4,7 -> 4,1 -> 3,7 s = **4,8x hizlanma**. Kosul: ON-EK ONBELLEGININ
+        isabet etmesi icin AYNI KODLANMIS NESNE tekrar kullanilmalidir.
+        Video her soru icin yeniden okunup kodlanirsa baytlar degisir ve
+        onbellek ISABET ETMEZ (dokumantasyon s.56).
+
+        Bu, bizim islemsel-soru mimarimize birebir oturur: "catalda kac kasa?",
+        "panoda koyu oyuk var mi?", "yelek var mi?" — hepsi ayni video uzerine.
+        """
+        return _VideoOturumu(self, video, system=system, giris_metni=giris_metni)
 
     def health_check(self) -> bool:
         """Sunucu ayakta ve model yüklü mü?
@@ -803,3 +912,67 @@ def mock_reply(prompt_text: str, frames: Optional[Sequence[Frame]] = None) -> st
         return (_MOCK_GEN.get(kind) or _gen_unknown)(text, _seed(kind, text, _frames_digest(frames)))
     except Exception:  # fail-open: mock hicbir kosulda akisi kirmasin
         return _gen_unknown("", 0)
+
+
+# ---------------------------------------------------------------------------
+# D41 — VIDEO OTURUMU (uzak EVREN servisi icin; yerel vLLM'de de calisir)
+# ---------------------------------------------------------------------------
+# NEDEN AYRI SINIF: `analyze_frames(as_video=True)` kareleri HER CAGRIDA yeniden
+# mp4'e kodluyor. Bu, on-ek onbellegini ISKALAR (baytlar her seferinde farkli).
+# Ayrica EVREN servisi istek basina EN FAZLA 2 GORUNTU kabul ediyor — bizim
+# 8-12 karelik kare-tabanli yolumuz orada CALISMAZ (olculdu).
+GOVDE_SINIRI = 256 * 1024 * 1024          # servisin kabul ettigi ust sinir
+HAM_SINIR = int(GOVDE_SINIRI / 1.34)      # base64 sismesi icin pay
+
+
+class _VideoOturumu:
+    """Tek videoya cok soru. base64 BIR KEZ uretilir ve TASINIR."""
+
+    def __init__(self, istemci: "VLMClient", video, system: Optional[str] = None,
+                 giris_metni: str = "Bu videoyu inceleyeceğiz."):
+        self.istemci = istemci
+        self.sistem = system if system is not None else SYSTEM_PERSONA
+        self.hata: Optional[str] = None
+
+        ham = video if isinstance(video, (bytes, bytearray)) else open(video, "rb").read()
+        if len(ham) > HAM_SINIR:
+            self.hata = (f"video {len(ham)/1e6:.1f} MB — base64 sonrasi govde "
+                         f"sinirini asar ({GOVDE_SINIRI/1e6:.0f} MB); klip bolunmeli")
+            self._url = None
+        else:
+            # BIR KEZ kodlanir; bu dize tum sorularda AYNEN tekrar kullanilir.
+            self._url = "data:video/mp4;base64," + base64.b64encode(bytes(ham)).decode()
+
+        self._mesajlar: List[dict] = []
+        if self._url:
+            self._mesajlar.append({"role": "user", "content": [
+                {"type": "text", "text": giris_metni},
+                {"type": "video_url", "video_url": {"url": self._url}},
+            ]})
+
+    @property
+    def hazir(self) -> bool:
+        return self._url is not None
+
+    def sor(self, soru: str, guided_choice: Optional[Sequence[str]] = None,
+            temperature: Optional[float] = None, max_tokens: Optional[int] = None,
+            hatirla: bool = True) -> Optional[str]:
+        """Ayni video uzerine bir soru. Hata olursa None (K3 fail-open).
+
+        hatirla=True: cevap konusma gecmisine eklenir (sonraki sorular gorur).
+        hatirla=False: soru sorulur ama gecmise YAZILMAZ — bagimsiz sorular icin
+        (or. birbirini etkilememesi gereken ISG olcumleri).
+        """
+        if not self.hazir:
+            return None
+        mesajlar = [{"role": "system", "content": self.sistem}] + self._mesajlar +                    [{"role": "user", "content": soru}]
+        try:
+            c = self.istemci.chat(mesajlar, temperature=temperature,
+                                  max_tokens=max_tokens, guided_choice=guided_choice)
+        except Exception as e:
+            self.hata = f"{type(e).__name__}: {e}"
+            return None
+        if hatirla and c:
+            self._mesajlar.append({"role": "user", "content": soru})
+            self._mesajlar.append({"role": "assistant", "content": c})
+        return c

@@ -334,9 +334,11 @@ def _events_block_scened(events: List[Event], cuts: List[float]) -> str:
 
 
 # --- dugumler ---
-def _ingest_output(frames, info, trace: list) -> dict:
+def _ingest_output(frames, info, trace: list, kaynak_yol: str = "") -> dict:
     """Cikarilmis karelerden segment + sahne-kesimi cikti sozlugu kurar (ortak yol)."""
     segments = build_segments(frames)
+    for _s in segments:
+        _s.kaynak_yol = kaynak_yol
     cuts = detect_scene_cuts(frames) if settings.scene_cut_threshold > 0 else []
     if not segments:
         trace.append("ingest: video okundu ama kare cikarilamadi (boş/bozuk olabilir)")
@@ -355,13 +357,13 @@ def ingest(state: AgentState) -> dict:
     if pf is not None:
         info = state.get("prebuilt_info")
         try:
-            return _ingest_output(pf, info, trace)
+            return _ingest_output(pf, info, trace, state.get("video_path", "") or "")
         except Exception as ex:
             trace.append(f"ingest: onceden-cikarilmis kare islenemedi: {ex}")
             return {"segments": [], "video_info": info, "trace": trace}
     try:
         frames, info = extract_timestamped_frames(state["video_path"])
-        return _ingest_output(frames, info, trace)
+        return _ingest_output(frames, info, trace, state["video_path"])
     except Exception as ex:  # okunamayan/bozuk video -> toleransli devam
         trace.append(f"ingest: video okunamadi: {ex}")
         return {"segments": [], "video_info": None, "trace": trace}
@@ -910,6 +912,153 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                 out.append(Event(
                     time=t, event=f"Yasak bölge ihlali: yetkisiz kişi '{reg}' kısıtlı bölgesinde tespit edildi",
                     severity=Severity.YUKSEK, category=EventCategory.YETKISIZ_ERISIM, region=reg))
+        # PANO KAPAGI (D39-E): kapak ACIK *ve* BASIBOS -> deterministik ISG olayi.
+        # K2: `panel_roi` bos iken bu blok TEK SATIR bile calistirmaz -> mevcut
+        # olcumler birebir yeniden uretilir.
+        # Kural bilesiktir ve BILESIK OLMASI SART: `Authorized_Intervention`da pano da
+        # fiziksel olarak aciktir; kisi terimi olmadan FP 1 -> 21'e cikar (olculdu).
+        if settings.panel_roi:
+            try:
+                from dilajan import pano as _pano
+                pd = _pano.pano_durumu(
+                    seg.frames, settings.panel_roi,
+                    luma_esik=settings.panel_luma_esik,
+                    kisi_kontrolu=settings.panel_kisi_kontrolu,
+                    gorus_imza=settings.panel_gorus_imza,
+                    gorus_esik=settings.panel_gorus_esik)
+            except Exception as ex:
+                pd = None
+                notes.append(f"perceive: segment {seg.index} pano dedektoru hatasi: {ex}")
+            if pd:
+                try:
+                    psev = Severity(settings.panel_severity)
+                except ValueError:
+                    psev = Severity.YUKSEK
+                out.append(Event(
+                    time=pd["time"],
+                    event=("Pano kapağı açık ve başıboş: elektrik/kontrol panosu "
+                           "kapağı açık, başında görevli yok"),
+                    severity=psev,
+                    category=EventCategory.GUVENLIK))
+                notes.append(
+                    f"perceive: segment {seg.index} pano dedektörü "
+                    f"[luma {pd['luma']} < eşik {pd['esik']}, {pd['n_kare']} kare, "
+                    f"başında kişi: {'var' if pd['kisi_vardi'] else 'yok'}] "
+                    f"-> deterministik olay eklendi")
+        # === D43 GOZLEM DUZLEMI ===
+        # Yapilandirilmis slot doldurma + DETERMINISTIK kural motoru.
+        # Karar dongusunde MODEL YOK: model yalnizca kapali cevap uzayinda bir
+        # slot doldurur (sayi/etiket), hukmu isg_kural verir. Uretilen olayin
+        # metni SABLON RENDER'idir -> sozcuksel eslestirme kaybi (olculen %64)
+        # yapisal olarak imkansiz.
+        # K2: `isg_slotlari` bos iken bu blok TEK SATIR bile calistirmaz.
+        if settings.isg_slotlari:
+            try:
+                from dilajan import gozlem as _gz, isg_kural as _kr
+                from dilajan.llm_client import _frames_to_mp4 as _mp4
+                istenen = _kr.gerekli_slotlar(settings)
+                slotlar = [_gz.SLOT_KATALOG[a] for a in istenen
+                           if a in _gz.SLOT_KATALOG]
+                # KLIP kapsamli slotlar YALNIZCA ilk segmentte sorulur: cevap
+                # segmentten segmente degismez, tekrar sormak hem bosa cagri
+                # hem de ayni olayin tekrar uretilmesi olurdu.
+                if seg.index != 0:
+                    slotlar = [x for x in slotlar
+                               if getattr(x, "kapsam", "segment") != "klip"]
+                if slotlar:
+                    kar = list(seg.frames)[: settings.isg_slot_azami_kare]
+                    # SYSTEM_PERSONA DEGIL: olculdu, cekimserlige davet eden
+                    # persona bu duzlemde MCC'yi +0,885'ten +0,000'a dusuruyor.
+                    # ORIJINAL videoyu gonder — OLCULEN yapilandirma budur.
+                    # Kareleri 768px'te yeniden kodlamak yelek/pano slotlarini
+                    # DEJENERE yapiyordu (her klipte ayni cevap).
+                    _yol = getattr(seg, "kaynak_yol", "") or ""
+
+                    # SEGMENTIN KENDI ZAMAN PENCERESI. Bu olmadan her segment
+                    # TUM videoyu gonderiyordu: ayni soru N kez soruluyor ve
+                    # uretilen olayin zamani ihlalin anina degil ILK segmente
+                    # denk geliyordu.
+                    _bas = float(_secs(seg.start_str))
+                    _sure = max(0.0, float(_secs(seg.end_str)) - _bas) or None
+
+                    def _video_uret(roi, kapsam="segment",
+                                    _y=_yol, _k=kar, _b=_bas, _s=_sure):
+                        """ROI basina TEK video uretir (ayni ROI'li slotlar paylasir).
+
+                        Kirpma yalnizca ORIJINAL dosya varken yapilabilir; kare
+                        yedeginde ROI ve pencere YOK SAYILIR — bu DEJENERE kiptir
+                        (olculdu: tam kare MCC -0,192) ve karar-izine yazilir."""
+                        if _y:
+                            from dilajan.video import servis_videosu as _sv
+                            if kapsam == "klip":
+                                # ON KOSUL sorusu TUM klibe sorulur: pencere
+                                # daraltilinca kisi goruntunun bir bolumunde
+                                # kaliyor ve kapi yanlis kapaniyordu.
+                                return _sv(_y, roi_str=roi)
+                            return _sv(_y, roi_str=roi, bas_sn=_b, sure_sn=_s)
+                        return _mp4(_k)
+
+                    kayit = _gz.slotlari_doldur_bolgeli(
+                        vlm, slotlar, _video_uret, settings,
+                        system=_gz.GOZLEM_SISTEM)
+                    if not _yol:
+                        notes.append(
+                            f"perceive: segment {seg.index} gozlem duzlemi "
+                            "KAYNAK VIDEO YOK -> kareler 768px'te yeniden "
+                            "kodlandi; ROI kirpmasi ve zaman penceresi "
+                            "UYGULANMADI (olculdu: bu kip DEJENERE)")
+                    yeni = _kr.olaylari_uret(kayit, settings,
+                                             zaman=(kar[0][0] if kar else "00:00"))
+                    out.extend(yeni)
+                    notes.append(
+                        f"perceive: segment {seg.index} gozlem duzlemi "
+                        f"[slot={list(kayit.degerler.items())}, "
+                        f"hata={list(kayit.hatalar)}] -> {len(yeni)} deterministik olay")
+                    # OLCULEMEYEN slot, "ihlal yok" DEGILDIR. Nedeni izde
+                    # ACIKCA yazilir; aksi halde coken bir kosum temiz bir
+                    # kosumdan ayirt edilemez.
+                    if kayit.hatalar:
+                        notes.append(
+                            f"perceive: segment {seg.index} ISG slotlari "
+                            f"OLCULEMEDI -> " + " | ".join(
+                                f"{a}: {n}" for a, n in
+                                list(kayit.hatalar.items())[:4]))
+            except Exception as ex:
+                notes.append(f"perceive: segment {seg.index} gozlem duzlemi hatasi: {ex}")
+        # FORKLIFT ASIRI YUK (D40): catalda >= esik kasa -> deterministik ISG olayi.
+        # K2: `forklift_yuk` bos iken blok TEK SATIR bile calistirmaz.
+        # Kaynak makalenin ISLEMSEL tanimi: "3 blocks or more". Anlamsal soru
+        # ("asiri yuk var mi?") olculdu ve DEJENERE cikti (50/50 "gorunmuyor").
+        if settings.forklift_yuk:
+            try:
+                from dilajan import forklift as _fk
+                fy = _fk.asiri_yuk(
+                    seg.frames, yontem=settings.forklift_yuk,
+                    esik=settings.forklift_esik,
+                    istemci=(vlm if settings.forklift_yuk in ("vlm", "ikisi") else None),
+                    y_ufuk=settings.forklift_y_ufuk,
+                    f_pers_esik=settings.forklift_f_pers_esik)
+            except Exception as ex:
+                fy = None
+                notes.append(f"perceive: segment {seg.index} forklift dedektoru hatasi: {ex}")
+            if fy:
+                try:
+                    fsev = Severity(settings.forklift_severity)
+                except ValueError:
+                    fsev = Severity.YUKSEK
+                kasa = fy.get("vlm_kasa")
+                out.append(Event(
+                    time=fy["time"],
+                    event=("Forklift aşırı yük: çatalda güvenli kapasitenin üzerinde "
+                           "istif taşınıyor"
+                           + (f" ({kasa} kasa)" if kasa is not None else "")),
+                    severity=fsev,
+                    category=EventCategory.GUVENLIK))
+                notes.append(
+                    f"perceive: segment {seg.index} forklift dedektörü "
+                    f"[yöntem={fy['yontem']}, vlm_kasa={fy.get('vlm_kasa')}, "
+                    f"geometri_aşırı={fy.get('geometri_asiri')}] "
+                    f"-> deterministik olay eklendi")
         # Hizli-kazanim: YETKISIZ/YANLIS-KONUMLU ARAC (deterministik YOLO; araclar iri -> grenli-guvenli).
         # vehicle_zones set ise: yasak bolgedeki arac -> ihlal; bos ise: durak (dwell) arac bilgi amacli.
         if settings.detect_vehicles:
@@ -961,6 +1110,16 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
             for kit in kitler:
                 if kit not in detector.KKD_KITLERI:
                     notes.append(f"perceive: bilinmeyen KKD kiti atlandı: {kit!r}")
+                    continue
+                # D39-D: kit ISTENDI ama KULLANILAMIYOR (agirlik yok / arka uc kurulu
+                # degil). K3 geregi fail-open kaliyoruz, ama SESSIZ DEGIL: eskiden
+                # sistem "KKD hazir" deyip hicbir sey tespit etmiyor ve ize de
+                # yazmiyordu. Artik operator/juri bunu izde gorur.
+                neden = detector.kkd_neden_yok(kit)
+                if neden:
+                    notes.append(
+                        f"perceive: ⚠ KKD kiti '{kit}' KULLANILAMIYOR — {neden}; "
+                        f"bu kit için tespit YAPILMADI")
                     continue
                 # DAGITIMA HAZIR OLMAYAN kit acilabilir (opt-in) ama SESSIZ OLMAZ:
                 # karar-izine olculmus zayifligi yazilir ki operator/jury bu olayin
@@ -1019,6 +1178,34 @@ def _dedup_words(text: str) -> set:
     return {w for w in re.findall(r"[a-zçğıöşü]+", text.lower()) if len(w) >= 4 and w not in _DEDUP_STOP}
 
 
+def _isg_tekille(events: List[Event]) -> List[Event]:
+    """AYNI ISG kodunu tasiyan olaylardan yalnizca ILKINI tutar.
+
+    NEDEN: gozlem duzlemi HER SEGMENT icin slot doldurur; 3 segmentlik bir
+    klipte ayni pano/forklift ihlali 3 kez raporlaniyordu. Ayni ihlali
+    tekrar yazmak operator icin gurultudur ve `_dedupe_events` bunu
+    yakalayamaz — o ARDISIK ve METIN-BENZERLIGINE bakar, oysa bu olaylarin
+    metni ZATEN BIREBIR AYNIDIR (sablon render'i) ama araya anlati duzlemi
+    olaylari girebilir.
+
+    En ERKEN zaman damgasi korunur (olaylar zaten zamana gore sirali).
+    ISG kodu TASIMAYAN olaylara DOKUNULMAZ -> `isg_slotlari` kapaliyken bu
+    fonksiyon listeyi BIREBIR ayni dondurur (K2).
+    """
+    gorulen = set()
+    out: List[Event] = []
+    for e in events:
+        kod = getattr(e, "isg_kod", None)
+        if kod is None:
+            out.append(e)
+            continue
+        if kod in gorulen:
+            continue
+        gorulen.add(kod)
+        out.append(e)
+    return out
+
+
 def _dedupe_events(events: List[Event]) -> List[Event]:
     """Ardisik + ayni kategori + benzer olaylari tek olaya birlestirir (surekli olay
     her segmentte tekrar raporlanmasin). Recall/risk/kategori'yi korur: en bilgilendirici
@@ -1038,6 +1225,20 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
             #      konumlandirilmasiyla ayni gerekce.
             # Iki KKD olayi birbiriyle birlesebilir (ayni kaynak, isaret korunur).
             if bool(getattr(k, "ppe_src", False)) != bool(getattr(e, "ppe_src", False)):
+                kept.append(e)
+                continue
+            # D44 — ISG OLAYLARI DA BIRLESTIRMEDEN KORUNUR. Yukaridaki KKD
+            # gerekcesinin BIREBIR AYNISI, olculmus sonucuyla birlikte:
+            # birlestirme `Event(...)` ile yeniden kuruyor ve sema-disi alanlari
+            # dusuruyor; `isg_kod` dustugunde olay ISG sinifini KAYBEDIYOR ve
+            # etiket metrigi onu HIC GORMUYOR.
+            # OLCULDU (149 klip, Unauthorized_Intervention cifti): kayitli slot
+            # degerlerine kural elle uygulaninca TP=19 / MCC +0,689 cikiyor,
+            # ama boru hattinin urettigi olaylarda TP=12 / MCC +0,393 — aradaki
+            # 7 dogru pozitif TAM BURADA kayboluyordu.
+            # Ayni koda sahip iki ISG olayi birbiriyle birlesebilir (kod korunur);
+            # farkli kodlar birlesirse biri sessizce yutulur, o da yasak.
+            if getattr(k, "isg_kod", None) != getattr(e, "isg_kod", None):
                 kept.append(e)
                 continue
             if k.category == e.category:
@@ -1070,6 +1271,22 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
                         # sevk maskesi bu birlesik olayda calismazdi.
                         if getattr(k, "ppe_src", False):
                             birlesik = birlesik.model_copy(update={"ppe_src": True})
+                        # D44: ISG ISARETLERI DE TASINMALI — yukaridaki kapi geregi
+                        # buraya gelen iki olayin `isg_kod`u AYNIDIR, ama `Event(...)`
+                        # yeniden-kurmasi alani yine de dusurur.
+                        # OLCULDU (enstrumantasyon, 1_tr33/1_tr50/1_tr38): tam burada
+                        # `_dedupe_events: 2 -> 0` — cok segmentli kliplerde AYNI ihlali
+                        # iki segment birden bildirdiginde ISG sinifi TAMAMEN kayboluyordu.
+                        # Bu yuzden kayip ozellikle UZUN kliplerde yogunlasiyordu.
+                        _kod = getattr(k, "isg_kod", None) or getattr(e, "isg_kod", None)
+                        if _kod:
+                            birlesik = birlesik.model_copy(update={
+                                "isg_kod": _kod,
+                                "isg_slot": (getattr(k, "isg_slot", None)
+                                             or getattr(e, "isg_slot", None)),
+                                "isg_deger": (getattr(k, "isg_deger", None)
+                                              if getattr(k, "isg_deger", None) is not None
+                                              else getattr(e, "isg_deger", None))})
                         kept[-1] = birlesik
                         continue
         kept.append(e)
@@ -1159,7 +1376,7 @@ def perceive(state: AgentState) -> dict:
                         trace.append(note)
             events.sort(key=lambda e: e.time)
             n_raw = len(events)
-            events = _dedupe_events(events)
+            events = _isg_tekille(_dedupe_events(events))
             trace.append(f"perceive: {len(events)} olay ({n_raw} ham, {len(segments)} segment, {workers} paralel)")
     except Exception as ex:
         trace.append(f"perceive: dugum hatasi (toleransli devam, {len(events)} olay korundu): {ex}")

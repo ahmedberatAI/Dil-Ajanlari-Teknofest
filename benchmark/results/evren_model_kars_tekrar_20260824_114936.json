@@ -1,0 +1,794 @@
+{
+  "kunye": {
+    "zaman": "2026-08-24T11:47:05",
+    "git": "bc52ce7",
+    "set": "/mnt/c/Users/omen/Desktop/DilAjanlariTeknofest/data/eval_defense",
+    "modeller": [
+      "vlm",
+      "llm-fast"
+    ],
+    "max_side": 768,
+    "crf": 28,
+    "temperature": 0.0,
+    "max_tokens": 24,
+    "guided_choice": true,
+    "deneme": 3,
+    "smoke": 0,
+    "base_url_host": "evren-llmapi.ssyz.org.tr",
+    "sistem_prompt": "Sen bir endustriyel is guvenligi kamerasi analiz sistemisin. Sana bir guvenlik kamerasindan alinmis kisa bir video verilir. YALNIZCA GORDUGUNE dayan; varsayim yapma. Ayirt edemiyorsan kacis secenegini kullan.",
+    "argv": [
+      "--kol",
+      "yelek",
+      "--modeller",
+      "vlm,llm-fast",
+      "--etiket",
+      "tekrar"
+    ]
+  },
+  "on_kayit": " (SONUCLARA BAKILMADAN, KOSUMDAN ONCE ILAN EDILDI) ===\nKURULUM (sabit):\n  video yolu (kare yolu DEGIL — servis istek basina en fazla 2 goruntu kabul ediyor)\n  servis_videosu(max_side=768, crf=28) · T=0 · max_tokens=24 · guided_choice (structured_outputs.choice)\n  ayni SISTEM promptu, ayni soru metni, ayni secenek listesi TUM modellerde\n  KLIP BIR KEZ kodlanir, ayni baytlar 3 modele de gider (esli tasarim)\n  istekler SIRAYLA gonderilir (servis paylasimli); hata basina en fazla 2 yeniden deneme\n\nSORULAR (kaynak makale Onal & Dandil 2024 islemsel olcutleri):\n  A forklift : \"catalda kac kasa?\"     >=3 -> ihlal\n  B yelek    : \"yesil reflektif yelek?\" YOK -> ihlal\n  C pano     : \"kapak acik mi?\"        ACIK -> ihlal\n\nPUANLAMA (olcum disiplini):\n  1. KACIS cevaplari (GORUNMUYOR / KISI_YOK) KARARSIZ sayilir; sessizce negatife\n     CEVRILMEZ. Ana tablo yalnizca KARAR VERILEN kliplerden hesaplanir; kararsiz ve\n     hata sayilari AYRICA yazilir.\n  2. HATA alan klip hicbir kolda puanlanmaz, ayrica raporlanir.\n  3. Ikincil \"sahada dagitim\" tablosu (kararsiz -> alarm yok) ACIKCA ikincil\n     etiketiyle verilir; manşet sayi ANA tablodan gelir.\n  4. TP/FP/FN/TN her zaman yazilir. Wilson %95 GA dogruluk uzerinden verilir.\n\nDEJENERELIK KAPISI (ikisinden biri yeterli -> DEJENERE):\n  D1: en sik HAM cevap, koldaki TUM kliplerin >= %85'ini kapliyor\n  D2: KARAR VERILEN klipler icinde bir taraf (ihlal / ihlal-degil) >= %85\n  DEJENERE kol, MCC ne olursa olsun BASARI SAYILMAZ.\n\nBASARI OLCUTU (kosumdan once ilan):\n  Bir kol KULLANILABILIR sayilir ancak ve ancak\n    (a) DEJENERE degil, (b) MCC >= +0,40, (c) karar orani >= 0,70,\n    (d) dogruluk Wilson alt sinir > 0,50.\n  Sinif kazanani = DEJENERE olmayan kollar icinde en yuksek MCC.\n  n~50'de 0,05 MCC farki GURULTUDUR -> berabere sayilir.\n\nYEREL TABAN (Qwen3-VL-8B-FP8, 24GB dizustu) — asilmasi gereken cizgi:\n  forklift islemsel MCC +0,762 (dogruluk 0,880) · yelek +0,000 DEJENERE (50/50 KISI_YOK)\n  pano +0,000 DEJENERE (49/49 GORUNMUYOR)\n",
+  "kollar": {
+    "yelek": {
+      "soru": "Makinenin/panonun basinda duran kiside yesil reflektif yelek var mi?",
+      "secenek": [
+        "YELEK_VAR",
+        "YELEK_YOK",
+        "KISI_YOK",
+        "GORUNMUYOR"
+      ],
+      "kural": "yelek YOK -> ihlal",
+      "n_klip": 50,
+      "yerel_taban": {
+        "mcc": 0.0,
+        "dogruluk": null,
+        "dejenere": true,
+        "not": "50/50 KISI_YOK — yerel model kisiyi bulamadi"
+      },
+      "sure_s": 151.2,
+      "klipler": [
+        {
+          "klip": "1_te10.mp4",
+          "ihlal": true,
+          "boyut_kb": 208.8,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 1.22,
+            "llm-fast": 0.78
+          }
+        },
+        {
+          "klip": "1_te3.mp4",
+          "ihlal": true,
+          "boyut_kb": 326.0,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.89,
+            "llm-fast": 1.99
+          }
+        },
+        {
+          "klip": "1_te4.mp4",
+          "ihlal": true,
+          "boyut_kb": 296.2,
+          "cevap": {
+            "vlm": "KISI_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 2.12,
+            "llm-fast": 2.46
+          }
+        },
+        {
+          "klip": "1_te5.mp4",
+          "ihlal": true,
+          "boyut_kb": 247.0,
+          "cevap": {
+            "vlm": "KISI_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.74,
+            "llm-fast": 0.8
+          }
+        },
+        {
+          "klip": "1_tr18.mp4",
+          "ihlal": true,
+          "boyut_kb": 170.9,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.57,
+            "llm-fast": 0.6
+          }
+        },
+        {
+          "klip": "1_tr2.mp4",
+          "ihlal": true,
+          "boyut_kb": 179.7,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.69,
+            "llm-fast": 1.03
+          }
+        },
+        {
+          "klip": "1_tr22.mp4",
+          "ihlal": true,
+          "boyut_kb": 344.2,
+          "cevap": {
+            "vlm": "KISI_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.97,
+            "llm-fast": 1.06
+          }
+        },
+        {
+          "klip": "1_tr25.mp4",
+          "ihlal": true,
+          "boyut_kb": 359.9,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 3.13,
+            "llm-fast": 1.83
+          }
+        },
+        {
+          "klip": "1_tr28.mp4",
+          "ihlal": true,
+          "boyut_kb": 341.4,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 1.01,
+            "llm-fast": 0.88
+          }
+        },
+        {
+          "klip": "1_tr33.mp4",
+          "ihlal": true,
+          "boyut_kb": 261.2,
+          "cevap": {
+            "vlm": "KISI_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.78,
+            "llm-fast": 0.83
+          }
+        },
+        {
+          "klip": "1_tr35.mp4",
+          "ihlal": true,
+          "boyut_kb": 287.9,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 2.44,
+            "llm-fast": 2.19
+          }
+        },
+        {
+          "klip": "1_tr38.mp4",
+          "ihlal": true,
+          "boyut_kb": 345.1,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 2.95,
+            "llm-fast": 2.59
+          }
+        },
+        {
+          "klip": "1_tr42.mp4",
+          "ihlal": true,
+          "boyut_kb": 243.4,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 2.05,
+            "llm-fast": 1.98
+          }
+        },
+        {
+          "klip": "1_tr50.mp4",
+          "ihlal": true,
+          "boyut_kb": 217.6,
+          "cevap": {
+            "vlm": "KISI_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 2.01,
+            "llm-fast": 0.73
+          }
+        },
+        {
+          "klip": "1_tr61.mp4",
+          "ihlal": true,
+          "boyut_kb": 280.0,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.79,
+            "llm-fast": 0.95
+          }
+        },
+        {
+          "klip": "1_tr62.mp4",
+          "ihlal": true,
+          "boyut_kb": 312.5,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.87,
+            "llm-fast": 1.02
+          }
+        },
+        {
+          "klip": "1_tr63.mp4",
+          "ihlal": true,
+          "boyut_kb": 257.1,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.76,
+            "llm-fast": 0.78
+          }
+        },
+        {
+          "klip": "1_tr67.mp4",
+          "ihlal": true,
+          "boyut_kb": 305.8,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 1.04,
+            "llm-fast": 2.32
+          }
+        },
+        {
+          "klip": "1_tr7.mp4",
+          "ihlal": true,
+          "boyut_kb": 185.0,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 1.46,
+            "llm-fast": 0.92
+          }
+        },
+        {
+          "klip": "1_tr76.mp4",
+          "ihlal": true,
+          "boyut_kb": 141.4,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.55,
+            "llm-fast": 0.59
+          }
+        },
+        {
+          "klip": "1_tr77.mp4",
+          "ihlal": true,
+          "boyut_kb": 144.3,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.56,
+            "llm-fast": 0.68
+          }
+        },
+        {
+          "klip": "1_tr81.mp4",
+          "ihlal": true,
+          "boyut_kb": 152.3,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.52,
+            "llm-fast": 0.68
+          }
+        },
+        {
+          "klip": "1_tr84.mp4",
+          "ihlal": true,
+          "boyut_kb": 148.4,
+          "cevap": {
+            "vlm": "KISI_YOK",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.23,
+            "llm-fast": 1.33
+          }
+        },
+        {
+          "klip": "1_tr87.mp4",
+          "ihlal": true,
+          "boyut_kb": 204.7,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 1.66,
+            "llm-fast": 1.54
+          }
+        },
+        {
+          "klip": "1_tr88.mp4",
+          "ihlal": true,
+          "boyut_kb": 213.4,
+          "cevap": {
+            "vlm": "KISI_YOK",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.87,
+            "llm-fast": 1.8
+          }
+        },
+        {
+          "klip": "5_te1.mp4",
+          "ihlal": false,
+          "boyut_kb": 140.9,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.4,
+            "llm-fast": 1.59
+          }
+        },
+        {
+          "klip": "5_te11.mp4",
+          "ihlal": false,
+          "boyut_kb": 121.1,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.29,
+            "llm-fast": 1.48
+          }
+        },
+        {
+          "klip": "5_te12.mp4",
+          "ihlal": false,
+          "boyut_kb": 300.3,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.1,
+            "llm-fast": 0.85
+          }
+        },
+        {
+          "klip": "5_te13.mp4",
+          "ihlal": false,
+          "boyut_kb": 297.3,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.78,
+            "llm-fast": 0.91
+          }
+        },
+        {
+          "klip": "5_te14.mp4",
+          "ihlal": false,
+          "boyut_kb": 282.5,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.76,
+            "llm-fast": 1.94
+          }
+        },
+        {
+          "klip": "5_te15.mp4",
+          "ihlal": false,
+          "boyut_kb": 283.2,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.83,
+            "llm-fast": 3.46
+          }
+        },
+        {
+          "klip": "5_te2.mp4",
+          "ihlal": false,
+          "boyut_kb": 137.6,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.82,
+            "llm-fast": 0.63
+          }
+        },
+        {
+          "klip": "5_te5.mp4",
+          "ihlal": false,
+          "boyut_kb": 265.6,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.79,
+            "llm-fast": 0.94
+          }
+        },
+        {
+          "klip": "5_te6.mp4",
+          "ihlal": false,
+          "boyut_kb": 321.1,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.87,
+            "llm-fast": 2.67
+          }
+        },
+        {
+          "klip": "5_te7.mp4",
+          "ihlal": false,
+          "boyut_kb": 153.7,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.31,
+            "llm-fast": 1.52
+          }
+        },
+        {
+          "klip": "5_te8.mp4",
+          "ihlal": false,
+          "boyut_kb": 176.8,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.47,
+            "llm-fast": 1.35
+          }
+        },
+        {
+          "klip": "5_tr10.mp4",
+          "ihlal": false,
+          "boyut_kb": 150.6,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.15,
+            "llm-fast": 1.29
+          }
+        },
+        {
+          "klip": "5_tr11.mp4",
+          "ihlal": false,
+          "boyut_kb": 89.1,
+          "cevap": {
+            "vlm": "KISI_YOK",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.86,
+            "llm-fast": 0.8
+          }
+        },
+        {
+          "klip": "5_tr12.mp4",
+          "ihlal": false,
+          "boyut_kb": 104.3,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 0.43,
+            "llm-fast": 0.54
+          }
+        },
+        {
+          "klip": "5_tr13.mp4",
+          "ihlal": false,
+          "boyut_kb": 112.9,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.45,
+            "llm-fast": 0.56
+          }
+        },
+        {
+          "klip": "5_tr15.mp4",
+          "ihlal": false,
+          "boyut_kb": 207.1,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.68,
+            "llm-fast": 0.75
+          }
+        },
+        {
+          "klip": "5_tr16.mp4",
+          "ihlal": false,
+          "boyut_kb": 142.5,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.79,
+            "llm-fast": 0.56
+          }
+        },
+        {
+          "klip": "5_tr19.mp4",
+          "ihlal": false,
+          "boyut_kb": 320.2,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.83,
+            "llm-fast": 1.06
+          }
+        },
+        {
+          "klip": "5_tr20.mp4",
+          "ihlal": false,
+          "boyut_kb": 284.9,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.65,
+            "llm-fast": 1.33
+          }
+        },
+        {
+          "klip": "5_tr22.mp4",
+          "ihlal": false,
+          "boyut_kb": 281.8,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.82,
+            "llm-fast": 0.79
+          }
+        },
+        {
+          "klip": "5_tr3.mp4",
+          "ihlal": false,
+          "boyut_kb": 159.3,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.56,
+            "llm-fast": 0.66
+          }
+        },
+        {
+          "klip": "5_tr4.mp4",
+          "ihlal": false,
+          "boyut_kb": 171.1,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.86,
+            "llm-fast": 1.26
+          }
+        },
+        {
+          "klip": "5_tr5.mp4",
+          "ihlal": false,
+          "boyut_kb": 263.6,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 1.89,
+            "llm-fast": 1.67
+          }
+        },
+        {
+          "klip": "5_tr6.mp4",
+          "ihlal": false,
+          "boyut_kb": 357.6,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 2.06,
+            "llm-fast": 2.13
+          }
+        },
+        {
+          "klip": "5_tr8.mp4",
+          "ihlal": false,
+          "boyut_kb": 174.4,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 0.77,
+            "llm-fast": 0.65
+          }
+        }
+      ],
+      "modeller": {
+        "vlm": {
+          "ana": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 3,
+            "tn": 21,
+            "kararsiz": 8,
+            "hata": 0,
+            "n_karar": 42,
+            "mcc": 0.7083,
+            "dogruluk": 0.8571,
+            "ga95": [
+              0.7216,
+              0.9328
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 15,
+            "fp": 3,
+            "fn": 10,
+            "tn": 22,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 50,
+            "mcc": 0.5,
+            "dogruluk": 0.74,
+            "ga95": [
+              0.6045,
+              0.8413
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": false,
+            "D1_ham_cevap": false,
+            "D2_karar": false,
+            "en_sik_cevap": "YELEK_VAR",
+            "en_sik_oran": 0.48,
+            "ham_dagilim": {
+              "YELEK_VAR": 24,
+              "YELEK_YOK": 18,
+              "KISI_YOK": 8
+            }
+          },
+          "karar_orani": 0.84,
+          "kullanilabilir": true
+        },
+        "llm-fast": {
+          "ana": {
+            "tp": 19,
+            "fp": 3,
+            "fn": 0,
+            "tn": 0,
+            "kararsiz": 28,
+            "hata": 0,
+            "n_karar": 22,
+            "mcc": 0.0,
+            "dogruluk": 0.8636,
+            "ga95": [
+              0.6666,
+              0.9525
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 19,
+            "fp": 3,
+            "fn": 6,
+            "tn": 22,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 50,
+            "mcc": 0.6447,
+            "dogruluk": 0.82,
+            "ga95": [
+              0.692,
+              0.9023
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": true,
+            "D1_ham_cevap": false,
+            "D2_karar": true,
+            "en_sik_cevap": "GORUNMUYOR",
+            "en_sik_oran": 0.56,
+            "ham_dagilim": {
+              "GORUNMUYOR": 28,
+              "YELEK_YOK": 22
+            }
+          },
+          "karar_orani": 0.44,
+          "kullanilabilir": false
+        }
+      }
+    }
+  }
+}

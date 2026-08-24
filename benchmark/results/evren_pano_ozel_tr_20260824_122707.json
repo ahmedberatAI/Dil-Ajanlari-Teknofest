@@ -1,0 +1,2176 @@
+{
+  "kunye": {
+    "tur": "kunye",
+    "zaman": "2026-08-24T12:27:07",
+    "git": "bc52ce7",
+    "kume": "tr",
+    "n": 34,
+    "n_pozitif": 21,
+    "roi": [
+      0.08,
+      0.55,
+      0.21,
+      0.73
+    ],
+    "kutu_dar": [
+      153,
+      594,
+      248,
+      194
+    ],
+    "kutu_baglam": [
+      28,
+      496,
+      498,
+      388
+    ],
+    "max_side": 1280,
+    "crf": 26,
+    "temperature": 0.0,
+    "max_tokens": 24,
+    "guided": true,
+    "deneme": 3,
+    "referans_klip": "2_tr101.mp4",
+    "sistem": "Sen bir endustriyel is guvenligi kamerasi analiz sistemisin. Sana bir guvenlik kamerasindan alinmis kisa bir video verilir. YALNIZCA GORDUGUNE dayan; varsayim yapma. Ayirt edemiyorsan kacis secenegini kullan.",
+    "giris": "Bu, bir elektrik/kontrol panosuna YAKINDAN odaklanmis guvenlik kamerasi goruntusudur. Panonun metal kapagi kadrajin merkezindedir.",
+    "hucreler": [
+      {
+        "kod": "H1",
+        "yol": "P1a",
+        "kirpma": "dar",
+        "model": "llm-large",
+        "protokol": "video",
+        "soru": "Kadrajin merkezindeki elektrik/kontrol panosunun metal kapagi ACIK mi KAPALI mi?",
+        "secenek": [
+          "ACIK",
+          "KAPALI",
+          "GORUNMUYOR"
+        ]
+      },
+      {
+        "kod": "H2",
+        "yol": "P1b",
+        "kirpma": "baglam",
+        "model": "llm-large",
+        "protokol": "video",
+        "soru": "Kadrajin merkezindeki elektrik/kontrol panosunun metal kapagi ACIK mi KAPALI mi?",
+        "secenek": [
+          "ACIK",
+          "KAPALI",
+          "GORUNMUYOR"
+        ]
+      },
+      {
+        "kod": "H3",
+        "yol": "P1c",
+        "kirpma": "baglam",
+        "model": "vlm",
+        "protokol": "video",
+        "soru": "Kadrajin merkezindeki elektrik/kontrol panosunun metal kapagi ACIK mi KAPALI mi?",
+        "secenek": [
+          "ACIK",
+          "KAPALI",
+          "GORUNMUYOR"
+        ]
+      },
+      {
+        "kod": "H4",
+        "yol": "P3",
+        "kirpma": "baglam",
+        "model": "llm-large",
+        "protokol": "video",
+        "soru": "Kadrajin merkezindeki panonun govdesinde, icini gosteren KOYU/KARANLIK bir OYUK (bosluk) gorunuyor mu?",
+        "secenek": [
+          "OYUK_VAR",
+          "OYUK_YOK",
+          "GORUNMUYOR"
+        ]
+      },
+      {
+        "kod": "H5",
+        "yol": "P4",
+        "kirpma": "baglam",
+        "model": "llm-large",
+        "protokol": "video",
+        "soru": "Kadrajin merkezindeki panonun on yuzeyi 0 ile 10 arasinda ne kadar karanlik? 0 = tamamen acik renkli/duz kapak, 10 = tamamen karanlik bir bosluk. Yalnizca sayiyi yaz.",
+        "secenek": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "GORUNMUYOR"
+        ]
+      },
+      {
+        "kod": "H6",
+        "yol": "P2",
+        "kirpma": "baglam",
+        "model": "llm-large",
+        "protokol": "2goruntu",
+        "soru": "Birinci goruntude panonun kapagi ACIKTIR (referans). Ikinci goruntudeki panonun kapagi da ACIK mi? Hangi goruntulerde pano kapagi aciktir?",
+        "secenek": [
+          "BIRINCI",
+          "IKINCI",
+          "IKISI_DE",
+          "HICBIRI"
+        ]
+      },
+      {
+        "kod": "H7",
+        "yol": "P5",
+        "kirpma": "baglam",
+        "model": "llm-fast",
+        "protokol": "2goruntu",
+        "soru": "Birinci goruntude panonun kapagi ACIKTIR (referans). Ikinci goruntudeki panonun kapagi da ACIK mi? Hangi goruntulerde pano kapagi aciktir?",
+        "secenek": [
+          "BIRINCI",
+          "IKINCI",
+          "IKISI_DE",
+          "HICBIRI"
+        ]
+      }
+    ],
+    "base_url_host": "evren-llmapi.ssyz.org.tr",
+    "argv": [
+      "--kume",
+      "tr"
+    ],
+    "on_kayit": " (SONUCLARA BAKILMADAN, HERHANGI BIR MODEL CAGRISINDAN ONCE ILAN EDILDI) ===\n\nNEDEN BU KOSUM VAR\n  Pano sinifini UC model de cozemedi: yerel 8B 49/49 \"GORUNMUYOR\", uzak llm-large\n  49/49 \"GORUNMUYOR\" (BIREBIR ayni), vlm 46/49 \"KAPALI\" (TP=0), llm-fast MCC -0,086.\n  Cozunurluk taramasi (768/1280/1920) TEK KLIBI bile degistirmedi (p=1,0) -> darbogaz\n  COZUNURLUK DEGIL. Geriye kalan hipotez: CERCEVELEME (pano tam karenin ~%2'si),\n  SORU BICIMI (mutlak ikili yargi) ve PROTOKOL (tek goruntu vs karsilastirma).\n\nVERI VE SECIM/RAPOR AYRIMI (ZORUNLU)\n  SECIM kumesi = yalniz _tr : Opened 21 ACIK + Closed 13 KAPALI = 34 klip\n  TUTMA kumesi = yalniz _te : Opened  3 ACIK + Closed 12 KAPALI = 15 klip\n  TUTMA'da yalniz 3 POZITIF var -> ONCEDEN ILAN: te KARAR VERDIRMEZ, yalnizca\n  \"secim tamamen cokmus mu\" kontroludur. Manset sayi tr'den VERILMEZ; tr sayilari\n  SECIM sayisidir ve coklu-karsilastirma duzeltmesiyle birlikte okunur.\n  te kliplerine SECIM asamasinda BAKILMAZ.\n\nCERCEVELEME (ROI kaynagi ve DURUSTLUK NOTU)\n  ROI = 0.08,0.55,0.21,0.73 — bu kutu BIZIM deterministik dedektorumuzden gelir ve\n  AYNI VERI uzerinde kalibre edilmistir. Yani P1/P3/P4/P2 kollari \"VLM'e cerceveleme\n  problemi COZULMUS halde verilirse ne yapar?\" sorusunu olcer; bagimsiz bir uctan-uca\n  boru hatti DEGILDIR. Bu KASITLIDIR: VLM bu yardimla bile basaramazsa sonuc DAHA\n  GUCLUDUR. Basarirsa da tek basina dagitilabilir bir cozum degildir (ROI'yi bulmak\n  icin zaten dedektor gerekir).\n  Kirpma kutulari (1920x1080): dar(1.0x) = 153,594,248x194 · baglam(2.0x) = 28,496,498x388\n  Kirpilan video max_side=1280'e OLCEKLENIR (buyutme) — pano piksel/token butcesinin\n  tamamini alir. crf=26, ses yok.\n\nIZGARA — 7 HUCRE (hepsi SECIM kumesinde, n=34)\n  H1 P1a  ROI-dar video      · ikili soru        · llm-large\n  H2 P1b  ROI-baglam video   · ikili soru        · llm-large   <- BIRINCIL hipotez\n  H3 P1c  ROI-baglam video   · ikili soru        · vlm\n  H4 P3   ROI-baglam video   · mekanizma sorusu  · llm-large\n  H5 P4   ROI-baglam video   · sayisal 0-10      · llm-large  (esik 1..10 taranir)\n  H6 P2   2 GORUNTU (ACIK referans + sorgu karesi, ikisi de ROI-baglam) · llm-large\n  H7 P5   ayni 2 GORUNTU protokolu                                     · llm-fast\n\n  IZOLASYON MANTIGI (hangi karsilastirma neyi ayirir):\n    H1 vs H2         : kirpma sikiligi (baglam yardim eder mi?)      — cerceveleme\n    H2 vs H4 vs H5   : SORU BICIMI, cerceveleme SABIT               — soru\n    H2 vs H3         : MODEL, cerceveleme+soru SABIT                — model\n    H2 vs H6         : PROTOKOL (mutlak yargi vs karsilastirma)     — protokol\n    H6 vs H7         : model, protokol SABIT\n    TARIHI KONTROL   : tam-kare + ikili + llm-large = 49/49 GORUNMUYOR (MCC 0,000)\n\nMODEL SECIMI VE GEREKCESI\n  llm-large : izgaranin omurgasi. En guclu alias; tam karede \"GORUNMUYOR\" demesinin\n              nedeni ALGI mi CERCEVELEME mi — bunu ancak ayni model uzerinde\n              cerceveleme degistirilerek ayirt edebiliriz. Tarihi kontrol de bu model.\n  vlm       : pano sorusunda ACIK/KAPALI'ya KARAR VEREN tek koldu (46/49 KAPALI);\n              yani \"goremiyorum\" demiyor, YANLIS goruyor. Video-yerel alias.\n              Cerceveleme duzeltilince kararlarinin duzelip duzelmedigi ayri bir soru.\n  llm-fast  : yalniz 2-goruntu protokolunde (H7). Gerekce: pano sorusunda diger iki\n              modelden FARKLI (dejenere degil ama sansin altinda) davrandi; farkli\n              hata modu, karsilastirma protokolunde farkli tepki verebilir.\n  vlm 2-goruntu kolunda YOK: servis vlm icin istek basina 0 GORUNTU kabul ediyor\n  (olculdu) — teknik olarak imkansiz, atlanmasinin sebebi budur.\n\nSABIT KURULUM\n  T=0 · max_tokens=24 · structured_outputs.choice (guided) ACIK · ayni SISTEM promptu\n  istekler SIRAYLA · hata basina en fazla 2 yeniden deneme · her klip icin ayni\n  kodlanmis baytlar ayni oturumda tekrar kullanilir (on-ek onbellegi)\n  H2/H4/H5 TEK video oturumunu paylasir; sorular hatirla=False ile BAGIMSIZ sorulur\n  (birbirinin cevabini gormezler) — bu yalnizca yukleme tasarrufudur, olcum degismez.\n  H6/H7 referans goruntusu: 2_tr101 orta karesi (ROI-baglam). O klip H6/H7'de\n  PUANLANMAZ (n=33) — kendi referansiyla karsilastirilamaz.\n\nPUANLAMA (olcum disiplini)\n  1. KACIS cevaplari (GORUNMUYOR / HICBIRI) KARARSIZ sayilir; sessizce negatife\n     CEVRILMEZ. Ana tablo yalnizca KARAR VERILEN kliplerden. Kararsiz ve hata AYRI.\n  2. TP/FP/FN/TN her hucre icin HER ZAMAN yazilir. Wilson %95 GA verilir.\n  3. DEJENERELIK KAPISI: D1 en sik HAM cevap >= %85 tum klipler VEYA D2 karar\n     verilenlerde bir taraf >= %85 -> DEJENERE. MCC ne olursa olsun BASARI SAYILMAZ.\n  4. COKLU KARSILASTIRMA: 7 hucre + H5'in 10 esigi deneniyor. Maks-istatistigi\n     permutasyonu (n=2000, etiketler karistirilir, H5 esigi HER permutasyonda\n     YENIDEN taranir) ile bos dagilim kurulur; %95 kuantili ve duzeltilmis p yazilir.\n  5. n=34'te 0,05 MCC farki GURULTUDUR -> berabere.\n\nBASARI OLCUTU (kosumdan ONCE ilan)\n  Bir hucre KULLANILABILIR sayilir ancak ve ancak\n    (a) DEJENERE degil, (b) MCC >= +0,40, (c) karar orani >= 0,70,\n    (d) dogruluk Wilson alt sinir > 0,50, (e) duzeltilmis p < 0,05.\n  Hicbiri gecmezse KARAR: pano sinifi VLM ile cozulmez, deterministik dedektor KALIR.\n\nTAHMIN (KOSUMDAN ONCE YAZILDI — sonra tutup tutmadigi bildirilecek)\n  Ham onsel (kirpmalari GORMEDEN): P1'in basarma olasiligi ~%30.\n  DUZELTME: kosumdan once 4 adet _tr kirpmasini (2 ACIK, 2 KAPALI) GOZLE inceledim\n  — _te'ye BAKILMADI. Baglam kirpmasinda ACIK pano net bir KARANLIK OYUK + gorunur\n  ic kablolama, KAPALI pano duz bej kapak. Insan icin KOLAY bir gorev. Bu yuzden\n  tahminimi YUKARI cekiyorum:\n    H2 (birincil) : MCC +0,60 · dejenere DEGIL · KULLANILABILIR olma olasiligi ~%60\n    H1            : H2 ile berabere (+-0,05); baglamin yardimi kucuk\n    H3 (vlm)      : MCC +0,25 · \"KAPALI\" tarafina egilim surer\n    H4 (mekanizma): MCC +0,45 · ikili soruyla berabere veya biraz altinda\n    H5 (sayisal)  : tr'de en iyi esikle MCC +0,55 ama esik taramasi SISIRIR;\n                    duzeltmeden sonra H2'yi GECMESINI beklemiyorum\n    H6/H7 (2 gor.): MCC +0,35 / +0,20 · karsilastirma protokolu, video oturumundan\n                    DAHA IYI OLMAYACAK (tek kare < video)\n  EN IYI HUCRE duzeltmeden sonra ANLAMLI cikar mi? EVET (~%60).\n  GENEL KARAR TAHMINI: cerceveleme duzeltilirse VLM bu sinifi COZER; ama bu,\n  deterministik dedektoru gereksiz KILMAZ (ROI'yi bulan sey zaten dedektor).\n"
+  },
+  "ozet": {
+    "H1": {
+      "yol": "P1a",
+      "kirpma": "dar",
+      "model": "llm-large",
+      "protokol": "video",
+      "ana": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "kararsiz": 34,
+        "hata": 0,
+        "n_karar": 0,
+        "mcc": 0.0,
+        "dogruluk": 0.0,
+        "ga95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ikincil": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 21,
+        "tn": 13,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 34,
+        "mcc": 0.0,
+        "dogruluk": 0.3824,
+        "ga95": [
+          0.239,
+          0.5496
+        ]
+      },
+      "dejenere": {
+        "dejenere": true,
+        "D1_ham_cevap": true,
+        "D2_karar": false,
+        "en_sik_cevap": "GORUNMUYOR",
+        "en_sik_oran": 1.0,
+        "ham_dagilim": {
+          "GORUNMUYOR": 34
+        }
+      },
+      "karar_orani": 0.0,
+      "esik": null,
+      "satirlar": [
+        {
+          "klip": "2_tr101.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr112.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr118.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr119.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr12.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr126.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr128.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr16.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr17.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr18.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr19.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr35.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr40.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr52.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr53.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr54.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr58.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr62.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr63.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr66.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr72.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr1.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr11.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr12.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr14.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr16.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr17.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr18.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr19.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr4.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr5.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr6.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr8.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr9.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        }
+      ]
+    },
+    "H2": {
+      "yol": "P1b",
+      "kirpma": "baglam",
+      "model": "llm-large",
+      "protokol": "video",
+      "ana": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "kararsiz": 34,
+        "hata": 0,
+        "n_karar": 0,
+        "mcc": 0.0,
+        "dogruluk": 0.0,
+        "ga95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ikincil": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 21,
+        "tn": 13,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 34,
+        "mcc": 0.0,
+        "dogruluk": 0.3824,
+        "ga95": [
+          0.239,
+          0.5496
+        ]
+      },
+      "dejenere": {
+        "dejenere": true,
+        "D1_ham_cevap": true,
+        "D2_karar": false,
+        "en_sik_cevap": "GORUNMUYOR",
+        "en_sik_oran": 1.0,
+        "ham_dagilim": {
+          "GORUNMUYOR": 34
+        }
+      },
+      "karar_orani": 0.0,
+      "esik": null,
+      "satirlar": [
+        {
+          "klip": "2_tr101.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr112.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr118.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr119.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr12.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr126.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr128.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr16.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr17.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr18.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr19.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr35.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr40.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr52.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr53.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr54.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr58.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr62.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr63.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr66.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr72.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr1.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr11.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr12.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr14.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr16.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr17.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr18.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr19.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr4.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr5.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr6.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr8.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr9.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        }
+      ]
+    },
+    "H3": {
+      "yol": "P1c",
+      "kirpma": "baglam",
+      "model": "vlm",
+      "protokol": "video",
+      "ana": {
+        "tp": 15,
+        "fp": 0,
+        "fn": 6,
+        "tn": 13,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 34,
+        "mcc": 0.6991,
+        "dogruluk": 0.8235,
+        "ga95": [
+          0.6649,
+          0.9165
+        ]
+      },
+      "ikincil": {
+        "tp": 15,
+        "fp": 0,
+        "fn": 6,
+        "tn": 13,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 34,
+        "mcc": 0.6991,
+        "dogruluk": 0.8235,
+        "ga95": [
+          0.6649,
+          0.9165
+        ]
+      },
+      "dejenere": {
+        "dejenere": false,
+        "D1_ham_cevap": false,
+        "D2_karar": false,
+        "en_sik_cevap": "KAPALI",
+        "en_sik_oran": 0.5588,
+        "ham_dagilim": {
+          "KAPALI": 19,
+          "ACIK": 15
+        }
+      },
+      "karar_orani": 1.0,
+      "esik": null,
+      "satirlar": [
+        {
+          "klip": "2_tr101.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "2_tr112.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr118.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "2_tr119.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr12.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr126.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr128.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr16.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "2_tr17.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "2_tr18.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr19.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "2_tr35.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr40.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr52.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr53.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr54.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr58.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr62.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr63.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr66.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "ACIK",
+          "karar": true
+        },
+        {
+          "klip": "2_tr72.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr1.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr11.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr12.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr14.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr16.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr17.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr18.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr19.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr4.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr5.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr6.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr8.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr9.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "KAPALI",
+          "karar": false
+        }
+      ]
+    },
+    "H4": {
+      "yol": "P3",
+      "kirpma": "baglam",
+      "model": "llm-large",
+      "protokol": "video",
+      "ana": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "kararsiz": 34,
+        "hata": 0,
+        "n_karar": 0,
+        "mcc": 0.0,
+        "dogruluk": 0.0,
+        "ga95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ikincil": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 21,
+        "tn": 13,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 34,
+        "mcc": 0.0,
+        "dogruluk": 0.3824,
+        "ga95": [
+          0.239,
+          0.5496
+        ]
+      },
+      "dejenere": {
+        "dejenere": true,
+        "D1_ham_cevap": true,
+        "D2_karar": false,
+        "en_sik_cevap": "GORUNMUYOR",
+        "en_sik_oran": 1.0,
+        "ham_dagilim": {
+          "GORUNMUYOR": 34
+        }
+      },
+      "karar_orani": 0.0,
+      "esik": null,
+      "satirlar": [
+        {
+          "klip": "2_tr101.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr112.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr118.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr119.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr12.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr126.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr128.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr16.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr17.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr18.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr19.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr35.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr40.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr52.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr53.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr54.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr58.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr62.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr63.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr66.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "2_tr72.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr1.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr11.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr12.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr14.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr16.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr17.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr18.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr19.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr4.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr5.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr6.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr8.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        },
+        {
+          "klip": "6_tr9.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "GORUNMUYOR",
+          "karar": null
+        }
+      ]
+    },
+    "H5": {
+      "yol": "P4",
+      "kirpma": "baglam",
+      "model": "llm-large",
+      "protokol": "video",
+      "ana": {
+        "tp": 21,
+        "fp": 0,
+        "fn": 0,
+        "tn": 13,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 34,
+        "mcc": 1.0,
+        "dogruluk": 1.0,
+        "ga95": [
+          0.8985,
+          1.0
+        ]
+      },
+      "ikincil": {
+        "tp": 21,
+        "fp": 0,
+        "fn": 0,
+        "tn": 13,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 34,
+        "mcc": 1.0,
+        "dogruluk": 1.0,
+        "ga95": [
+          0.8985,
+          1.0
+        ]
+      },
+      "dejenere": {
+        "dejenere": false,
+        "D1_ham_cevap": false,
+        "D2_karar": false,
+        "en_sik_cevap": "8",
+        "en_sik_oran": 0.5882,
+        "ham_dagilim": {
+          "8": 20,
+          "2": 13,
+          "9": 1
+        }
+      },
+      "karar_orani": 1.0,
+      "esik": 3,
+      "satirlar": [
+        {
+          "klip": "2_tr101.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr112.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr118.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr119.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr12.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr126.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "9",
+          "karar": true
+        },
+        {
+          "klip": "2_tr128.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr16.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr17.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr18.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr19.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr35.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr40.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr52.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr53.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr54.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr58.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr62.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr63.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr66.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "2_tr72.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "8",
+          "karar": true
+        },
+        {
+          "klip": "6_tr1.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr11.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr12.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr14.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr16.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr17.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr18.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr19.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr4.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr5.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr6.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr8.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        },
+        {
+          "klip": "6_tr9.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "2",
+          "karar": false
+        }
+      ]
+    },
+    "H6": {
+      "yol": "P2",
+      "kirpma": "baglam",
+      "model": "llm-large",
+      "protokol": "2goruntu",
+      "ana": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 4,
+        "tn": 13,
+        "kararsiz": 10,
+        "hata": 0,
+        "n_karar": 23,
+        "mcc": 0.6774,
+        "dogruluk": 0.8261,
+        "ga95": [
+          0.6286,
+          0.9302
+        ]
+      },
+      "ikincil": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 14,
+        "tn": 13,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 33,
+        "mcc": 0.3801,
+        "dogruluk": 0.5758,
+        "ga95": [
+          0.4081,
+          0.7276
+        ]
+      },
+      "dejenere": {
+        "dejenere": false,
+        "D1_ham_cevap": false,
+        "D2_karar": false,
+        "en_sik_cevap": "BIRINCI",
+        "en_sik_oran": 0.5152,
+        "ham_dagilim": {
+          "BIRINCI": 17,
+          "HICBIRI": 10,
+          "IKINCI": 6
+        }
+      },
+      "karar_orani": 0.697,
+      "esik": null,
+      "satirlar": [
+        {
+          "klip": "2_tr112.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr118.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr119.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr12.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr126.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr128.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "2_tr16.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr17.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr18.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr19.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr35.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr40.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr52.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr53.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr54.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr58.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr62.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "2_tr63.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "2_tr66.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "HICBIRI",
+          "karar": null
+        },
+        {
+          "klip": "2_tr72.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr1.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr11.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr12.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr14.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr16.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr17.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr18.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr19.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr4.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr5.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr6.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr8.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        },
+        {
+          "klip": "6_tr9.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "BIRINCI",
+          "karar": false
+        }
+      ]
+    },
+    "H7": {
+      "yol": "P5",
+      "kirpma": "baglam",
+      "model": "llm-fast",
+      "protokol": "2goruntu",
+      "ana": {
+        "tp": 20,
+        "fp": 13,
+        "fn": 0,
+        "tn": 0,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 33,
+        "mcc": 0.0,
+        "dogruluk": 0.6061,
+        "ga95": [
+          0.4368,
+          0.7532
+        ]
+      },
+      "ikincil": {
+        "tp": 20,
+        "fp": 13,
+        "fn": 0,
+        "tn": 0,
+        "kararsiz": 0,
+        "hata": 0,
+        "n_karar": 33,
+        "mcc": 0.0,
+        "dogruluk": 0.6061,
+        "ga95": [
+          0.4368,
+          0.7532
+        ]
+      },
+      "dejenere": {
+        "dejenere": true,
+        "D1_ham_cevap": true,
+        "D2_karar": true,
+        "en_sik_cevap": "IKINCI",
+        "en_sik_oran": 1.0,
+        "ham_dagilim": {
+          "IKINCI": 33
+        }
+      },
+      "karar_orani": 1.0,
+      "esik": null,
+      "satirlar": [
+        {
+          "klip": "2_tr112.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr118.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr119.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr12.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr126.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr128.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr16.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr17.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr18.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr19.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr35.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr40.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr52.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr53.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr54.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr58.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr62.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr63.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr66.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "2_tr72.mp4",
+          "ihlal": true,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr1.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr11.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr12.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr14.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr16.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr17.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr18.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr19.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr4.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr5.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr6.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr8.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        },
+        {
+          "klip": "6_tr9.mp4",
+          "ihlal": false,
+          "hata": false,
+          "ham": "IKINCI",
+          "karar": true
+        }
+      ]
+    }
+  },
+  "permutasyon": {
+    "n_perm": 2000,
+    "bos_q95": 0.3773,
+    "gozlenen_maks": 1.0,
+    "p_duzeltilmis": 0.0005,
+    "p_hucre": {
+      "H1": 1.0,
+      "H2": 1.0,
+      "H3": 0.001,
+      "H4": 1.0,
+      "H5": 0.0005,
+      "H6": 0.001,
+      "H7": 1.0
+    },
+    "bos_ortalama": 0.1603
+  },
+  "gecen": [
+    "H3",
+    "H5"
+  ]
+}

@@ -1,0 +1,100 @@
+====================================================================================================
+###  FORKLIFT   n_tr=39  n_te=11   aday havuzu=72 (dejenere olmayan 72)
+     maks-istatistigi bos dagilim %95 kuantili = +0.465
+  EN IYI TEKIL (tr)
+     kol      : llm-fast @1280 sistem VAR + kacis secenegi VAR
+     tr (SECIM): MCC +0.847  karar 1.00  TP/FP/FN/TN = 19/1/2/17  kararsiz 0  duzeltilmis p=0.0005
+     te (RAPOR): MCC +0.449  dogruluk 0.727 [Wilson 0.43-0.90]  karar 1.00  TP/FP/FN/TN = 3/2/1/5 kararsiz 0
+     ikincil (sahada dagitim, kararsiz->alarm yok) tr: MCC +0.847 dogruluk 0.923 TP/FP/FN/TN = 19/1/2/17
+
+  EN IYI KOMBINASYON (tr)
+     kol      : K1[llm-fast @1280 sistem VAR + kacis secenegi VAR & llm-fast @768 sistem VAR + kacis secenegi VAR]
+     tr (SECIM): MCC +0.932  karar 0.77  TP/FP/FN/TN = 18/0/1/11  kararsiz 9  duzeltilmis p=0.0005
+     te (RAPOR): MCC +0.791  dogruluk 0.889 [Wilson 0.56-0.98]  karar 0.82  TP/FP/FN/TN = 3/0/1/5 kararsiz 2
+     ikincil (sahada dagitim, kararsiz->alarm yok) tr: MCC +0.857 dogruluk 0.923 TP/FP/FN/TN = 18/0/3/18
+
+  >> ESLI TEST (tr, kombinasyon - tekil): fark +0.085  %95 GA [-0.029, +0.246]  p=0.274
+     karar orani farki: -0.23
+     HUKUM: ANLAMLI FARK YOK (GA sifiri iceriyor ve/veya fark 0,05 gurultu esiginin altinda) -> BERABERE
+
+  YEREL TABAN (Qwen3-VL-8B-FP8, islemsel prompt, kare tabanli):
+     tr MCC +0.697 karar 1.00 TP/FP/FN/TN=17/2/4/16 dejenere=False
+     te MCC +0.607 dogruluk 0.818 karar 1.00
+     ESLI (tr, kazanan - yerel): fark +0.235 %95 GA [+0.048, +0.462] p=0.008
+     ESLI (te, kazanan - yerel): fark +0.183 %95 GA [-0.092, +0.530] p=0.730
+
+  BASARI OLCUTU (dorttu birden):
+     (a) dejenere degil : True
+     (b) tr MCC>=+0,40  : True  (+0.932)
+     (c) karar>=0,70    : True  (0.77)
+     (d) > bos %95      : True  (+0.932 vs +0.465)
+     ==> GECTI
+
+====================================================================================================
+###  YELEK   n_tr=35  n_te=15   aday havuzu=1731 (dejenere olmayan 1261)
+     maks-istatistigi bos dagilim %95 kuantili = +0.756
+  EN IYI TEKIL (tr)
+     kol      : llm-large @1280 SISTEM YOK + kacis YOK
+     tr (SECIM): MCC +0.885  karar 1.00  TP/FP/FN/TN = 21/2/0/12  kararsiz 0  duzeltilmis p=0.0105
+     te (RAPOR): MCC +0.645  dogruluk 0.800 [Wilson 0.55-0.93]  karar 1.00  TP/FP/FN/TN = 4/3/0/8 kararsiz 0
+     ikincil (sahada dagitim, kararsiz->alarm yok) tr: MCC +0.885 dogruluk 0.943 TP/FP/FN/TN = 21/2/0/12
+
+  EN IYI KOMBINASYON (tr)
+     kol      : K3[llm-large @1920 SISTEM PROMPTU YOK | vlm @768 sistem VAR + kacis secenegi VAR | llm-large @1280 SISTEM YOK + kacis YOK]
+     tr (SECIM): MCC +0.941  karar 1.00  TP/FP/FN/TN = 21/1/0/13  kararsiz 0  duzeltilmis p=0.0105
+     te (RAPOR): MCC +0.730  dogruluk 0.857 [Wilson 0.60-0.96]  karar 0.93  TP/FP/FN/TN = 4/2/0/8 kararsiz 1
+     ikincil (sahada dagitim, kararsiz->alarm yok) tr: MCC +0.941 dogruluk 0.971 TP/FP/FN/TN = 21/1/0/13
+
+  >> ESLI TEST (tr, kombinasyon - tekil): fark +0.057  %95 GA [+0.000, +0.183]  p=0.701
+     karar orani farki: +0.00
+     HUKUM: ANLAMLI FARK YOK (GA sifiri iceriyor ve/veya fark 0,05 gurultu esiginin altinda) -> BERABERE
+
+  YEREL TABAN (Qwen3-VL-8B-FP8, islemsel prompt, kare tabanli):
+     tr MCC +0.000 karar 0.00 TP/FP/FN/TN=0/0/0/0 dejenere=True
+     te MCC +0.000 dogruluk 0.000 karar 0.00
+     -> YEREL TABAN DEJENERE (hic karar vermiyor): esli test ANLAMSIZ; uzak servis 'kazandi' demek yerine 'yerel taban bu sinifta YOK' demek dogrudur.
+
+  BASARI OLCUTU (dorttu birden):
+     (a) dejenere degil : True
+     (b) tr MCC>=+0,40  : True  (+0.941)
+     (c) karar>=0,70    : True  (1.00)
+     (d) > bos %95      : True  (+0.941 vs +0.756)
+     ==> GECTI
+
+====================================================================================================
+###  PANO   n_tr=34  n_te=15   aday havuzu=10584 (dejenere olmayan 5670)
+     maks-istatistigi bos dagilim %95 kuantili = +0.523
+  EN IYI TEKIL (tr)
+     kol      : llm-large ROI-baglam, 0-10 KARANLIK skoru, esik>=3
+     tr (SECIM): MCC +1.000  karar 1.00  TP/FP/FN/TN = 21/0/0/13  kararsiz 0  duzeltilmis p=0.0005
+     te (RAPOR): MCC +0.784  dogruluk 0.933 [Wilson 0.70-0.99]  karar 1.00  TP/FP/FN/TN = 2/0/1/12 kararsiz 0
+     ikincil (sahada dagitim, kararsiz->alarm yok) tr: MCC +1.000 dogruluk 1.000 TP/FP/FN/TN = 21/0/0/13
+
+  EN IYI KOMBINASYON (tr)
+     kol      : K2[llm-large ROI-dar kirpma, ikili soru -> llm-large ROI-baglam, 0-10 KARANLIK skoru, esik>=3]
+     tr (SECIM): MCC +1.000  karar 1.00  TP/FP/FN/TN = 21/0/0/13  kararsiz 0  duzeltilmis p=0.0005
+     te (RAPOR): MCC +0.784  dogruluk 0.933 [Wilson 0.70-0.99]  karar 1.00  TP/FP/FN/TN = 2/0/1/12 kararsiz 0
+     ikincil (sahada dagitim, kararsiz->alarm yok) tr: MCC +1.000 dogruluk 1.000 TP/FP/FN/TN = 21/0/0/13
+
+  >> KOMBINASYON, TEKIL KOL ILE BIREBIR AYNI KARARLARI VERIYOR (cebirsel olarak ozdes; 'kombinasyon kazanci' YOKTUR).
+
+  YEREL TABAN (Qwen3-VL-8B-FP8, islemsel prompt, kare tabanli):
+     tr MCC +0.000 karar 0.00 TP/FP/FN/TN=0/0/0/0 dejenere=True
+     te MCC +0.000 dogruluk 0.000 karar 0.00
+     -> YEREL TABAN DEJENERE (hic karar vermiyor): esli test ANLAMSIZ; uzak servis 'kazandi' demek yerine 'yerel taban bu sinifta YOK' demek dogrudur.
+
+  BASARI OLCUTU (dorttu birden):
+     (a) dejenere degil : True
+     (b) tr MCC>=+0,40  : True  (+1.000)
+     (c) karar>=0,70    : True  (1.00)
+     (d) > bos %95      : True  (+1.000 vs +0.523)
+     ==> GECTI
+
+====================================================================================================
+NIHAI DAGITIM TABLOSU  (secim=_tr, manset=_te)
+====================================================================================================
+sinif     | secilen yapilandirma                                       |  te-MCC | te-dog |   Wilson %95 | karar |   YEREL | anlamli mi
+---------------------------------------------------------------------------------------------------------------------------------------
+forklift  | K1[llm-fast @1280 sistem VAR + kacis secenegi VAR & llm-fa |  +0.791 |  0.889 |  0.56- 0.98  |  0.82 |   +0.607 |
+yelek     | K3[llm-large @1920 SISTEM PROMPTU YOK | vlm @768 sistem VA |  +0.730 |  0.857 |  0.60- 0.96  |  0.93 | YOK(dej) |
+pano      | llm-large ROI-baglam, 0-10 KARANLIK skoru, esik>=3         |  +0.784 |  0.933 |  0.70- 0.99  |  1.00 | YOK(dej) |

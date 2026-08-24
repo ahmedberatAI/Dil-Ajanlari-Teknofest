@@ -1,0 +1,668 @@
+{
+  "veri": {
+    "eski_maske": "yesil kanal orani, mutlak esik (yol_oznitelik.py)",
+    "yeni_maske": "maske_sari_sinir.yol_maskesi (sari capa + histerezis)",
+    "kutular": "PAYLASILAN — yol_oznitelik.json'dan aynen alindi, dedektor yeniden kosulmadi",
+    "n_klip": 48,
+    "ihlal": 25,
+    "normal": 23
+  },
+  "izgara": {
+    "D": [
+      150,
+      250,
+      400,
+      600
+    ],
+    "tau": [
+      0.05,
+      0.1,
+      0.2,
+      0.35
+    ],
+    "beta_post_hoc": [
+      0.0,
+      0.02,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.3
+    ],
+    "on_kayitli_yapilandirma": 15,
+    "post_hoc_yapilandirma": 7
+  },
+  "karsilastirma": [
+    {
+      "kural": "R5 tau=0.05",
+      "eski": {
+        "tp": 25,
+        "fp": 16,
+        "fn": 0,
+        "tn": 7,
+        "mcc": 0.4308
+      },
+      "yeni": {
+        "tp": 25,
+        "fp": 14,
+        "fn": 0,
+        "tn": 9,
+        "mcc": 0.5008
+      }
+    },
+    {
+      "kural": "R4 en hareketli",
+      "eski": {
+        "tp": 24,
+        "fp": 15,
+        "fn": 1,
+        "tn": 8,
+        "mcc": 0.394
+      },
+      "yeni": {
+        "tp": 22,
+        "fp": 10,
+        "fn": 3,
+        "tn": 13,
+        "mcc": 0.4718
+      }
+    },
+    {
+      "kural": "R1 hic yesilde yok",
+      "eski": {
+        "tp": 24,
+        "fp": 12,
+        "fn": 1,
+        "tn": 11,
+        "mcc": 0.5056
+      },
+      "yeni": {
+        "tp": 20,
+        "fp": 8,
+        "fn": 5,
+        "tn": 15,
+        "mcc": 0.4582
+      }
+    },
+    {
+      "kural": "R6 D=150",
+      "eski": {
+        "tp": 24,
+        "fp": 12,
+        "fn": 1,
+        "tn": 11,
+        "mcc": 0.5056
+      },
+      "yeni": {
+        "tp": 20,
+        "fp": 8,
+        "fn": 5,
+        "tn": 15,
+        "mcc": 0.4582
+      }
+    },
+    {
+      "kural": "R6 D=250",
+      "eski": {
+        "tp": 24,
+        "fp": 12,
+        "fn": 1,
+        "tn": 11,
+        "mcc": 0.5056
+      },
+      "yeni": {
+        "tp": 20,
+        "fp": 8,
+        "fn": 5,
+        "tn": 15,
+        "mcc": 0.4582
+      }
+    },
+    {
+      "kural": "R6 D=400",
+      "eski": {
+        "tp": 24,
+        "fp": 12,
+        "fn": 1,
+        "tn": 11,
+        "mcc": 0.5056
+      },
+      "yeni": {
+        "tp": 20,
+        "fp": 8,
+        "fn": 5,
+        "tn": 15,
+        "mcc": 0.4582
+      }
+    },
+    {
+      "kural": "R6 D=600",
+      "eski": {
+        "tp": 24,
+        "fp": 12,
+        "fn": 1,
+        "tn": 11,
+        "mcc": 0.5056
+      },
+      "yeni": {
+        "tp": 20,
+        "fp": 8,
+        "fn": 5,
+        "tn": 15,
+        "mcc": 0.4582
+      }
+    },
+    {
+      "kural": "R7 beta=0.00 [post-hoc]",
+      "eski": {
+        "tp": 24,
+        "fp": 12,
+        "fn": 1,
+        "tn": 11,
+        "mcc": 0.5056
+      },
+      "yeni": {
+        "tp": 20,
+        "fp": 8,
+        "fn": 5,
+        "tn": 15,
+        "mcc": 0.4582
+      }
+    },
+    {
+      "kural": "R7 beta=0.02 [post-hoc]",
+      "eski": {
+        "tp": 23,
+        "fp": 10,
+        "fn": 2,
+        "tn": 13,
+        "mcc": 0.523
+      },
+      "yeni": {
+        "tp": 18,
+        "fp": 7,
+        "fn": 7,
+        "tn": 16,
+        "mcc": 0.4157
+      }
+    },
+    {
+      "kural": "R7 beta=0.05 [post-hoc]",
+      "eski": {
+        "tp": 22,
+        "fp": 8,
+        "fn": 3,
+        "tn": 15,
+        "mcc": 0.5491
+      },
+      "yeni": {
+        "tp": 16,
+        "fp": 6,
+        "fn": 9,
+        "tn": 17,
+        "mcc": 0.3801
+      }
+    },
+    {
+      "kural": "R7 beta=0.10 [post-hoc]",
+      "eski": {
+        "tp": 19,
+        "fp": 8,
+        "fn": 6,
+        "tn": 15,
+        "mcc": 0.4151
+      },
+      "yeni": {
+        "tp": 9,
+        "fp": 2,
+        "fn": 16,
+        "tn": 21,
+        "mcc": 0.3245
+      }
+    },
+    {
+      "kural": "R7 beta=0.15 [post-hoc]",
+      "eski": {
+        "tp": 19,
+        "fp": 6,
+        "fn": 6,
+        "tn": 17,
+        "mcc": 0.4991
+      },
+      "yeni": {
+        "tp": 6,
+        "fp": 1,
+        "fn": 19,
+        "tn": 22,
+        "mcc": 0.2782
+      }
+    },
+    {
+      "kural": "R7 beta=0.20 [post-hoc]",
+      "eski": {
+        "tp": 17,
+        "fp": 6,
+        "fn": 8,
+        "tn": 17,
+        "mcc": 0.4191
+      },
+      "yeni": {
+        "tp": 6,
+        "fp": 1,
+        "fn": 19,
+        "tn": 22,
+        "mcc": 0.2782
+      }
+    },
+    {
+      "kural": "R5 tau=0.1",
+      "eski": {
+        "tp": 25,
+        "fp": 20,
+        "fn": 0,
+        "tn": 3,
+        "mcc": 0.2692
+      },
+      "yeni": {
+        "tp": 25,
+        "fp": 21,
+        "fn": 0,
+        "tn": 2,
+        "mcc": 0.2174
+      }
+    },
+    {
+      "kural": "R7 beta=0.30 [post-hoc]",
+      "eski": {
+        "tp": 15,
+        "fp": 4,
+        "fn": 10,
+        "tn": 19,
+        "mcc": 0.4353
+      },
+      "yeni": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 23,
+        "tn": 23,
+        "mcc": 0.2
+      }
+    },
+    {
+      "kural": "R2 yesil disinda >=1",
+      "eski": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      },
+      "yeni": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      }
+    },
+    {
+      "kural": "R3 D=150",
+      "eski": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      },
+      "yeni": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      }
+    },
+    {
+      "kural": "R3 D=250",
+      "eski": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      },
+      "yeni": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      }
+    },
+    {
+      "kural": "R3 D=400",
+      "eski": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      },
+      "yeni": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      }
+    },
+    {
+      "kural": "R3 D=600",
+      "eski": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      },
+      "yeni": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      }
+    },
+    {
+      "kural": "R5 tau=0.2",
+      "eski": {
+        "tp": 25,
+        "fp": 22,
+        "fn": 0,
+        "tn": 1,
+        "mcc": 0.1521
+      },
+      "yeni": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      }
+    },
+    {
+      "kural": "R5 tau=0.35",
+      "eski": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      },
+      "yeni": {
+        "tp": 25,
+        "fp": 23,
+        "fn": 0,
+        "tn": 0,
+        "mcc": 0.0
+      }
+    }
+  ],
+  "dejenere": {
+    "eski": [
+      "R2 yesil disinda >=1",
+      "R3 D=150",
+      "R3 D=250",
+      "R3 D=400",
+      "R3 D=600",
+      "R5 tau=0.35"
+    ],
+    "yeni": [
+      "R2 yesil disinda >=1",
+      "R3 D=150",
+      "R3 D=250",
+      "R3 D=400",
+      "R3 D=600",
+      "R5 tau=0.2",
+      "R5 tau=0.35"
+    ]
+  },
+  "en_iyi_on_kayitli": {
+    "eski": {
+      "kural": "R1 hic yesilde yok",
+      "tp": 24,
+      "fp": 12,
+      "fn": 1,
+      "tn": 11,
+      "mcc": 0.5056
+    },
+    "yeni": {
+      "kural": "R5 tau=0.05",
+      "tp": 25,
+      "fp": 14,
+      "fn": 0,
+      "tn": 9,
+      "mcc": 0.5008
+    }
+  },
+  "mcnemar_exact": {
+    "R1 hic yesilde yok": {
+      "b_eski_dogru_yeni_yanlis": 4,
+      "c_yeni_dogru_eski_yanlis": 4,
+      "p_exact": 1.0,
+      "eski_kazandigi_klipler": [
+        "0_tr11.mp4",
+        "0_tr135.mp4",
+        "0_tr44.mp4",
+        "0_tr79.mp4"
+      ],
+      "yeni_kazandigi_klipler": [
+        "4_te6.mp4",
+        "4_tr23.mp4",
+        "4_tr29.mp4",
+        "4_tr37.mp4"
+      ]
+    },
+    "R5 tau=0.05": {
+      "b_eski_dogru_yeni_yanlis": 2,
+      "c_yeni_dogru_eski_yanlis": 4,
+      "p_exact": 0.6875,
+      "eski_kazandigi_klipler": [
+        "4_tr40.mp4",
+        "4_tr41.mp4"
+      ],
+      "yeni_kazandigi_klipler": [
+        "4_te6.mp4",
+        "4_tr15.mp4",
+        "4_tr35.mp4",
+        "4_tr37.mp4"
+      ]
+    }
+  },
+  "ek_tani": {
+    "ayni_kural_R1": {
+      "b": 4,
+      "c": 4,
+      "p_exact": 1.0,
+      "A_kazandi": [
+        "0_tr11.mp4",
+        "0_tr135.mp4",
+        "0_tr44.mp4",
+        "0_tr79.mp4"
+      ],
+      "B_kazandi": [
+        "4_te6.mp4",
+        "4_tr23.mp4",
+        "4_tr29.mp4",
+        "4_tr37.mp4"
+      ],
+      "dmcc_onyukleme_ga": [
+        -0.266,
+        0.167
+      ],
+      "P_dmcc_pozitif": 0.35
+    },
+    "capraz_dagitim_karari": {
+      "b": 4,
+      "c": 3,
+      "p_exact": 1.0,
+      "A_kazandi": [
+        "4_tr13.mp4",
+        "4_tr40.mp4",
+        "4_tr41.mp4",
+        "4_tr47.mp4"
+      ],
+      "B_kazandi": [
+        "0_tr13.mp4",
+        "4_te6.mp4",
+        "4_tr37.mp4"
+      ],
+      "dmcc_onyukleme_ga": [
+        -0.205,
+        0.214
+      ],
+      "P_dmcc_pozitif": 0.432
+    },
+    "ayni_kural_R5tau005": {
+      "b": 2,
+      "c": 4,
+      "p_exact": 0.6875,
+      "A_kazandi": [
+        "4_tr40.mp4",
+        "4_tr41.mp4"
+      ],
+      "B_kazandi": [
+        "4_te6.mp4",
+        "4_tr15.mp4",
+        "4_tr35.mp4",
+        "4_tr37.mp4"
+      ],
+      "dmcc_onyukleme_ga": [
+        -0.102,
+        0.249
+      ],
+      "P_dmcc_pozitif": 0.73
+    },
+    "maske_kapsama": {
+      "ort_kapsama_eski": 0.0227,
+      "ort_kapsama_yeni": 0.0338,
+      "dusuk_kapsama_klip_eski": [
+        "0_te31.mp4",
+        "0_tr104.mp4",
+        "0_tr108.mp4",
+        "0_tr110.mp4",
+        "0_tr171.mp4",
+        "0_tr176.mp4",
+        "0_tr177.mp4",
+        "0_tr178.mp4",
+        "0_tr72.mp4",
+        "0_tr79.mp4",
+        "0_tr84.mp4",
+        "4_te15.mp4",
+        "4_te19.mp4",
+        "4_tr37.mp4"
+      ],
+      "dusuk_kapsama_klip_yeni": [],
+      "kare_ici_CV_eski": 0.059,
+      "kare_ici_CV_yeni": 0.038
+    },
+    "R1_kirilganlik_yeni_maske": [
+      {
+        "klip": "0_tr11.mp4",
+        "gercek": "IHLAL",
+        "ayak_yolda": 2,
+        "toplam_tespit": 205,
+        "oran": 0.0098
+      },
+      {
+        "klip": "0_tr13.mp4",
+        "gercek": "IHLAL",
+        "ayak_yolda": 1,
+        "toplam_tespit": 99,
+        "oran": 0.0101
+      },
+      {
+        "klip": "0_tr135.mp4",
+        "gercek": "IHLAL",
+        "ayak_yolda": 2,
+        "toplam_tespit": 103,
+        "oran": 0.0194
+      },
+      {
+        "klip": "0_tr44.mp4",
+        "gercek": "IHLAL",
+        "ayak_yolda": 1,
+        "toplam_tespit": 180,
+        "oran": 0.0056
+      },
+      {
+        "klip": "0_tr79.mp4",
+        "gercek": "IHLAL",
+        "ayak_yolda": 2,
+        "toplam_tespit": 149,
+        "oran": 0.0134
+      },
+      {
+        "klip": "4_te1.mp4",
+        "gercek": "NORMAL",
+        "ayak_yolda": 0,
+        "toplam_tespit": 63,
+        "oran": 0.0
+      },
+      {
+        "klip": "4_te15.mp4",
+        "gercek": "NORMAL",
+        "ayak_yolda": 0,
+        "toplam_tespit": 155,
+        "oran": 0.0
+      },
+      {
+        "klip": "4_te19.mp4",
+        "gercek": "NORMAL",
+        "ayak_yolda": 0,
+        "toplam_tespit": 60,
+        "oran": 0.0
+      },
+      {
+        "klip": "4_tr18.mp4",
+        "gercek": "NORMAL",
+        "ayak_yolda": 0,
+        "toplam_tespit": 213,
+        "oran": 0.0
+      },
+      {
+        "klip": "4_tr3.mp4",
+        "gercek": "NORMAL",
+        "ayak_yolda": 0,
+        "toplam_tespit": 106,
+        "oran": 0.0
+      },
+      {
+        "klip": "4_tr31.mp4",
+        "gercek": "NORMAL",
+        "ayak_yolda": 0,
+        "toplam_tespit": 70,
+        "oran": 0.0
+      },
+      {
+        "klip": "4_tr33.mp4",
+        "gercek": "NORMAL",
+        "ayak_yolda": 0,
+        "toplam_tespit": 142,
+        "oran": 0.0
+      },
+      {
+        "klip": "4_tr45.mp4",
+        "gercek": "NORMAL",
+        "ayak_yolda": 0,
+        "toplam_tespit": 72,
+        "oran": 0.0
+      }
+    ],
+    "onyukleme": {
+      "B": 20000,
+      "tohum": 20260818,
+      "tip": "eslesmis klip"
+    }
+  }
+}

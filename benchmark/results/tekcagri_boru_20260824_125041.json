@@ -1,0 +1,946 @@
+{
+ "kunye": {
+  "tarih": "2026-08-24T12:46:47",
+  "model_name": "llm-large",
+  "base_url": "https://evren-llmapi.ssyz.org.tr/v1",
+  "n_samples": 1,
+  "frame_max_side": 768,
+  "not": "boru hatti kendi ic T/max_tokens degerlerini kullanir"
+ },
+ "satirlar": [
+  {
+   "klip": "holdout/Explosion001",
+   "anomali": true,
+   "sure_s": 23.77,
+   "cagri_sayisi": 12,
+   "girdi_token": 17590,
+   "cikti_token": 2640,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 3.63,
+     "ptok": 1782,
+     "ctok": 292
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.5,
+     "ptok": 1414,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 4.88,
+     "ptok": 3101,
+     "ctok": 400
+    },
+    {
+     "model": "llm-large",
+     "sure": 4.86,
+     "ptok": 3101,
+     "ctok": 400
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.6,
+     "ptok": 1523,
+     "ctok": 150
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.74,
+     "ptok": 1523,
+     "ctok": 176
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.91,
+     "ptok": 726,
+     "ctok": 96
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.18,
+     "ptok": 719,
+     "ctok": 109
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.98,
+     "ptok": 706,
+     "ctok": 59
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.94,
+     "ptok": 712,
+     "ctok": 120
+    },
+    {
+     "model": "llm-large",
+     "sure": 4.15,
+     "ptok": 1177,
+     "ctok": 579
+    },
+    {
+     "model": "llm-large",
+     "sure": 2.04,
+     "ptok": 1106,
+     "ctok": 253
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 4,
+    "n_action": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 492
+   },
+   "cikti": {
+    "summary": "Görüntülerde, üst kısımda ani ve kör edici bir parlaklıkla başlayan büyük ölçekli bir patlama ve ardından nesnelerin havaya fırladığı kritik bir kaza olayı tespit edilmiştir. Ayrıca, yoğun toz bulutu ve enkaz parçacıkları ile merkezdeki bir cisme düşen ani ışık huzmesi (elektrik arkı veya alevlenme) gibi şiddetli fiziksel olaylar kaydedilmiştir. Bu olaylar, farklı zaman dilimlerinde ve bağımsız sahnelerde gerçekleşmiş olup, ortamda ciddi bir güvenlik ihlali ve fiziksel tehlike mevcuttur.",
+    "events": [
+     {
+      "time": "00:04",
+      "event": "Ani ve kör edici parlaklık ile büyük ölçekli patlama başlangıcı"
+     },
+     {
+      "time": "00:05",
+      "event": "Patlama dalgası nedeniyle nesnelerin havaya fırlaması ve kameranın şiddetli sarsılması"
+     },
+     {
+      "time": "00:10",
+      "event": "Yoğun toz bulutu ve havada süzülen enkaz parçacıkları ile şiddetli fiziksel olay (patlama veya çarpışma) izlenimi"
+     },
+     {
+      "time": "00:12",
+      "event": "Merkezdeki cisme düşen ani parlak ışık huzmesi (elektrik arkı, kıvılcım veya alevlenme)"
+     }
+    ],
+    "risk": "Kritik",
+    "actions": [
+     "Acil durum alarmını hemen devreye sokun ve bölgeyi derhal tahliye edin.",
+     "İtfaiye ve acil sağlık ekiplerini olay yerine yönlendirin.",
+     "Olay bölgesine giden tüm yolları kapatın ve yetkisiz girişleri engelleyin.",
+     "Görüntü kayıtlarını ve sensör verilerini koruyun, silinmemesini sağlayın.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Fighting023",
+   "anomali": true,
+   "sure_s": 36.8,
+   "cagri_sayisi": 16,
+   "girdi_token": 24435,
+   "cikti_token": 3069,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 5.48,
+     "ptok": 2706,
+     "ctok": 277
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.54,
+     "ptok": 1399,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 6.81,
+     "ptok": 3101,
+     "ctok": 382
+    },
+    {
+     "model": "llm-large",
+     "sure": 6.9,
+     "ptok": 3014,
+     "ctok": 400
+    },
+    {
+     "model": "llm-large",
+     "sure": 6.9,
+     "ptok": 3101,
+     "ctok": 400
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.38,
+     "ptok": 1504,
+     "ctok": 79
+    },
+    {
+     "model": "llm-large",
+     "sure": 2.68,
+     "ptok": 1523,
+     "ctok": 169
+    },
+    {
+     "model": "llm-large",
+     "sure": 2.85,
+     "ptok": 1523,
+     "ctok": 197
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.18,
+     "ptok": 703,
+     "ctok": 65
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.22,
+     "ptok": 717,
+     "ctok": 72
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.97,
+     "ptok": 716,
+     "ctok": 71
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.56,
+     "ptok": 701,
+     "ctok": 73
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.89,
+     "ptok": 700,
+     "ctok": 2
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.36,
+     "ptok": 702,
+     "ctok": 57
+    },
+    {
+     "model": "llm-large",
+     "sure": 4.85,
+     "ptok": 1181,
+     "ctok": 593
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.97,
+     "ptok": 1144,
+     "ctok": 226
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 6,
+    "n_action": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 569
+   },
+   "cikti": {
+    "summary": "Görüntülerde, farklı zamanlarda ve sahnelerde gerçekleşen birden fazla ciddi güvenlik ve sağlık olayı tespit edilmiştir. İlk bölümde iki kişi arasında fiziksel kavga ve darp olayı yaşanmış, ardından bir birey yere düşerek hareketsiz kalmıştır. Daha sonraki sahnelerde şüpheli bir bireyin elindeki eşyalarla olay yerinden kaçışı ve bir başka sahnede beyaz giyimli birinin koyu giyimli bireye sert müdahalede bulunarak gasp girişiminde bulunduğu görülmüştür. Bu olaylar birbirinden bağımsız sahnelerde gerçekleşen ayrı ayrı güvenlik ihlalleri ve sağlık acil durumlarıdır.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "İki kişi arasında fiziksel kavga ve darp olayı"
+     },
+     {
+      "time": "00:02",
+      "event": "Kişinin yere düşmesi ve hareketsiz kalması"
+     },
+     {
+      "time": "00:03",
+      "event": "Şüpheli kişinin elindeki eşyalarla olay yerinden kaçışı"
+     },
+     {
+      "time": "00:04",
+      "event": "Kişinin ani ve sert bir şekilde yere çökmesi/düşmesi"
+     },
+     {
+      "time": "00:11",
+      "event": "Beyaz giyimli bireyin koyu giyimli bireye sert fiziksel müdahalede bulunması ve kavga çıkması"
+     },
+     {
+      "time": "00:12",
+      "event": "Bireylerin duvara sıkıştırılması, boğazdan tutulması ve gasp (hırsızlık) girişimi"
+     }
+    ],
+    "risk": "Kritik",
+    "actions": [
+     "Derhal acil sağlık ekiplerini (112) ve güvenlik güçlerini olay yerlerine yönlendirin.",
+     "Kaçan şüphelinin son görüldüğü yönü (sol) takip eden kameraları anlık olarak izleyin ve kaçış rotasını belirleyin.",
+     "Olay yerindeki tüm kamera kayıtlarını ve ilgili bölümleri şifreli olarak yedekleyin.",
+     "İlgili alanlara güvenlik personeli göndererek bölgeyi izole edin ve diğer kişilerin güvenliğini sağlayın.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "holdout/RoadAcc021",
+   "anomali": true,
+   "sure_s": 29.4,
+   "cagri_sayisi": 7,
+   "girdi_token": 8621,
+   "cikti_token": 1508,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 6.02,
+     "ptok": 3101,
+     "ctok": 400
+    },
+    {
+     "model": "llm-large",
+     "sure": 2.07,
+     "ptok": 1523,
+     "ctok": 215
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.04,
+     "ptok": 704,
+     "ctok": 88
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.45,
+     "ptok": 710,
+     "ctok": 71
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.62,
+     "ptok": 706,
+     "ctok": 80
+    },
+    {
+     "model": "llm-large",
+     "sure": 3.23,
+     "ptok": 861,
+     "ctok": 461
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.7,
+     "ptok": 1016,
+     "ctok": 193
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 3,
+    "n_action": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 233
+   },
+   "cikti": {
+    "summary": "İç mekânda iki kişi arasında fiziksel müdahale ve itişme başlamıştır. Siyah giyimli bir birey, uzun namlulu silah benzeri bir cisimle diğerini tehdit etmiştir. Tehdit edilen kişi, zorla bir aracın arkasına sürüklenerek götürülmüştür.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "İki kişi arasında fiziksel müdahale ve itişme başlangıcı"
+     },
+     {
+      "time": "00:01",
+      "event": "Siyah giyimli birey tarafından uzun namlulu silah benzeri cisimle tehdit edilmesi"
+     },
+     {
+      "time": "00:02",
+      "event": "Silahla tehdit edilen kişinin sürüklenerek zorla araç arkasına götürülmesi"
+     }
+    ],
+    "risk": "Kritik",
+    "actions": [
+     "Derhal yerel güvenlik birimlerini ve acil durum servislerini (112) uyarın.",
+     "Olay anında kaydedilen kamera görüntülerini ve ses verilerini anlık olarak yedekleyin ve delil olarak saklayın.",
+     "Olay bölgesine giden tüm personel ve ziyaretçileri güvenli bir alana tahliye edin.",
+     "Saldırganın ve mağdurun son görüldüğü konumu takip ederek güvenlik ekiplerine canlı koordinat bilgisi iletin.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Shooting001",
+   "anomali": true,
+   "sure_s": 27.49,
+   "cagri_sayisi": 4,
+   "girdi_token": 6490,
+   "cikti_token": 1227,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 5.62,
+     "ptok": 3014,
+     "ctok": 400
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.9,
+     "ptok": 1523,
+     "ctok": 151
+    },
+    {
+     "model": "llm-large",
+     "sure": 3.92,
+     "ptok": 974,
+     "ctok": 444
+    },
+    {
+     "model": "llm-large",
+     "sure": 2.55,
+     "ptok": 979,
+     "ctok": 232
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 2,
+    "n_action": 4,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 302
+   },
+   "cikti": {
+    "summary": "İç mekân ortamında, beyaz giyimli bir birey kontrolsüz bir şekilde yere çöküp yığılmıştır. Ayrıca, yere düşen kişiye mobilya parçası kullanılarak fiziksel saldırı başlatılmıştır. Bu olaylar farklı zaman dilimlerinde tespit edilmiş olup, her biri bağımsız bir güvenlik ve sağlık tehdidi oluşturmaktadır.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Beyaz giyimli birey kontrolsüz şekilde yere çöküp yığıldı."
+     },
+     {
+      "time": "00:02",
+      "event": "Yere düşen kişiye mobilya parçası ile fiziksel saldırı başlatıldı."
+     }
+    ],
+    "risk": "Kritik",
+    "actions": [
+     "Derhal acil sağlık ekiplerini ve güvenlik güçlerini olay yerine yönlendirin.",
+     "Saldırganın hareketlerini takip eden ek güvenlik kameralarını aktif hale getirin ve şüpheliyi izleyin.",
+     "Olay alanına giden tüm çıkışları ve erişim noktalarını kilitleyin veya kontrol altına alın.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_6te10",
+   "anomali": false,
+   "sure_s": 6.72,
+   "cagri_sayisi": 3,
+   "girdi_token": 4084,
+   "cikti_token": 602,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 3.95,
+     "ptok": 1854,
+     "ctok": 354
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.7,
+     "ptok": 1476,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.82,
+     "ptok": 754,
+     "ctok": 242
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 206
+   },
+   "cikti": {
+    "summary": "İki saniyelik video analizinde herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını normal izleme modunda devam ettirin.",
+     "Sistem loglarını güncelleyerek bu zaman diliminde 'olay yok' olarak işaretleyin."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_939",
+   "anomali": false,
+   "sure_s": 10.62,
+   "cagri_sayisi": 7,
+   "girdi_token": 14055,
+   "cikti_token": 1154,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 4.23,
+     "ptok": 3014,
+     "ctok": 281
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.53,
+     "ptok": 1403,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 5.51,
+     "ptok": 3014,
+     "ctok": 280
+    },
+    {
+     "model": "llm-large",
+     "sure": 6.23,
+     "ptok": 3014,
+     "ctok": 332
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.74,
+     "ptok": 1402,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.48,
+     "ptok": 1454,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 3.27,
+     "ptok": 754,
+     "ctok": 243
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 230
+   },
+   "cikti": {
+    "summary": "27 saniyelik video incelemesinde herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülerde sakin bir ortam akışı gözlemlenmiş, operatörün dikkatini gerektirecek bir durum ortaya çıkmamıştır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını normal izlemeye devam edin.",
+     "Kayıtları arşivleme prosedürünü tamamlayın.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  },
+  {
+   "klip": "isg/Forklift_asiri_yuk",
+   "anomali": true,
+   "sure_s": 12.38,
+   "cagri_sayisi": 5,
+   "girdi_token": 8370,
+   "cikti_token": 890,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 5.47,
+     "ptok": 1510,
+     "ctok": 281
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.64,
+     "ptok": 1403,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 8.42,
+     "ptok": 3230,
+     "ctok": 351
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.7,
+     "ptok": 1473,
+     "ctok": 11
+    },
+    {
+     "model": "llm-large",
+     "sure": 2.21,
+     "ptok": 754,
+     "ctok": 241
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 209
+   },
+   "cikti": {
+    "summary": "11 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını standart izleme modunda devam ettirin.",
+     "Sistem loglarını ve kamera kayıtlarını arşivleyin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Yaya_yolu_ihlali",
+   "anomali": true,
+   "sure_s": 18.89,
+   "cagri_sayisi": 5,
+   "girdi_token": 9805,
+   "cikti_token": 988,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 11.47,
+     "ptok": 3230,
+     "ctok": 330
+    },
+    {
+     "model": "llm-large",
+     "sure": 11.78,
+     "ptok": 2886,
+     "ctok": 360
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.83,
+     "ptok": 1452,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.58,
+     "ptok": 1483,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 5.37,
+     "ptok": 754,
+     "ctok": 286
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 222
+   },
+   "cikti": {
+    "summary": "15 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam akışı gözlemlenmiş olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Sistemi normal izleme modunda tutun ve kayıtları arşivleyin.",
+     "Kamera açılarının ve sensörlerin çalışmaya devam ettiğini periyodik olarak kontrol edin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_acik",
+   "anomali": true,
+   "sure_s": 12.3,
+   "cagri_sayisi": 5,
+   "girdi_token": 8846,
+   "cikti_token": 998,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 7.13,
+     "ptok": 1854,
+     "ctok": 364
+    },
+    {
+     "model": "llm-large",
+     "sure": 7.44,
+     "ptok": 3230,
+     "ctok": 398
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.07,
+     "ptok": 1486,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.72,
+     "ptok": 1522,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 3.27,
+     "ptok": 754,
+     "ctok": 224
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 224
+   },
+   "cikti": {
+    "summary": "12 saniyelik video analizinde herhangi bir anormal durum, güvenlik ihlali veya riskli olay tespit edilmemiştir. Görüntülerde sakin bir ortam akışı gözlemlenmiş, operatörün dikkatini gerektirecek bir durum ortaya çıkmamıştır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını standart izleme modunda devam ettirin.",
+     "Sistem kayıtlarını arşivleyin ve izlemeye devam edin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "anomali": false,
+   "sure_s": 13.25,
+   "cagri_sayisi": 5,
+   "girdi_token": 8868,
+   "cikti_token": 995,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 7.08,
+     "ptok": 1854,
+     "ctok": 295
+    },
+    {
+     "model": "llm-large",
+     "sure": 7.99,
+     "ptok": 3317,
+     "ctok": 400
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.94,
+     "ptok": 1420,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.95,
+     "ptok": 1523,
+     "ctok": 6
+    },
+    {
+     "model": "llm-large",
+     "sure": 3.36,
+     "ptok": 754,
+     "ctok": 288
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 225
+   },
+   "cikti": {
+    "summary": "12 saniyelik video süresi boyunca herhangi bir anormal durum, güvenlik ihlali veya tehlikeli olay tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün müdahalesini gerektirecek bir durum gözlemlenmemiştir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını standart izleme modunda devam ettirin.",
+     "Sistem loglarını güncelleyerek bu zaman aralığında herhangi bir alarm tetiklenmediğini kaydedin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_yaya_yolu",
+   "anomali": false,
+   "sure_s": 16.85,
+   "cagri_sayisi": 5,
+   "girdi_token": 9975,
+   "cikti_token": 773,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 8.53,
+     "ptok": 3230,
+     "ctok": 259
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.55,
+     "ptok": 1381,
+     "ctok": 11
+    },
+    {
+     "model": "llm-large",
+     "sure": 11.05,
+     "ptok": 3230,
+     "ctok": 258
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.55,
+     "ptok": 1380,
+     "ctok": 11
+    },
+    {
+     "model": "llm-large",
+     "sure": 4.11,
+     "ptok": 754,
+     "ctok": 234
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 278
+   },
+   "cikti": {
+    "summary": "16 saniyelik video süresi boyunca herhangi bir anormal durum, tehdit veya güvenlik ihlali tespit edilmemiştir. Görüntülerde sakin bir ortam hakim olup, operatörün dikkatini gerektirecek bir olay yaşanmamıştır. Mevcut veriler ışığında izleme süreci normal seyrini sürdürmektedir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "İzlemeye devam et",
+     "Sistemi normal çalışma modunda tut"
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_kapali",
+   "anomali": false,
+   "sure_s": 25.11,
+   "cagri_sayisi": 4,
+   "girdi_token": 6562,
+   "cikti_token": 1067,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 10.3,
+     "ptok": 3317,
+     "ctok": 400
+    },
+    {
+     "model": "llm-large",
+     "sure": 0.91,
+     "ptok": 1526,
+     "ctok": 90
+    },
+    {
+     "model": "llm-large",
+     "sure": 4.09,
+     "ptok": 792,
+     "ctok": 409
+    },
+    {
+     "model": "llm-large",
+     "sure": 1.46,
+     "ptok": 927,
+     "ctok": 168
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 1,
+    "n_action": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 240
+   },
+   "cikti": {
+    "summary": "Görüntülerde, iki personel arasında ani bir fiziksel temas gerçekleşmiştir. Bu temas sonucunda sarı yelek giyen personel dengesini kaybederek yere düşmüştür. Olay, belirlenen zaman dilimi içinde tek bir kaza vakası olarak tespit edilmiştir.",
+    "events": [
+     {
+      "time": "00:01",
+      "event": "İki personel arasında ani fiziksel temas sonucu sarı yeleklili personelin dengesini kaybedip yere düşmesi"
+     }
+    ],
+    "risk": "Yüksek",
+    "actions": [
+     "Acil durum ekiplerini ve sağlık personeli derhal olay yerine yönlendirin.",
+     "Olay anını ve sonrasını kaydeden tüm kamera görüntülerini koruyun ve arşivleyin.",
+     "Olay yerini güvenli hale getirin ve diğer personelin yaklaşmasını engelleyin."
+    ]
+   }
+  }
+ ]
+}

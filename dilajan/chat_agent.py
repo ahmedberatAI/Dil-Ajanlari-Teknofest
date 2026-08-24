@@ -78,11 +78,19 @@ def _tools_desc() -> str:
     return "\n".join(out)
 
 
-def _get_client() -> VLMClient:
+def _get_client(model: Optional[str] = None) -> VLMClient:
+    """Paylasilan sohbet istemcisi. `model` verilirse AYNI baglantiyi paylasan,
+    o modele bakan hafif bir gorunum doner (yeni HTTP baglantisi acilmaz).
+
+    D42 — NEDEN PARAMETRIK: Otonomi/diyalog maddesi puanin %20'si ve uzak serviste
+    10 alias acik. Hangi alias'in operator diyalogunda en iyi oldugunu OLCEBILMEK
+    icin model, olcum betiginden secilebilmeli. VARSAYILAN None -> eskisi gibi
+    `settings.model_name` (K2: uretim davranisi BIREBIR ayni).
+    """
     global _client
     if _client is None:
         _client = VLMClient()
-    return _client
+    return _client.model_ile(model) if model else _client
 
 
 def build_context(result: AnalysisResult) -> str:
@@ -215,8 +223,15 @@ def respond(
     message: str,
     max_tokens: int = 400,
     temperature: float = 0.3,
+    model: Optional[str] = None,
 ) -> str:
-    """Bir operatör mesajina, analiz baglami + sohbet gecmisine dayanarak yanit uretir."""
+    """Bir operatör mesajina, analiz baglami + sohbet gecmisine dayanarak yanit uretir.
+
+    `model`: kullanilacak alias (or. "llm-large" / "llm-fast" / "router").
+    None -> `settings.model_name` (K2 — uretim davranisi degismez). D42 alias
+    karsilastirmasi icin eklendi; hem serbest-metin yaniti hem de KAPILI ICRA
+    cikarimi AYNI kola gider, yoksa kol karsilastirmasi karisir.
+    """
     if not context:
         return ("Önce bir video analiz edin; ardından analizle ilgili sorularınızı "
                 "yanıtlayabilir ve aksiyon önerebilirim.")
@@ -239,14 +254,21 @@ def respond(
         # 4,60 -> 5,00 dizisinin ne kadari degisiklik, ne kadari gurultu ayirt EDILEMEDI).
         # Artik parametre; VARSAYILAN 0.3 (K2 — uretim davranisi BIREBIR ayni),
         # olcum betikleri 0.0 gecerek tekrarlanabilir kosum alir.
-        answer = _get_client().chat(messages, temperature=temperature,
-                                    max_tokens=max_tokens).strip()
+        # K2: model verilmediginde cagri ESKISIYLE BIREBIR AYNI (`_get_client()`),
+        # cunku testler `_get_client`i SIFIR ARGUMANLI bir lambda ile degistiriyor
+        # (tests/test_agent_k2_k4_k5.py:119). Kosulsuz `_get_client(model)` yazmak
+        # o testleri TypeError ile kirdi — olculdu ve duzeltildi.
+        istemci = _get_client(model) if model else _get_client()
+        answer = istemci.chat(messages, temperature=temperature,
+                              max_tokens=max_tokens).strip()
     except Exception as ex:
         return f"Yanıt üretilirken hata oluştu: {ex}"
     # 2) B#1 KAPILI ICRA: operatör ONAY verdiyse, önerilen aksiyonu GERÇEKTEN çalıştır (insan-onay kapısı)
     #    K5: onay tespiti olumsuzlama-farkindalikli ("gönderme"/"onaylamıyorum" icra ETMEZ)
-    if is_confirmation(message):
-        executed = _maybe_execute(context, history, message)
+    #    D42: onay TEK BASINA yetmez — ONAYLANACAK BIR ONERI de olmali. Bu onkosul
+    #    DETERMINISTIKTIR; modele birakildiginda uc alias da ihlal etti (6/6).
+    if is_confirmation(message) and onaylanacak_oneri_var_mi(history):
+        executed = _maybe_execute(context, history, message, model=model)
         if executed:
             answer += "\n\n" + executed
     # 3) D36 INISIYATIF GARANTISI: bekleyen Kritik/Yuksek bulgu varsa ve yanit onu
@@ -284,7 +306,31 @@ def _dedup_key(fn: Optional[str], args: Optional[Dict[str, Any]]) -> str:
     return f"{name}|{payload}"
 
 
-def _maybe_execute(context: str, history: Optional[List[dict]], message: str) -> str:
+def onaylanacak_oneri_var_mi(history: Optional[List[dict]]) -> bool:
+    """Asistanin ONCEKI turunda ONAYLANACAK somut bir oneri var mi? (DETERMINISTIK)
+
+    D42 KUSURU (2026-08-24, olculdu): icra kapisi YALNIZCA operatorun mesajina
+    bakiyordu. Operator BOS gecmiste sadece "Tamam." yazdiginda:
+        is_confirmation("Tamam.") -> True  ->  _maybe_execute cagriliyordu
+    ve UC MODEL DE (llm-large, llm-fast, router) 6/6 kosumda GERCEK mock
+    fonksiyonlari YURUTTU (saglik_ekibi_yonlendir, alan_guvenligini_sagla,
+    olay_kaydi_olustur, yonetici_bilgilendir) — ortada onaylanacak HICBIR oneri
+    yokken. CHAT_EXECUTE_PROMPT bunu ACIKCA yasakliyordu; ucu de kurali cigneddi.
+
+    DERS: insan-onay kapisi MODEL YARGISINA birakilamaz. Model degistirmek bu
+    hatayi KAPATMIYOR (uc alias da ayni sekilde dustu). Deterministik onkosul sart.
+
+    KURAL: gecmiste en az bir ASISTAN turu olmali. Yoksa onaylanacak bir sey de
+    yoktur ve icra YAPILMAZ. FP-guvenli: belirsizse False.
+    """
+    for m in reversed(history or []):
+        if m.get("role") == "assistant" and (m.get("content") or "").strip():
+            return True
+    return False
+
+
+def _maybe_execute(context: str, history: Optional[List[dict]], message: str,
+                   model: Optional[str] = None) -> str:
     """Operatör onayi sonrasi: sohbetten onaylanan mock-fonksiyon(lar)i çikar ve ÇALIŞTIR.
     FAIL-OPEN: belirsizse/parse hatasiysa hiçbir şey yapmaz (bos döner). FP-güvenli: yalniz
     açik öneri+onay varsa çağirir (model 'calls:[]' döndürür aksi halde)."""
@@ -292,7 +338,8 @@ def _maybe_execute(context: str, history: Optional[List[dict]], message: str) ->
         hist = [m for m in (history or []) if m.get("content")][-6:]
         hist_txt = "\n".join(f"{m['role']}: {m['content']}" for m in hist) + f"\nuser: {message}"
         prompt = CHAT_EXECUTE_PROMPT.format(tools=_tools_desc(), context=context)
-        raw = _get_client().chat(
+        istemci = _get_client(model) if model else _get_client()  # K2, bkz. respond()
+        raw = istemci.chat(
             [{"role": "system", "content": prompt},
              {"role": "user", "content": "SOHBET GEÇMİŞİ:\n" + hist_txt}],
             temperature=0.0, max_tokens=300)

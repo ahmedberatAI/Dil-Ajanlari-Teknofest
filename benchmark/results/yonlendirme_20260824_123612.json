@@ -1,0 +1,2136 @@
+{
+  "kunye": {
+    "tarih": "2026-08-24 12:36:12",
+    "T": 0.0,
+    "max_tokens": 16,
+    "kisitli_cozme": "structured_outputs.choice",
+    "seed": "PLUMBED DEGIL (chat() seed almiyor) -> belirlenimlilik ampirik",
+    "n": 36,
+    "zor_maddeler": [
+      "G5",
+      "K9",
+      "S8"
+    ],
+    "hedef_tablosu": {
+      "sayma": "llm-large",
+      "kisi_oznitelik": "vlm",
+      "durum": "vlm",
+      "genel": "llm-fast"
+    },
+    "on_kayit": "docs/on_kayit_router_yonlendirme_2026-08-24.md"
+  },
+  "kollar": {
+    "kural": {
+      "kol": "kural",
+      "alias": "__kural__",
+      "n": 36,
+      "dogru": 33,
+      "acc": 0.9166666666666666,
+      "acc_zor_haric": 0.9090909090909091,
+      "n_zor_haric": 33,
+      "gecikme_medyan_s": 6.744000017988583e-06,
+      "gecikme_ort_s": 7.26019444149036e-06,
+      "gecikme_p90_s": 1.0644999974829261e-05,
+      "giris_token_ort": null,
+      "cikis_token_ort": null,
+      "sinif": {
+        "sayma": {
+          "n": 9,
+          "dogru": 7
+        },
+        "kisi_oznitelik": {
+          "n": 9,
+          "dogru": 9
+        },
+        "durum": {
+          "n": 9,
+          "dogru": 8
+        },
+        "genel": {
+          "n": 9,
+          "dogru": 9
+        }
+      },
+      "tur": {
+        "soru": {
+          "n": 26,
+          "dogru": 25
+        },
+        "klip": {
+          "n": 10,
+          "dogru": 8
+        }
+      },
+      "karisiklik": {
+        "durum->durum": 8,
+        "durum->genel": 1,
+        "genel->genel": 9,
+        "kisi_oznitelik->kisi_oznitelik": 9,
+        "sayma->genel": 2,
+        "sayma->sayma": 7
+      },
+      "kayit": [
+        {
+          "kim": "S1",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 3.7670000665457337e-06,
+          "kullanim": null,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S2",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 1.4869999631628161e-06,
+          "kullanim": null,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S3",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 2.4180000082196784e-06,
+          "kullanim": null,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S4",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 1.6430000187028782e-06,
+          "kullanim": null,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S5",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 1.4359999340740615e-06,
+          "kullanim": null,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S6",
+          "tur": "klip",
+          "gercek": "sayma",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 1.8637000039234408e-05,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "S7",
+          "tur": "klip",
+          "gercek": "sayma",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 1.6513999980816152e-05,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "S8",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 1.5460000213352032e-06,
+          "kullanim": null,
+          "ham": "sayma"
+        },
+        {
+          "kim": "S9",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 1.677999989624368e-06,
+          "kullanim": null,
+          "ham": "sayma"
+        },
+        {
+          "kim": "K1",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 2.148000021406915e-06,
+          "kullanim": null,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K2",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 4.389999958220869e-06,
+          "kullanim": null,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K3",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 4.251999939697271e-06,
+          "kullanim": null,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K4",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 3.7600000268867007e-06,
+          "kullanim": null,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K5",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 5.020999992666475e-06,
+          "kullanim": null,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K6",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 4.537999984677299e-06,
+          "kullanim": null,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K7",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 7.283999934770691e-06,
+          "kullanim": null,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K8",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 6.2889999981052824e-06,
+          "kullanim": null,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K9",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 5.438000016511069e-06,
+          "kullanim": null,
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "D1",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 5.686999998033571e-06,
+          "kullanim": null,
+          "ham": "durum"
+        },
+        {
+          "kim": "D2",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 5.592999968939694e-06,
+          "kullanim": null,
+          "ham": "durum"
+        },
+        {
+          "kim": "D3",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 6.493999990198063e-06,
+          "kullanim": null,
+          "ham": "durum"
+        },
+        {
+          "kim": "D4",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 9.496999950897589e-06,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "D5",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 1.0644999974829261e-05,
+          "kullanim": null,
+          "ham": "durum"
+        },
+        {
+          "kim": "D6",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 9.44900000376947e-06,
+          "kullanim": null,
+          "ham": "durum"
+        },
+        {
+          "kim": "D7",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 1.0138999982700625e-05,
+          "kullanim": null,
+          "ham": "durum"
+        },
+        {
+          "kim": "D8",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 9.00599991382478e-06,
+          "kullanim": null,
+          "ham": "durum"
+        },
+        {
+          "kim": "D9",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 8.019000006243004e-06,
+          "kullanim": null,
+          "ham": "durum"
+        },
+        {
+          "kim": "G1",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 6.994000045779103e-06,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "G2",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 7.310000000870787e-06,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "G3",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 1.0094000003846304e-05,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "G4",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 7.5589999823932885e-06,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "G5",
+          "tur": "klip",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 1.890900000489637e-05,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "G6",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 1.0409000083200226e-05,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "G7",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 1.0062000001198612e-05,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "G8",
+          "tur": "klip",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 1.4143000043986831e-05,
+          "kullanim": null,
+          "ham": "genel"
+        },
+        {
+          "kim": "G9",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 9.112000043387525e-06,
+          "kullanim": null,
+          "ham": "genel"
+        }
+      ]
+    },
+    "router": {
+      "kol": "router",
+      "alias": "router",
+      "n": 36,
+      "dogru": 35,
+      "acc": 0.9722222222222222,
+      "acc_zor_haric": 0.9696969696969697,
+      "n_zor_haric": 33,
+      "gecikme_medyan_s": 0.2626767185000176,
+      "gecikme_ort_s": 0.26002017333334176,
+      "gecikme_p90_s": 0.2913790269999481,
+      "giris_token_ort": 297.77777777777777,
+      "cikis_token_ort": 4.388888888888889,
+      "sinif": {
+        "sayma": {
+          "n": 9,
+          "dogru": 9
+        },
+        "kisi_oznitelik": {
+          "n": 9,
+          "dogru": 9
+        },
+        "durum": {
+          "n": 9,
+          "dogru": 8
+        },
+        "genel": {
+          "n": 9,
+          "dogru": 9
+        }
+      },
+      "tur": {
+        "soru": {
+          "n": 26,
+          "dogru": 26
+        },
+        "klip": {
+          "n": 10,
+          "dogru": 9
+        }
+      },
+      "karisiklik": {
+        "durum->durum": 8,
+        "durum->kisi_oznitelik": 1,
+        "genel->genel": 9,
+        "kisi_oznitelik->kisi_oznitelik": 9,
+        "sayma->sayma": 9
+      },
+      "kayit": [
+        {
+          "kim": "S1",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.19565787499993803,
+          "kullanim": {
+            "giris": 291,
+            "cikis": 3,
+            "toplam": 294
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S2",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.21004675900007896,
+          "kullanim": {
+            "giris": 292,
+            "cikis": 3,
+            "toplam": 295
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S3",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.20629708600006325,
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S4",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.21448921299997892,
+          "kullanim": {
+            "giris": 299,
+            "cikis": 3,
+            "toplam": 302
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S5",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.211104692000049,
+          "kullanim": {
+            "giris": 292,
+            "cikis": 3,
+            "toplam": 295
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S6",
+          "tur": "klip",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.22175378299994009,
+          "kullanim": {
+            "giris": 310,
+            "cikis": 3,
+            "toplam": 313
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S7",
+          "tur": "klip",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.23308843300003446,
+          "kullanim": {
+            "giris": 307,
+            "cikis": 3,
+            "toplam": 310
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S8",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.26190488700001424,
+          "kullanim": {
+            "giris": 296,
+            "cikis": 3,
+            "toplam": 299
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S9",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.2788272689999758,
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "K1",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.3179812099999708,
+          "kullanim": {
+            "giris": 289,
+            "cikis": 8,
+            "toplam": 297
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K2",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.23130555099999128,
+          "kullanim": {
+            "giris": 295,
+            "cikis": 8,
+            "toplam": 303
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K3",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.25745745099993655,
+          "kullanim": {
+            "giris": 293,
+            "cikis": 8,
+            "toplam": 301
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K4",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.32301523800003906,
+          "kullanim": {
+            "giris": 295,
+            "cikis": 8,
+            "toplam": 303
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K5",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.3073936279999998,
+          "kullanim": {
+            "giris": 298,
+            "cikis": 8,
+            "toplam": 306
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K6",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.25060600599999816,
+          "kullanim": {
+            "giris": 300,
+            "cikis": 8,
+            "toplam": 308
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K7",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.28358190000005834,
+          "kullanim": {
+            "giris": 308,
+            "cikis": 8,
+            "toplam": 316
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K8",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.25950286800002687,
+          "kullanim": {
+            "giris": 299,
+            "cikis": 8,
+            "toplam": 307
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K9",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.263448550000021,
+          "kullanim": {
+            "giris": 305,
+            "cikis": 8,
+            "toplam": 313
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "D1",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.22697533300004125,
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D2",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.24588898499996503,
+          "kullanim": {
+            "giris": 290,
+            "cikis": 3,
+            "toplam": 293
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D3",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.24090276799995536,
+          "kullanim": {
+            "giris": 293,
+            "cikis": 3,
+            "toplam": 296
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D4",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.24595065100004376,
+          "kullanim": {
+            "giris": 298,
+            "cikis": 3,
+            "toplam": 301
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D5",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.24321350200000325,
+          "kullanim": {
+            "giris": 306,
+            "cikis": 3,
+            "toplam": 309
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D6",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "kisi_oznitelik",
+          "dogru": false,
+          "gecikme_s": 0.282116090000045,
+          "kullanim": {
+            "giris": 304,
+            "cikis": 8,
+            "toplam": 312
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "D7",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.27913608599999407,
+          "kullanim": {
+            "giris": 300,
+            "cikis": 3,
+            "toplam": 303
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D8",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.2912002340000299,
+          "kullanim": {
+            "giris": 300,
+            "cikis": 3,
+            "toplam": 303
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D9",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.2741200460000073,
+          "kullanim": {
+            "giris": 296,
+            "cikis": 3,
+            "toplam": 299
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "G1",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.27891334800006007,
+          "kullanim": {
+            "giris": 293,
+            "cikis": 3,
+            "toplam": 296
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G2",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.2918252910000092,
+          "kullanim": {
+            "giris": 295,
+            "cikis": 3,
+            "toplam": 298
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G3",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.2840299719999848,
+          "kullanim": {
+            "giris": 300,
+            "cikis": 3,
+            "toplam": 303
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G4",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.26462534300003426,
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G5",
+          "tur": "klip",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.2752926910000042,
+          "kullanim": {
+            "giris": 309,
+            "cikis": 3,
+            "toplam": 312
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G6",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.28364622499998404,
+          "kullanim": {
+            "giris": 298,
+            "cikis": 3,
+            "toplam": 301
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G7",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.2913790269999481,
+          "kullanim": {
+            "giris": 298,
+            "cikis": 3,
+            "toplam": 301
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G8",
+          "tur": "klip",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.28860737000002246,
+          "kullanim": {
+            "giris": 301,
+            "cikis": 3,
+            "toplam": 304
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G9",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.24544087900005707,
+          "kullanim": {
+            "giris": 294,
+            "cikis": 3,
+            "toplam": 297
+          },
+          "ham": "genel"
+        }
+      ]
+    },
+    "llm-fast": {
+      "kol": "llm-fast",
+      "alias": "llm-fast",
+      "n": 36,
+      "dogru": 29,
+      "acc": 0.8055555555555556,
+      "acc_zor_haric": 0.7878787878787878,
+      "n_zor_haric": 33,
+      "gecikme_medyan_s": 0.327590975000021,
+      "gecikme_ort_s": 0.35455631574999164,
+      "gecikme_p90_s": 0.3511219140000321,
+      "giris_token_ort": 278.19444444444446,
+      "cikis_token_ort": 3.6666666666666665,
+      "sinif": {
+        "sayma": {
+          "n": 9,
+          "dogru": 7
+        },
+        "kisi_oznitelik": {
+          "n": 9,
+          "dogru": 4
+        },
+        "durum": {
+          "n": 9,
+          "dogru": 9
+        },
+        "genel": {
+          "n": 9,
+          "dogru": 9
+        }
+      },
+      "tur": {
+        "soru": {
+          "n": 26,
+          "dogru": 21
+        },
+        "klip": {
+          "n": 10,
+          "dogru": 8
+        }
+      },
+      "karisiklik": {
+        "durum->durum": 9,
+        "genel->genel": 9,
+        "kisi_oznitelik->genel": 5,
+        "kisi_oznitelik->kisi_oznitelik": 4,
+        "sayma->durum": 1,
+        "sayma->genel": 1,
+        "sayma->sayma": 7
+      },
+      "kayit": [
+        {
+          "kim": "S1",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.33137157199996636,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S2",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.321297995000009,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S3",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.32205024299992147,
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S4",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.33191101700003856,
+          "kullanim": {
+            "giris": 280,
+            "cikis": 3,
+            "toplam": 283
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S5",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.339137146999974,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S6",
+          "tur": "klip",
+          "gercek": "sayma",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.33219149999990805,
+          "kullanim": {
+            "giris": 289,
+            "cikis": 3,
+            "toplam": 292
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "S7",
+          "tur": "klip",
+          "gercek": "sayma",
+          "tahmin": "durum",
+          "dogru": false,
+          "gecikme_s": 0.3068108210001128,
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "S8",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.31113548999996965,
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S9",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.326526622000074,
+          "kullanim": {
+            "giris": 275,
+            "cikis": 3,
+            "toplam": 278
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "K1",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.31876035300001604,
+          "kullanim": {
+            "giris": 271,
+            "cikis": 4,
+            "toplam": 275
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "K2",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.3463790850000805,
+          "kullanim": {
+            "giris": 275,
+            "cikis": 7,
+            "toplam": 282
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K3",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.2967910260000508,
+          "kullanim": {
+            "giris": 274,
+            "cikis": 4,
+            "toplam": 278
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "K4",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.2995501679999961,
+          "kullanim": {
+            "giris": 277,
+            "cikis": 4,
+            "toplam": 281
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "K5",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.2619513529999722,
+          "kullanim": {
+            "giris": 278,
+            "cikis": 4,
+            "toplam": 282
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "K6",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.2897882940000045,
+          "kullanim": {
+            "giris": 279,
+            "cikis": 7,
+            "toplam": 286
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K7",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.3124161450000429,
+          "kullanim": {
+            "giris": 290,
+            "cikis": 7,
+            "toplam": 297
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K8",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.5232901340000353,
+          "kullanim": {
+            "giris": 280,
+            "cikis": 4,
+            "toplam": 284
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "K9",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.3435540409999476,
+          "kullanim": {
+            "giris": 283,
+            "cikis": 7,
+            "toplam": 290
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "D1",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.6749631029999819,
+          "kullanim": {
+            "giris": 274,
+            "cikis": 3,
+            "toplam": 277
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D2",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.242216155000051,
+          "kullanim": {
+            "giris": 272,
+            "cikis": 3,
+            "toplam": 275
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D3",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.2614040509999995,
+          "kullanim": {
+            "giris": 275,
+            "cikis": 3,
+            "toplam": 278
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D4",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.28058726699998715,
+          "kullanim": {
+            "giris": 278,
+            "cikis": 3,
+            "toplam": 281
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D5",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.32378822199996193,
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D6",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.3304824289999715,
+          "kullanim": {
+            "giris": 284,
+            "cikis": 3,
+            "toplam": 287
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D7",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.9604216239999914,
+          "kullanim": {
+            "giris": 280,
+            "cikis": 3,
+            "toplam": 283
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D8",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.31905511299987666,
+          "kullanim": {
+            "giris": 283,
+            "cikis": 3,
+            "toplam": 286
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D9",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.34660231999987445,
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "G1",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.34465031599984286,
+          "kullanim": {
+            "giris": 274,
+            "cikis": 3,
+            "toplam": 277
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G2",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.3073720649999814,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 4,
+            "toplam": 277
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G3",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.32908487600002445,
+          "kullanim": {
+            "giris": 278,
+            "cikis": 3,
+            "toplam": 281
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G4",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.3383770640000421,
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G5",
+          "tur": "klip",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.3092638549999265,
+          "kullanim": {
+            "giris": 287,
+            "cikis": 3,
+            "toplam": 290
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G6",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.4629572870001084,
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G7",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.3511219140000321,
+          "kullanim": {
+            "giris": 278,
+            "cikis": 4,
+            "toplam": 282
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G8",
+          "tur": "klip",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.33811137199995756,
+          "kullanim": {
+            "giris": 281,
+            "cikis": 3,
+            "toplam": 284
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G9",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.328655327999968,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 4,
+            "toplam": 277
+          },
+          "ham": "genel"
+        }
+      ]
+    },
+    "llm-large": {
+      "kol": "llm-large",
+      "alias": "llm-large",
+      "n": 36,
+      "dogru": 26,
+      "acc": 0.7222222222222222,
+      "acc_zor_haric": 0.696969696969697,
+      "n_zor_haric": 33,
+      "gecikme_medyan_s": 0.36329299950000404,
+      "gecikme_ort_s": 0.3822754454722283,
+      "gecikme_p90_s": 0.3913112860000183,
+      "giris_token_ort": 278.19444444444446,
+      "cikis_token_ort": 3.888888888888889,
+      "sinif": {
+        "sayma": {
+          "n": 9,
+          "dogru": 7
+        },
+        "kisi_oznitelik": {
+          "n": 9,
+          "dogru": 5
+        },
+        "durum": {
+          "n": 9,
+          "dogru": 5
+        },
+        "genel": {
+          "n": 9,
+          "dogru": 9
+        }
+      },
+      "tur": {
+        "soru": {
+          "n": 26,
+          "dogru": 18
+        },
+        "klip": {
+          "n": 10,
+          "dogru": 8
+        }
+      },
+      "karisiklik": {
+        "durum->durum": 5,
+        "durum->genel": 4,
+        "genel->genel": 9,
+        "kisi_oznitelik->genel": 4,
+        "kisi_oznitelik->kisi_oznitelik": 5,
+        "sayma->durum": 1,
+        "sayma->genel": 1,
+        "sayma->sayma": 7
+      },
+      "kayit": [
+        {
+          "kim": "S1",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.3386630969998805,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S2",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.34873582299996997,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S3",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.36538079100000687,
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S4",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.3635433209999519,
+          "kullanim": {
+            "giris": 280,
+            "cikis": 3,
+            "toplam": 283
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S5",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.35908514499988087,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S6",
+          "tur": "klip",
+          "gercek": "sayma",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.39474871700008407,
+          "kullanim": {
+            "giris": 289,
+            "cikis": 3,
+            "toplam": 292
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "S7",
+          "tur": "klip",
+          "gercek": "sayma",
+          "tahmin": "durum",
+          "dogru": false,
+          "gecikme_s": 0.3732026970001243,
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "S8",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.3740495879999344,
+          "kullanim": {
+            "giris": 276,
+            "cikis": 3,
+            "toplam": 279
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "S9",
+          "tur": "soru",
+          "gercek": "sayma",
+          "tahmin": "sayma",
+          "dogru": true,
+          "gecikme_s": 0.34244749999993473,
+          "kullanim": {
+            "giris": 275,
+            "cikis": 3,
+            "toplam": 278
+          },
+          "ham": "sayma"
+        },
+        {
+          "kim": "K1",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.37647236399993744,
+          "kullanim": {
+            "giris": 271,
+            "cikis": 7,
+            "toplam": 278
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K2",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.37274123299994244,
+          "kullanim": {
+            "giris": 275,
+            "cikis": 7,
+            "toplam": 282
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K3",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.3585153840001567,
+          "kullanim": {
+            "giris": 274,
+            "cikis": 4,
+            "toplam": 278
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "K4",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.3913112860000183,
+          "kullanim": {
+            "giris": 277,
+            "cikis": 4,
+            "toplam": 281
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "K5",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.3573538240000289,
+          "kullanim": {
+            "giris": 278,
+            "cikis": 4,
+            "toplam": 282
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "K6",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.3614505069999723,
+          "kullanim": {
+            "giris": 279,
+            "cikis": 7,
+            "toplam": 286
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K7",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.3630426780000562,
+          "kullanim": {
+            "giris": 290,
+            "cikis": 7,
+            "toplam": 297
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "K8",
+          "tur": "soru",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.3359038400001282,
+          "kullanim": {
+            "giris": 280,
+            "cikis": 4,
+            "toplam": 284
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "K9",
+          "tur": "klip",
+          "gercek": "kisi_oznitelik",
+          "tahmin": "kisi_oznitelik",
+          "dogru": true,
+          "gecikme_s": 0.33874603000003844,
+          "kullanim": {
+            "giris": 283,
+            "cikis": 7,
+            "toplam": 290
+          },
+          "ham": "kisi_oznitelik"
+        },
+        {
+          "kim": "D1",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.3216759419999562,
+          "kullanim": {
+            "giris": 274,
+            "cikis": 4,
+            "toplam": 278
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "D2",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.3519877000001088,
+          "kullanim": {
+            "giris": 272,
+            "cikis": 4,
+            "toplam": 276
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "D3",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.3784810480001397,
+          "kullanim": {
+            "giris": 275,
+            "cikis": 4,
+            "toplam": 279
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "D4",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.3642136380001375,
+          "kullanim": {
+            "giris": 278,
+            "cikis": 3,
+            "toplam": 281
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D5",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.3763737079998464,
+          "kullanim": {
+            "giris": 286,
+            "cikis": 3,
+            "toplam": 289
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D6",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.33707284599995546,
+          "kullanim": {
+            "giris": 284,
+            "cikis": 3,
+            "toplam": 287
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D7",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "genel",
+          "dogru": false,
+          "gecikme_s": 0.3650541819999944,
+          "kullanim": {
+            "giris": 280,
+            "cikis": 4,
+            "toplam": 284
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "D8",
+          "tur": "klip",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.33746812300000784,
+          "kullanim": {
+            "giris": 283,
+            "cikis": 3,
+            "toplam": 286
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "D9",
+          "tur": "soru",
+          "gercek": "durum",
+          "tahmin": "durum",
+          "dogru": true,
+          "gecikme_s": 0.33213180899997496,
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          },
+          "ham": "durum"
+        },
+        {
+          "kim": "G1",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.8921899670001494,
+          "kullanim": {
+            "giris": 274,
+            "cikis": 4,
+            "toplam": 278
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G2",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.2885544389998813,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 3,
+            "toplam": 276
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G3",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.720660338000016,
+          "kullanim": {
+            "giris": 278,
+            "cikis": 4,
+            "toplam": 282
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G4",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.28744590600013,
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G5",
+          "tur": "klip",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.3543886529998872,
+          "kullanim": {
+            "giris": 287,
+            "cikis": 3,
+            "toplam": 290
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G6",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.38476087799995184,
+          "kullanim": {
+            "giris": 277,
+            "cikis": 3,
+            "toplam": 280
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G7",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.3867365300000074,
+          "kullanim": {
+            "giris": 278,
+            "cikis": 4,
+            "toplam": 282
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G8",
+          "tur": "klip",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.37557010299997273,
+          "kullanim": {
+            "giris": 281,
+            "cikis": 3,
+            "toplam": 284
+          },
+          "ham": "genel"
+        },
+        {
+          "kim": "G9",
+          "tur": "soru",
+          "gercek": "genel",
+          "tahmin": "genel",
+          "dogru": true,
+          "gecikme_s": 0.39175640200005546,
+          "kullanim": {
+            "giris": 273,
+            "cikis": 4,
+            "toplam": 277
+          },
+          "ham": "genel"
+        }
+      ]
+    }
+  },
+  "belirlenimlilik": {
+    "tekrar": 3,
+    "farkli_madde": 0,
+    "n": 36,
+    "kararlilik": 1.0
+  },
+  "kural_router_anlasmazlik": [
+    "S6",
+    "S7",
+    "D4",
+    "D6"
+  ],
+  "wilson": {
+    "kural": [
+      0.7817298972308114,
+      0.9712519107287082
+    ],
+    "router": [
+      0.8582996626496918,
+      0.9950797197044302
+    ],
+    "llm-fast": [
+      0.6497163793648479,
+      0.9024702798054665
+    ],
+    "llm-large": [
+      0.5600719978365485,
+      0.841518299741862
+    ]
+  }
+}

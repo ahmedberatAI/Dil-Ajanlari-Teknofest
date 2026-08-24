@@ -1,0 +1,51 @@
+{
+ "kunye": {
+  "tarih": "2026-08-24T12:42:17",
+  "model_name": "llm-large",
+  "base_url": "https://evren-llmapi.ssyz.org.tr/v1",
+  "n_samples": 1,
+  "frame_max_side": 768,
+  "not": "boru hatti kendi ic T/max_tokens degerlerini kullanir"
+ },
+ "satirlar": [
+  {
+   "klip": "holdout/Explosion001",
+   "anomali": true,
+   "sure_s": 6.88,
+   "cagri_sayisi": 1,
+   "girdi_token": 1001,
+   "cikti_token": 278,
+   "cagrilar": [
+    {
+     "model": "llm-large",
+     "sure": 2.34,
+     "ptok": 1001,
+     "ctok": 278
+    }
+   ],
+   "denetim": {
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "n_event": 0,
+    "n_action": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_bos": false,
+    "summary_uzunluk": 330
+   },
+   "cikti": {
+    "summary": "Video analizinde yer alan 6 ayrı ve kopuk bölümde herhangi bir önemli olay, tehdit veya anormallik tespit edilmemiştir. Görüntüler genel olarak sakin seyretmiş ve güvenlik prosedürlerine aykırı bir durum gözlemlenmemiştir. Toplam 21 saniyelik izleme süresi boyunca operasyonel bir müdahale gerektiren bir durum ortaya çıkmamıştır.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü akışını standart izleme modunda devam ettirin.",
+     "Kayıtları arşivleme prosedürünü tamamlayın.",
+     "Düşük görüntü çözünürlüğü (320×240); olay tiplerini manuel teyit önerilir"
+    ]
+   }
+  }
+ ]
+}

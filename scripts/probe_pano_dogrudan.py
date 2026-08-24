@@ -85,7 +85,9 @@ def sor(istemci: VLMClient, yol: str) -> str:
         messages=[{"role": "user", "content": icerik}],
         temperature=0.0,
         max_tokens=8,
-        extra_body={"guided_choice": SECENEKLER},
+        # D40 KUSUR (2026-08-19): vLLM 0.23 eski `guided_choice` alanini SESSIZCE
+        # yok sayiyor (hata vermiyor, serbest metin donuyor). Dogrusu:
+        extra_body={"structured_outputs": {"choice": SECENEKLER}},
     )
     return (resp.choices[0].message.content or "").strip()
 

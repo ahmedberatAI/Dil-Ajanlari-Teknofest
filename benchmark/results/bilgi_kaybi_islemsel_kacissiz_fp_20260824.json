@@ -1,0 +1,517 @@
+{
+ "kol": "islemsel",
+ "kunye": {
+  "zaman": "2026-08-24T15:39:56",
+  "git_commit": "bc52ce7",
+  "argv": [
+   "benchmark/bilgi_kaybi_prob.py",
+   "--kol",
+   "islemsel",
+   "--kacissiz",
+   "--ciftler",
+   "forklift,pano",
+   "--cikti",
+   "benchmark/results/bilgi_kaybi_islemsel_kacissiz_fp_20260824.json"
+  ],
+  "base_url": "https://evren-llmapi.ssyz.org.tr/v1",
+  "uzak_api": true,
+  "model_name": "llm-large",
+  "gorev_modelleri": {
+   "algi": "vlm",
+   "sayim": "llm-fast",
+   "yapi": "llm-fast",
+   "ozet": "llm-fast",
+   "diyalog": "llm-fast"
+  },
+  "mock_mode": false,
+  "temperature": 0.2,
+  "fps_sample": 2.0,
+  "frame_max_side": 768,
+  "max_frames_per_segment": 12,
+  "isg_lens": false,
+  "threat_interpretation": true,
+  "single_pass_perceive": false,
+  "verify_events": true,
+  "spatial_grounding": true,
+  "adaptive_reexamine": true,
+  "panel_roi": "",
+  "forklift_yuk": "",
+  "use_detector": false,
+  "islemsel_alias": "(varsayilan model_name)",
+  "kacissiz": true
+ },
+ "satirlar": [
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te1.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "3",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6+"
+   ],
+   "sure_s": 5.1,
+   "video_mb": 1.45,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr11.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "3",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6+"
+   ],
+   "sure_s": 3.9,
+   "video_mb": 1.24,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr27.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "3",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6+"
+   ],
+   "sure_s": 2.5,
+   "video_mb": 0.71,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr36.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "4",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6+"
+   ],
+   "sure_s": 2.1,
+   "video_mb": 0.68,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 4 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 4 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr43.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "3",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6+"
+   ],
+   "sure_s": 1.8,
+   "video_mb": 0.48,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_te1.mp4",
+   "cift": "forklift",
+   "ihlal": false,
+   "alt": "Normal/Safe_Carrying",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "2",
+   "karar": false,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6+"
+   ],
+   "sure_s": 3.5,
+   "video_mb": 1.25,
+   "events": [],
+   "summary": "Islemsel kontrolde ihlal olcutu saglanmadi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr11.mp4",
+   "cift": "forklift",
+   "ihlal": false,
+   "alt": "Normal/Safe_Carrying",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "3",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6+"
+   ],
+   "sure_s": 2.2,
+   "video_mb": 0.7,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr20.mp4",
+   "cift": "forklift",
+   "ihlal": false,
+   "alt": "Normal/Safe_Carrying",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "2",
+   "karar": false,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6+"
+   ],
+   "sure_s": 5.1,
+   "video_mb": 1.93,
+   "events": [],
+   "summary": "Islemsel kontrolde ihlal olcutu saglanmadi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_te12.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "EVET_KOYU_OYUK",
+    "HAYIR_DUZ_YUZEY"
+   ],
+   "sure_s": 5.1,
+   "video_mb": 1.99,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr112.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "EVET_KOYU_OYUK",
+    "HAYIR_DUZ_YUZEY"
+   ],
+   "sure_s": 3.6,
+   "video_mb": 1.21,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr128.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "EVET_KOYU_OYUK",
+    "HAYIR_DUZ_YUZEY"
+   ],
+   "sure_s": 1.8,
+   "video_mb": 0.4,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr35.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "EVET_KOYU_OYUK",
+    "HAYIR_DUZ_YUZEY"
+   ],
+   "sure_s": 2.8,
+   "video_mb": 0.85,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr58.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "EVET_KOYU_OYUK",
+    "HAYIR_DUZ_YUZEY"
+   ],
+   "sure_s": 2.6,
+   "video_mb": 0.77,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te10.mp4",
+   "cift": "pano",
+   "ihlal": false,
+   "alt": "Normal/Closed_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "EVET_KOYU_OYUK",
+    "HAYIR_DUZ_YUZEY"
+   ],
+   "sure_s": 1.8,
+   "video_mb": 0.3,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr1.mp4",
+   "cift": "pano",
+   "ihlal": false,
+   "alt": "Normal/Closed_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "model": "llm-large",
+   "kacissiz": true,
+   "secenek": [
+    "EVET_KOYU_OYUK",
+    "HAYIR_DUZ_YUZEY"
+   ],
+   "sure_s": 3.0,
+   "video_mb": 1.04,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  }
+ ]
+}

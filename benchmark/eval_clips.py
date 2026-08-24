@@ -124,6 +124,34 @@ def _kosum_kunyesi() -> dict:
         "ppe_detection": _s.ppe_detection,
         "isg_lens": _s.isg_lens,
         "threat_interpretation": _s.threat_interpretation,
+        # D39-E: pano dedektoru. ROI bos = kapali. `panel_roi` kunyede OLMAZSA
+        # acik/kapali kollari AYNI ara-kayit dosyasini paylasir (isg_lens hatasinin
+        # aynisi). Esik ve gorus imzasi da davranisi degistirir -> ikisi de girer;
+        # imza uzun oldugu icin yalnizca varligi ve uzunlugu yazilir.
+        # D43/D44 — BU BAYRAKLAR KUNYEDE OLMAK ZORUNDA: ara-kayit dosya adi
+        # kunyenin md5'idir. Eksik kalan bir bayrak, ACIK ve KAPALI kollarin
+        # AYNI ara dosyayi paylasmasina yol acar ve ikinci kosum birincinin
+        # satirlarini "tamamlanmis" diye devralir — yani "kapali" diye
+        # raporlanan sayilar aslinda ACIK kolun sayilari olur.
+        # Ayni hata bu dosyada daha once `isg_lens` ve `panel_roi` icin yasandi.
+        "isg_slotlari": _s.isg_slotlari,
+        "panel_roi_vlm": _s.panel_roi_vlm,
+        "panel_koyuluk_esik": _s.panel_koyuluk_esik,
+        "forklift_esik": _s.forklift_esik,
+        "panel_roi": _s.panel_roi,
+        "panel_luma_esik": _s.panel_luma_esik,
+        "panel_kisi_kontrolu": _s.panel_kisi_kontrolu,
+        "panel_gorus_imza_uzunluk": len(_s.panel_gorus_imza or ""),
+        # D41: UZAK CIKARIM SERVISI. Bu alanlar OLMADAN yerel ve uzak kosum
+        # arsivleri ayirt edilemez ve "ayni kosullarda olculdu" iddiasi yanlis olur.
+        # (Ayni ders: panel_roi kunyeye eklenmeseydi acik/kapali kollar ayni
+        #  ara-kayit dosyasini paylasacakti.)
+        "uzak_api": _s.uzak_api_mi,
+        "base_url": _s.base_url,
+        "model_algi": _s.gorev_modeli("algi"),
+        "model_yapi": _s.gorev_modeli("yapi"),
+        "model_ozet": _s.gorev_modeli("ozet"),
+        "forklift_yuk": _s.forklift_yuk,
     }
 
 

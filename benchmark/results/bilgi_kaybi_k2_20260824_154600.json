@@ -1,0 +1,354 @@
+{
+ "model": "llm-large",
+ "kaynak_boru": "benchmark/results/bilgi_kaybi_boru_20260824_152728.json",
+ "gozlem_cumleleri": {
+  "forklift": "*   **00:02:** Forkliftin çatalında üst üste {c} kasa istiflenmiş durumda taşınıyor; istif sürücünün ön görüş hattının üzerine çıkıyor.",
+  "yetki": "*   **00:02:** Makinenin başında duran ve elleriyle makineye dokunan kişinin üzerinde reflektif yelek yok; diğer personelde yelek var.",
+  "pano": "*   **00:02:** Makinenin yan yüzündeki elektrik panosunun kapağı açık duruyor; kapağın arkasındaki boşlukta kablo ve terminaller görünüyor.",
+  "yol": "*   **00:02:** Yürüyen personel zemindeki sarı işaretli yaya şeridinin dışında, makinelerin ve forklift güzergâhının olduğu alanda ilerliyor."
+ },
+ "satirlar": [
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te1.mp4",
+   "cift": "forklift",
+   "eklenen": "*   **00:02:** Forkliftin çatalında üst üste 3 kasa istiflenmiş durumda taşınıyor; istif sürücünün ön görüş hattının üzerine çıkıyor.",
+   "n_olay": 3,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Forkliftin yükü görüş hattını kapatması ve operatörün kör noktada kalması",
+     "severity": "Orta",
+     "category": "Kaza"
+    },
+    {
+     "time": "00:03",
+     "event": "Forklift ile oturan kişi arasında çarpışma gerçekleşmesi",
+     "severity": "Kritik",
+     "category": "Kaza"
+    },
+    {
+     "time": "00:03",
+     "event": "Kişinin çarpışma sonucu yere düşmesi ve hareketsiz kalması",
+     "severity": "Kritik",
+     "category": "Sağlık"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 2.3,
+   "ham": "```json\n{\n  \"events\": [\n    {\n      \"time\": \"00:02\",\n      \"event\": \"Forkliftin yükü görüş hattını kapatması ve operatörün kör noktada kalması\",\n      \"severity\": \"Orta\",\n      \"category\": \"Kaza\"\n    },\n    {\n      \"time\": \"00:03\",\n      \"event\": \"Forklift ile oturan kişi arasında çarpışma gerçekleşmesi\",\n      \"severity\": \"Kritik\",\n      \"category\": \"Kaza\"\n    },\n    {\n      \"time\": \"00:03\",\n      \"event\": \"Kişinin çarpışma sonucu yere düşmesi ve hareketsiz kalması\",\n      \"severity\": \"Kritik\",\n      \"category\": \"Sağlık\"\n    }\n  ]\n}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr11.mp4",
+   "cift": "forklift",
+   "eklenen": "*   **00:02:** Forkliftin çatalında üst üste 3 kasa istiflenmiş durumda taşınıyor; istif sürücünün ön görüş hattının üzerine çıkıyor.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Forkliftin yükü görüş hattını engelleyecek şekilde taşınması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.7,
+   "ham": "```json\n{\"events\": [{\"time\": \"00:02\", \"event\": \"Forkliftin yükü görüş hattını engelleyecek şekilde taşınması\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr27.mp4",
+   "cift": "forklift",
+   "eklenen": "*   **00:02:** Forkliftin çatalında üst üste 3 kasa istiflenmiş durumda taşınıyor; istif sürücünün ön görüş hattının üzerine çıkıyor.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Forklift çatalındaki yükün sürücünün görüş hattını kapatması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.6,
+   "ham": "```json\n{\"events\": [{\"time\": \"00:02\", \"event\": \"Forklift çatalındaki yükün sürücünün görüş hattını kapatması\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr36.mp4",
+   "cift": "forklift",
+   "eklenen": "*   **00:02:** Forkliftin çatalında üst üste 3 kasa istiflenmiş durumda taşınıyor; istif sürücünün ön görüş hattının üzerine çıkıyor.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Forklift çatalındaki yükün sürücünün görüş hattını kapatması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.6,
+   "ham": "```json\n{\"events\": [{\"time\": \"00:02\", \"event\": \"Forklift çatalındaki yükün sürücünün görüş hattını kapatması\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr43.mp4",
+   "cift": "forklift",
+   "eklenen": "*   **00:02:** Forkliftin çatalında üst üste 3 kasa istiflenmiş durumda taşınıyor; istif sürücünün ön görüş hattının üzerine çıkıyor.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Forklift çatalındaki yükün sürücünün görüş hattını kapatması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.6,
+   "ham": "{\"events\": [{\"time\": \"00:02\", \"event\": \"Forklift çatalındaki yükün sürücünün görüş hattını kapatması\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_te10.mp4",
+   "cift": "yetki",
+   "eklenen": "*   **00:02:** Makinenin başında duran ve elleriyle makineye dokunan kişinin üzerinde reflektif yelek yok; diğer personelde yelek var.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Makine başında çalışan kişinin üzerinde güvenlik yeleği bulunmaması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": false,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.6,
+   "ham": "{\"events\": [{\"time\": \"00:02\", \"event\": \"Makine başında çalışan kişinin üzerinde güvenlik yeleği bulunmaması\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr2.mp4",
+   "cift": "yetki",
+   "eklenen": "*   **00:02:** Makinenin başında duran ve elleriyle makineye dokunan kişinin üzerinde reflektif yelek yok; diğer personelde yelek var.",
+   "n_olay": 0,
+   "olaylar": [],
+   "K2_gozlem_olaya_dondu": false,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.4,
+   "ham": "```json\n{\"events\": []}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr35.mp4",
+   "cift": "yetki",
+   "eklenen": "*   **00:02:** Makinenin başında duran ve elleriyle makineye dokunan kişinin üzerinde reflektif yelek yok; diğer personelde yelek var.",
+   "n_olay": 0,
+   "olaylar": [],
+   "K2_gozlem_olaya_dondu": false,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.3,
+   "ham": "{\"events\": []}"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr62.mp4",
+   "cift": "yetki",
+   "eklenen": "*   **00:02:** Makinenin başında duran ve elleriyle makineye dokunan kişinin üzerinde reflektif yelek yok; diğer personelde yelek var.",
+   "n_olay": 0,
+   "olaylar": [],
+   "K2_gozlem_olaya_dondu": false,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.3,
+   "ham": "{\"events\": []}"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr77.mp4",
+   "cift": "yetki",
+   "eklenen": "*   **00:02:** Makinenin başında duran ve elleriyle makineye dokunan kişinin üzerinde reflektif yelek yok; diğer personelde yelek var.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Makine başında çalışan personelin reflektif yelek takmaması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.7,
+   "ham": "```json\n{\"events\": [{\"time\": \"00:02\", \"event\": \"Makine başında çalışan personelin reflektif yelek takmaması\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_te12.mp4",
+   "cift": "pano",
+   "eklenen": "*   **00:02:** Makinenin yan yüzündeki elektrik panosunun kapağı açık duruyor; kapağın arkasındaki boşlukta kablo ve terminaller görünüyor.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Elektrik panosu kapağının açık bırakılması ve iç kısımların (kablo/terminaller) görünür olması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": true,
+   "isg_match_tum_metin": true,
+   "sure_s": 0.7,
+   "ham": "```json\n{\"events\": [{\"time\": \"00:02\", \"event\": \"Elektrik panosu kapağının açık bırakılması ve iç kısımların (kablo/terminaller) görünür olması\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr112.mp4",
+   "cift": "pano",
+   "eklenen": "*   **00:02:** Makinenin yan yüzündeki elektrik panosunun kapağı açık duruyor; kapağın arkasındaki boşlukta kablo ve terminaller görünüyor.",
+   "n_olay": 0,
+   "olaylar": [],
+   "K2_gozlem_olaya_dondu": false,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.3,
+   "ham": "{\"events\": []}"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr128.mp4",
+   "cift": "pano",
+   "eklenen": "*   **00:02:** Makinenin yan yüzündeki elektrik panosunun kapağı açık duruyor; kapağın arkasındaki boşlukta kablo ve terminaller görünüyor.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Elektrik panosu kapağının açık olması ve iç kısımdaki kablo/terminallerin görünür olması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": true,
+   "isg_match_tum_metin": true,
+   "sure_s": 0.6,
+   "ham": "{\"events\": [{\"time\": \"00:02\", \"event\": \"Elektrik panosu kapağının açık olması ve iç kısımdaki kablo/terminallerin görünür olması\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr35.mp4",
+   "cift": "pano",
+   "eklenen": "*   **00:02:** Makinenin yan yüzündeki elektrik panosunun kapağı açık duruyor; kapağın arkasındaki boşlukta kablo ve terminaller görünüyor.",
+   "n_olay": 0,
+   "olaylar": [],
+   "K2_gozlem_olaya_dondu": false,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.3,
+   "ham": "{\"events\": []}"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr58.mp4",
+   "cift": "pano",
+   "eklenen": "*   **00:02:** Makinenin yan yüzündeki elektrik panosunun kapağı açık duruyor; kapağın arkasındaki boşlukta kablo ve terminaller görünüyor.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Elektrik panosu kapağının açık bırakılması ve iç kısımların (kablo/terminaller) görünür olması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": true,
+   "isg_match_tum_metin": true,
+   "sure_s": 0.7,
+   "ham": "{\"events\": [{\"time\": \"00:02\", \"event\": \"Elektrik panosu kapağının açık bırakılması ve iç kısımların (kablo/terminaller) görünür olması\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_te11.mp4",
+   "cift": "yol",
+   "eklenen": "*   **00:02:** Yürüyen personel zemindeki sarı işaretli yaya şeridinin dışında, makinelerin ve forklift güzergâhının olduğu alanda ilerliyor.",
+   "n_olay": 0,
+   "olaylar": [],
+   "K2_gozlem_olaya_dondu": false,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.3,
+   "ham": "{\"events\": []}"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr108.mp4",
+   "cift": "yol",
+   "eklenen": "*   **00:02:** Yürüyen personel zemindeki sarı işaretli yaya şeridinin dışında, makinelerin ve forklift güzergâhının olduğu alanda ilerliyor.",
+   "n_olay": 0,
+   "olaylar": [],
+   "K2_gozlem_olaya_dondu": false,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.4,
+   "ham": "```json\n{\"events\": []}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr128.mp4",
+   "cift": "yol",
+   "eklenen": "*   **00:02:** Yürüyen personel zemindeki sarı işaretli yaya şeridinin dışında, makinelerin ve forklift güzergâhının olduğu alanda ilerliyor.",
+   "n_olay": 1,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Personelin yaya şeridinin dışında, makineler ve forklift güzergahı olan alanda ilerlemesi",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.7,
+   "ham": "```json\n{\"events\": [{\"time\": \"00:02\", \"event\": \"Personelin yaya şeridinin dışında, makineler ve forklift güzergahı olan alanda ilerlemesi\", \"severity\": \"Orta\", \"category\": \"Güvenlik\"}]}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr176.mp4",
+   "cift": "yol",
+   "eklenen": "*   **00:02:** Yürüyen personel zemindeki sarı işaretli yaya şeridinin dışında, makinelerin ve forklift güzergâhının olduğu alanda ilerliyor.",
+   "n_olay": 2,
+   "olaylar": [
+    {
+     "time": "00:02",
+     "event": "Personelin belirlenen yürüyüş yolu dışında, makine ve forklift güzergahında dolaşması",
+     "severity": "Orta",
+     "category": "Güvenlik"
+    },
+    {
+     "time": "00:03",
+     "event": "Seyyar masa üzerinde ani toz/partikül kalkması ve havaya yayılması",
+     "severity": "Orta",
+     "category": "Anomali"
+    }
+   ],
+   "K2_gozlem_olaya_dondu": true,
+   "K3_isg_match": true,
+   "isg_match_tum_metin": true,
+   "sure_s": 1.2,
+   "ham": "```json\n{\n  \"events\": [\n    {\n      \"time\": \"00:02\",\n      \"event\": \"Personelin belirlenen yürüyüş yolu dışında, makine ve forklift güzergahında dolaşması\",\n      \"severity\": \"Orta\",\n      \"category\": \"Güvenlik\"\n    },\n    {\n      \"time\": \"00:03\",\n      \"event\": \"Seyyar masa üzerinde ani toz/partikül kalkması ve havaya yayılması\",\n      \"severity\": \"Orta\",\n      \"category\": \"Anomali\"\n    }\n  ]\n}\n```"
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr59.mp4",
+   "cift": "yol",
+   "eklenen": "*   **00:02:** Yürüyen personel zemindeki sarı işaretli yaya şeridinin dışında, makinelerin ve forklift güzergâhının olduğu alanda ilerliyor.",
+   "n_olay": 0,
+   "olaylar": [],
+   "K2_gozlem_olaya_dondu": false,
+   "K3_isg_match": false,
+   "isg_match_tum_metin": false,
+   "sure_s": 0.5,
+   "ham": "{\"events\": []}"
+  }
+ ]
+}

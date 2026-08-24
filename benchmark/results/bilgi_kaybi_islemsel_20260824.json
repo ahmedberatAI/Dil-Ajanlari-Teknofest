@@ -1,0 +1,616 @@
+{
+ "kol": "islemsel",
+ "kunye": {
+  "zaman": "2026-08-24T15:31:27",
+  "git_commit": "bc52ce7",
+  "argv": [
+   "benchmark/bilgi_kaybi_prob.py",
+   "--kol",
+   "islemsel",
+   "--cikti",
+   "/mnt/c/Users/omen/Desktop/DilAjanlariTeknofest/benchmark/results/bilgi_kaybi_islemsel_20260824.json"
+  ],
+  "base_url": "https://evren-llmapi.ssyz.org.tr/v1",
+  "uzak_api": true,
+  "model_name": "llm-large",
+  "gorev_modelleri": {
+   "algi": "vlm",
+   "sayim": "llm-fast",
+   "yapi": "llm-fast",
+   "ozet": "llm-fast",
+   "diyalog": "llm-fast"
+  },
+  "mock_mode": false,
+  "temperature": 0.2,
+  "fps_sample": 2.0,
+  "frame_max_side": 768,
+  "max_frames_per_segment": 12,
+  "isg_lens": false,
+  "threat_interpretation": true,
+  "single_pass_perceive": false,
+  "verify_events": true,
+  "spatial_grounding": true,
+  "adaptive_reexamine": true,
+  "panel_roi": "",
+  "forklift_yuk": "",
+  "use_detector": false
+ },
+ "satirlar": [
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_te1.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "3",
+   "karar": true,
+   "sure_s": 5.9,
+   "video_mb": 1.45,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr11.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "3",
+   "karar": true,
+   "sure_s": 5.3,
+   "video_mb": 1.24,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr27.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "3",
+   "karar": true,
+   "sure_s": 3.1,
+   "video_mb": 0.71,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr36.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "4",
+   "karar": true,
+   "sure_s": 2.6,
+   "video_mb": 0.68,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 4 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 4 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr43.mp4",
+   "cift": "forklift",
+   "ihlal": true,
+   "alt": "Anomali/Carrying_Overload_with_Forklift",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "3",
+   "karar": true,
+   "sure_s": 1.8,
+   "video_mb": 0.48,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Forklift catalinda 3 kasa istiflenmis — asiri yuk tasiniyor, yuk dengesiz ve surucunun gorusu engelli, devrilme riski var.",
+   "risk": "Yüksek",
+   "actions": [
+    "Forklift operatorunu durdur; yuku guvenli kapasiteye (en fazla 2 kasa) indirt"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_te1.mp4",
+   "cift": "forklift",
+   "ihlal": false,
+   "alt": "Normal/Safe_Carrying",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "2",
+   "karar": false,
+   "sure_s": 4.5,
+   "video_mb": 1.25,
+   "events": [],
+   "summary": "Islemsel kontrolde ihlal olcutu saglanmadi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr11.mp4",
+   "cift": "forklift",
+   "ihlal": false,
+   "alt": "Normal/Safe_Carrying",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "2",
+   "karar": false,
+   "sure_s": 2.6,
+   "video_mb": 0.7,
+   "events": [],
+   "summary": "Islemsel kontrolde ihlal olcutu saglanmadi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr20.mp4",
+   "cift": "forklift",
+   "ihlal": false,
+   "alt": "Normal/Safe_Carrying",
+   "soru": "Forkliftin CATALINDA ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+   "ham": "2",
+   "karar": false,
+   "sure_s": 6.3,
+   "video_mb": 1.93,
+   "events": [],
+   "summary": "Islemsel kontrolde ihlal olcutu saglanmadi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_te10.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "soru": "Makinenin/panonun BASINDA DURAN KISIDE yesil reflektif yelek var mi?",
+   "ham": "YELEK_YOK",
+   "karar": true,
+   "sure_s": 5.8,
+   "video_mb": 1.57,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Yelek takmayan bir kisi makineye mudahale ediyor — yetkisiz mudahale",
+     "severity": "Yüksek",
+     "category": "Yetkisiz Erişim"
+    }
+   ],
+   "summary": "Yelek takmayan bir kisi makineye mudahale ediyor — yetkisiz mudahale.",
+   "risk": "Yüksek",
+   "actions": [
+    "Yetkisiz kisiyi makineden uzaklastir; yetkili teknisyen cagir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr2.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "soru": "Makinenin/panonun BASINDA DURAN KISIDE yesil reflektif yelek var mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 3.7,
+   "video_mb": 1.35,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr35.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "soru": "Makinenin/panonun BASINDA DURAN KISIDE yesil reflektif yelek var mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 7.3,
+   "video_mb": 2.04,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr62.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "soru": "Makinenin/panonun BASINDA DURAN KISIDE yesil reflektif yelek var mi?",
+   "ham": "YELEK_YOK",
+   "karar": true,
+   "sure_s": 6.5,
+   "video_mb": 2.06,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Yelek takmayan bir kisi makineye mudahale ediyor — yetkisiz mudahale",
+     "severity": "Yüksek",
+     "category": "Yetkisiz Erişim"
+    }
+   ],
+   "summary": "Yelek takmayan bir kisi makineye mudahale ediyor — yetkisiz mudahale.",
+   "risk": "Yüksek",
+   "actions": [
+    "Yetkisiz kisiyi makineden uzaklastir; yetkili teknisyen cagir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Unauthorized_Intervention/1_tr77.mp4",
+   "cift": "yetki",
+   "ihlal": true,
+   "alt": "Anomali/Unauthorized_Intervention",
+   "soru": "Makinenin/panonun BASINDA DURAN KISIDE yesil reflektif yelek var mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 5.0,
+   "video_mb": 1.2,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Normal/Authorized_Intervention/5_te1.mp4",
+   "cift": "yetki",
+   "ihlal": false,
+   "alt": "Normal/Authorized_Intervention",
+   "soru": "Makinenin/panonun BASINDA DURAN KISIDE yesil reflektif yelek var mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 4.0,
+   "video_mb": 0.96,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Normal/Authorized_Intervention/5_tr11.mp4",
+   "cift": "yetki",
+   "ihlal": false,
+   "alt": "Normal/Authorized_Intervention",
+   "soru": "Makinenin/panonun BASINDA DURAN KISIDE yesil reflektif yelek var mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 2.6,
+   "video_mb": 0.64,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_te12.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "sure_s": 7.0,
+   "video_mb": 1.99,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr112.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "sure_s": 5.4,
+   "video_mb": 1.21,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr128.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "sure_s": 3.0,
+   "video_mb": 0.4,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr35.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "sure_s": 5.1,
+   "video_mb": 0.85,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr58.mp4",
+   "cift": "pano",
+   "ihlal": true,
+   "alt": "Anomali/Opened_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "sure_s": 3.3,
+   "video_mb": 0.77,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_te10.mp4",
+   "cift": "pano",
+   "ihlal": false,
+   "alt": "Normal/Closed_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "sure_s": 1.6,
+   "video_mb": 0.3,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr1.mp4",
+   "cift": "pano",
+   "ihlal": false,
+   "alt": "Normal/Closed_Panel_Cover",
+   "soru": "Makinenin PANO BOLGESINDE koyu/karanlik bir oyuk (acik kapagin arkasindaki bosluk) gorunuyor mu, yoksa orasi duz bir yuzey mi?",
+   "ham": "EVET_KOYU_OYUK",
+   "karar": true,
+   "sure_s": 3.1,
+   "video_mb": 1.04,
+   "events": [
+    {
+     "time": "00:00",
+     "event": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta",
+     "severity": "Yüksek",
+     "category": "Güvenlik"
+    }
+   ],
+   "summary": "Elektrik panosu kapagi acik birakilmis — pano kapagi acik, canli terminaller acikta.",
+   "risk": "Yüksek",
+   "actions": [
+    "Pano kapagini kapat ve kilitle; elektrik bakim ekibini bilgilendir"
+   ]
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_te11.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "soru": "Yerdeki SARI/BEYAZ isaretli yaya seridine bak. Yuruyen kisi bu seridin ICINDE mi, yoksa DISINDA (makine/forklift sahasinda) mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 6.2,
+   "video_mb": 1.51,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr108.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "soru": "Yerdeki SARI/BEYAZ isaretli yaya seridine bak. Yuruyen kisi bu seridin ICINDE mi, yoksa DISINDA (makine/forklift sahasinda) mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 8.9,
+   "video_mb": 1.25,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr128.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "soru": "Yerdeki SARI/BEYAZ isaretli yaya seridine bak. Yuruyen kisi bu seridin ICINDE mi, yoksa DISINDA (makine/forklift sahasinda) mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 6.3,
+   "video_mb": 1.98,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr176.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "soru": "Yerdeki SARI/BEYAZ isaretli yaya seridine bak. Yuruyen kisi bu seridin ICINDE mi, yoksa DISINDA (makine/forklift sahasinda) mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 9.8,
+   "video_mb": 1.9,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr59.mp4",
+   "cift": "yol",
+   "ihlal": true,
+   "alt": "Anomali/Safe_Walkway_Violation",
+   "soru": "Yerdeki SARI/BEYAZ isaretli yaya seridine bak. Yuruyen kisi bu seridin ICINDE mi, yoksa DISINDA (makine/forklift sahasinda) mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 8.9,
+   "video_mb": 1.32,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Walkway/4_te1.mp4",
+   "cift": "yol",
+   "ihlal": false,
+   "alt": "Normal/Safe_Walkway",
+   "soru": "Yerdeki SARI/BEYAZ isaretli yaya seridine bak. Yuruyen kisi bu seridin ICINDE mi, yoksa DISINDA (makine/forklift sahasinda) mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 4.5,
+   "video_mb": 1.01,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr15.mp4",
+   "cift": "yol",
+   "ihlal": false,
+   "alt": "Normal/Safe_Walkway",
+   "soru": "Yerdeki SARI/BEYAZ isaretli yaya seridine bak. Yuruyen kisi bu seridin ICINDE mi, yoksa DISINDA (makine/forklift sahasinda) mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 6.3,
+   "video_mb": 1.8,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  },
+  {
+   "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr35.mp4",
+   "cift": "yol",
+   "ihlal": false,
+   "alt": "Normal/Safe_Walkway",
+   "soru": "Yerdeki SARI/BEYAZ isaretli yaya seridine bak. Yuruyen kisi bu seridin ICINDE mi, yoksa DISINDA (makine/forklift sahasinda) mi?",
+   "ham": "GORUNMUYOR",
+   "karar": null,
+   "sure_s": 12.7,
+   "video_mb": 1.38,
+   "events": [],
+   "summary": "Islemsel kontrol karar veremedi.",
+   "risk": "Düşük",
+   "actions": []
+  }
+ ]
+}

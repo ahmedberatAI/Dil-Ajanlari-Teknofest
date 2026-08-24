@@ -369,11 +369,37 @@ def _get_ppe_model():
     return _get_kkd_model("baret")
 
 
-def kkd_available(kit: str = "baret") -> bool:
-    """Bu kitin egitilmis agirligi mevcut mu?"""
+def kkd_agirlik_var(kit: str = "baret") -> bool:
+    """SADECE dosya varligi. `kkd_available` ile karistirilmamali."""
     import os as _os
     kok = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
     return _os.path.exists(_os.path.join(kok, _kit(kit)["agirlik"]))
+
+
+def kkd_neden_yok(kit: str = "baret") -> Optional[str]:
+    """Kit KULLANILAMIYORSA sebebi (Turkce), kullanilabiliyorsa None.
+
+    D39-D: bu ayrimin olmasi SART. Eskiden `kkd_available` yalnizca dosya
+    varligina bakiyordu; `ultralytics` kurulu degilken True donuyor, model
+    yuklenemiyor, `detect_ppe_violation` FAIL-OPEN ile None donuyordu. Sonuc:
+    sistem "KKD hazir" diyor, hicbir sey tespit etmiyor ve KARAR-IZINE DE
+    YAZMIYORDU. K3 (fail-open) korunur ama artik SESSIZ DEGIL — cagiran taraf
+    bu metni ize yazar.
+    """
+    if not kkd_agirlik_var(kit):
+        return f"agirlik dosyasi yok ({_kit(kit)['agirlik']})"
+    if not available():
+        return ("nesne tespit arka ucu kurulu degil — KKD kitleri `ultralytics` "
+                "gerektirir (AGPL-3.0, opsiyonel): pip install -r requirements-kkd.txt")
+    return None
+
+
+def kkd_available(kit: str = "baret") -> bool:
+    """Bu kit GERCEKTEN kullanilabilir mi? — agirlik VAR *ve* arka uc yuklenebilir.
+
+    Yalnizca dosya varligina bakmak yetmez (bkz. `kkd_neden_yok`).
+    """
+    return kkd_neden_yok(kit) is None
 
 
 def kkd_mevcut_kitler() -> list:

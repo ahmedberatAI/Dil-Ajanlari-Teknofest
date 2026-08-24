@@ -1,0 +1,158 @@
+{
+  "kirp_orani": [
+    0.0,
+    0.28,
+    0.42,
+    1.0
+  ],
+  "soru": "Bu karelerde makinenin elektrik/kontrol PANO KAPAGI acik mi kapali mi? Yalnizca sunlardan birini yaz: ACIK, KAPALI, GORUNMUYOR",
+  "n": 24,
+  "A_dogru": 7,
+  "B_dogru": 13,
+  "satirlar": [
+    {
+      "klip": "2_te12.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "GORUNMUYOR",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_te13.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "GORUNMUYOR",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_te6.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "GÖRÜNMEYOR",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_tr101.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_tr112.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_tr118.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_tr119.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_tr12.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_tr126.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_tr128.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "ACIK"
+    },
+    {
+      "klip": "2_tr16.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "GORUNMUYOR",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "2_tr17.mp4",
+      "gercek": "ACIK",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te10.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "GÖRÜNMEYOR",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te11.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "GÖRÜNMEYOR",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te12.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "GORUNMUYOR",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te13.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te2.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te3.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "GORUNMUYOR",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te4.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "GÖRÜNMEYOR",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te5.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te6.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te7.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te8.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    },
+    {
+      "klip": "6_te9.mp4",
+      "gercek": "KAPALI",
+      "A_tamkare": "KAPALI",
+      "B_kirpma": "KAPALI"
+    }
+  ]
+}

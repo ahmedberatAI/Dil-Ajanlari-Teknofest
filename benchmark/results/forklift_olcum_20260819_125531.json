@@ -1,0 +1,356 @@
+{
+  "set": "/mnt/c/Users/omen/Desktop/DilAjanlariTeknofest/data/eval_defense",
+  "esik": 3,
+  "satirlar": [
+    {
+      "klip": "3_te1.mp4",
+      "ihlal": true,
+      "oran": 1.2103964043619215,
+      "vlm": 4,
+      "geometri": 2
+    },
+    {
+      "klip": "3_te2.mp4",
+      "ihlal": true,
+      "oran": 2.2196125907990316,
+      "vlm": 2,
+      "geometri": 4
+    },
+    {
+      "klip": "3_te3.mp4",
+      "ihlal": true,
+      "oran": 1.076072607260726,
+      "vlm": 3,
+      "geometri": 2
+    },
+    {
+      "klip": "3_te7.mp4",
+      "ihlal": true,
+      "oran": 1.3394086826347305,
+      "vlm": 3,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr10.mp4",
+      "ihlal": true,
+      "oran": 1.3454992754355812,
+      "vlm": 4,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr11.mp4",
+      "ihlal": true,
+      "oran": 1.5291501976284585,
+      "vlm": 4,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr15.mp4",
+      "ihlal": true,
+      "oran": 1.0296454487002848,
+      "vlm": 3,
+      "geometri": 2
+    },
+    {
+      "klip": "3_tr16.mp4",
+      "ihlal": true,
+      "oran": 1.8635300993571011,
+      "vlm": 2,
+      "geometri": 4
+    },
+    {
+      "klip": "3_tr24.mp4",
+      "ihlal": true,
+      "oran": 1.3671875,
+      "vlm": null,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr25.mp4",
+      "ihlal": true,
+      "oran": 1.145062484685126,
+      "vlm": 3,
+      "geometri": 2
+    },
+    {
+      "klip": "3_tr27.mp4",
+      "ihlal": true,
+      "oran": 1.024390243902439,
+      "vlm": 3,
+      "geometri": 2
+    },
+    {
+      "klip": "3_tr28.mp4",
+      "ihlal": true,
+      "oran": 1.4686643835616437,
+      "vlm": 3,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr30.mp4",
+      "ihlal": true,
+      "oran": 1.157719286061532,
+      "vlm": 4,
+      "geometri": 2
+    },
+    {
+      "klip": "3_tr31.mp4",
+      "ihlal": true,
+      "oran": 2.666666666666667,
+      "vlm": null,
+      "geometri": 5
+    },
+    {
+      "klip": "3_tr33.mp4",
+      "ihlal": true,
+      "oran": 1.6968446156668502,
+      "vlm": 2,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr36.mp4",
+      "ihlal": true,
+      "oran": 1.7215415019762847,
+      "vlm": 4,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr37.mp4",
+      "ihlal": true,
+      "oran": 1.360379746835443,
+      "vlm": 3,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr38.mp4",
+      "ihlal": true,
+      "oran": 1.330032383723659,
+      "vlm": 3,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr41.mp4",
+      "ihlal": true,
+      "oran": 1.572198275862069,
+      "vlm": 4,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr42.mp4",
+      "ihlal": true,
+      "oran": 1.074353448275862,
+      "vlm": 4,
+      "geometri": 2
+    },
+    {
+      "klip": "3_tr43.mp4",
+      "ihlal": true,
+      "oran": 2.6424501424501425,
+      "vlm": 3,
+      "geometri": 5
+    },
+    {
+      "klip": "3_tr45.mp4",
+      "ihlal": true,
+      "oran": 1.5371287128712872,
+      "vlm": 4,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr47.mp4",
+      "ihlal": true,
+      "oran": 1.440022757216433,
+      "vlm": 3,
+      "geometri": 3
+    },
+    {
+      "klip": "3_tr5.mp4",
+      "ihlal": true,
+      "oran": 1.0670093795093796,
+      "vlm": 3,
+      "geometri": 2
+    },
+    {
+      "klip": "3_tr9.mp4",
+      "ihlal": true,
+      "oran": 1.0046958228202971,
+      "vlm": 3,
+      "geometri": 2
+    },
+    {
+      "klip": "7_te1.mp4",
+      "ihlal": false,
+      "oran": 1.0651923927465723,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_te2.mp4",
+      "ihlal": false,
+      "oran": 0.5135797983468071,
+      "vlm": 2,
+      "geometri": 1
+    },
+    {
+      "klip": "7_te3.mp4",
+      "ihlal": false,
+      "oran": 0.9671052631578947,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_te4.mp4",
+      "ihlal": false,
+      "oran": 1.5800637958532695,
+      "vlm": 3,
+      "geometri": 3
+    },
+    {
+      "klip": "7_te6.mp4",
+      "ihlal": false,
+      "oran": 1.161123595505618,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_te7.mp4",
+      "ihlal": false,
+      "oran": 0.9053030303030303,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_te8.mp4",
+      "ihlal": false,
+      "oran": 0.9642857142857143,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_tr1.mp4",
+      "ihlal": false,
+      "oran": 2.1859756097560976,
+      "vlm": 2,
+      "geometri": 4
+    },
+    {
+      "klip": "7_tr11.mp4",
+      "ihlal": false,
+      "oran": 1.209090909090909,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_tr12.mp4",
+      "ihlal": false,
+      "oran": 1.496684350132626,
+      "vlm": 3,
+      "geometri": 3
+    },
+    {
+      "klip": "7_tr13.mp4",
+      "ihlal": false,
+      "oran": 1.0142039074781046,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_tr14.mp4",
+      "ihlal": false,
+      "oran": 0.9939470665031451,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_tr15.mp4",
+      "ihlal": false,
+      "oran": 0.9570552147239264,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_tr16.mp4",
+      "ihlal": false,
+      "oran": 0.44508670520231214,
+      "vlm": 2,
+      "geometri": 1
+    },
+    {
+      "klip": "7_tr18.mp4",
+      "ihlal": false,
+      "oran": 1.056578947368421,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_tr2.mp4",
+      "ihlal": false,
+      "oran": 1.6889920424403182,
+      "vlm": 2,
+      "geometri": 3
+    },
+    {
+      "klip": "7_tr20.mp4",
+      "ihlal": false,
+      "oran": 2.240079365079365,
+      "vlm": 2,
+      "geometri": 4
+    },
+    {
+      "klip": "7_tr21.mp4",
+      "ihlal": false,
+      "oran": 1.3984983314794217,
+      "vlm": 2,
+      "geometri": 3
+    },
+    {
+      "klip": "7_tr22.mp4",
+      "ihlal": false,
+      "oran": 1.4714439655172413,
+      "vlm": 2,
+      "geometri": 3
+    },
+    {
+      "klip": "7_tr3.mp4",
+      "ihlal": false,
+      "oran": 0.8642634044768349,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_tr4.mp4",
+      "ihlal": false,
+      "oran": 1.6724137931034484,
+      "vlm": 3,
+      "geometri": 3
+    },
+    {
+      "klip": "7_tr5.mp4",
+      "ihlal": false,
+      "oran": 1.387860576923077,
+      "vlm": 2,
+      "geometri": 3
+    },
+    {
+      "klip": "7_tr7.mp4",
+      "ihlal": false,
+      "oran": 1.2788461538461537,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_tr8.mp4",
+      "ihlal": false,
+      "oran": 0.9943181818181819,
+      "vlm": 2,
+      "geometri": 2
+    },
+    {
+      "klip": "7_tr9.mp4",
+      "ihlal": false,
+      "oran": 1.239159891598916,
+      "vlm": 2,
+      "geometri": 2
+    }
+  ]
+}

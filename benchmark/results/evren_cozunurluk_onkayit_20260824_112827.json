@@ -1,0 +1,72 @@
+{
+  "baslik": "EVREN cozunurluk taramasi — ON KAYIT (sonuclara BAKILMADAN yazildi)",
+  "zaman": "20260824_112827",
+  "soru": "Daha yuksek cozunurluk zayif siniflarda (pano, yelek) MCC'yi arttiriyor mu?",
+  "sabitler": {
+    "model": "llm-large",
+    "temperature": 0.0,
+    "max_tokens": 8,
+    "kisitli_kod_cozme": "extra_body.structured_outputs.choice (D40 kusuru: guided_choice ATIL)",
+    "gonderim": "dilajan.video.servis_videosu ile mp4, tek video_url, sistem promptu YOK",
+    "istek_duzeni": "SIRAYLA (paralel yok). Her klip icin 768->1280->1920 ARDISIK: boylece uc kol AYNI servis yuku altinda olculur (zaman kaymasi confound'u kapanir)."
+  },
+  "kollar": [
+    {
+      "max_side": 768,
+      "crf": 28
+    },
+    {
+      "max_side": 1280,
+      "crf": 26
+    },
+    {
+      "max_side": 1920,
+      "crf": 24
+    }
+  ],
+  "siniflar": {
+    "pano": {
+      "poz_dizin": "Anomali/Opened_Panel_Cover (24)",
+      "neg_dizin": "Normal/Closed_Panel_Cover (25)",
+      "soru": "Elektrik/kontrol panosunun kapagi acik mi?",
+      "secenekler": [
+        "ACIK",
+        "KAPALI",
+        "GORUNMUYOR"
+      ],
+      "pozitif_cevap": "ACIK",
+      "negatif_cevap": "KAPALI",
+      "cekimser": [
+        "GORUNMUYOR"
+      ]
+    },
+    "yelek": {
+      "poz_dizin": "Anomali/Unauthorized_Intervention (25)",
+      "neg_dizin": "Normal/Authorized_Intervention (25)",
+      "soru": "Makinenin/panonun basinda duran kiside yesil reflektif yelek var mi?",
+      "secenekler": [
+        "YELEK_VAR",
+        "YELEK_YOK",
+        "KISI_YOK",
+        "GORUNMUYOR"
+      ],
+      "pozitif_cevap": "YELEK_YOK",
+      "negatif_cevap": "YELEK_VAR",
+      "cekimser": [
+        "KISI_YOK",
+        "GORUNMUYOR"
+      ]
+    }
+  },
+  "metrikler": {
+    "her_zaman": "TP/FP/FN/TN + dogruluk + Wilson %95 GA + MCC + cekimser sayisi + hata sayisi",
+    "BIRINCIL": "cekimser -> NEGATIF esleme (tum n kullanilir; sahada 'kanit yoksa alarm yok' davranisi)",
+    "IKINCIL": "yalnizca-karar-verilen 2x2 (cekimserler DISLANIR, n azalir ve RAPORLANIR)",
+    "not": "Cekimserler ASLA sessizce negatif sayilmaz: her iki esleme de ayri raporlanir (kural 5)."
+  },
+  "DEJENERELIK_KAPISI": "Bir kol, o sinifin kliplerinin >=%85'ine AYNI etiketi veriyorsa DEJENERE isaretlenir ve MCC ne olursa olsun BASARI SAYILMAZ.",
+  "KARAR_OLCUTU_ONCEDEN": "Yuksek cozunurluk 'YARDIM ETTI' denmesi icin BIRINCIL MCC, 768 koluna gore DELTA >= +0,15 artmali VE kol DEJENERE olmamali. delta < +0,15 ise sonuc: '768 YETER (yuksek cozunurluk parasini hak etmiyor)'. n~50'de +0,05 GURULTUDUR.",
+  "yan_olcumler": "her kol icin gonderilen bayt, giris token, istek gecikmesi (ortalama+medyan)",
+  "hata_politikasi": "Istisna -> 5 s sonra 1 kez yeniden dene; yine hata ise 'HATA' olarak AYRI sayilir, negatif/pozitif YAPILMAZ.",
+  "beklenti_onceden": "Yerel tabanda pano ve yelek MCC=0,000 ve DEJENERE idi. Bugun ayni klipte 1080p ve 768px AYNI cevabi verdi. Onceden tahminim: cozunurluk MCC'yi anlamli arttirmayacak."
+}

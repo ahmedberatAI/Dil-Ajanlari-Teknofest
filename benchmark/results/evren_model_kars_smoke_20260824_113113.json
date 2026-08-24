@@ -1,0 +1,681 @@
+{
+  "kunye": {
+    "zaman": "2026-08-24T11:28:58",
+    "git": "bc52ce7",
+    "set": "/mnt/c/Users/omen/Desktop/DilAjanlariTeknofest/data/eval_defense",
+    "modeller": [
+      "vlm",
+      "llm-large",
+      "llm-fast"
+    ],
+    "max_side": 768,
+    "crf": 28,
+    "temperature": 0.0,
+    "max_tokens": 24,
+    "guided_choice": true,
+    "deneme": 3,
+    "smoke": 2,
+    "base_url_host": "evren-llmapi.ssyz.org.tr",
+    "sistem_prompt": "Sen bir endustriyel is guvenligi kamerasi analiz sistemisin. Sana bir guvenlik kamerasindan alinmis kisa bir video verilir. YALNIZCA GORDUGUNE dayan; varsayim yapma. Ayirt edemiyorsan kacis secenegini kullan.",
+    "argv": [
+      "--smoke",
+      "2"
+    ]
+  },
+  "on_kayit": " (SONUCLARA BAKILMADAN, KOSUMDAN ONCE ILAN EDILDI) ===\nKURULUM (sabit):\n  video yolu (kare yolu DEGIL — servis istek basina en fazla 2 goruntu kabul ediyor)\n  servis_videosu(max_side=768, crf=28) · T=0 · max_tokens=24 · guided_choice (structured_outputs.choice)\n  ayni SISTEM promptu, ayni soru metni, ayni secenek listesi TUM modellerde\n  KLIP BIR KEZ kodlanir, ayni baytlar 3 modele de gider (esli tasarim)\n  istekler SIRAYLA gonderilir (servis paylasimli); hata basina en fazla 2 yeniden deneme\n\nSORULAR (kaynak makale Onal & Dandil 2024 islemsel olcutleri):\n  A forklift : \"catalda kac kasa?\"     >=3 -> ihlal\n  B yelek    : \"yesil reflektif yelek?\" YOK -> ihlal\n  C pano     : \"kapak acik mi?\"        ACIK -> ihlal\n\nPUANLAMA (olcum disiplini):\n  1. KACIS cevaplari (GORUNMUYOR / KISI_YOK) KARARSIZ sayilir; sessizce negatife\n     CEVRILMEZ. Ana tablo yalnizca KARAR VERILEN kliplerden hesaplanir; kararsiz ve\n     hata sayilari AYRICA yazilir.\n  2. HATA alan klip hicbir kolda puanlanmaz, ayrica raporlanir.\n  3. Ikincil \"sahada dagitim\" tablosu (kararsiz -> alarm yok) ACIKCA ikincil\n     etiketiyle verilir; manşet sayi ANA tablodan gelir.\n  4. TP/FP/FN/TN her zaman yazilir. Wilson %95 GA dogruluk uzerinden verilir.\n\nDEJENERELIK KAPISI (ikisinden biri yeterli -> DEJENERE):\n  D1: en sik HAM cevap, koldaki TUM kliplerin >= %85'ini kapliyor\n  D2: KARAR VERILEN klipler icinde bir taraf (ihlal / ihlal-degil) >= %85\n  DEJENERE kol, MCC ne olursa olsun BASARI SAYILMAZ.\n\nBASARI OLCUTU (kosumdan once ilan):\n  Bir kol KULLANILABILIR sayilir ancak ve ancak\n    (a) DEJENERE degil, (b) MCC >= +0,40, (c) karar orani >= 0,70,\n    (d) dogruluk Wilson alt sinir > 0,50.\n  Sinif kazanani = DEJENERE olmayan kollar icinde en yuksek MCC.\n  n~50'de 0,05 MCC farki GURULTUDUR -> berabere sayilir.\n\nYEREL TABAN (Qwen3-VL-8B-FP8, 24GB dizustu) — asilmasi gereken cizgi:\n  forklift islemsel MCC +0,762 (dogruluk 0,880) · yelek +0,000 DEJENERE (50/50 KISI_YOK)\n  pano +0,000 DEJENERE (49/49 GORUNMUYOR)\n",
+  "kollar": {
+    "forklift": {
+      "soru": "Forkliftin catalinda ust uste kac adet kasa/blok tasiniyor? Yalnizca sayiyi yaz.",
+      "secenek": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6+",
+        "GORUNMUYOR"
+      ],
+      "kural": ">=3 kasa -> ihlal",
+      "n_klip": 4,
+      "yerel_taban": {
+        "mcc": 0.762,
+        "dogruluk": 0.88,
+        "dejenere": false,
+        "not": "islemsel soru, Qwen3-VL-8B-FP8 yerel"
+      },
+      "sure_s": 39.2,
+      "klipler": [
+        {
+          "klip": "3_te1.mp4",
+          "ihlal": true,
+          "boyut_kb": 241.6,
+          "cevap": {
+            "vlm": "4",
+            "llm-large": "3",
+            "llm-fast": "3"
+          },
+          "sure": {
+            "vlm": 1.74,
+            "llm-large": 3.96,
+            "llm-fast": 2.08
+          }
+        },
+        {
+          "klip": "3_te2.mp4",
+          "ihlal": true,
+          "boyut_kb": 243.2,
+          "cevap": {
+            "vlm": "3",
+            "llm-large": "3",
+            "llm-fast": "2"
+          },
+          "sure": {
+            "vlm": 7.82,
+            "llm-large": 2.5,
+            "llm-fast": 2.04
+          }
+        },
+        {
+          "klip": "7_te1.mp4",
+          "ihlal": false,
+          "boyut_kb": 219.0,
+          "cevap": {
+            "vlm": "2",
+            "llm-large": "2",
+            "llm-fast": "2"
+          },
+          "sure": {
+            "vlm": 3.5,
+            "llm-large": 1.78,
+            "llm-fast": 4.47
+          }
+        },
+        {
+          "klip": "7_te2.mp4",
+          "ihlal": false,
+          "boyut_kb": 184.2,
+          "cevap": {
+            "vlm": "4",
+            "llm-large": "3",
+            "llm-fast": "2"
+          },
+          "sure": {
+            "vlm": 1.63,
+            "llm-large": 1.31,
+            "llm-fast": 4.28
+          }
+        }
+      ],
+      "modeller": {
+        "vlm": {
+          "ana": {
+            "tp": 2,
+            "fp": 1,
+            "fn": 0,
+            "tn": 1,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.5774,
+            "dogruluk": 0.75,
+            "ga95": [
+              0.3006,
+              0.9544
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 2,
+            "fp": 1,
+            "fn": 0,
+            "tn": 1,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.5774,
+            "dogruluk": 0.75,
+            "ga95": [
+              0.3006,
+              0.9544
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": false,
+            "D1_ham_cevap": false,
+            "D2_karar": false,
+            "en_sik_cevap": "4",
+            "en_sik_oran": 0.5,
+            "ham_dagilim": {
+              "4": 2,
+              "3": 1,
+              "2": 1
+            }
+          },
+          "karar_orani": 1.0,
+          "kullanilabilir": false
+        },
+        "llm-large": {
+          "ana": {
+            "tp": 2,
+            "fp": 1,
+            "fn": 0,
+            "tn": 1,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.5774,
+            "dogruluk": 0.75,
+            "ga95": [
+              0.3006,
+              0.9544
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 2,
+            "fp": 1,
+            "fn": 0,
+            "tn": 1,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.5774,
+            "dogruluk": 0.75,
+            "ga95": [
+              0.3006,
+              0.9544
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": false,
+            "D1_ham_cevap": false,
+            "D2_karar": false,
+            "en_sik_cevap": "3",
+            "en_sik_oran": 0.75,
+            "ham_dagilim": {
+              "3": 3,
+              "2": 1
+            }
+          },
+          "karar_orani": 1.0,
+          "kullanilabilir": false
+        },
+        "llm-fast": {
+          "ana": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "tn": 2,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.5774,
+            "dogruluk": 0.75,
+            "ga95": [
+              0.3006,
+              0.9544
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "tn": 2,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.5774,
+            "dogruluk": 0.75,
+            "ga95": [
+              0.3006,
+              0.9544
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": false,
+            "D1_ham_cevap": false,
+            "D2_karar": false,
+            "en_sik_cevap": "2",
+            "en_sik_oran": 0.75,
+            "ham_dagilim": {
+              "2": 3,
+              "3": 1
+            }
+          },
+          "karar_orani": 1.0,
+          "kullanilabilir": false
+        }
+      }
+    },
+    "yelek": {
+      "soru": "Makinenin/panonun basinda duran kiside yesil reflektif yelek var mi?",
+      "secenek": [
+        "YELEK_VAR",
+        "YELEK_YOK",
+        "KISI_YOK",
+        "GORUNMUYOR"
+      ],
+      "kural": "yelek YOK -> ihlal",
+      "n_klip": 4,
+      "yerel_taban": {
+        "mcc": 0.0,
+        "dogruluk": null,
+        "dejenere": true,
+        "not": "50/50 KISI_YOK — yerel model kisiyi bulamadi"
+      },
+      "sure_s": 40.7,
+      "klipler": [
+        {
+          "klip": "1_te10.mp4",
+          "ihlal": true,
+          "boyut_kb": 208.8,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-large": "GORUNMUYOR",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 2.06,
+            "llm-large": 2.26,
+            "llm-fast": 10.74
+          }
+        },
+        {
+          "klip": "1_te3.mp4",
+          "ihlal": true,
+          "boyut_kb": 326.0,
+          "cevap": {
+            "vlm": "YELEK_YOK",
+            "llm-large": "GORUNMUYOR",
+            "llm-fast": "YELEK_YOK"
+          },
+          "sure": {
+            "vlm": 7.27,
+            "llm-large": 2.57,
+            "llm-fast": 2.41
+          }
+        },
+        {
+          "klip": "5_te1.mp4",
+          "ihlal": false,
+          "boyut_kb": 140.9,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-large": "GORUNMUYOR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 3.04,
+            "llm-large": 1.68,
+            "llm-fast": 1.65
+          }
+        },
+        {
+          "klip": "5_te11.mp4",
+          "ihlal": false,
+          "boyut_kb": 121.1,
+          "cevap": {
+            "vlm": "YELEK_VAR",
+            "llm-large": "GORUNMUYOR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 2.01,
+            "llm-large": 1.49,
+            "llm-fast": 1.35
+          }
+        }
+      ],
+      "modeller": {
+        "vlm": {
+          "ana": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "tn": 2,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 1.0,
+            "dogruluk": 1.0,
+            "ga95": [
+              0.5101,
+              1.0
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "tn": 2,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 1.0,
+            "dogruluk": 1.0,
+            "ga95": [
+              0.5101,
+              1.0
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": false,
+            "D1_ham_cevap": false,
+            "D2_karar": false,
+            "en_sik_cevap": "YELEK_YOK",
+            "en_sik_oran": 0.5,
+            "ham_dagilim": {
+              "YELEK_YOK": 2,
+              "YELEK_VAR": 2
+            }
+          },
+          "karar_orani": 1.0,
+          "kullanilabilir": true
+        },
+        "llm-large": {
+          "ana": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "kararsiz": 4,
+            "hata": 0,
+            "n_karar": 0,
+            "mcc": 0.0,
+            "dogruluk": 0.0,
+            "ga95": [
+              0.0,
+              0.0
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "tn": 2,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.0,
+            "dogruluk": 0.5,
+            "ga95": [
+              0.15,
+              0.85
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": true,
+            "D1_ham_cevap": true,
+            "D2_karar": false,
+            "en_sik_cevap": "GORUNMUYOR",
+            "en_sik_oran": 1.0,
+            "ham_dagilim": {
+              "GORUNMUYOR": 4
+            }
+          },
+          "karar_orani": 0.0,
+          "kullanilabilir": false
+        },
+        "llm-fast": {
+          "ana": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "kararsiz": 2,
+            "hata": 0,
+            "n_karar": 2,
+            "mcc": 0.0,
+            "dogruluk": 1.0,
+            "ga95": [
+              0.3424,
+              1.0
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "tn": 2,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 1.0,
+            "dogruluk": 1.0,
+            "ga95": [
+              0.5101,
+              1.0
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": true,
+            "D1_ham_cevap": false,
+            "D2_karar": true,
+            "en_sik_cevap": "YELEK_YOK",
+            "en_sik_oran": 0.5,
+            "ham_dagilim": {
+              "YELEK_YOK": 2,
+              "GORUNMUYOR": 2
+            }
+          },
+          "karar_orani": 0.5,
+          "kullanilabilir": false
+        }
+      }
+    },
+    "pano": {
+      "soru": "Elektrik/kontrol panosunun kapagi acik mi?",
+      "secenek": [
+        "ACIK",
+        "KAPALI",
+        "GORUNMUYOR"
+      ],
+      "kural": "ACIK -> ihlal",
+      "n_klip": 4,
+      "yerel_taban": {
+        "mcc": 0.0,
+        "dogruluk": null,
+        "dejenere": true,
+        "not": "49/49 GORUNMUYOR"
+      },
+      "sure_s": 55.2,
+      "klipler": [
+        {
+          "klip": "2_te12.mp4",
+          "ihlal": true,
+          "boyut_kb": 287.1,
+          "cevap": {
+            "vlm": "KAPALI",
+            "llm-large": "GORUNMUYOR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 5.52,
+            "llm-large": 1.68,
+            "llm-fast": 3.35
+          }
+        },
+        {
+          "klip": "2_te13.mp4",
+          "ihlal": true,
+          "boyut_kb": 78.1,
+          "cevap": {
+            "vlm": "KAPALI",
+            "llm-large": "GORUNMUYOR",
+            "llm-fast": "GORUNMUYOR"
+          },
+          "sure": {
+            "vlm": 6.56,
+            "llm-large": 1.98,
+            "llm-fast": 2.77
+          }
+        },
+        {
+          "klip": "6_te10.mp4",
+          "ihlal": false,
+          "boyut_kb": 62.9,
+          "cevap": {
+            "vlm": "KAPALI",
+            "llm-large": "GORUNMUYOR",
+            "llm-fast": "KAPALI"
+          },
+          "sure": {
+            "vlm": 1.69,
+            "llm-large": 4.33,
+            "llm-fast": 2.68
+          }
+        },
+        {
+          "klip": "6_te11.mp4",
+          "ihlal": false,
+          "boyut_kb": 278.7,
+          "cevap": {
+            "vlm": "KAPALI",
+            "llm-large": "GORUNMUYOR",
+            "llm-fast": "ACIK"
+          },
+          "sure": {
+            "vlm": 19.05,
+            "llm-large": 2.04,
+            "llm-fast": 1.94
+          }
+        }
+      ],
+      "modeller": {
+        "vlm": {
+          "ana": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "tn": 2,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.0,
+            "dogruluk": 0.5,
+            "ga95": [
+              0.15,
+              0.85
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "tn": 2,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.0,
+            "dogruluk": 0.5,
+            "ga95": [
+              0.15,
+              0.85
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": true,
+            "D1_ham_cevap": true,
+            "D2_karar": true,
+            "en_sik_cevap": "KAPALI",
+            "en_sik_oran": 1.0,
+            "ham_dagilim": {
+              "KAPALI": 4
+            }
+          },
+          "karar_orani": 1.0,
+          "kullanilabilir": false
+        },
+        "llm-large": {
+          "ana": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "tn": 0,
+            "kararsiz": 4,
+            "hata": 0,
+            "n_karar": 0,
+            "mcc": 0.0,
+            "dogruluk": 0.0,
+            "ga95": [
+              0.0,
+              0.0
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "tn": 2,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": 0.0,
+            "dogruluk": 0.5,
+            "ga95": [
+              0.15,
+              0.85
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": true,
+            "D1_ham_cevap": true,
+            "D2_karar": false,
+            "en_sik_cevap": "GORUNMUYOR",
+            "en_sik_oran": 1.0,
+            "ham_dagilim": {
+              "GORUNMUYOR": 4
+            }
+          },
+          "karar_orani": 0.0,
+          "kullanilabilir": false
+        },
+        "llm-fast": {
+          "ana": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 0,
+            "tn": 1,
+            "kararsiz": 2,
+            "hata": 0,
+            "n_karar": 2,
+            "mcc": 0.0,
+            "dogruluk": 0.5,
+            "ga95": [
+              0.0945,
+              0.9055
+            ]
+          },
+          "ikincil_dagitim": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 2,
+            "tn": 1,
+            "kararsiz": 0,
+            "hata": 0,
+            "n_karar": 4,
+            "mcc": -0.5774,
+            "dogruluk": 0.25,
+            "ga95": [
+              0.0456,
+              0.6994
+            ]
+          },
+          "dejenere_kapisi": {
+            "dejenere": false,
+            "D1_ham_cevap": false,
+            "D2_karar": false,
+            "en_sik_cevap": "GORUNMUYOR",
+            "en_sik_oran": 0.5,
+            "ham_dagilim": {
+              "GORUNMUYOR": 2,
+              "KAPALI": 1,
+              "ACIK": 1
+            }
+          },
+          "karar_orani": 0.5,
+          "kullanilabilir": false
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,615 @@
+{
+ "kunye": {
+  "tarih": "2026-08-24T12:38:50",
+  "T": 0.0,
+  "seed": 1234,
+  "n_tekrar": 3,
+  "thinking": "kapali"
+ },
+ "satirlar": [
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "L-strict",
+   "tekrar": 0,
+   "sure": 5.4312310218811035,
+   "tok": 508,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntüde, bir iç mekân alanında forklift ile yük taşıyan bir araç tespit edilmiştir. Araç, taşıdığı yükün dengesi ve ağırlığı açısından riskli bir durum sergilemekte ve daha sonra yay"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "L-strict",
+   "tekrar": 1,
+   "sure": 3.943349838256836,
+   "tok": 453,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntüde, bir iç mekân alanında forklift ile taşıma yapan bir araç tespit edilmiştir. Araç, çatalında aşırı yük taşımakta ve bu durum dengesizlik riski oluşturmaktadır. Ayrıca, araç b"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "L-strict",
+   "tekrar": 2,
+   "sure": 8.86672329902649,
+   "tok": 453,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntüde, bir iç mekân alanında forklift ile taşıma yapan bir araç tespit edilmiştir. Araç, çatalında aşırı yük taşımakta ve bu durum dengesizlik riski oluşturmaktadır. Ayrıca, araç b"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "L-semaTS",
+   "tekrar": 0,
+   "sure": 3.4020156860351562,
+   "tok": 446,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntüde, bir iç mekân alanında forklift ile taşıma yapan bir araç tespit edilmiştir. Araç, çatalında aşırı yük taşımakta ve bu durum dengesizlik riski oluşturmaktadır. Ayrıca, araç b"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "L-semaTS",
+   "tekrar": 1,
+   "sure": 2.5732107162475586,
+   "tok": 463,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntüde, bir iç mekân alanında forklift ile taşıma yapan bir araç tespit edilmiştir. Araç, çatalında aşırı yük taşımakta ve bu durum dengesizlik riski oluşturmaktadır. Ayrıca, araç b"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "L-semaTS",
+   "tekrar": 2,
+   "sure": 3.8995554447174072,
+   "tok": 463,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntüde, bir iç mekân alanında forklift ile taşıma yapan bir araç tespit edilmiştir. Araç, çatalında aşırı yük taşımakta ve bu durum dengesizlik riski oluşturmaktadır. Ayrıca, araç b"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "L-semasiz",
+   "tekrar": 0,
+   "sure": 2.6693344116210938,
+   "tok": 424,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "**Özet:**\nGörüntüde, bir iç mekân alanında forklift ile hareket eden bir araç tespit edilmiştir. Araç, çatalında taşıdığı yükün dengesi ve boyutu açısından standart dışı bir durum sergilemektedir. Ayr"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "L-semasiz",
+   "tekrar": 1,
+   "sure": 2.302095413208008,
+   "tok": 408,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "**Özet:**\nGörüntüde, bir iç mekân alanında forklift ile hareket eden bir araç tespit edilmiştir. Araç, çatalında taşıdığı yükün dengesi ve boyutu açısından standart dışı bir durum sergilemektedir. Ayr"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "L-semasiz",
+   "tekrar": 2,
+   "sure": 2.309230089187622,
+   "tok": 408,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "**Özet:**\nGörüntüde, bir iç mekân alanında forklift ile hareket eden bir araç tespit edilmiştir. Araç, çatalında taşıdığı yükün dengesi ve boyutu açısından standart dışı bir durum sergilemektedir. Ayr"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "F-strict",
+   "tekrar": 0,
+   "sure": 1.6356348991394043,
+   "tok": 309,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntü analizine göre, 00:03 zamanında forkliftin çatalında aşırı yük taşıdığı tespit edilmiştir. Ardından, yaklaşık 00:11 zamanında forklift yaya yoluna girmiştir. Bu durum, hem ekip"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "F-strict",
+   "tekrar": 1,
+   "sure": 1.5683891773223877,
+   "tok": 309,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntü analizine göre, 00:03 zamanında forkliftin çatalında aşırı yük taşıdığı tespit edilmiştir. Ardından, yaklaşık 00:11 zamanında forklift yaya yoluna girmiştir. Bu durum, hem ekip"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "F-strict",
+   "tekrar": 2,
+   "sure": 1.6132385730743408,
+   "tok": 309,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntü analizine göre, 00:03 zamanında forkliftin çatalında aşırı yük taşıdığı tespit edilmiştir. Ardından, yaklaşık 00:11 zamanında forklift yaya yoluna girmiştir. Bu durum, hem ekip"
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "F-semasiz",
+   "tekrar": 0,
+   "sure": 2.021223783493042,
+   "tok": 421,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "confidence: 0.9\nkategori: İSG\nkamera_id: CAM-7\n\nsummary: Görüntüde, forkliftin çatalında aşırı yük taşıdığı ve daha sonra yaya yoluna girdiği tespit edilmiştir. Bu durum, hem ekipman güvenliği hem de "
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "F-semasiz",
+   "tekrar": 1,
+   "sure": 2.0069081783294678,
+   "tok": 421,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "confidence: 0.9\nkategori: İSG\nkamera_id: CAM-7\n\nsummary: Görüntüde, forkliftin çatalında aşırı yük taşıdığı ve daha sonra yaya yoluna girdiği tespit edilmiştir. Bu durum, hem ekipman güvenliği hem de "
+  },
+  {
+   "test": "D1 ek-alan/enum-disi/bozuk-time",
+   "kol": "F-semasiz",
+   "tekrar": 2,
+   "sure": 2.0010201930999756,
+   "tok": 421,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "confidence: 0.9\nkategori: İSG\nkamera_id: CAM-7\n\nsummary: Görüntüde, forkliftin çatalında aşırı yük taşıdığı ve daha sonra yaya yoluna girdiği tespit edilmiştir. Bu durum, hem ekipman güvenliği hem de "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "L-strict",
+   "tekrar": 0,
+   "sure": 2.054124116897583,
+   "tok": 355,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntü analizinde, 00:03 saniyesinde forkliftin çatalında taşıma kapasitesini aşan bir yük bulunduğu tespit edilmiştir. Ardından 00:11 saniyesinde aynı forkliftin, yaya geçiş alanına "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "L-strict",
+   "tekrar": 1,
+   "sure": 2.5403809547424316,
+   "tok": 355,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntü analizinde, 00:03 saniyesinde forkliftin çatalında taşıma kapasitesini aşan bir yük bulunduğu tespit edilmiştir. Ardından 00:11 saniyesinde aynı forkliftin, yaya geçiş alanına "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "L-strict",
+   "tekrar": 2,
+   "sure": 1.9836726188659668,
+   "tok": 355,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntü analizinde, 00:03 saniyesinde forkliftin çatalında taşıma kapasitesini aşan bir yük bulunduğu tespit edilmiştir. Ardından 00:11 saniyesinde aynı forkliftin, yaya geçiş alanına "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "L-semaTS",
+   "tekrar": 0,
+   "sure": 2.0325241088867188,
+   "tok": 355,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntü analizinde, 00:03 saniyesinde forkliftin çatalında taşıma kapasitesini aşan bir yük bulunduğu tespit edilmiştir. Ardından 00:11 saniyesinde aynı forkliftin, yaya geçiş alanına "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "L-semaTS",
+   "tekrar": 1,
+   "sure": 2.065030574798584,
+   "tok": 355,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntü analizinde, 00:03 saniyesinde forkliftin çatalında taşıma kapasitesini aşan bir yük bulunduğu tespit edilmiştir. Ardından 00:11 saniyesinde aynı forkliftin, yaya geçiş alanına "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "L-semaTS",
+   "tekrar": 2,
+   "sure": 2.030088186264038,
+   "tok": 355,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"Görüntü analizinde, 00:03 saniyesinde forkliftin çatalında taşıma kapasitesini aşan bir yük bulunduğu tespit edilmiştir. Ardından 00:11 saniyesinde aynı forkliftin, yaya geçiş alanına "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "L-semasiz",
+   "tekrar": 0,
+   "sure": 1.8099372386932373,
+   "tok": 305,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "Görüntüde bir iç mekân ortamında güvenlik ihlalleri tespit edilmiştir. 00:03 saniyesinde, forkliftin çatalında taşıma kapasitesini aşan aşırı yük bulunduğu gözlemlenmiştir. 00:11 saniyesinde ise aynı "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "L-semasiz",
+   "tekrar": 1,
+   "sure": 4.034000873565674,
+   "tok": 470,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "Görüntüde bir iç mekân ortamında, 00:03 saniyesinde bir forkliftin çatalında standart kapasitesini aşan aşırı yük taşındığı tespit edilmiştir. Bu durum, yükün dengesizleşmesine ve araç devrilmesine yo"
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "L-semasiz",
+   "tekrar": 2,
+   "sure": 1.7842278480529785,
+   "tok": 305,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "Görüntüde bir iç mekân ortamında güvenlik ihlalleri tespit edilmiştir. 00:03 saniyesinde, forkliftin çatalında taşıma kapasitesini aşan aşırı yük bulunduğu gözlemlenmiştir. 00:11 saniyesinde ise aynı "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "F-strict",
+   "tekrar": 0,
+   "sure": 1.241361379623413,
+   "tok": 241,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"00:03'te forklift çatalında aşırı yük taşıyor, 00:11'de yaya yoluna giriyor.\",\n  \"events\": [\n    {\n      \"time\": \"00:03\",\n      \"event\": \"Forklift çatalında aşırı yük taşıyor.\"\n    },\n"
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "F-strict",
+   "tekrar": 1,
+   "sure": 1.332416296005249,
+   "tok": 241,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"00:03'te forklift çatalında aşırı yük taşıyor, 00:11'de yaya yoluna giriyor.\",\n  \"events\": [\n    {\n      \"time\": \"00:03\",\n      \"event\": \"Forklift çatalında aşırı yük taşıyor.\"\n    },\n"
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "F-strict",
+   "tekrar": 2,
+   "sure": 1.310638666152954,
+   "tok": 241,
+   "finish": "stop",
+   "sonuc": {
+    "json": true,
+    "tam4": true,
+    "fazla": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "ev_alan_tam": true,
+    "time_mmss": true,
+    "timeler": [
+     "00:03",
+     "00:11"
+    ]
+   },
+   "ham_ilk200": "{\n  \"summary\": \"00:03'te forklift çatalında aşırı yük taşıyor, 00:11'de yaya yoluna giriyor.\",\n  \"events\": [\n    {\n      \"time\": \"00:03\",\n      \"event\": \"Forklift çatalında aşırı yük taşıyor.\"\n    },\n"
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "F-semasiz",
+   "tekrar": 0,
+   "sure": 1.378749132156372,
+   "tok": 263,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "Özetle, 00:03 saniyesinde forklift operatörünün çatalında aşırı yük taşıdığı ve 00:11 saniyesinde yaya yoluna girdiği gözlemlenmiştir.\n\n*   Olaylar:\n    *   00:03: Forklift çatalında aşırı yük taşıma "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "F-semasiz",
+   "tekrar": 1,
+   "sure": 1.4216463565826416,
+   "tok": 263,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "Özetle, 00:03 saniyesinde forklift operatörünün çatalında aşırı yük taşıdığı ve 00:11 saniyesinde yaya yoluna girdiği gözlemlenmiştir.\n\n*   Olaylar:\n    *   00:03: Forklift çatalında aşırı yük taşıma "
+  },
+  {
+   "test": "D2 JSON-verme",
+   "kol": "F-semasiz",
+   "tekrar": 2,
+   "sure": 1.4143950939178467,
+   "tok": 263,
+   "finish": "stop",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 1 column 1 (char 0)"
+   },
+   "ham_ilk200": "Özetle, 00:03 saniyesinde forklift operatörünün çatalında aşırı yük taşıdığı ve 00:11 saniyesinde yaya yoluna girdiği gözlemlenmiştir.\n\n*   Olaylar:\n    *   00:03: Forklift çatalında aşırı yük taşıma "
+  },
+  {
+   "test": "D3 kesilme",
+   "kol": "L-strict",
+   "max_tokens": 150,
+   "sure": 4.876301050186157,
+   "tok": 150,
+   "finish": "length",
+   "sonuc": {
+    "json": false,
+    "hata": "Unterminated string starting at: line 6 column 16 (char 407)"
+   },
+   "ham_son120": "\"events\": [\n    {\n      \"time\": \"00:09\",\n      \"event\": \"Beyaz şapkalı kişi, elinde çanta ile otomatik kapıdan içeri gir"
+  },
+  {
+   "test": "D3 kesilme",
+   "kol": "L-strict",
+   "max_tokens": 400,
+   "sure": 6.163315534591675,
+   "tok": 400,
+   "finish": "length",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 28 column 4 (char 1116)"
+   },
+   "ham_son120": " },\n    {\n      \"time\": \"00:25\",\n      \"event\": \"Beyaz şapkalı kişi, çantasını almadan kapıdan dışarı çıkar.\"\n    },\n   "
+  },
+  {
+   "test": "D3 kesilme",
+   "kol": "L-semasiz",
+   "max_tokens": 150,
+   "sure": 5.583802223205566,
+   "tok": 150,
+   "finish": "length",
+   "sonuc": {
+    "json": false,
+    "hata": "Expecting value: line 8 column 1 (char 466)"
+   },
+   "ham_son120": "    {\n      \"time\": \"00:09\",\n      \"event\": \"Beyaz şapkalı kişi, elinde çanta ile otomatik kapıdan içeri girer.\"\n    },\n"
+  },
+  {
+   "test": "D3 kesilme",
+   "kol": "L-semasiz",
+   "max_tokens": 400,
+   "sure": 8.109521627426147,
+   "tok": 400,
+   "finish": "length",
+   "sonuc": {
+    "json": false,
+    "hata": "Unterminated string starting at: line 26 column 3 (char 1096)"
+   },
+   "ham_son120": "az şapkalı kişi, çantasıyla birlikte otomatik kapıdan dışarı çıkar ve kaybolur.\"\n    }\n  ],\n  \"risk\": \"Orta\",\n  \"actions"
+  }
+ ]
+}

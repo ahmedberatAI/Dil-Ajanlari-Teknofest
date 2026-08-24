@@ -42,6 +42,10 @@ class Segment:
     start: float
     end: float
     frames: List[Tuple[str, bytes]] = field(default_factory=list)  # (MM:SS, jpeg)
+    # D43: gozlem duzlemi ORIJINAL videoyu ister (kareleri yeniden kodlamak degil).
+    # Olculdu: kareleri 768px'te mp4'e kodlamak yelek/pano slotlarini DEJENERE
+    # yapiyor; servis_videosu(orijinal, 1280) ile olculen sonuclar geri geliyor.
+    kaynak_yol: str = ""
 
     @property
     def start_str(self) -> str:
@@ -253,3 +257,94 @@ def build_segments(
             idx += 1
         start = end - overlap if overlap > 0 else end
     return segments
+
+
+# ---------------------------------------------------------------------------
+# D41 — SERVIS ICIN VIDEO HAZIRLAMA (uzak EVREN cikarim servisi)
+# ---------------------------------------------------------------------------
+# OLCULDU (2026-08-24, 3_te1.mp4, llm-large):
+#
+#   gonderilen           boyut      base64     sure            giris token   cevap
+#   -------------------  ---------  ---------  --------------  -----------   -----
+#   orijinal 1080p       24,5 MB    32,7 MB    82 / 71 / 190 s      12.221    '3' dogru
+#   768px CRF28          0,25 MB    0,33 MB     6,4 / 4,2 / 3,2 s    3.621    '3' dogru
+#
+#   saf metin cagrisi: 0,4 s  -> sistem YUK ALTINDA DEGILDI; yavasligin kaynagi
+#   BIZIM gonderdigimiz govdeydi.
+#
+# ~20x hizlanma, AYNI DOGRU CEVAP. 197 klip: 3,3 saat -> ~16 dakika.
+#
+# COZUNURLUK TARAMASI (2026-08-24, 297 istek, hata 0) — VARSAYILAN 1280 SECILDI:
+#
+#   sinif   768        1280       1920       yorum
+#   ------  ---------  ---------  ---------  ------------------------------------
+#   yelek   MCC 0,000  MCC 0,560  MCC 0,564  768 -> 1280 GERCEK (McNemar p=0,0013,
+#           (yazi-tura)                      16 klip duzeldi/2 bozuldu). 1280 -> 1920
+#                                            GURULTU (6/6, p=1,000) ve ikincil
+#                                            eslemede 1920 DAHA KOTU.
+#   pano    49/49 "gorunmuyor" — UC KOLDA DA AYNI. Esli karsilastirmada TEK KLIP
+#           bile farkli cevaplanmadi (p=1,0). 1920, 768'e gore 26x bayt + 8x
+#           gecikme harcayip HICBIR SEY degistirmedi.
+#           => pano darbogazi COZUNURLUK DEGIL; cerceveleme/ROI + dedektor gerek.
+#
+# DUZELTME: daha once "768 yeter" izlenimi TEK BIR forklift klibinden, BASKA bir
+# soruda alinmisti; yelek sinifina GENELLENMIYOR. O genelleme HATALIYDI.
+def servis_videosu(yol: str, max_side: int = 1280, crf: int = 26,
+                   fps: float | None = None, roi_str: str = "",
+                   bas_sn: float | None = None, sure_sn: float | None = None) -> bytes:
+    """Klibi servise gonderilecek KUCUK bir mp4'e cevirir ve baytlari doner.
+
+    Ag gövdesi ve piksel butcesi icin kucultulur. ffmpeg yoksa veya hata olursa
+    ORIJINAL baytlar doner (K3 fail-open — olcum durmaz, yalnizca yavaslar).
+
+    `bas_sn`/`sure_sn` verilirse yalnizca O ZAMAN PENCERESI kodlanir.
+    NEDEN: gozlem duzlemi HER SEGMENT icin slot dolduruyor, ama segmentin
+    kendi penceresi UYGULANMADIGI surece her segment TUM videoyu gonderiyordu.
+    Iki sonucu vardi: (1) 6 segmentlik klipte AYNI soru 6 kez TUM videoya
+    soruluyor ve ayni cevap geliyordu (N kat ffmpeg + N kat govde), (2) uretilen
+    olayin zaman damgasi ihlalin gercek anina degil ILK segmente denk geliyordu
+    — 02:30'daki asiri yuk 00:00 diye raporlaniyordu.
+
+    `roi_str` ("x1,y1,x2,y2" — 0..1 orani) verilirse once KIRPILIR, sonra
+    olceklenir. NEDEN: tam karede sorulan pano sorusu OLCULDU ve DEJENERE
+    cikti (12 klipte yalnizca {2, 8}, MCC -0,192); ayni soru KIRPILMIS ROI
+    uzerinde MCC +1,000 veriyordu. Yani belirleyici olan modelin yetenegi
+    degil, sorulan bolgenin karedeki PAYI.
+    """
+    import subprocess, tempfile, os as _os
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as f:
+            gecici = f.name
+        # -ss GIRDIDEN ONCE gelir (hizli arama); -t ondan sonra.
+        girdi_oncesi = []
+        if bas_sn is not None and bas_sn > 0:
+            girdi_oncesi += ["-ss", f"{bas_sn:.3f}"]
+        vf = []
+        if roi_str:
+            try:
+                x1, y1, x2, y2 = (float(v) for v in roi_str.split(","))
+                # ffmpeg crop: genislik:yukseklik:x:y — oranlar iw/ih ile carpilir.
+                # Cift sayiya yuvarlanir (libx264 tek boyut kabul etmez).
+                vf.append(f"crop=trunc(iw*{x2 - x1:.6f}/2)*2:"
+                          f"trunc(ih*{y2 - y1:.6f}/2)*2:"
+                          f"trunc(iw*{x1:.6f}):trunc(ih*{y1:.6f})")
+            except (ValueError, TypeError):
+                pass                      # bozuk ROI -> kirpma YOK (K3)
+        vf.append(f"scale={max_side}:-2")
+        komut = (["ffmpeg", "-y", "-v", "error"] + girdi_oncesi
+                 + ["-i", yol]
+                 + (["-t", f"{sure_sn:.3f}"] if sure_sn and sure_sn > 0 else [])
+                 + ["-vf", ",".join(vf), "-c:v", "libx264",
+                    "-crf", str(crf), "-preset", "fast", "-an"])
+        if fps:
+            komut += ["-r", str(fps)]
+        komut.append(gecici)
+        r = subprocess.run(komut, capture_output=True, timeout=300)
+        if r.returncode == 0 and _os.path.getsize(gecici) > 0:
+            veri = open(gecici, "rb").read()
+            _os.unlink(gecici)
+            return veri
+        _os.unlink(gecici)
+    except Exception:
+        pass
+    return open(yol, "rb").read()

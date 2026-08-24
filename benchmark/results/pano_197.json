@@ -1,0 +1,1789 @@
+{
+  "roi": "0.08,0.55,0.21,0.73",
+  "esik": 87.3,
+  "ozet": {
+    "URETIM (max_side=768)": {
+      "tp": 15,
+      "fp": 5,
+      "fn": 9,
+      "tn": 168,
+      "mcc": 0.6455723182612634,
+      "normal_fp": 4,
+      "satirlar": [
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_te11.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_te22.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_te31.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr100.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr104.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr108.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr11.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr110.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr113.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr123.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr128.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr13.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr135.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr149.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr171.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr176.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr177.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr178.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr40.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr44.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr59.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr72.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr79.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr84.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Safe_Walkway_Violation",
+          "klip": "0_tr95.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_te12.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_te13.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 76.3,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_te6.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 77.9,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr101.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 80.3,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr112.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 72.7,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr118.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 74.7,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr119.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 75.3,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr12.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 77.4,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr126.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 76.9,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr128.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 81.0,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr16.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 77.1,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr17.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 77.1,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr18.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 77.3,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr19.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 77.5,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr35.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr40.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 84.7,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr52.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr53.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr54.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr58.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr62.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr63.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr66.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": true,
+          "luma": 75.4,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Opened_Panel_Cover",
+          "klip": "2_tr72.mp4",
+          "anomali": true,
+          "hedef": true,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_te10.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": true,
+          "luma": 81.7,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_te3.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_te4.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_te5.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr18.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr2.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr22.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr25.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr28.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr33.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr35.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr38.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr42.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr50.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr61.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr62.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr63.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr67.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr7.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr76.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr77.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr81.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr84.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr87.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Unauthorized_Intervention",
+          "klip": "1_tr88.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_te1.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_te2.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_te3.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_te7.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr10.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr11.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr15.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr16.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr24.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr25.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr27.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr28.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr30.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr31.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr33.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr36.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr37.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr38.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr41.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr42.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr43.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr45.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr47.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr5.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Anomali/Carrying_Overload_with_Forklift",
+          "klip": "3_tr9.mp4",
+          "anomali": true,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_te1.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_te15.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_te19.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_te6.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": true,
+          "luma": 80.7,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr11.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": true,
+          "luma": 75.2,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr12.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr13.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr15.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr18.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr22.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr23.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr29.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr3.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr31.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr33.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr35.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr37.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr40.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr41.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr45.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr47.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr49.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Walkway",
+          "klip": "4_tr7.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": true,
+          "luma": 75.6,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te10.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te11.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te12.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te13.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te2.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te3.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te4.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te5.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te6.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te7.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te8.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_te9.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr1.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr11.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr12.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr14.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr16.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr17.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr18.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr19.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr4.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr5.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr6.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr8.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Closed_Panel_Cover",
+          "klip": "6_tr9.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te1.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te11.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te12.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te13.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te14.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te15.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te2.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te5.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te6.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te7.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_te8.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr10.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr11.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr12.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": true,
+          "luma": 84.8,
+          "kisi_vardi": false
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr13.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr15.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr16.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr19.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr20.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr22.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr3.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr4.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr5.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr6.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Authorized_Intervention",
+          "klip": "5_tr8.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_te1.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_te2.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_te3.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_te4.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_te6.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_te7.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_te8.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr1.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr11.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr12.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr13.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr14.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr15.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr16.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr18.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr2.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr20.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr21.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr22.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr3.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr4.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr5.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr7.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr8.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        },
+        {
+          "sinif": "Normal/Safe_Carrying",
+          "klip": "7_tr9.mp4",
+          "anomali": false,
+          "hedef": false,
+          "atesledi": false,
+          "luma": null,
+          "kisi_vardi": null
+        }
+      ]
+    }
+  }
+}

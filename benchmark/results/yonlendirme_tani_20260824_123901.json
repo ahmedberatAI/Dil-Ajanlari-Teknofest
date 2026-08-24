@@ -1,0 +1,350 @@
+{
+  "kunye": {
+    "tarih": "2026-08-24 12:37:24",
+    "disable_thinking": false,
+    "T": 0.0,
+    "n": 36
+  },
+  "kollar": [
+    {
+      "kol": "router  · duz sira · guided",
+      "alias": "router",
+      "guided": true,
+      "secenek_sirasi": [
+        "sayma",
+        "kisi_oznitelik",
+        "durum",
+        "genel"
+      ],
+      "acc": 0.9722222222222222,
+      "dogru": 35,
+      "n": 36,
+      "hata_sayisi": 1,
+      "hata_-> 'genel'": 0,
+      "hata_-> listenin SONU": 0,
+      "hata_-> listenin BASI": 0,
+      "hatalar": [
+        [
+          "D6",
+          "durum",
+          "kisi_oznitelik"
+        ]
+      ]
+    },
+    {
+      "kol": "router  · TERS sira · guided",
+      "alias": "router",
+      "guided": true,
+      "secenek_sirasi": [
+        "genel",
+        "durum",
+        "kisi_oznitelik",
+        "sayma"
+      ],
+      "acc": 0.9722222222222222,
+      "dogru": 35,
+      "n": 36,
+      "hata_sayisi": 1,
+      "hata_-> 'genel'": 0,
+      "hata_-> listenin SONU": 0,
+      "hata_-> listenin BASI": 0,
+      "hatalar": [
+        [
+          "D6",
+          "durum",
+          "kisi_oznitelik"
+        ]
+      ]
+    },
+    {
+      "kol": "llm-fast · TERS sira · guided",
+      "alias": "llm-fast",
+      "guided": true,
+      "secenek_sirasi": [
+        "genel",
+        "durum",
+        "kisi_oznitelik",
+        "sayma"
+      ],
+      "acc": 0.7777777777777778,
+      "dogru": 28,
+      "n": 36,
+      "hata_sayisi": 8,
+      "hata_-> 'genel'": 7,
+      "hata_-> listenin SONU": 0,
+      "hata_-> listenin BASI": 7,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "genel"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ],
+        [
+          "K1",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K3",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K4",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K5",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K8",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "D1",
+          "durum",
+          "genel"
+        ]
+      ]
+    },
+    {
+      "kol": "llm-large· TERS sira · guided",
+      "alias": "llm-large",
+      "guided": true,
+      "secenek_sirasi": [
+        "genel",
+        "durum",
+        "kisi_oznitelik",
+        "sayma"
+      ],
+      "acc": 0.6944444444444444,
+      "dogru": 25,
+      "n": 36,
+      "hata_sayisi": 11,
+      "hata_-> 'genel'": 10,
+      "hata_-> listenin SONU": 0,
+      "hata_-> listenin BASI": 10,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "genel"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ],
+        [
+          "K1",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K3",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K4",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K5",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "K8",
+          "kisi_oznitelik",
+          "genel"
+        ],
+        [
+          "D1",
+          "durum",
+          "genel"
+        ],
+        [
+          "D2",
+          "durum",
+          "genel"
+        ],
+        [
+          "D3",
+          "durum",
+          "genel"
+        ],
+        [
+          "D7",
+          "durum",
+          "genel"
+        ]
+      ]
+    },
+    {
+      "kol": "llm-large· duz sira · SERBEST",
+      "alias": "llm-large",
+      "guided": false,
+      "secenek_sirasi": [
+        "sayma",
+        "kisi_oznitelik",
+        "durum",
+        "genel"
+      ],
+      "acc": 0.8333333333333334,
+      "dogru": 30,
+      "n": 36,
+      "hata_sayisi": 6,
+      "hata_-> 'genel'": 0,
+      "hata_-> listenin SONU": 0,
+      "hata_-> listenin BASI": 0,
+      "hatalar": [
+        [
+          "S6",
+          "sayma",
+          "kisi_oznitelik"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ],
+        [
+          "G1",
+          "genel",
+          "durum"
+        ],
+        [
+          "G2",
+          "genel",
+          "durum"
+        ],
+        [
+          "G4",
+          "genel",
+          "durum"
+        ],
+        [
+          "G9",
+          "genel",
+          "durum"
+        ]
+      ]
+    },
+    {
+      "kol": "llm-fast · duz sira · SERBEST",
+      "alias": "llm-fast",
+      "guided": false,
+      "secenek_sirasi": [
+        "sayma",
+        "kisi_oznitelik",
+        "durum",
+        "genel"
+      ],
+      "acc": 0.5277777777777778,
+      "dogru": 19,
+      "n": 36,
+      "hata_sayisi": 17,
+      "hata_-> 'genel'": 0,
+      "hata_-> listenin SONU": 0,
+      "hata_-> listenin BASI": 2,
+      "hatalar": [
+        [
+          "S4",
+          "sayma",
+          "AYRISTIRILAMADI:bu girdi, bir nesnenin (istiflenen yükün"
+        ],
+        [
+          "S5",
+          "sayma",
+          "AYRISTIRILAMADI:girdi, sarı çizgiye göre kişilerin konum"
+        ],
+        [
+          "S6",
+          "sayma",
+          "AYRISTIRILAMADI:bu girdi, bir soru sormamakta; bunun yer"
+        ],
+        [
+          "S7",
+          "sayma",
+          "durum"
+        ],
+        [
+          "K6",
+          "kisi_oznitelik",
+          "durum"
+        ],
+        [
+          "K7",
+          "kisi_oznitelik",
+          "AYRISTIRILAMADI:bu girdi, bakım personelinin üzerindeki "
+        ],
+        [
+          "K8",
+          "kisi_oznitelik",
+          "AYRISTIRILAMADI:bu girdi, bir kişinin üzerindeki belirli"
+        ],
+        [
+          "K9",
+          "kisi_oznitelik",
+          "AYRISTIRILAMADI:bu girdi, sahnedeki kişilerin (vardiya a"
+        ],
+        [
+          "G1",
+          "genel",
+          "durum"
+        ],
+        [
+          "G2",
+          "genel",
+          "durum"
+        ],
+        [
+          "G3",
+          "genel",
+          "durum"
+        ],
+        [
+          "G4",
+          "genel",
+          "durum"
+        ],
+        [
+          "G5",
+          "genel",
+          "durum"
+        ],
+        [
+          "G6",
+          "genel",
+          "sayma"
+        ],
+        [
+          "G7",
+          "genel",
+          "durum"
+        ],
+        [
+          "G8",
+          "genel",
+          "durum"
+        ],
+        [
+          "G9",
+          "genel",
+          "sayma"
+        ]
+      ]
+    }
+  ]
+}

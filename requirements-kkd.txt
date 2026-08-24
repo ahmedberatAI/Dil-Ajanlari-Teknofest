@@ -1,0 +1,17 @@
+# =============================================================================
+# OPSIYONEL — KKD (baret/yelek) dedektorleri ve poz-tabanli dusme dogrulamasi
+# =============================================================================
+# DIKKAT — LISANS: ultralytics AGPL-3.0'dir. Bu deponun kendi lisansi
+# Apache-2.0'dir (LICENSE). Bu dosyayi kurmak, calisan BIRLESIK ESERI AGPL-3.0
+# yukumlulukleri altina sokar. Apache-2.0 dagitimi hedefliyorsaniz KURMAYIN.
+#
+# Kurmadan da cekirdek boru hatti tam calisir; yalnizca su yetenekler kapanir:
+#   - KKD kitleri (baret mAP50 0,934 · yelek 0,905)
+#   - verify_pose_falls (poz ile dusme dogrulamasi)
+#   - restricted_zones / detect_vehicles / detect_crowd (YOLO tabanli)
+#
+# Kurulum:
+#   pip install -r requirements-kkd.txt
+# =============================================================================
+
+ultralytics>=8.4

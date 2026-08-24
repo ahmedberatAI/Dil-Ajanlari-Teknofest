@@ -480,6 +480,43 @@ def _cumlecikler(metin: str) -> List[str]:
     return [c for c in _AYIRAC_RE.split(metin) if c and c.strip()]
 
 
+# --- D44: OLUMSUZLAMA KAPSAMI — DENENDI ve REDDEDILDI --------------------
+#
+# TESPIT EDILEN GERCEK KUSUR (duruyor, cozulmedi):
+#   `_AYIRAC_RE` virgulde boluyor, ama Turkcede siralanmis nesneler TEK bir
+#   olumsuz fiili PAYLASIR:
+#       "guvenlik ihlali, tehlikeli durum veya anomali tespit edilmemistir"
+#        ^^^^^^^^^^^^^^^^ <- olumsuzluk fiili BU parcada YOK
+#   Ilk parca olumlu sayilir ve sahte kategori eslesmesi uretir.
+#
+# DENENEN COZUM: olumsuzlugu CUMLE kapsaminda degerlendirip, "kendi cekimli
+# fiili olmayan" parcalara GERIYE yaymak. Fiil ayrimi icin sonek vekili
+# kullanildi (-yor/-makta/-mis/-di/-dir/-ir ...).
+#
+# NEDEN REDDEDILDI (olculdu, 2026-08-24):
+#   1) Sonek vekili YAYGIN ADLARI fiil saniyor. Test edilen 21 addan 19'u
+#      "fiil" cikti: bir, hicbir, demir, mudur, hazir, cukur, kusur, tedbir,
+#      zincir, silindir, bakir, komur, memur, amir, fikir, satir, tur,
+#      kendi, simdi. Sonuc: kapi TAM DA yazilma gerekcesi olan cumlede
+#      ("herhangi BIR guvenlik ihlali, ... tespit edilmemistir") devre disi
+#      kaliyor — "bir" fiil sanildigi icin yayilim duruyor.
+#   2) Ad yuklemli parcalar ("pano kapagi ACIK") fiilsiz gorunduğu icin
+#      olumsuz kapsama aliniyor ve GERCEK tespitler siliniyor. Arsiv olcumu:
+#      ISG hedef setinde gercek eslesmelerin %83'u (18 -> 3) kayboluyordu.
+#   3) Karsit baglaclar (ancak/fakat/ama) liste ayiraci sayilmadigi icin
+#      "Alev gozlemlenmemistir ANCAK yogun duman yukselmektedir" tek parca
+#      oluyor ve duman tespiti eleniyor.
+#
+# Yani onarim, onardigi kusurdan DAHA COK zarar veriyordu. Kod KALDIRILDI;
+# yerine yanlis calisan bir kapi BIRAKILMADI.
+#
+# ILERISI ICIN: dogru cozum sozcuk-sonu vekili degil, ad obegi / yuklem
+# ayrimini gercekten yapan bir cozumleme (ya da olumsuz fiilin nesne
+# listesini kapsam olarak isaretleyen dar, YUKSEK KESINLIKLI bir kalip).
+# Olculmeden tekrar acilmamalidir.
+# -------------------------------------------------------------------------
+
+
 def patterns_for(category: str) -> List[str]:
     """Kategori icin SIKILASTIRILMIS kalip listesi (D28)."""
     return list(CATEGORY_PATTERNS.get(category, []))
@@ -583,11 +620,11 @@ def any_match(parts: Sequence[str], category: str, *, mode: str = "strict",
     """Metin parcalarindan HERHANGI biri kategoriyle (veya grubuyla) eslesiyor mu?"""
     if mode == "loose":
         return any(loose_match(p, category) for p in parts)
+    kw = {"onarik_olumsuzlama": onarik_olumsuzlama}
     if group:
-        return any(any(match_category(p, c, onarik_olumsuzlama=onarik_olumsuzlama)
+        return any(any(match_category(p, c, **kw)
                        for c in group_members(category)) for p in parts)
-    return any(match_category(p, category, onarik_olumsuzlama=onarik_olumsuzlama)
-               for p in parts)
+    return any(match_category(p, category, **kw) for p in parts)
 
 
 # ===========================================================================

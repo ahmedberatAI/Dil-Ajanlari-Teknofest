@@ -1,0 +1,2469 @@
+{
+ "kunye": {
+  "tarih": "2026-08-24T12:32:36",
+  "video": "servis_videosu(max_side=768, crf=28)",
+  "T": 0.0,
+  "seed": 1234,
+  "max_tokens": 1200,
+  "thinking": "kapali (enable_thinking=False)",
+  "sema": {
+   "type": "object",
+   "properties": {
+    "summary": {
+     "type": "string"
+    },
+    "events": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "time": {
+        "type": "string",
+        "pattern": "^[0-9]{2}:[0-9]{2}$"
+       },
+       "event": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "time",
+       "event"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "risk": {
+     "type": "string",
+     "enum": [
+      "Düşük",
+      "Orta",
+      "Yüksek",
+      "Kritik"
+     ]
+    },
+    "actions": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "required": [
+    "summary",
+    "events",
+    "risk",
+    "actions"
+   ],
+   "additionalProperties": false
+  },
+  "gorev_prompt": "Bu bir güvenlik kamerası kaydıdır. Kaydı baştan sona izle ve operatöre tek seferde eksiksiz bir durum raporu üret.\nRapor şu dört parçadan oluşur:\n- summary: kayıtta olup biteni anlatan kısa Türkçe özet.\n- events: dikkat çekici her olay için zaman damgası (MM:SS, kaydın başından itibaren) ve olayın Türkçe kısa açıklaması. Dikkat çekici hiçbir şey yoksa liste boş kalır.\n- risk: kaydın genel risk seviyesi; yalnızca şu dördünden biri: Düşük, Orta, Yüksek, Kritik.\n- actions: operatörün şimdi yapabileceği somut, uygulanabilir adımlar (Türkçe, emir kipinde).\nYalnızca görüntüde gerçekten gördüğüne dayan; görmediğin bir olayı yazma.",
+  "base_url": "https://evren-llmapi.ssyz.org.tr/v1"
+ },
+ "klipler": [
+  {
+   "etiket": "holdout/Explosion001",
+   "anomali": true,
+   "yol": "data/eval_holdout/Explosion/Explosion001_x264.mp4"
+  },
+  {
+   "etiket": "holdout/Fighting023",
+   "anomali": true,
+   "yol": "data/eval_holdout/Fighting/Fighting023_x264.mp4"
+  },
+  {
+   "etiket": "holdout/RoadAcc021",
+   "anomali": true,
+   "yol": "data/eval_holdout/RoadAccidents/RoadAccidents021_x264.mp4"
+  },
+  {
+   "etiket": "holdout/Shooting001",
+   "anomali": true,
+   "yol": "data/eval_holdout/Shooting/Shooting001_x264.mp4"
+  },
+  {
+   "etiket": "holdout/Normal_6te10",
+   "anomali": false,
+   "yol": "data/eval_holdout/Normal/6_te10.mp4"
+  },
+  {
+   "etiket": "holdout/Normal_939",
+   "anomali": false,
+   "yol": "data/eval_holdout/Normal/Normal_Videos_939_x264.mp4"
+  },
+  {
+   "etiket": "isg/Forklift_asiri_yuk",
+   "anomali": true,
+   "yol": "data/eval_defense/Anomali/Carrying_Overload_with_Forklift/3_tr5.mp4"
+  },
+  {
+   "etiket": "isg/Yaya_yolu_ihlali",
+   "anomali": true,
+   "yol": "data/eval_defense/Anomali/Safe_Walkway_Violation/0_tr11.mp4"
+  },
+  {
+   "etiket": "isg/Pano_kapagi_acik",
+   "anomali": true,
+   "yol": "data/eval_defense/Anomali/Opened_Panel_Cover/2_tr126.mp4"
+  },
+  {
+   "etiket": "isg/Guvenli_tasima",
+   "anomali": false,
+   "yol": "data/eval_defense/Normal/Safe_Carrying/7_tr18.mp4"
+  },
+  {
+   "etiket": "isg/Guvenli_yaya_yolu",
+   "anomali": false,
+   "yol": "data/eval_defense/Normal/Safe_Walkway/4_tr47.mp4"
+  },
+  {
+   "etiket": "isg/Pano_kapagi_kapali",
+   "anomali": false,
+   "yol": "data/eval_defense/Normal/Closed_Panel_Cover/6_tr1.mp4"
+  }
+ ],
+ "satirlar": [
+  {
+   "klip": "holdout/Explosion001",
+   "anomali": true,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 6.42,
+   "cikti_token": 394,
+   "girdi_token": 9772,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 4,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 56.2,
+    "summary_str": true,
+    "summary_uzunluk": 224
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, dış mekânda park halindeki karavan ve diğer araçların bulunduğu bir alanda, aniden gerçekleşen şiddetli bir patlamayı göstermektedir. Patlama, ortamı duman ve enkazla kaplamış, etrafındaki nesneleri havaya uçurmuştur.\",\n  \"events\": [\n    {\n      \"time\": \"00:04\",\n      \"event\":",
+   "cikti": {
+    "summary": "Kayıt, dış mekânda park halindeki karavan ve diğer araçların bulunduğu bir alanda, aniden gerçekleşen şiddetli bir patlamayı göstermektedir. Patlama, ortamı duman ve enkazla kaplamış, etrafındaki nesneleri havaya uçurmuştur.",
+    "events": [
+     {
+      "time": "00:04",
+      "event": "Dış mekânda, karavan ve diğer araçların bulunduğu sakin bir ortam görüntüleniyor."
+     },
+     {
+      "time": "00:05",
+      "event": "Görüntünün tamamını kaplayan şiddetli bir ışık patlaması ve ardından gelen güçlü bir şok dalgası ile patlama gerçekleşiyor."
+     },
+     {
+      "time": "00:06",
+      "event": "Patlamanın yarattığı duman ve enkaz parçaları kameraya doğru ilerliyor, görüş mesafesi sıfıra iniyor."
+     },
+     {
+      "time": "00:07",
+      "event": "Havada uçuşan büyük enkaz parçaları ve yoğun duman nedeniyle ortam tamamen belirsiz hale geliyor."
+     }
+    ],
+    "risk": "Kritik",
+    "actions": [
+     "Acil durum ekiplerini derhal bölgeye sevk edin.",
+     "Tüm personeli güvenli bir mesafeye tahliye edin.",
+     "Bölgeyi izole edin ve yetkisiz girişleri engelleyin.",
+     "Yangın ve patlama riskine karşı tüm acil müdahale protokollerini devreye alın."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Explosion001",
+   "anomali": true,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 8.38,
+   "cikti_token": 695,
+   "girdi_token": 9772,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 6,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 6,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 91.0,
+    "summary_str": true,
+    "summary_uzunluk": 370
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, gece saatlerinde dış mekânda park halinde olan beyaz karavanlar ve araçların bulunduğu bir alanı göstermektedir. Aniden, kaynağı belirsiz güçlü bir patlama gerçekleşir; şiddetli bir ışık patlaması, yoğun duman ve havaya savrulan enkaz parçaları oluşur. Kamera sarsılır ve görün",
+   "cikti": {
+    "summary": "Kayıt, gece saatlerinde dış mekânda park halinde olan beyaz karavanlar ve araçların bulunduğu bir alanı göstermektedir. Aniden, kaynağı belirsiz güçlü bir patlama gerçekleşir; şiddetli bir ışık patlaması, yoğun duman ve havaya savrulan enkaz parçaları oluşur. Kamera sarsılır ve görüntü büyük ölçüde bulanıklaşır. Patlama sonrası ortam tamamen duman ve enkazla kaplıdır.",
+    "events": [
+     {
+      "time": "00:04",
+      "event": "Gece saatlerinde, dış mekânda park halinde olan beyaz karavanlar ve araçlar görülmektedir. Ortam sakin görünmektedir."
+     },
+     {
+      "time": "00:05",
+      "event": "Görüntünün sağ üst köşesinden ani ve şiddetli bir parlama başlar. Işık patlaması tüm sahneyi aydınlatır."
+     },
+     {
+      "time": "00:06",
+      "event": "Şiddetli bir patlama gerçekleşir. Kamera şiddetle sarsılır ve görüntü büyük ölçüde beyazlaşır ve bulanıklaşır."
+     },
+     {
+      "time": "00:08",
+      "event": "Patlama dumanı ve enkaz parçaları havada uçuşmaya başlar. Görüntü neredeyse tamamen opak bir duman bulutuyla kaplıdır."
+     },
+     {
+      "time": "00:11",
+      "event": "Havaya savrulan büyük enkaz parçaları (muhtemelen yapısal elemanlar veya araç parçaları) net bir şekilde görülebilir. Duman yoğunluğunu korumaktadır."
+     },
+     {
+      "time": "00:13",
+      "event": "Patlama etkisi azalmaya başlar ancak ortam hala yoğun duman ve enkazla doludur. Görüntü kalitesi düşük ve bulanıktır."
+     }
+    ],
+    "risk": "Kritik",
+    "actions": [
+     "Hemen tüm bölgedeki personeli tahliye et ve güvenli bir toplama noktasına yönlendir.",
+     "İtfaiye ve acil servisleri (112) ve yangın müdahale ekiplerini derhal olay yerine çağır.",
+     "Patlamanın nedenini araştırmak üzere yetkili makamlara (yangın soruşturma birimi, polis) haber ver.",
+     "Güvenlik kameralarının kayıtlarını ve diğer dijital kanıtları koru ve yetkililere teslim et.",
+     "Olay alanına yaklaşımı kesinlikle yasakla ve yetkisiz kişilerin bölgeye girmesini engelle.",
+     "Yaralı veya mahsur kalan olup olmadığını tespit etmek için arama kurtarma ekiplerini hazırla."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Explosion001",
+   "anomali": true,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 6.54,
+   "cikti_token": 619,
+   "girdi_token": 9837,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 10,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Kritik",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 6,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 54.8,
+    "summary_str": true,
+    "summary_uzunluk": 343
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Güvenlik kamerası kaydı, dış mekânda park halindeki karavan ve diğer nesnelerin bulunduğu bir alanda aniden gerçekleşen şiddetli bir patlamayı göstermektedir. Patlama, görüntüyü tamamen beyazlatmış, ardından duman ve enkazla kaplamıştır. Kayıt, patlamanın etkisiyle nesnelerin havaya ",
+   "cikti": {
+    "summary": "Güvenlik kamerası kaydı, dış mekânda park halindeki karavan ve diğer nesnelerin bulunduğu bir alanda aniden gerçekleşen şiddetli bir patlamayı göstermektedir. Patlama, görüntüyü tamamen beyazlatmış, ardından duman ve enkazla kaplamıştır. Kayıt, patlamanın etkisiyle nesnelerin havaya uçtuğunu ve ortamın tamamen bozulduğunu ortaya koymaktadır.",
+    "events": [
+     {
+      "time": "00:04",
+      "event": "Dış mekânda karavan ve diğer nesnelerle dolu bir alan görüntüleniyor."
+     },
+     {
+      "time": "00:05",
+      "event": "Aniden parlak bir ışık patlaması gerçekleşiyor ve görüntü tamamen beyazlıyor."
+     },
+     {
+      "time": "00:06",
+      "event": "Patlama sonrası duman ve toz yükselmeye başlıyor."
+     },
+     {
+      "time": "00:07",
+      "event": "Havaya uçan enkaz parçaları ve nesneler görülmeye başlıyor."
+     },
+     {
+      "time": "00:08",
+      "event": "Patlama etkisi devam ediyor, nesneler yerinden oynuyor ve havaya fırlıyor."
+     },
+     {
+      "time": "00:09",
+      "event": "Görüntü tamamen duman ve enkazla kaplanıyor, netlik kayboluyor."
+     },
+     {
+      "time": "00:10",
+      "event": "Havada uçuşan büyük enkaz parçaları belirginleşiyor."
+     },
+     {
+      "time": "00:11",
+      "event": "Patlama sonrası ortamda hâlâ hareketli enkaz ve duman var."
+     },
+     {
+      "time": "00:12",
+      "event": "Görüntü giderek bulanıklaşıyor, patlama etkisi azalıyor."
+     },
+     {
+      "time": "00:13",
+      "event": "Ortam tamamen dumanla kaplı, nesneler neredeyse görünmez hale geliyor."
+     }
+    ],
+    "risk": "Kritik",
+    "actions": [
+     "Acil durum ekiplerini derhal bölgeye sevk et.",
+     "Çevredeki tüm personeli tahliye et ve güvenli bölgeye yönlendir.",
+     "Yangın söndürme ve kurtarma ekiplerini hazır tut.",
+     "Bölgeye erişimi kesin ve güvenlik perimetresi oluştur.",
+     "Patlama sonrası gaz sızıntısı veya yangın riskini kontrol et.",
+     "Güvenlik kamerası kayıtlarını sakla ve incelemeye başla."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Fighting023",
+   "anomali": true,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 13.17,
+   "cikti_token": 506,
+   "girdi_token": 12241,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 5,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 77.0,
+    "summary_str": true,
+    "summary_uzunluk": 320
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Güvenlik kamerası kaydı, bir mağaza girişinde iki kişi arasında fiziksel bir çatışmayı göstermektedir. Beyaz şapkalı ve siyah giysili bir kişi, beyaz gömlekli bir başka kişi tarafından yakalanıp duvara yaslanır. Çatışma kısa sürer; beyaz şapkalı kişi serbest kalır, yere düşen bir çan",
+   "cikti": {
+    "summary": "Güvenlik kamerası kaydı, bir mağaza girişinde iki kişi arasında fiziksel bir çatışmayı göstermektedir. Beyaz şapkalı ve siyah giysili bir kişi, beyaz gömlekli bir başka kişi tarafından yakalanıp duvara yaslanır. Çatışma kısa sürer; beyaz şapkalı kişi serbest kalır, yere düşen bir çantayı alır ve mağazadan dışarı çıkar.",
+    "events": [
+     {
+      "time": "00:09",
+      "event": "Beyaz şapkalı, siyah giysili bir kişi mağaza girişine girer."
+     },
+     {
+      "time": "00:11",
+      "event": "Beyaz gömlekli bir kişi, beyaz şapkalı kişiyi yakalar ve duvara doğru iter."
+     },
+     {
+      "time": "00:12",
+      "event": "İki kişi arasında duvar kenarında fiziksel bir mücadele başlar."
+     },
+     {
+      "time": "00:23",
+      "event": "Beyaz şapkalı kişi, beyaz gömleklinin tutuşunu kopararak serbest kalır."
+     },
+     {
+      "time": "00:24",
+      "event": "Beyaz şapkalı kişi, yerdeki bir çantayı alır ve mağazadan hızla dışarı çıkar."
+     }
+    ],
+    "risk": "Yüksek",
+    "actions": [
+     "Olayı izleyen güvenlik görevlilerini derhal harekete geçirin.",
+     "Şüphelinin kaçış yönünü ve fiziksel özelliklerini not edin.",
+     "Olay anını ve şüphelinin kaçışını gösteren tüm kamera kayıtlarını arşivleyin ve yedekleyin.",
+     "Yetkili mercilere (polis) durumu bildirin ve kayıtları teslim etmeye hazır olun.",
+     "Müdahale eden beyaz gömlekli kişinin durumunu kontrol edin ve gerekirse tıbbi yardım sağlayın."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Fighting023",
+   "anomali": true,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 9.31,
+   "cikti_token": 497,
+   "girdi_token": 12241,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 5,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 73.8,
+    "summary_str": true,
+    "summary_uzunluk": 338
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, bir marketin giriş kapısı önünde gerçekleşen bir soyunma girişimini göstermektedir. Siyah kıyafetli ve beyaz şapkalı bir kişi, markete girerken bir başka kişi tarafından engellenir. Aralarında kısa bir fiziksel mücadele yaşanır. Mücadele sonunda, siyah kıyafetli kişi, elindeki",
+   "cikti": {
+    "summary": "Kayıt, bir marketin giriş kapısı önünde gerçekleşen bir soyunma girişimini göstermektedir. Siyah kıyafetli ve beyaz şapkalı bir kişi, markete girerken bir başka kişi tarafından engellenir. Aralarında kısa bir fiziksel mücadele yaşanır. Mücadele sonunda, siyah kıyafetli kişi, elindeki çantayı bırakarak marketten çıkar ve kaçmaya çalışır.",
+    "events": [
+     {
+      "time": "00:09",
+      "event": "Siyah kıyafetli ve beyaz şapkalı bir kişi, marketin otomatik kapılarından içeri girer."
+     },
+     {
+      "time": "00:11",
+      "event": "Girişte, beyaz gömlekli bir kişi siyah kıyafetli kişiyi yakalar ve kapıya doğru iter."
+     },
+     {
+      "time": "00:12",
+      "event": "İki kişi arasında kapı yanında kısa bir fiziksel mücadele başlar."
+     },
+     {
+      "time": "00:23",
+      "event": "Mücadele sona erer ve siyah kıyafetli kişi, elindeki çantayı bırakır."
+     },
+     {
+      "time": "00:25",
+      "event": "Siyah kıyafetli kişi, marketten çıkarak kaçmaya çalışır."
+     }
+    ],
+    "risk": "Yüksek",
+    "actions": [
+     "Olay yerindeki güvenlik personeline durumu bildir ve şüphelinin takip edilmesini sağla.",
+     "Şüphelinin kaçış yönünü ve giysilerini (siyah kıyafet, beyaz şapka) güvenlik ekiplerine ilet.",
+     "Olay anının kayıtlarını ve şüphelinin görüntülerini güvenlik arşivine kaydet.",
+     "Yaralı veya şokta olan varsa, acil tıbbi yardım talep et.",
+     "Polise durumu bildir ve olay yerinin korunmasını sağla."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Fighting023",
+   "anomali": true,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 7.92,
+   "cikti_token": 547,
+   "girdi_token": 12306,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 5,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 72.2,
+    "summary_str": true,
+    "summary_uzunluk": 384
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Güvenlik kamerası kaydı, bir mağaza girişinde iki kişi arasında fiziksel bir çatışmayı göstermektedir. Bir kişi, beyaz şapkalı ve siyah giysili, elinde çanta ile içeri girer; diğer kişi, beyaz gömlekli, onu durdurmaya çalışır. Çatışma sırasında beyaz şapkalı kişi, beyaz gömlekli kişi",
+   "cikti": {
+    "summary": "Güvenlik kamerası kaydı, bir mağaza girişinde iki kişi arasında fiziksel bir çatışmayı göstermektedir. Bir kişi, beyaz şapkalı ve siyah giysili, elinde çanta ile içeri girer; diğer kişi, beyaz gömlekli, onu durdurmaya çalışır. Çatışma sırasında beyaz şapkalı kişi, beyaz gömlekli kişiyi iterek yere düşürür ve mağazadan çıkar. Kayıt, olayın ardından boş bir giriş alanı ile sona erer.",
+    "events": [
+     {
+      "time": "00:09",
+      "event": "Beyaz şapkalı, siyah giysili bir kişi elinde çanta ile mağaza girişine girer."
+     },
+     {
+      "time": "00:11",
+      "event": "Beyaz gömlekli bir kişi, beyaz şapkalı kişiyi durdurmaya çalışır ve fiziksel temas başlar."
+     },
+     {
+      "time": "00:13",
+      "event": "İki kişi arasında itişme ve kavga başlar; beyaz gömlekli kişi, beyaz şapkalı kişiyi duvara doğru iter."
+     },
+     {
+      "time": "00:18",
+      "event": "Beyaz şapkalı kişi, beyaz gömlekli kişiyi iterek geriye doğru düşürür."
+     },
+     {
+      "time": "00:24",
+      "event": "Beyaz şapkalı kişi, çantasıyla birlikte mağazadan çıkar ve kaybolur."
+     }
+    ],
+    "risk": "Yüksek",
+    "actions": [
+     "Olayı kaydeden güvenlik kamerası görüntülerini sakla ve yedekle.",
+     "Beyaz şapkalı şüphelinin fiziksel özelliklerini ve giysilerini not et.",
+     "Olay yerindeki diğer güvenlik kameralarını kontrol et ve şüphelinin çıkış yönünü belirle.",
+     "Yetkili makamlara (polis) olayı bildirmek için gerekli bilgileri hazırla.",
+     "Mağaza personeline olay sonrası güvenlik prosedürlerini hatırlat."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/RoadAcc021",
+   "anomali": true,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 4.35,
+   "cikti_token": 386,
+   "girdi_token": 2721,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 1,
+    "actions_ort_uzunluk": 53.7,
+    "summary_str": true,
+    "summary_uzunluk": 433
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Dış mekânda, toprak veya çakıl zeminli bir alanda, iki adet siyah pikap ve bir adet gümüş sedan park halindedir. İlk karelerde iki kişi, ön plandaki siyah pikabın yanında yürüyerek kameradan uzaklaşır. Arka plandaki siyah pikap hareket etmez. Daha sonra, sol taraftan başka bir gümüş ",
+   "cikti": {
+    "summary": "Dış mekânda, toprak veya çakıl zeminli bir alanda, iki adet siyah pikap ve bir adet gümüş sedan park halindedir. İlk karelerde iki kişi, ön plandaki siyah pikabın yanında yürüyerek kameradan uzaklaşır. Arka plandaki siyah pikap hareket etmez. Daha sonra, sol taraftan başka bir gümüş sedan yavaşça sahneye girer ve arka plandaki pikabın yanına park eder. Olaylar sırasında herhangi bir şiddet, çarpışma veya ani hareket gözlemlenmez.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "İki kişi, ön plandaki siyah pikabın yanında yürüyerek kameradan uzaklaşmaya başlar."
+     },
+     {
+      "time": "00:02",
+      "event": "Sol taraftan bir gümüş sedan yavaşça sahneye girer ve arka plandaki siyah pikabın yanına park eder."
+     },
+     {
+      "time": "00:04",
+      "event": "İnsan figürleri sahnenin alt kısmından tamamen çıkar; araçlar hareketsiz kalır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Kaydı arşivle.",
+     "Görüntü kalitesini artırmak için kamera açısını veya odak noktasını kontrol et.",
+     "Giriş-çıkış noktalarını takip eden ek kameraların varlığını doğrula."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/RoadAcc021",
+   "anomali": true,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 4.37,
+   "cikti_token": 452,
+   "girdi_token": 2721,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 102.0,
+    "summary_str": true,
+    "summary_uzunluk": 494
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, dış mekânda, muhtemelen bir otopark veya açık alanda çekilmiştir. Görüntüde üç araç (iki siyah pick-up, bir gri sedan) park halindedir. İki kişi, siyah pick-up’ın önünden geçerek sağ alt köşeye doğru yürüyerek kayıttan çıkar. Ardından, sol alt köşeden başka bir kişi daha görün",
+   "cikti": {
+    "summary": "Kayıt, dış mekânda, muhtemelen bir otopark veya açık alanda çekilmiştir. Görüntüde üç araç (iki siyah pick-up, bir gri sedan) park halindedir. İki kişi, siyah pick-up’ın önünden geçerek sağ alt köşeye doğru yürüyerek kayıttan çıkar. Ardından, sol alt köşeden başka bir kişi daha görüntüye girer ve aynı yöne doğru hareket eder. Arka planda, siyah pick-up’lardan biri hareket halinde olup yoldan geçmektedir. Genel olarak sakin bir sahne olup, şüpheli veya tehlikeli bir durum gözlemlenmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "İki kişi, siyah pick-up’ın önünden geçerek sağa doğru yürümektedir."
+     },
+     {
+      "time": "00:02",
+      "event": "İki kişi kayıttan sağ alt köşede çıkar. Arka plandaki siyah pick-up hareket etmeye başlar."
+     },
+     {
+      "time": "00:04",
+      "event": "Sol alt köşeden yeni bir kişi görüntüye girer ve sağa doğru yürümeye başlar."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntüdeki kişilerin kimliğini ve niyetini doğrulamak için yakınlaştırılmış görüntüleri inceleyin.",
+     "Arka plandaki hareket eden aracın plaka numarasını kaydedin ve gerekirse takip edin.",
+     "Olay yerinde herhangi bir iz bırakma veya hırsızlık girişimi olup olmadığını kontrol etmek için çevre alanını gözden geçirin.",
+     "Güvenlik personeline, özellikle sol alt köşeden giren kişinin hareketlerini izlemesi talimatı verin."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/RoadAcc021",
+   "anomali": true,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 4.59,
+   "cikti_token": 329,
+   "girdi_token": 2786,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 41.2,
+    "summary_str": true,
+    "summary_uzunluk": 295
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Dış mekânda, toprak veya çakıl zeminli bir alanda üç araç (iki siyah pikap, bir gri sedan) park halindedir. İki kişi, kamera açısına göre sağdan sola doğru yürüyerek sahneyi terk eder. Arka planda bir yol ve ağaçlar görünür. Kişilerin hareketi normaldir, şiddet veya acil durum belirt",
+   "cikti": {
+    "summary": "Dış mekânda, toprak veya çakıl zeminli bir alanda üç araç (iki siyah pikap, bir gri sedan) park halindedir. İki kişi, kamera açısına göre sağdan sola doğru yürüyerek sahneyi terk eder. Arka planda bir yol ve ağaçlar görünür. Kişilerin hareketi normaldir, şiddet veya acil durum belirtisi yoktur.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "İki kişi, gri sedanın yanında duran siyah pikabın önünden sola doğru yürümeye başlar."
+     },
+     {
+      "time": "00:02",
+      "event": "Kişiler, kamera çerçevesinin alt kısmına doğru ilerlerken kısmen görünür hale gelir."
+     },
+     {
+      "time": "00:04",
+      "event": "İki kişi, kamera çerçevesinin sol alt köşesinden tamamen çıkar."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Kaydı arşivle.",
+     "Görüntü kalitesini artırmak için kamera ayarlarını kontrol et.",
+     "İlgili zaman diliminde başka kamera açılarını incele.",
+     "Olayı günlük güvenlik raporuna ekle."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Shooting001",
+   "anomali": true,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 10.4,
+   "cikti_token": 609,
+   "girdi_token": 4041,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 9,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 69.2,
+    "summary_str": true,
+    "summary_uzunluk": 272
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, kareli zeminli bir alanda, birkaç kişi arasında fiziksel bir çatışma veya kavga yaşanmaktadır. Görüntülerde, bir kişi diğerlerini itmek veya saldırmak için hareket ederken, diğerleri de buna tepki göstermektedir. Ortamda gerginlik ve kaotik bir durum hakimdir.\",\n  \"events",
+   "cikti": {
+    "summary": "İç mekânda, kareli zeminli bir alanda, birkaç kişi arasında fiziksel bir çatışma veya kavga yaşanmaktadır. Görüntülerde, bir kişi diğerlerini itmek veya saldırmak için hareket ederken, diğerleri de buna tepki göstermektedir. Ortamda gerginlik ve kaotik bir durum hakimdir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Görüntüde, bir kişi diğerlerine doğru eğilmiş ve fiziksel bir temas kurmuş halde görülüyor."
+     },
+     {
+      "time": "00:01",
+      "event": "Kişiler arasında itişme ve kavga benzeri hareketler başlıyor."
+     },
+     {
+      "time": "00:02",
+      "event": "Çatışma devam ediyor, kişiler birbirine doğru hareket ediyor ve fiziksel temas artıyor."
+     },
+     {
+      "time": "00:03",
+      "event": "Bir kişi diğerlerini iterek geri çekilmeye çalışıyor gibi görünüyor."
+     },
+     {
+      "time": "00:04",
+      "event": "Çatışma hala devam ediyor, kişiler arasında fiziksel temas sürüyor."
+     },
+     {
+      "time": "00:05",
+      "event": "Bir kişi diğerlerine doğru ilerlerken, diğerleri de buna tepki gösteriyor."
+     },
+     {
+      "time": "00:06",
+      "event": "Çatışma daha da şiddetleniyor, kişiler arasında itişme ve kavga benzeri hareketler artıyor."
+     },
+     {
+      "time": "00:07",
+      "event": "Görüntüde, bir kişi diğerlerini itmek için hareket ederken, diğerleri de buna tepki gösteriyor."
+     },
+     {
+      "time": "00:08",
+      "event": "Çatışma hala devam ediyor, kişiler arasında fiziksel temas sürüyor."
+     }
+    ],
+    "risk": "Yüksek",
+    "actions": [
+     "Güvenlik personeli derhal olay yerine gönderilsin.",
+     "Olayın detaylı bir şekilde kaydedilmesi için kamera açısı değiştirilsin.",
+     "Gerekirse, olay yerine polis veya acil durum ekipleri çağrılmalı.",
+     "Olayın ardından, ilgili kişilerin ifadesi alınmalı ve gerekli yasal işlemler başlatılmalı."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Shooting001",
+   "anomali": true,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 6.05,
+   "cikti_token": 445,
+   "girdi_token": 4041,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 4,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 68.2,
+    "summary_str": true,
+    "summary_uzunluk": 328
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, iç mekânda, kareli zeminli bir alanda çekilmiştir. Görüntüde birden fazla kişi bulunmaktadır. Bir kişi beyaz renkli bir nesneye (muhtemelen bir sandalye veya masa) eğilerek müdahale etmektedir. Diğer kişiler arka planda hareket etmektedir. Görüntü kalitesi düşük ve bulanıktır,",
+   "cikti": {
+    "summary": "Kayıt, iç mekânda, kareli zeminli bir alanda çekilmiştir. Görüntüde birden fazla kişi bulunmaktadır. Bir kişi beyaz renkli bir nesneye (muhtemelen bir sandalye veya masa) eğilerek müdahale etmektedir. Diğer kişiler arka planda hareket etmektedir. Görüntü kalitesi düşük ve bulanıktır, bu da detaylı analizleri zorlaştırmaktadır.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kayıt başlar. İç mekânda, kareli zeminli bir alanda birden fazla kişi görülür. Bir kişi beyaz bir nesneye eğilmiştir."
+     },
+     {
+      "time": "00:02",
+      "event": "Beyaz nesneye eğilen kişi, nesnenin üzerine doğru bir şeyler yerleştiriyor veya düzenliyor gibi görünmektedir. Arka plandaki kişiler hareket etmektedir."
+     },
+     {
+      "time": "00:05",
+      "event": "Beyaz nesneye eğilen kişi ayağa kalkar ve geriye doğru çekilir. Arka plandaki kişiler hala hareket halindedir."
+     },
+     {
+      "time": "00:07",
+      "event": "Kayıt sona erer. Kişiler hala alanda bulunmaktadır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntü kalitesini artırmak için kamera ayarlarını kontrol edin.",
+     "Olayın devamını izlemek için kaydı tekrar gözden geçirin.",
+     "Görüntüdeki kişilerin kimliğini belirlemek için daha net görüntüler elde etmeye çalışın.",
+     "Olayın bağlamını anlamak için çevresel faktörleri değerlendirin."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Shooting001",
+   "anomali": true,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 6.88,
+   "cikti_token": 383,
+   "girdi_token": 4106,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Yüksek",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 5,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 44.8,
+    "summary_str": true,
+    "summary_uzunluk": 270
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, kareli zemin üzerinde birkaç kişi arasında fiziksel bir çatışma yaşanıyor. Bir kişi yere düşürülmüş veya itilmiş durumda; diğerleri etrafında toplanmış, bazıları müdahale ediyor veya geri çekiliyor. Görüntü kalitesi düşük, ancak hareketler agresif ve kaotik.\",\n  \"events\":",
+   "cikti": {
+    "summary": "İç mekânda, kareli zemin üzerinde birkaç kişi arasında fiziksel bir çatışma yaşanıyor. Bir kişi yere düşürülmüş veya itilmiş durumda; diğerleri etrafında toplanmış, bazıları müdahale ediyor veya geri çekiliyor. Görüntü kalitesi düşük, ancak hareketler agresif ve kaotik.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Bir kişi yere eğilmiş, diğerleri etrafında hareket ediyor."
+     },
+     {
+      "time": "00:02",
+      "event": "Sağ taraftan gelen bir kişi merkeze doğru ilerliyor, elinde nesne olabilir."
+     },
+     {
+      "time": "00:04",
+      "event": "Merkezdeki kişi ayağa kalkmaya çalışıyor, diğerleri onu çevreliyor."
+     },
+     {
+      "time": "00:06",
+      "event": "Sol taraftaki grup daha da sıkışıyor, bir itiş kakış başlıyor."
+     },
+     {
+      "time": "00:08",
+      "event": "Görüntü aniden kararır, muhtemelen kamera kapatılmış veya engellenmiştir."
+     }
+    ],
+    "risk": "Yüksek",
+    "actions": [
+     "Güvenlik personeli derhal olay yerine gönderilsin.",
+     "Kayıt kaydedilsin ve arşivlensin.",
+     "İlgili alanın diğer kameraları da izlensin.",
+     "Olay sonrası polis veya yetkili mercilere bildirim yapılsın.",
+     "Mümkünse ses kaydı da kontrol edilsin."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_6te10",
+   "anomali": false,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 4.63,
+   "cikti_token": 293,
+   "girdi_token": 1209,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 89.0,
+    "summary_str": true,
+    "summary_uzunluk": 228
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, endüstriyel görünümlü bir alanda, kırmızı-siyah üniformalı bir kişi yürüyerek ilerlerken, zeminde dönen bir robotik temizleme cihazı ve sabit makineler görülmektedir. Arka planda başka bir kişi de hareket halindedir.\",\n  \"events\": [\n    {\n      \"time\": \"00:00\",\n      \"eve",
+   "cikti": {
+    "summary": "İç mekânda, endüstriyel görünümlü bir alanda, kırmızı-siyah üniformalı bir kişi yürüyerek ilerlerken, zeminde dönen bir robotik temizleme cihazı ve sabit makineler görülmektedir. Arka planda başka bir kişi de hareket halindedir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kırmızı-siyah üniformalı kişi, zemindeki dönen robotik cihazın yanından yürüyerek geçmektedir."
+     },
+     {
+      "time": "00:01",
+      "event": "Kişi yürüyüşüne devam ederken, arka plandaki yeşil şerit üzerinde başka bir kişi de uzaklaşmaktadır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Robotik temizleme cihazının çalışma alanındaki personel hareketini izlemeye devam et.",
+     "Yürüme yolları ile makine çalışma alanları arasındaki güvenlik mesafesini kontrol et.",
+     "Gerekirse, otomatik cihazların çalıştığı bölgelerde uyarı işaretlerinin yerinde olduğunu doğrula."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_6te10",
+   "anomali": false,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 3.82,
+   "cikti_token": 406,
+   "girdi_token": 1209,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Orta",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 67.2,
+    "summary_str": true,
+    "summary_uzunluk": 463
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, iç mekânda, muhtemelen bir üretim veya işleme alanını göstermektedir. Sol tarafta büyük mavi ve beyaz renkli endüstriyel makineler yer almaktadır. Ortada, sarı çizgilerle belirlenmiş bir geçiş yolu üzerinde, kırmızı-siyah üst giyimli bir kişi yürümektedir. Yolu kesen bir metal",
+   "cikti": {
+    "summary": "Kayıt, iç mekânda, muhtemelen bir üretim veya işleme alanını göstermektedir. Sol tarafta büyük mavi ve beyaz renkli endüstriyel makineler yer almaktadır. Ortada, sarı çizgilerle belirlenmiş bir geçiş yolu üzerinde, kırmızı-siyah üst giyimli bir kişi yürümektedir. Yolu kesen bir metal parçası veya ekipman yere düşmüş veya bırakılmış durumdadır. Arka planda başka bir kişi de görülmektedir. Genel ortam düzenli görünmektedir ancak ortadaki engel dikkat çekicidir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kayıt başlar. İç mekânda, makinelerin bulunduğu bir alanda, sarı çizgili bir geçiş yolu üzerinde kırmızı-siyah üst giyimli bir kişi yürümektedir. Yolu kesen metal bir parça veya ekipman yere düşmüştür."
+     },
+     {
+      "time": "00:01",
+      "event": "Kişi, yere düşen metal parçanın yanından geçerek yürümeye devam etmektedir. Arka planda başka bir kişi de hareket etmektedir. Ortamdaki genel düzen bozulmamış görünmektedir."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "Yere düşen metal parçayı veya ekipmanı kontrol et ve güvenli bir şekilde kaldır.",
+     "Geçiş yolundaki engelleri kaldırarak geçiş güvenliğini sağla.",
+     "Çalışanların güvenlik kurallarına uygun şekilde hareket ettiğini doğrula.",
+     "Makinelerin etrafındaki düzeni ve temizliği kontrol et."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_6te10",
+   "anomali": false,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 5.19,
+   "cikti_token": 313,
+   "girdi_token": 1274,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 61.7,
+    "summary_str": true,
+    "summary_uzunluk": 264
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, büyük makineler ve sarı güvenlik çizgileri bulunan bir alanda, kırmızı-siyah üniformalı bir kişi yürüyerek ilerlerken, yerde dönen bir nesne (muhtemelen bir robotik araç veya döner taban) hareket etmektedir. Arka planda başka bir kişi de görülmektedir.\",\n  \"events\": [\n   ",
+   "cikti": {
+    "summary": "İç mekânda, büyük makineler ve sarı güvenlik çizgileri bulunan bir alanda, kırmızı-siyah üniformalı bir kişi yürüyerek ilerlerken, yerde dönen bir nesne (muhtemelen bir robotik araç veya döner taban) hareket etmektedir. Arka planda başka bir kişi de görülmektedir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kırmızı-siyah üniformalı kişi, sarı çizgili koridorda yürümeye başlar."
+     },
+     {
+      "time": "00:00",
+      "event": "Yerde dönen, üzerinde beyaz nesne taşıyan bir cihaz hareket halindedir."
+     },
+     {
+      "time": "00:01",
+      "event": "Kişi yürüyüşünü sürdürür, dönen cihaz da aynı yönde ilerler."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Dönen cihazın hareket yolunu ve yakınındaki personeli izlemeye devam et.",
+     "Gerekirse cihazın otomatik durdurma fonksiyonunu kontrol et.",
+     "Personelin güvenlik çizgileri içinde kalmasını sağla."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_939",
+   "anomali": false,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 12.21,
+   "cikti_token": 424,
+   "girdi_token": 12418,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 6,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 70.7,
+    "summary_str": true,
+    "summary_uzunluk": 273
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, tezgâh arkasında duran bir erkek, elindeki küçük paketleri tezgâha koyar, sonra tekrar alır ve dikkatle inceler. Paketleri açmaya çalışır, içeriğini kontrol eder ve ardından tekrar tezgâhın üzerine bırakır. Olay sırasında başka kişi veya tehdit unsuru görülmez.\",\n  \"event",
+   "cikti": {
+    "summary": "İç mekânda, tezgâh arkasında duran bir erkek, elindeki küçük paketleri tezgâha koyar, sonra tekrar alır ve dikkatle inceler. Paketleri açmaya çalışır, içeriğini kontrol eder ve ardından tekrar tezgâhın üzerine bırakır. Olay sırasında başka kişi veya tehdit unsuru görülmez.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Erkek, elinde birkaç küçük paketle tezgâhın arkasında duruyor."
+     },
+     {
+      "time": "00:02",
+      "event": "Paketleri tezgâhın üzerine bırakıyor."
+     },
+     {
+      "time": "00:05",
+      "event": "Paketleri tekrar alıyor ve incelemeye başlıyor."
+     },
+     {
+      "time": "00:10",
+      "event": "Paketleri açmaya çalışıyor, içeriğini kontrol ediyor."
+     },
+     {
+      "time": "00:18",
+      "event": "Paketlerin içeriğini dikkatle inceliyor, muhtemelen etiketleri okuyor."
+     },
+     {
+      "time": "00:24",
+      "event": "İncelemeyi bitirip paketleri tekrar tezgâhın üzerine bırakıyor."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Kaydı arşivle ve normal işleyişe devam et.",
+     "Gerekirse, paketlerin içeriğini belirlemek için ilgili personelle iletişime geç.",
+     "Tezgâh üzerindeki nesnelerin düzenini korumak için gerekliyse temizlik veya düzenleme yap."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_939",
+   "anomali": false,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 7.92,
+   "cikti_token": 508,
+   "girdi_token": 12418,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 4,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 144.7,
+    "summary_str": true,
+    "summary_uzunluk": 473
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, iç mekânda, muhtemelen bir mağaza veya satış noktasında çekilmiştir. Kırmızı polo yaka tişört ve açık renk pantolon giyen bir erkek, tezgâhın arkasında durmaktadır. Erkek, tezgâh üzerinde birkaç küçük paketli eşyayı tek tek dizerek düzenler, ardından bunları toplar ve elinde t",
+   "cikti": {
+    "summary": "Kayıt, iç mekânda, muhtemelen bir mağaza veya satış noktasında çekilmiştir. Kırmızı polo yaka tişört ve açık renk pantolon giyen bir erkek, tezgâhın arkasında durmaktadır. Erkek, tezgâh üzerinde birkaç küçük paketli eşyayı tek tek dizerek düzenler, ardından bunları toplar ve elinde tutarak dikkatle inceler. Sonrasında eşyaları tekrar tezgâha bırakır ve etrafına bakar. Kayıt boyunca başka bir kişi görünmez; ortam sakin ve normal bir ticari aktivite izlenimi vermektedir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kırmızı tişörtlü erkek, tezgâhın arkasında durur ve elindeki küçük paketli eşyaları tezgâh üzerine koymaya başlar."
+     },
+     {
+      "time": "00:05",
+      "event": "Erkek, tezgâh üzerindeki eşyaları tek tek sıraya dizer ve düzenler."
+     },
+     {
+      "time": "00:12",
+      "event": "Erkek, dizdiği eşyaları toplar, ellerinde tutarak yakından inceler ve kontrol eder."
+     },
+     {
+      "time": "00:20",
+      "event": "Erkek, eşyaları tekrar tezgâha bırakır, etrafına bakar ve hareketlerini sürdürür."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Kayıt süresince herhangi bir şüpheli davranış gözlenmediğinden, mevcut durumu normal ticari aktivite olarak kaydedin.",
+     "Güvenlik personeli, benzer durumlarda eşya sayımı veya düzenleme işlemlerinin yetkili personel tarafından yapıldığını doğrulamak için ilgili departmanla iletişime geçebilir.",
+     "Gerekirse, bu tür iç mekân kayıtlarında düzenli aralıklarla otomatik uyarı kuralları oluşturulabilir; ancak şu an için müdahale gerekmemektedir."
+    ]
+   }
+  },
+  {
+   "klip": "holdout/Normal_939",
+   "anomali": false,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 7.41,
+   "cikti_token": 339,
+   "girdi_token": 12483,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Orta",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 40.2,
+    "summary_str": true,
+    "summary_uzunluk": 219
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, tezgâh arkasında duran pembe tişörtlü bir erkek, masaya koyduğu küçük paketleri sayıp kontrol ediyor, ardından eline alıp tekrar masaya bırakıyor. Sonra paketleri toplayıp cebine koyuyor ve etrafa bakınıyor.\",\n  \"events\": [\n    {\n      \"time\": \"00:02\",\n      \"event\": \"Erk",
+   "cikti": {
+    "summary": "İç mekânda, tezgâh arkasında duran pembe tişörtlü bir erkek, masaya koyduğu küçük paketleri sayıp kontrol ediyor, ardından eline alıp tekrar masaya bırakıyor. Sonra paketleri toplayıp cebine koyuyor ve etrafa bakınıyor.",
+    "events": [
+     {
+      "time": "00:02",
+      "event": "Erkek, masaya birkaç küçük paket koyuyor."
+     },
+     {
+      "time": "00:06",
+      "event": "Paketleri tek tek sayıyor ve düzenliyor."
+     },
+     {
+      "time": "00:14",
+      "event": "Paketleri eline alıp yakından inceliyor."
+     },
+     {
+      "time": "00:23",
+      "event": "Paketleri toplayıp cebine koyuyor."
+     },
+     {
+      "time": "00:25",
+      "event": "Etrafa dikkatle bakınıyor."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "Kaydı kaydet ve arşivle.",
+     "Olay anındaki hareketleri detaylı incele.",
+     "Gerekirse ilgili personeli bilgilendir.",
+     "Güvenlik protokolüne göre ek kamera açılarını kontrol et."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Forklift_asiri_yuk",
+   "anomali": true,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 5.89,
+   "cikti_token": 280,
+   "girdi_token": 4306,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 2,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 1,
+    "actions_ort_uzunluk": 58.0,
+    "summary_str": true,
+    "summary_uzunluk": 280
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, endüstriyel bir alanda forklift, üst üste dizilmiş turuncu paletli yükleri taşıyarak soldan sağa doğru hareket etmektedir. Arka planda sabit duran makineler ve bir operatör görülmektedir. Görüntüde herhangi bir güvenlik ihlali veya tehlikeli durum tespit edilmemiştir.\",\n ",
+   "cikti": {
+    "summary": "İç mekânda, endüstriyel bir alanda forklift, üst üste dizilmiş turuncu paletli yükleri taşıyarak soldan sağa doğru hareket etmektedir. Arka planda sabit duran makineler ve bir operatör görülmektedir. Görüntüde herhangi bir güvenlik ihlali veya tehlikeli durum tespit edilmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Forklift, turuncu yüklerle birlikte sahnenin sol tarafında görünür ve hareket etmeye başlar."
+     },
+     {
+      "time": "00:05",
+      "event": "Forklift, yükü taşıyarak sahnenin sol üst köşesine doğru ilerler ve yavaşça durur."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Forkliftin hareket güzergahını izlemeye devam edin.",
+     "Yükün güvenli bir şekilde indirildiğini doğrulayın.",
+     "Operatörün çalışma alanındaki diğer personelle etkileşimini gözlemleyin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Forklift_asiri_yuk",
+   "anomali": true,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 5.77,
+   "cikti_token": 267,
+   "girdi_token": 4306,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 0,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 91.0,
+    "summary_str": true,
+    "summary_uzunluk": 517
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, iç mekânda, muhtemelen bir üretim veya depo alanını göstermektedir. Görüntüde, turuncu renkli bir forklift, yüksekçe yüklenmiş turuncu paletleri taşıyarak sol taraftan sağa doğru hareket etmektedir. Arka planda, mavi ve sarı renkli büyük endüstriyel makineler yer almaktadır. S",
+   "cikti": {
+    "summary": "Kayıt, iç mekânda, muhtemelen bir üretim veya depo alanını göstermektedir. Görüntüde, turuncu renkli bir forklift, yüksekçe yüklenmiş turuncu paletleri taşıyarak sol taraftan sağa doğru hareket etmektedir. Arka planda, mavi ve sarı renkli büyük endüstriyel makineler yer almaktadır. Sağ tarafta, bir masada oturan bir kişi görülmektedir. Forklift, belirlenmiş sarı çizgilerle işaretlenmiş yoldan geçerek güvenli bir şekilde ilerlemektedir. Kayıt süresince başka bir hareketli olay veya riskli durum gözlemlenmemiştir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Forklift operatörünün yükü güvenli bir şekilde taşıdığını ve hız sınırlarına uyduğunu doğrulayın.",
+     "Makinelerin etrafındaki çalışma alanının düzenli ve temiz olduğunu kontrol edin.",
+     "Kayıt süresince herhangi bir anomali veya güvenlik ihlali olmadığı için mevcut durumu onaylayın."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Forklift_asiri_yuk",
+   "anomali": true,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 5.85,
+   "cikti_token": 418,
+   "girdi_token": 4371,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 4,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 1,
+    "actions_ort_uzunluk": 63.0,
+    "summary_str": true,
+    "summary_uzunluk": 363
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıtta, geniş bir iç mekânda (muhtemelen üretim veya depolama alanı) bir forklift, üst üste dizilmiş turuncu paletli yükleri taşıyarak soldan sağa doğru hareket eder. Arka planda sabit duran makineler, raflar ve bir operatörün oturduğu çalışma istasyonu görülmektedir. Forkliftin har",
+   "cikti": {
+    "summary": "Kayıtta, geniş bir iç mekânda (muhtemelen üretim veya depolama alanı) bir forklift, üst üste dizilmiş turuncu paletli yükleri taşıyarak soldan sağa doğru hareket eder. Arka planda sabit duran makineler, raflar ve bir operatörün oturduğu çalışma istasyonu görülmektedir. Forkliftin hareketi sırasında herhangi bir çarpışma, duraksama veya acil durum yaşanmamıştır.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Forklift, turuncu paletli yüklerle birlikte soldan sahneye girer ve sağa doğru ilerlemeye başlar."
+     },
+     {
+      "time": "00:03",
+      "event": "Forklift, merkezdeki geçiş yolunu takip ederek sağa doğru devam eder."
+     },
+     {
+      "time": "00:06",
+      "event": "Forklift, sağ taraftaki makine istasyonlarının yanından geçerek sahnenin sağ kenarına yaklaşır."
+     },
+     {
+      "time": "00:09",
+      "event": "Forklift, sahnenin sağ tarafında kaybolur; hareket tamamlanır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Forkliftin rotasını ve hızını izlemeye devam et.",
+     "Operatörün çalışma alanında güvenli mesafede kaldığını doğrula.",
+     "Yüklerin dengeli ve sağlam bir şekilde yüklendiğini kontrol et.",
+     "Gerekirse forkliftin varış noktasına ulaşmasını onayla ve kayıtta bir not düş."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Yaya_yolu_ihlali",
+   "anomali": true,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 5.35,
+   "cikti_token": 159,
+   "girdi_token": 5686,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 0,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 1,
+    "actions_ort_uzunluk": 77.3,
+    "summary_str": true,
+    "summary_uzunluk": 202
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, büyük makinelerin bulunduğu bir alanda, bir kişi koridor boyunca yürürken diğer bir kişi makine yanında durmaktadır. Ortamda ani bir hareket, çarpışma veya tehlikeli durum gözlemlenmemiştir.\",\n  \"events\": [],\n  \"risk\": \"Düşük\",\n  \"actions\": [\n    \"Kamera açısını koruyarak",
+   "cikti": {
+    "summary": "İç mekânda, büyük makinelerin bulunduğu bir alanda, bir kişi koridor boyunca yürürken diğer bir kişi makine yanında durmaktadır. Ortamda ani bir hareket, çarpışma veya tehlikeli durum gözlemlenmemiştir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Kamera açısını koruyarak izlemeye devam edin.",
+     "Personelin makine çevresinde güvenli mesafede kalıp kalmadığını periyodik olarak kontrol edin.",
+     "Herhangi bir acil durum veya anormal hareket algılanması durumunda derhal operatöre bildirin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Yaya_yolu_ihlali",
+   "anomali": true,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 5.26,
+   "cikti_token": 274,
+   "girdi_token": 5686,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 0,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 92.0,
+    "summary_str": true,
+    "summary_uzunluk": 449
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, iç mekânda, büyük endüstriyel makinelerin bulunduğu bir alanda çekilmiştir. Ön planda mavi-beyaz renkli bir makine başında duran bir kişi, elinde bir cihazla (muhtemelen tablet veya kontrol paneli) işlem yapmaktadır. Arka planda, yeşil ve sarı çizgilerle belirlenmiş bir yürüme",
+   "cikti": {
+    "summary": "Kayıt, iç mekânda, büyük endüstriyel makinelerin bulunduğu bir alanda çekilmiştir. Ön planda mavi-beyaz renkli bir makine başında duran bir kişi, elinde bir cihazla (muhtemelen tablet veya kontrol paneli) işlem yapmaktadır. Arka planda, yeşil ve sarı çizgilerle belirlenmiş bir yürüme yolu üzerinde, kırmızı yelekli bir kişi uzaklaşmaktadır. Genel ortamda normal işleyiş devam etmektedir; ani hareket, tehlike veya güvenlik ihlali gözlemlenmemiştir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Makine başındaki personelin cihazla yaptığı işlemi izleyerek normal çalışıp çalışmadığını doğrula.",
+     "Arka plandaki kırmızı yelekli kişinin yürüme yolunu terk edip etmediğini takip et.",
+     "Çevredeki makinelerin durumunu ve çevredeki malzemelerin yerinde olup olmadığını kontrol et.",
+     "Güvenlik çizgileri üzerinde herhangi bir engel veya yabancıl cisim olup olmadığını gözden geçir."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Yaya_yolu_ihlali",
+   "anomali": true,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 4.49,
+   "cikti_token": 233,
+   "girdi_token": 5751,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 0,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 2,
+    "actions_ort_uzunluk": 50.8,
+    "summary_str": true,
+    "summary_uzunluk": 406
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıtta, geniş bir iç mekânda (muhtemelen üretim veya depolama alanı) birkaç kişi hareket halindedir. Sol tarafta büyük mavi ve beyaz makineler, ortada turuncu bir konteyner ve metal yuvarlak bir parça yer alır. Sağ tarafta yeşil zemin şeridi üzerinde yürüyen bir kişi vardır. Arka pl",
+   "cikti": {
+    "summary": "Kayıtta, geniş bir iç mekânda (muhtemelen üretim veya depolama alanı) birkaç kişi hareket halindedir. Sol tarafta büyük mavi ve beyaz makineler, ortada turuncu bir konteyner ve metal yuvarlak bir parça yer alır. Sağ tarafta yeşil zemin şeridi üzerinde yürüyen bir kişi vardır. Arka planda 'MANUEL DEPO' yazılı kapı görülmektedir. Hiçbir acil durum, çarpışma, düşme veya tehlikeli hareket gözlemlenmemiştir.",
+    "events": [],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntüyü izlemeye devam edin.",
+     "Yürüyen kişinin rotasını takip edin.",
+     "Makinelerin çevresinde bekleyen kişilerin güvenliğini kontrol edin.",
+     "Herhangi bir anormal hareket veya ses algılanırsa hemen müdahale edin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_acik",
+   "anomali": true,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 7.13,
+   "cikti_token": 354,
+   "girdi_token": 4651,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 4,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 2,
+    "actions_ort_uzunluk": 49.0,
+    "summary_str": true,
+    "summary_uzunluk": 278
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, sarı ve yeşil çizgilerle işaretlenmiş bir koridorda, kırmızı-siyah üniformalı bir kişi yürüyerek uzaklaşmaktadır. Zeminde yuvarlak bir nesne ve çeşitli makineler bulunmaktadır. Kayıt boyunca herhangi bir acil durum, çarpışma veya tehlikeli hareket gözlemlenmemiştir.\",\n  \"",
+   "cikti": {
+    "summary": "İç mekânda, sarı ve yeşil çizgilerle işaretlenmiş bir koridorda, kırmızı-siyah üniformalı bir kişi yürüyerek uzaklaşmaktadır. Zeminde yuvarlak bir nesne ve çeşitli makineler bulunmaktadır. Kayıt boyunca herhangi bir acil durum, çarpışma veya tehlikeli hareket gözlemlenmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kırmızı-siyah üniformalı kişi, koridorun ortasında durmakta ve etrafına bakınmaktadır."
+     },
+     {
+      "time": "00:02",
+      "event": "Kişi, koridorun derinliklerine doğru yürümeye başlar."
+     },
+     {
+      "time": "00:05",
+      "event": "Kişi, koridor boyunca düz bir şekilde yürümeye devam eder."
+     },
+     {
+      "time": "00:10",
+      "event": "Kişi, koridorun sonuna doğru yaklaşırken görüntüde net bir şekilde görülür."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Kaydı izlemeye devam edin.",
+     "Kişinin koridorun sonuna ulaşıp ulaşmadığını takip edin.",
+     "Zemindeki yuvarlak nesnenin hareket edip etmediğini kontrol edin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_acik",
+   "anomali": true,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 5.9,
+   "cikti_token": 355,
+   "girdi_token": 4651,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 1,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 94.0,
+    "summary_str": true,
+    "summary_uzunluk": 434
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, iç mekânda, muhtemelen bir üretim veya işleme alanı olarak kullanılan geniş bir alanda çekilmiştir. Sol tarafta büyük mavi ve sarı renkli endüstriyel makineler, ortada turuncu bir ekipman ve sağ tarafta yeşil-sarı çizgili yürüme yolları görülmektedir. Kayıt süresince, kırmızı-",
+   "cikti": {
+    "summary": "Kayıt, iç mekânda, muhtemelen bir üretim veya işleme alanı olarak kullanılan geniş bir alanda çekilmiştir. Sol tarafta büyük mavi ve sarı renkli endüstriyel makineler, ortada turuncu bir ekipman ve sağ tarafta yeşil-sarı çizgili yürüme yolları görülmektedir. Kayıt süresince, kırmızı-siyah renkli iş kıyafeti giyen bir kişi, makinelerin yanından geçerek arka tarafa doğru yürümektedir. Başka bir hareket veya olay tespit edilmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kayıt başlar. İç mekânda, endüstriyel makinelerin bulunduğu geniş bir alanda bir kişi yürümektedir."
+     },
+     {
+      "time": "00:05",
+      "event": "Kişi, makinelerin yanından geçerek arka taraftaki turuncu ekipmanın yakınına doğru ilerlemektedir."
+     },
+     {
+      "time": "00:11",
+      "event": "Kişi, arka taraftaki alana doğru yürüyerek kayıttan uzaklaşmaktadır. Kayıt sona erer."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Kayıt süresince herhangi bir riskli durum tespit edilmemiştir. Normal gözlem devam edilebilir."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_acik",
+   "anomali": true,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 8.15,
+   "cikti_token": 434,
+   "girdi_token": 4716,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 4,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 1,
+    "actions_ort_uzunluk": 58.0,
+    "summary_str": true,
+    "summary_uzunluk": 417
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıtta, endüstriyel bir iç mekânda, zeminde sarı güvenlik çizgileri ve büyük makineler bulunan alanda, kırmızı-siyah üniformalı bir kişi yürüyerek ilerliyor. Kişi, kamera açısına göre sağdan sola doğru hareket ediyor ve ortada duran yuvarlak bir nesnenin yanından geçiyor. Arka pland",
+   "cikti": {
+    "summary": "Kayıtta, endüstriyel bir iç mekânda, zeminde sarı güvenlik çizgileri ve büyük makineler bulunan alanda, kırmızı-siyah üniformalı bir kişi yürüyerek ilerliyor. Kişi, kamera açısına göre sağdan sola doğru hareket ediyor ve ortada duran yuvarlak bir nesnenin yanından geçiyor. Arka planda başka bir kişi de oturmuş halde görünüyor ancak hareketsiz. Ortamda ani bir tehlike, çarpışma, düşme veya acil durum belirtisi yok.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kırmızı-siyah üniformalı kişi, makine grubunun yanında yürüyerek sahneye giriyor."
+     },
+     {
+      "time": "00:03",
+      "event": "Kişi, zemindeki yuvarlak metalik nesnenin yanından geçerken duraksamadan devam ediyor."
+     },
+     {
+      "time": "00:07",
+      "event": "Kişi, arka plandaki turuncu makineye doğru ilerlemeye devam ediyor."
+     },
+     {
+      "time": "00:11",
+      "event": "Kişi, turuncu makineye yaklaşıp duruyor; hareketi yavaşlıyor."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntüyü izlemeye devam et.",
+     "Kişinin turuncu makineye yaklaşma amacını gözlemle.",
+     "Eğer kişi makineyi çalıştırmaya başlarsa, güvenlik prosedürlerine uygun olup olmadığını kontrol et.",
+     "Arka plandaki oturan kişinin hareketliliğini takip et."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "anomali": false,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 10.77,
+   "cikti_token": 525,
+   "girdi_token": 4651,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 6,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Orta",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 116.5,
+    "summary_str": true,
+    "summary_uzunluk": 283
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, büyük makinelerin bulunduğu bir alanda, bir forklift kamyonet, yük taşıyarak sağdan sola doğru hareket eder. Forklift, alanın ortasından geçerken, sağ taraftaki bir makinenin yanında oturan bir kişiye yakından yaklaşır ve ardından sol taraftaki raf alanına doğru ilerler.\"",
+   "cikti": {
+    "summary": "İç mekânda, büyük makinelerin bulunduğu bir alanda, bir forklift kamyonet, yük taşıyarak sağdan sola doğru hareket eder. Forklift, alanın ortasından geçerken, sağ taraftaki bir makinenin yanında oturan bir kişiye yakından yaklaşır ve ardından sol taraftaki raf alanına doğru ilerler.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Görüntüde, iç mekânda büyük makineler ve bir forklift kamyonet görülür."
+     },
+     {
+      "time": "00:01",
+      "event": "Forklift kamyonet, sağdan sola doğru hareket etmeye başlar."
+     },
+     {
+      "time": "00:02",
+      "event": "Forklift, sağ taraftaki makinede oturan kişiye oldukça yakın bir mesafeden geçer."
+     },
+     {
+      "time": "00:05",
+      "event": "Forklift, makine grubunun önünden geçerek sol tarafa doğru ilerlemeye devam eder."
+     },
+     {
+      "time": "00:08",
+      "event": "Forklift, sol taraftaki raf alanına doğru yaklaşır."
+     },
+     {
+      "time": "00:11",
+      "event": "Forklift, görüntünün sol tarafında, raf alanına doğru hareket ederken kayıttan çıkar."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "Forklift operatörünün, yaya alanı veya çalışma istasyonlarına yaklaşırken hızını azaltıp çevreyi kontrol ettiğini doğrula.",
+     "Forkliftin geçtiği güzergahın, yaya trafiği için ayrılmış ve işaretlenmiş bir yol olup olmadığını kontrol et.",
+     "Makine başında oturan personelin, forkliftin geçişini fark edip etmediğini ve güvenli bir mesafede kalıp kalmadığını gözlemle.",
+     "Gerekirse, forklift operatörü ve diğer personel için güvenlik prosedürlerini hatırlatıcı bir bildirim gönder."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "anomali": false,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 7.9,
+   "cikti_token": 416,
+   "girdi_token": 4651,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 1,
+    "actions_ort_uzunluk": 43.0,
+    "summary_str": true,
+    "summary_uzunluk": 353
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, iç mekânda, büyük makinelerin bulunduğu bir alanda çekilmiştir. Bir forklift, üzerinde iki kat turuncu kutu taşıyarak sağdan sola doğru hareket etmektedir. Forklift, alanın ortasından geçerek sol tarafa doğru ilerlerken, arka planda bir kişi makine başında oturarak çalışmaktad",
+   "cikti": {
+    "summary": "Kayıt, iç mekânda, büyük makinelerin bulunduğu bir alanda çekilmiştir. Bir forklift, üzerinde iki kat turuncu kutu taşıyarak sağdan sola doğru hareket etmektedir. Forklift, alanın ortasından geçerek sol tarafa doğru ilerlerken, arka planda bir kişi makine başında oturarak çalışmaktadır. Herhangi bir güvenlik ihlali veya riskli durum gözlemlenmemiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kayıt başlar; iç mekânda, büyük mavi ve sarı makinelerin bulunduğu bir alanda forklift sağdan görünür."
+     },
+     {
+      "time": "00:02",
+      "event": "Forklift, üzerinde iki kat turuncu kutu taşıyarak sola doğru hareket etmeye başlar."
+     },
+     {
+      "time": "00:05",
+      "event": "Forklift, alanın ortasından geçerek sola doğru ilerlemeye devam eder."
+     },
+     {
+      "time": "00:08",
+      "event": "Forklift, sol tarafa doğru ilerlemeye devam ederken, arka planda bir kişi makine başında oturarak çalışmaktadır."
+     },
+     {
+      "time": "00:11",
+      "event": "Kayıt sona erer; forklift hala sola doğru hareket etmektedir."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Forkliftin hareketini izlemeye devam et.",
+     "Çalışan personelin güvenliğini kontrol et.",
+     "Makinelerin çalışır durumda olduğundan emin ol."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_tasima",
+   "anomali": false,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 9.11,
+   "cikti_token": 317,
+   "girdi_token": 4716,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 1,
+    "actions_ort_uzunluk": 54.0,
+    "summary_str": true,
+    "summary_uzunluk": 312
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, büyük makinelerin bulunduğu bir alanda, sarı çizgilerle işaretlenmiş bir yoldan, yük taşıyan bir forklift geçmektedir. Forklift, sağ tarafta bir makinenin yanında oturan bir kişinin yakınından, belirlenmiş güzergâhı takip ederek güvenli bir şekilde ilerler ve görüntünün s",
+   "cikti": {
+    "summary": "İç mekânda, büyük makinelerin bulunduğu bir alanda, sarı çizgilerle işaretlenmiş bir yoldan, yük taşıyan bir forklift geçmektedir. Forklift, sağ tarafta bir makinenin yanında oturan bir kişinin yakınından, belirlenmiş güzergâhı takip ederek güvenli bir şekilde ilerler ve görüntünün sol tarafına doğru uzaklaşır.",
+    "events": [
+     {
+      "time": "00:01",
+      "event": "Sağ alt köşeden yük taşıyan bir forklift görüntüye girer."
+     },
+     {
+      "time": "00:02",
+      "event": "Forklift, makine başında oturan bir kişinin yakınından, belirlenmiş yoldan geçerek ilerler."
+     },
+     {
+      "time": "00:08",
+      "event": "Forklift, görüntünün sol tarafına doğru hareket ederek alandan uzaklaşır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Forklift operasyonunun devamını izleyin.",
+     "Personelin makine başındaki konumunu ve dikkatini takip edin.",
+     "Belirlenmiş yolların kullanımını periyodik olarak denetleyin."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_yaya_yolu",
+   "anomali": false,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 7.01,
+   "cikti_token": 369,
+   "girdi_token": 6031,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 1,
+    "actions_ort_uzunluk": 71.3,
+    "summary_str": true,
+    "summary_uzunluk": 231
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, büyük mavi bir makine yanında oturan bir kişi ve yeşil çizgili koridorda yürüyen bir kişi görüntülenmiştir. Zaman içinde koridorda yürüyen kişi uzaklaşmış ve başka bir kişi de aynı yönde yürüyerek sahneyi terk etmiştir.\",\n  \"events\": [\n    {\n      \"time\": \"00:00\",\n      \"",
+   "cikti": {
+    "summary": "İç mekânda, büyük mavi bir makine yanında oturan bir kişi ve yeşil çizgili koridorda yürüyen bir kişi görüntülenmiştir. Zaman içinde koridorda yürüyen kişi uzaklaşmış ve başka bir kişi de aynı yönde yürüyerek sahneyi terk etmiştir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Yeşil çizgili koridorda yürüyen bir kişi sahneye girer."
+     },
+     {
+      "time": "00:03",
+      "event": "Makine yanında oturan kişi hareketsiz kalır."
+     },
+     {
+      "time": "00:05",
+      "event": "Koridorda yürüyen kişi sahnenin sağ tarafına doğru uzaklaşır."
+     },
+     {
+      "time": "00:10",
+      "event": "Uzakta, koridorun sonunda başka bir kişi yürüyerek görünür."
+     },
+     {
+      "time": "00:15",
+      "event": "İkinci kişi de koridor boyunca uzaklaşır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Koridoru kullanan kişilerin güvenli yürüyüşünü izlemeye devam et.",
+     "Makine yanında oturan kişinin durumunu periyodik olarak kontrol et.",
+     "Herhangi bir acil durum veya anormal hareketlilik durumunda operatörü bilgilendir."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_yaya_yolu",
+   "anomali": false,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 7.12,
+   "cikti_token": 535,
+   "girdi_token": 6031,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 5,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 72.2,
+    "summary_str": true,
+    "summary_uzunluk": 594
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, iç mekânda, muhtemelen bir üretim veya işleme alanını göstermektedir. Sol tarafta büyük mavi ve beyaz renkli bir makine bulunmaktadır; makinenin yanında kırmızı-siyah yelekli bir kişi oturarak çalışmaktadır. Sağ tarafta yeşil zemin üzerinde sarı çizgilerle belirlenmiş bir yürü",
+   "cikti": {
+    "summary": "Kayıt, iç mekânda, muhtemelen bir üretim veya işleme alanını göstermektedir. Sol tarafta büyük mavi ve beyaz renkli bir makine bulunmaktadır; makinenin yanında kırmızı-siyah yelekli bir kişi oturarak çalışmaktadır. Sağ tarafta yeşil zemin üzerinde sarı çizgilerle belirlenmiş bir yürüme yolu vardır. Kayıt süresince, bu yoldan sağdan sola doğru yürüyen bir kişi görülür. Ayrıca, arka planda uzakta başka bir kişi de yürüyerek geçmektedir. Ortada yer alan turuncu renkli bir ekipman ve yere serilmiş metal parçalar dikkat çekmektedir. Genel olarak, normal işleyiş içinde bir ortam izlenmektedir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kayıt başlar. Makine başında oturan kişi hareketsizdir. Sağdan bir kişi yürüyerek giriş yapar."
+     },
+     {
+      "time": "00:03",
+      "event": "Yürüyen kişi, yeşil zeminli koridordan geçerek sola doğru ilerler."
+     },
+     {
+      "time": "00:07",
+      "event": "Arka planda uzakta, başka bir kişi yürüyerek geçmektedir."
+     },
+     {
+      "time": "00:10",
+      "event": "Ön plandaki yürüyen kişi, kaydı terk eder. Makine başındaki kişi hâlâ oturarak çalışmaktadır."
+     },
+     {
+      "time": "00:15",
+      "event": "Kayıt sona erer. Ortamda herhangi bir anormallik veya acil durum gözlenmemiştir."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Makine başındaki personelin güvenliğini ve dikkatini kontrol et.",
+     "Yürüme yollarında herhangi bir engel veya kayganlık olup olmadığını denetle.",
+     "Arka plandaki hareketli kişilerin izni dahilinde hareket edip etmediğini doğrula.",
+     "Güvenlik kameralarının bu alanı sürekli olarak kayda almasını sağla."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Guvenli_yaya_yolu",
+   "anomali": false,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 5.98,
+   "cikti_token": 339,
+   "girdi_token": 6096,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 53.5,
+    "summary_str": true,
+    "summary_uzunluk": 242
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, büyük makineler ve yeşil-sarı çizgili zemin bulunan bir alanda, bir kişi oturmuş, başka bir kişi sağdan sola doğru yürüyerek geçiyor. Arka planda uzakta başka bir kişi de yürüyor. Ortamda ani bir tehlike veya çarpışma gözlenmiyor.\",\n  \"events\": [\n    {\n      \"time\": \"00:0",
+   "cikti": {
+    "summary": "İç mekânda, büyük makineler ve yeşil-sarı çizgili zemin bulunan bir alanda, bir kişi oturmuş, başka bir kişi sağdan sola doğru yürüyerek geçiyor. Arka planda uzakta başka bir kişi de yürüyor. Ortamda ani bir tehlike veya çarpışma gözlenmiyor.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Sağ taraftan mavi kıyafetli bir kişi yürüyerek sahneye girer."
+     },
+     {
+      "time": "00:03",
+      "event": "Mavi kıyafetli kişi sol tarafa doğru ilerlerken arka planda uzakta siyah kıyafetli başka bir kişi yürümeye başlar."
+     },
+     {
+      "time": "00:10",
+      "event": "Siyah kıyafetli kişi arka planda daha net görünür ve merkeze doğru yaklaşır."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Görüntüdeki kişilerin hareketlerini takip etmeye devam et.",
+     "Yürüyen kişilerin makinelere yaklaşmamasını kontrol et.",
+     "Gerekirse sesli uyarı sistemiyle dikkat çek.",
+     "Kaydı arşivle ve gerekirse ilgili birime bildirim gönder."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_kapali",
+   "anomali": false,
+   "kol": "L-strict",
+   "model": "llm-large",
+   "strict": true,
+   "sure_s": 8.72,
+   "cikti_token": 405,
+   "girdi_token": 2585,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 4,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Orta",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 108.0,
+    "summary_str": true,
+    "summary_uzunluk": 237
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, endüstriyel görünümlü bir alanda, kırmızı-siyah üniformalı bir kişi yerde duran büyük bir silindirik nesneyi iterek hareket ettiriyor. Yeşil yelekli ikinci bir kişi, bu nesneyi iten kişinin yanına yürüyerek yaklaşır ve durur.\",\n  \"events\": [\n    {\n      \"time\": \"00:00\",\n ",
+   "cikti": {
+    "summary": "İç mekânda, endüstriyel görünümlü bir alanda, kırmızı-siyah üniformalı bir kişi yerde duran büyük bir silindirik nesneyi iterek hareket ettiriyor. Yeşil yelekli ikinci bir kişi, bu nesneyi iten kişinin yanına yürüyerek yaklaşır ve durur.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kırmızı-siyah üniformalı kişi, yerde duran büyük bir silindirik nesneyi iterek hareket ettirmeye başlar."
+     },
+     {
+      "time": "00:01",
+      "event": "Yeşil yelekli bir kişi, sol alt köşeden sahneye girer ve yürümeye başlar."
+     },
+     {
+      "time": "00:03",
+      "event": "Yeşil yelekli kişi, nesneyi iten kişiye doğru yaklaşır."
+     },
+     {
+      "time": "00:05",
+      "event": "Yeşil yelekli kişi, nesneyi iten kişinin yanına varır ve durur."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "İki kişinin arasındaki etkileşimi ve nesnenin taşınma işlemini canlı olarak izlemeye devam et.",
+     "Nesnenin itilme yönteminin güvenli olup olmadığını ve personelin uygun koruyucu ekipman kullanıp kullanmadığını kontrol et.",
+     "Eğer nesne ağırsa, manuel taşıma yerine uygun kaldırma ekipmanlarının kullanılıp kullanılmadığını teyit et."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_kapali",
+   "anomali": false,
+   "kol": "F-strict",
+   "model": "llm-fast",
+   "strict": true,
+   "sure_s": 4.19,
+   "cikti_token": 357,
+   "girdi_token": 2585,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 3,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Düşük",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 3,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 70.7,
+    "summary_str": true,
+    "summary_uzunluk": 294
+   },
+   "ham_ilk300": "{\n  \"summary\": \"Kayıt, iç mekânda, büyük endüstriyel makinelerin bulunduğu bir alanda çekilmiştir. Bir kişi, yere düşmüş büyük bir lastik tekerleği omzunda taşıyarak koridorda ilerlemektedir. Ardından, yeşil yelekli başka bir kişi bu kişiyi takip etmektedir. Ortamda düzenli bir çalışma akışı devam e",
+   "cikti": {
+    "summary": "Kayıt, iç mekânda, büyük endüstriyel makinelerin bulunduğu bir alanda çekilmiştir. Bir kişi, yere düşmüş büyük bir lastik tekerleği omzunda taşıyarak koridorda ilerlemektedir. Ardından, yeşil yelekli başka bir kişi bu kişiyi takip etmektedir. Ortamda düzenli bir çalışma akışı devam etmektedir.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kayıt başladığında, merkezde kırmızı-siyah üniformalı bir kişi, yere düşmüş büyük bir lastik tekerleği omzunda taşımaktadır."
+     },
+     {
+      "time": "00:02",
+      "event": "Yeşil yelekli ikinci bir kişi, alt kısımdan sahneye girerek tekerlek taşıyan kişiyi takip etmeye başlar."
+     },
+     {
+      "time": "00:05",
+      "event": "İki kişi de koridor boyunca aynı yönde yürümeye devam etmektedir."
+     }
+    ],
+    "risk": "Düşük",
+    "actions": [
+     "Tekerlek taşıyan personelin yolunun açık olduğundan emin olun.",
+     "Yeşil yelekli personelin takip mesafesini korumasını sağlayın.",
+     "Düşük ağırlıklı nesnelerin taşınması sırasında dikkatli olunması gerektiğini hatırlatın."
+    ]
+   }
+  },
+  {
+   "klip": "isg/Pano_kapagi_kapali",
+   "anomali": false,
+   "kol": "L-serbest",
+   "model": "llm-large",
+   "strict": false,
+   "sure_s": 6.4,
+   "cikti_token": 399,
+   "girdi_token": 2650,
+   "ayristirma": "dogrudan",
+   "denetim": {
+    "ayristi": true,
+    "anahtarlar": [
+     "actions",
+     "events",
+     "risk",
+     "summary"
+    ],
+    "tam4": true,
+    "fazla": [],
+    "eksik": [],
+    "events_liste": true,
+    "n_event": 4,
+    "event_alan_tam": true,
+    "time_mmss": true,
+    "kotu_time": [],
+    "risk": "Orta",
+    "risk_kumede": true,
+    "actions_liste": true,
+    "n_action": 4,
+    "actions_bos": false,
+    "actions_genel": 0,
+    "actions_ort_uzunluk": 73.0,
+    "summary_str": true,
+    "summary_uzunluk": 293
+   },
+   "ham_ilk300": "{\n  \"summary\": \"İç mekânda, sarı ve yeşil çizgilerle işaretlenmiş bir koridorda, kırmızı-siyah üniformalı bir kişi yerde duran büyük bir metal parçasını iterek hareket ettiriyor. Yeşil yelekli başka bir kişi yaklaşıp onunla birlikte parçayı itmeye başlıyor. İkili birlikte parçayı koridor boyunca ile",
+   "cikti": {
+    "summary": "İç mekânda, sarı ve yeşil çizgilerle işaretlenmiş bir koridorda, kırmızı-siyah üniformalı bir kişi yerde duran büyük bir metal parçasını iterek hareket ettiriyor. Yeşil yelekli başka bir kişi yaklaşıp onunla birlikte parçayı itmeye başlıyor. İkili birlikte parçayı koridor boyunca ilerletiyor.",
+    "events": [
+     {
+      "time": "00:00",
+      "event": "Kırmızı-siyah üniformalı kişi yerde duran metal parçasını itmeye başlıyor."
+     },
+     {
+      "time": "00:02",
+      "event": "Yeşil yelekli kişi sahneye girip kırmızı-siyah üniformalı kişiye doğru yürüyor."
+     },
+     {
+      "time": "00:04",
+      "event": "Yeşil yelekli kişi metal parçasına katılarak birlikte itişe başlıyor."
+     },
+     {
+      "time": "00:06",
+      "event": "İki kişi birlikte metal parçasını koridor boyunca ilerletiyor."
+     }
+    ],
+    "risk": "Orta",
+    "actions": [
+     "Kişilerin taşıdığı yükün ağırlığını ve taşınma yöntemini kontrol et.",
+     "Zemindeki çizgilerin işgal edilip edilmediğini ve geçiş güvenliği açısından uygunluğunu değerlendir.",
+     "Gerekirse uygun el arabası veya taşıma ekipmanı kullanımını öner.",
+     "Kişilerin ergonomik duruşunu ve yaralanma riskini gözlemle."
+    ]
+   }
+  }
+ ]
+}

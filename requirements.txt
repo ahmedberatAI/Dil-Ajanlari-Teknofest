@@ -34,10 +34,32 @@ pydantic-settings>=2.4
 # Arayuz
 gradio>=6.0
 
-# Nesne tespiti (KKD/baret dogrulayicisi, poz-tabanli dusme dogrulamasi, geofence)
-# NOT: vLLM zaten bagimli olarak cekiyor olabilir; burada ACIKCA belirtilir cunku
-# dilajan/detector.py dogrudan ithal eder.
-ultralytics>=8.4
+# Apache-2.0 gorsel modeller (nesne tespiti + poz). vLLM zaten bagimli olarak
+# cekiyor; ACIKCA beyan ediliyor cunku dilajan/algila_rtdetr.py DOGRUDAN ithal eder.
+# Kullanilan siniflar: RTDetrV2ForObjectDetection, VitPoseForPoseEstimation.
+transformers>=5.0
+
+# ---------------------------------------------------------------------------
+# LISANS NOTU (D39-A, 2026-08-18)
+# `ultralytics` = AGPL-3.0. Bu deponun lisansi Apache-2.0 (bkz. LICENSE) ve
+# yarisma sarti da Apache-2.0'dir. AGPL kod Apache-2.0 olarak yeniden
+# lisanslanamaz (uyumluluk tek yonludur). Bu yuzden ultralytics ZORUNLU
+# bagimlilik OLMAKTAN CIKARILDI: cekirdek boru hatti onsuz calisir.
+#
+# OLGU DUZELTMESI: onceki not "vLLM zaten bagimli olarak cekiyor olabilir"
+# diyordu; YANLIS. `pip show ultralytics` -> Required-by: BOS. vLLM 0.23.0'in
+# bagimliliklarinda ultralytics YOKTUR.
+#
+# KKD (baret/yelek) dedektorleri ve poz-tabanli dusme dogrulamasi su an hala
+# ultralytics'e baglidir. Bunlari kullanmak isteyen:
+#     pip install -r requirements-kkd.txt
+# Kurulmadiginda `detector.kkd_available()` False doner ve boru hatti bu
+# yetenekleri KAPALI kabul eder (K3 fail-open, ama artik SESSIZ DEGIL —
+# karar-izine yazilir).
+#
+# Apache-2.0 karsiliklari `transformers` icinde HAZIRDIR ve yeni kod onlari
+# kullanir: RTDetrV2ForObjectDetection (nesne), VitPoseForPoseEstimation (poz).
+# ---------------------------------------------------------------------------
 
 # Veri seti indirme betikleri (scripts/get_ppe.py, scripts/get_isafety_bench.py).
 # Yalnizca VERI cekmek icin; calisma zamaninda (analiz yolunda) KULLANILMAZ —
