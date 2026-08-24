@@ -82,7 +82,8 @@ class Slot:
                  gorev: str, coz: Callable[[str], Optional[object]],
                  aciklama: str = "", roi_alani: str = "",
                  kapsam: str = "segment",
-                 dislanan_gorus_alani: str = "", gorus_esik_alani: str = ""):
+                 dislanan_gorus_alani: str = "", gorus_esik_alani: str = "",
+                 fps_alani: str = ""):
         self.ad = ad
         self.soru = soru
         self.secenekler = list(secenekler)
@@ -119,6 +120,15 @@ class Slot:
         # yaklasiminin ta kendisi olurdu: skor bilgiden degil kameradan gelir.
         self.dislanan_gorus_alani = dislanan_gorus_alani
         self.gorus_esik_alani = gorus_esik_alani
+        # SLOTA OZGU KARE HIZI — ROI ve kapsam ile AYNI desen: sorunun
+        # ihtiyaci kadar bilgi gonder, fazlasini degil.
+        # OLCULDU: yaya yolu ihlali ANLIK bir durumdur (kisi cizgiyi bir anda
+        # gecer); kare seyreltmek o ani kaciriyor —
+        #     ozgun fps  MCC +0,535   ·   fps 8  MCC +0,217
+        # Pano STATIK, forklift SUREKLI oldugu icin onlar fps 8'de bozulmuyor
+        # (pano +0,960 · forklift +0,881, normalize spekte olculdu).
+        # Bos ise genel `kodlama_fps` gecerlidir.
+        self.fps_alani = fps_alani
 
     def __repr__(self) -> str:      # pragma: no cover
         return f"<Slot {self.ad} -> {self.gorev}>"
@@ -244,6 +254,7 @@ SLOT_YAYA_CIZGI_MESAFE = Slot(
     kapsam="klip",      # olcum TUM klip uzerinde yapildi; sevk edilen = olculen
     dislanan_gorus_alani="yol_dislanan_gorus",
     gorus_esik_alani="yol_gorus_esik",
+    fps_alani="yol_kodlama_fps",
     aciklama=("Yerdeki isaretli cizgiye uzaklik. ROI kirpmasi ZORUNLU: tam "
               "karede ayni soru MCC +0,192, ROI ile +0,638 (ayrilmis kume)."),
 )
@@ -344,6 +355,19 @@ def roi_coz(slot: Slot, ayar) -> str:
     return (getattr(ayar, slot.roi_alani, "") or "").strip()
 
 
+def fps_coz(slot: Slot, ayar):
+    """Slotun KARE HIZI (None = genel `kodlama_fps` gecerli)."""
+    ad = getattr(slot, "fps_alani", "")
+    if not ad:
+        return None
+    v = getattr(ayar, ad, None)
+    try:
+        v = float(v)
+    except (TypeError, ValueError):
+        return None
+    return v if v > 0 else 0.0          # 0.0 = "kare hizina DOKUNMA"
+
+
 def gorus_uygun_mu(slot: Slot, ayar, frames) -> bool:
     """Bu slot BU SAHNEDE sorulmali mi? (kamera gorus muhafizi)
 
@@ -394,10 +418,11 @@ def slotlari_doldur_bolgeli(istemci, slotlar: Sequence[Slot], video_uret,
     gruplar: Dict[tuple, List[Slot]] = {}
     for s in slotlar:
         gruplar.setdefault((roi_coz(s, ayar),
-                            getattr(s, "kapsam", "segment")), []).append(s)
-    for (roi, kapsam), grup in gruplar.items():
+                            getattr(s, "kapsam", "segment"),
+                            fps_coz(s, ayar)), []).append(s)
+    for (roi, kapsam, fps), grup in gruplar.items():
         try:
-            oturum = istemci.video_oturumu(video_uret(roi, kapsam), system=system)
+            oturum = istemci.video_oturumu(video_uret(roi, kapsam, fps), system=system)
         except Exception as e:
             for s_ in grup:
                 kayit.hatalar[s_.ad] = f"__HATA__ {type(e).__name__}: {e}"

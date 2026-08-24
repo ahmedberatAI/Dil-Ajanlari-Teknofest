@@ -276,6 +276,9 @@ class Settings(BaseSettings):
     # BOS = muhafiz kapali = eski davranis (K2).
     yol_dislanan_gorus: str = ""
     yol_gorus_esik: float = 0.708
+    # Yol slotunun KENDI kare hizi. 0 = "kare hizina DOKUNMA" (ozgun fps).
+    # Olculdu: ozgun fps +0,535 · fps 8 +0,217 — yaya yolu ihlali ANLIK.
+    yol_kodlama_fps: float = 0.0
     # YENIDEN KODLAMA KONTROLU (varsayilan KAPALI = eski davranis, K2).
     # Acikken gozlem duzlemi videolari ORTAK SPEKTE kodlar: sabit fps + sabit
     # bit hizi. Boylece "skor icerikten mi, kodlama izinden mi geliyor?"

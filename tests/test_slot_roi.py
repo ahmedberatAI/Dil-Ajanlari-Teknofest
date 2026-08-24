@@ -36,9 +36,11 @@ class Ayar:
     panel_roi_vlm = "0.0,0.4,0.3,0.8"
 
 uretilen = []
-def video_uret(roi, kapsam="segment"):
+def video_uret(roi, kapsam="segment", fps=None):
+    # `fps` SLOTA OZGU kare hizidir (ROI ve kapsam ile ayni desen); muhafizsiz
+    # ve fps'siz slotlarda None gelir.
     uretilen.append((roi, kapsam))
-    return f"VIDEO[{roi}|{kapsam}]"
+    return f"VIDEO[{roi}|{kapsam}|{fps}]"
 
 CEVAP = {}
 

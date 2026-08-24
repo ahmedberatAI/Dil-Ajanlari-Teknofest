@@ -981,7 +981,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                     _bas = float(_secs(seg.start_str))
                     _sure = max(0.0, float(_secs(seg.end_str)) - _bas) or None
 
-                    def _video_uret(roi, kapsam="segment",
+                    def _video_uret(roi, kapsam="segment", fps=None,
                                     _y=_yol, _k=kar, _b=_bas, _s=_sure):
                         """ROI basina TEK video uretir (ayni ROI'li slotlar paylasir).
 
@@ -994,6 +994,12 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                             _nk = ({"fps": settings.kodlama_fps,
                                     "sabit_bit": settings.kodlama_bit}
                                    if settings.kodlama_normalize else {})
+                            # SLOTA OZGU fps genel ayari EZER (0 = dokunma)
+                            if fps is not None:
+                                if fps > 0:
+                                    _nk["fps"] = fps
+                                else:
+                                    _nk.pop("fps", None)
                             if kapsam == "klip":
                                 # ON KOSUL sorusu TUM klibe sorulur: pencere
                                 # daraltilinca kisi goruntunun bir bolumunde

@@ -79,7 +79,7 @@ class SahteIstemci:
 ist = SahteIstemci()
 kayit2 = G.slotlari_doldur_bolgeli(
     ist, [G.SLOT_YAYA_CIZGI_MESAFE, G.SLOT_CATAL_KASA],
-    lambda roi, kapsam="segment": f"V[{roi}|{kapsam}]", Ayar(),
+    lambda roi, kapsam="segment", fps=None: f"V[{roi}|{kapsam}|{fps}]", Ayar(),
     frames=[("00:00", b"x")])
 c("muhafizli slot ATLANDI", "yaya_cizgi_mesafe" in kayit2.atlanan)
 c("muhafizsiz slot DOLDU", kayit2.al("catal_kasa_sayisi") == 5)
@@ -90,7 +90,7 @@ _pano.gorus_uyuyor = lambda frames, imza, esik=0.6: False  # "bu DOGRU kamera"
 ist2 = SahteIstemci()
 kayit3 = G.slotlari_doldur_bolgeli(
     ist2, [G.SLOT_YAYA_CIZGI_MESAFE, G.SLOT_CATAL_KASA],
-    lambda roi, kapsam="segment": f"V[{roi}|{kapsam}]", Ayar(),
+    lambda roi, kapsam="segment", fps=None: f"V[{roi}|{kapsam}|{fps}]", Ayar(),
     frames=[("00:00", b"x")])
 c("dogru kamerada slot SORULUR", kayit3.al("yaya_cizgi_mesafe") == 5)
 c("dogru kamerada atlama YOK", kayit3.atlanan == {})
