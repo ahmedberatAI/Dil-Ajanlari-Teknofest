@@ -38,6 +38,8 @@ from __future__ import annotations
 
 import glob
 import json
+from concurrent.futures import ThreadPoolExecutor
+import threading
 import os
 import statistics
 import sys
@@ -381,18 +383,41 @@ def main() -> None:
 
     print(f"{len(kalan)} klip degerlendiriliyor"
           f"{f' (toplam {len(clips)}, {len(rows)} devralindi)' if rows else ''}...\n")
-    for path, cat in kalan:
+    # PARALELLIK (EVAL_ISCI, varsayilan 1 = ESKI SERI DAVRANIS).
+    # Uzak cikarim servisinde is I/O-baglidir; seri kosum 197 klip icin ~2 saat
+    # suruyordu. Ara kayit ve konsol ciktisi KILIT altinda yazilir, yani dosya
+    # bozulmaz. Varsayilan 1 oldugu icin eski kosumlar BIREBIR yeniden uretilir.
+    # NOT: paralellik SIRAYI degistirir; `rows` sirasi zaten metrikleri
+    # etkilemez (hepsi kume-duzeyi orandir), ama ara kayit satir sirasi da
+    # farkli olabilir — devralma ANAHTARA gore yapildigi icin sorun degil.
+    _isci = max(1, int(os.environ.get("EVAL_ISCI", "1")))
+    _kilit = threading.Lock()
+
+    def _bir_klip(arg):
+        path, cat = arg
         try:
             r = evaluate_clip(path, cat)
         except Exception as e:
-            print(f"[HATA] {path}: {e}")
-            continue
-        rows.append(r)
-        _ara_kayit_ekle(ara_yol, r)
-        mark = "✓" if (r["category_match"] or (not r["is_anomaly"] and r["max_severity"] < 3)) else "·"
-        print(f"  {mark} [{cat:13s}] olay={r['n_events']} risk={r['risk_level']:6s} "
-              f"kat_eslesme={r['category_match']} {r['latency_s']}s  {os.path.basename(path)}",
-              flush=True)   # tamponlama yuzunden ilerleme gorunmuyordu
+            with _kilit:
+                print(f"[HATA] {path}: {e}", flush=True)
+            return None
+        with _kilit:
+            rows.append(r)
+            _ara_kayit_ekle(ara_yol, r)
+            mark = "✓" if (r["category_match"] or (not r["is_anomaly"] and r["max_severity"] < 3)) else "·"
+            print(f"  {mark} [{cat:13s}] olay={r['n_events']} risk={r['risk_level']:6s} "
+                  f"kat_eslesme={r['category_match']} {r['latency_s']}s  {os.path.basename(path)}",
+                  flush=True)   # tamponlama yuzunden ilerleme gorunmuyordu
+        return r
+
+    if _isci > 1:
+        print(f"[PARALEL] {_isci} isci", flush=True)
+        print(flush=True)
+        with ThreadPoolExecutor(max_workers=_isci) as _hav:
+            list(_hav.map(_bir_klip, kalan))
+    else:
+        for _is in kalan:
+            _bir_klip(_is)
 
     # --- toplulastir ---
     anom = [r for r in rows if r["is_anomaly"]]
