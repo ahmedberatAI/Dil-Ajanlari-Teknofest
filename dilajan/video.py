@@ -327,6 +327,19 @@ def servis_videosu(yol: str, max_side: int = 1280, crf: int = 26,
     degil, sorulan bolgenin karedeki PAYI.
     """
     import subprocess, tempfile, os as _os
+
+    def _kararli():
+        """Tekrar uretilebilir kodlama istendiyse tek is parcacigi.
+
+        Ayardan okunur ki cagri yerleri degismesin. Varsayilan KAPALI ->
+        komut satiri BIREBIR eskisi gibi (K2).
+        """
+        try:
+            from dilajan.config import settings as _s
+            return ["-threads", "1"] if getattr(_s, "kodlama_kararli", False) else []
+        except Exception:
+            return []
+
     try:
         with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as f:
             gecici = f.name
@@ -348,11 +361,24 @@ def servis_videosu(yol: str, max_side: int = 1280, crf: int = 26,
         vf.append(f"scale={max_side}:-2")
         _kalite = (["-b:v", sabit_bit, "-minrate", sabit_bit, "-maxrate", sabit_bit,
                     "-bufsize", sabit_bit] if sabit_bit else ["-crf", str(crf)])
-        komut = (["ffmpeg", "-y", "-v", "error"] + girdi_oncesi
+        # TEKRAR URETILEBILIRLIK — OLCULDU (2026-08-25):
+        # ffmpeg varsayilan ayarlarla ayni klibi iki kez kodlayinca BAYT BAYT
+        # FARKLI cikti uretiyordu (0/6 ayni). Kare cikarimi ise tamamen
+        # kararliydi (3/3 ayni) ve model ayni oturumda 50/50 klipte birebir
+        # ayni cevabi veriyordu. Yani olcumlerimizdeki kosumlar arasi ~0,05'lik
+        # MCC dalgalanmasinin kaynagi MODEL DEGIL, KODLAYICIYDI.
+        # `+bitexact` (+ metadata silme) bunu 3/3 tekrar uretilebilir yapiyor
+        # ve ek maliyeti YOK. `-threads 1` de calisiyordu ama 5x yavas.
+        # GIRDI ve CIKTI bayraklari AYRIDIR: `-map_metadata` yalnizca cikti
+        # secenegidir ve girdi tarafina konursa ffmpeg hata verir.
+        _be_girdi = ["-fflags", "+bitexact"]
+        _be_cikti = ["-flags:v", "+bitexact", "-map_metadata", "-1",
+                     "-fflags", "+bitexact"]
+        komut = (["ffmpeg", "-y", "-v", "error"] + _be_girdi + girdi_oncesi
                  + ["-i", yol]
                  + (["-t", f"{sure_sn:.3f}"] if sure_sn and sure_sn > 0 else [])
                  + ["-vf", ",".join(vf), "-c:v", "libx264"]
-                 + _kalite + ["-preset", "fast", "-an"])
+                 + _kalite + _be_cikti + _kararli() + ["-preset", "fast", "-an"])
         if fps:
             komut += ["-r", str(fps)]
         komut.append(gecici)

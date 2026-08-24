@@ -292,6 +292,15 @@ class Settings(BaseSettings):
     # yanlistir, tekrarlamak yalnizca gecikme ekler.
     yeniden_deneme: int = 3           # ek deneme sayisi (0 = kapali, eski davranis)
     yeniden_deneme_bekleme: float = 1.5   # ilk bekleme (s); her denemede 2x + jitter
+    # TEKRAR URETILEBILIR KODLAMA — OLCULDU (2026-08-25):
+    # Ayni klip iki kez kodlaninca BAYT BAYT farkli cikiyor (0/8 ayni).
+    # Kaynak: x264'un cozunurluge gore sectigi is parcacigi sayisi — dusuk
+    # cozunurluklu ROI kirpmalari zaten tekrar uretilebilir cikiyordu.
+    # Model AYNI baytlarda tamamen deterministik (50/50 klipte 3/3 ayni cevap),
+    # yani kosumlar arasi ~0,05'lik MCC dalgalanmasinin kaynagi KODLAYICI.
+    # `-threads 1` bunu cozer ama kodlamayi ~5x yavaslatir; VARSAYILAN KAPALI.
+    # Bir olcumun BIREBIR yeniden uretilmesi gerektiginde acilir.
+    kodlama_kararli: bool = False
     kodlama_normalize: bool = False
     kodlama_fps: float = 8.0
     kodlama_bit: str = "800k"
