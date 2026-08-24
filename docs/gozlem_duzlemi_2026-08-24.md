@@ -320,3 +320,77 @@ Yol boyunca ölçülen ara durumlar (hiçbiri silinmedi):
   ateşliyor. Çift bazlı metriği etkilemiyor ama sahada operatöre gider.
 - **Virgülle ayrılmış nesnelerin ortak olumsuz fiili** (§8.1) — gerçek kusur,
   denenen onarım geri alındı, çözüm açık.
+
+---
+
+# EK-3 — D45: dördüncü sınıf ve yelek tavanı
+
+## 12. Yelek slotu bilgi tavanına oturmuş — soru biçimi burada çare değil
+
+Yetkisiz müdahaledeki 6 kaçırmanın kaynağı boru hattı değil, slotun kendisiydi
+(uçtan uca +0,689 = slot tavanı). Pano dersini ("soru biçimi belirleyici")
+yeleğe uyguladım: aynı 28 klip, aynı video baytları, beş kol.
+
+| kol | MCC | karışıklık |
+|---|---|---|
+| A mevcut ikili + `vlm` (taban) | +0,788 | TP13 FP2 FN1 TN12 |
+| B mevcut ikili + `llm-large` | +0,788 | TP13 FP2 FN1 TN12 |
+| C sayım: yelekli kaç kişi | +0,788 | TP12 FP1 FN2 TN13 |
+| D sayısal: yeleğin yeşilliği 0-10 | +0,788 | TP13 FP2 FN1 TN12 |
+| E sayım: yeleksiz kaç kişi | −0,229 | dejenere |
+
+Dört farklı biçim **birebir aynı** sonuca oturuyor, model değişimi dahil. Aynı
+klipler yanlış okunuyor. Pano'da belirleyici olan soru biçimiydi; burada değil —
+slot bilgi tavanında. Mevcut soru kalıyor. (E kolu reddedildi: "yeleksiz kaç
+kişi" sorusu modelden iki adımlı çıkarım istiyor ve çöküyor.)
+
+## 13. Safe_Walkway_Violation — dört ret, sonra ROI ile kabul
+
+Bu sınıfta daha önce geofence yaklaşımı **reddedilmişti**: MCC +0,506 görünüyordu
+ama çerçeveleme tek başına aynı skoru veriyordu. Bu yüzden çerçeveleme kontrolü
+proba **gömülü** koşuldu.
+
+**Çerçeveleme tabanı: MCC −0,072** (n=28) — bu sınıfta kamera açısı tek başına
+sinyal taşımıyor. Yani buradaki bir skor, geofence'ten farklı olarak, çerçeveden
+gelemez.
+
+Ölçüm zinciri (hiçbiri silinmedi):
+
+| kol | IHLAL dağılımı | NORMAL dağılımı | MCC |
+|---|---|---|---|
+| tam kare, ikili (içinde/dışında) | DIŞINDA 13 | DIŞINDA 14 | −0,192 (dejenere) |
+| tam kare, sayım | 1:7, 0:4, 2:3 | 1:7, 2:6 | −0,280 |
+| tam kare, mesafe 0-10 | 5:9 | 5:11 | +0,192 |
+| **ROI alt yarı, mesafe 0-10** | 0:5, 5:7 | 7:5, 5:7 | **+0,466** |
+| ROI alt şerit, mesafe | — | — | +0,082 |
+| ROI, ikili | DIŞINDA 14 | DIŞINDA 14 | dejenere |
+
+Yine pano'daki mekanizma: **tam karede ölü, ROI kırpmasıyla canlı.**
+
+### Kendi kabul ölçütümdeki hata
+
+Betiğim kolları `abs(MCC)` ile sıralıyordu ve en iyi kolu "+0,466" diye değil
+**−0,466** diye buldu, yani ters işaretli bir ilişkiyi "KABUL" diye raporladı.
+İşaretli hesap doğru kuralı verdi: *çizgiye uzaklık < 7 → ihlal*, MCC +0,466.
+
+### Ayrılmış kümede doğrulama
+
+Eşik seçim kümesinde belirlendiği için, pano'ya uyguladığım standardın aynısı
+uygulandı — seçimde hiç görülmeyen 11 İHLAL + 9 NORMAL klip, eşik koşumdan önce
+sabitlenmiş:
+
+**MCC +0,638 · TP11 FP4 FN0 TN5 · doğruluk 0,800 [0,584–0,919]**
+
+Seçim kümesinden (+0,466) *daha yüksek* ve 11 ihlalin hepsini yakalıyor. Kabul.
+
+### Açık bırakılan semantik çekince
+
+Ölçülen ilişki **"mesafe küçük → ihlal"** yönünde. "İşaretli yolun içinde yürümek
+güvenlidir" sezgisiyle bu ters görünüyor. Bu tesiste çizginin ne olduğunu
+(yaya yolu sınırı mı, araç şeridi kenarı mı) bilmiyoruz. Bu yüzden:
+
+- Slot adı **ölçülen büyüklüğü** anlatır: `yaya_cizgi_mesafe`.
+- Kural metni de öyle: *"kişi yerdeki işaretli çizginin hemen üzerinde/bitişiğinde
+  yürüyor (çizgiye uzaklık {değer}/10)"* — nedensel bir hikâye iddia etmez.
+- Yön, çevrilebilir bir bayrak değil, **ayrı bir kural sınıfının tanımında**
+  sabittir (`AltEsikKurali`). Böylece "sonuç kötü çıktıysa yönü çevir" kapısı kapalı.

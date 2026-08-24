@@ -196,9 +196,45 @@ SLOT_MAKINE_KISI = Slot(
               "degerlendirilmez — yelek sorusu anlamsizdir."),
 )
 
+# YAYA YOLU — OLCULEN SEY, VARSAYILAN NEDEN DEGIL.
+#
+# DIKKAT — SEMANTIK CEKINCE (kasitli olarak burada duruyor):
+# Slot, kisinin yerdeki isaretli cizgiye UZAKLIGINI olcer. Olculen iliski su
+# yonde: MESAFE KUCUK -> Safe_Walkway_Violation.
+#     ayrilmis kume (n=20): IHLAL {0: 7, 5: 4} · NORMAL {7: 5, 5: 2, 3: 1, 0: 1}
+# "Isaretli yolun ICINDE yurumek guvenlidir" seklindeki sezgisel okumayla bu
+# TERS gorunuyor. Bu tesiste cizginin ne oldugunu (yaya yolu siniri mi, arac
+# seridi kenari mi) BILMIYORUZ. Bu yuzden slot adi ve kural metni OLCULEN
+# BUYUKLUGU anlatir; nedensel bir hikaye ANLATMAZ.
+#
+# OLCUM ZINCIRI (hicbiri silinmedi):
+#   tam kare, ikili soru    : 28 klibin 27'si "DISINDA" -> DEJENERE
+#   tam kare, sayim         : MCC -0,280
+#   tam kare, mesafe        : MCC +0,192
+#   ROI (alt yari), mesafe  : MCC +0,466  <- esik BU kumede secildi
+#   AYRILMIS KUME, esik 7   : MCC +0,638 · TP11 FP4 FN0 TN5 · n=20
+#   cerceveleme tabani      : MCC -0,072 (kamera acisi tek basina sinyal TASIMIYOR)
+#
+# Cerceveleme tabaninin dusuk olmasi onemli: bu sinifta daha once geofence
+# yaklasimi REDDEDILMISTI cunku skorun tamami cerceveden geliyordu. Burada
+# oyle degil.
+SLOT_YAYA_CIZGI_MESAFE = Slot(
+    ad="yaya_cizgi_mesafe",
+    soru=("Yuruyen kisi ile yerdeki isaretli yaya yolu cizgisi arasindaki mesafe "
+          "0 ile 10 arasinda ne kadar? Yalnizca sayiyi yaz "
+          "(0 = tam cizginin uzerinde/icinde, 10 = yoldan cok uzakta)."),
+    secenekler=[str(i) for i in range(11)] + ["GORUNMUYOR"],
+    gorev="algi",
+    coz=_sayi,
+    roi_alani="yol_roi_vlm",
+    kapsam="klip",      # olcum TUM klip uzerinde yapildi; sevk edilen = olculen
+    aciklama=("Yerdeki isaretli cizgiye uzaklik. ROI kirpmasi ZORUNLU: tam "
+              "karede ayni soru MCC +0,192, ROI ile +0,638 (ayrilmis kume)."),
+)
+
 SLOT_KATALOG: Dict[str, Slot] = {
     s.ad: s for s in (SLOT_CATAL_KASA, SLOT_PANO_KOYULUK, SLOT_YELEK,
-                      SLOT_MAKINE_KISI)
+                      SLOT_MAKINE_KISI, SLOT_YAYA_CIZGI_MESAFE)
 }
 
 

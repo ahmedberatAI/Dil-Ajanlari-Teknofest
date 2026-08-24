@@ -23,6 +23,17 @@ _TR = {
 _model = None
 
 
+def _cihaz() -> str:
+    """Ultralytics tahmininin kosacagi cihaz — TEK KAPI.
+
+    Uzak servis kullanilirken yerel GPU YASAK; model CPU'da calisir.
+    (`device="cuda"` sabitleri bu yuzden kaldirildi: sabit kalirsa yasak
+    sessizce delinir.)
+    """
+    from dilajan.config import yerel_cihaz
+    return yerel_cihaz()
+
+
 def _get_model():
     global _model
     if _model is None:
@@ -37,7 +48,7 @@ def detect_segment(frames: Sequence[Tuple[str, bytes]], conf: float = 0.35) -> s
     try:
         model = _get_model()
         imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
-        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        results = model.predict(imgs, conf=conf, verbose=False, device=_cihaz())
         peak: Counter = Counter()
         for r in results:
             names = r.names
@@ -61,7 +72,7 @@ def persons_present(frames: Sequence[Tuple[str, bytes]], conf: float = 0.35):
     try:
         model = _get_model()
         imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
-        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        results = model.predict(imgs, conf=conf, verbose=False, device=_cihaz())
         any_obj = False
         for r in results:
             cls = r.boxes.cls.tolist()
@@ -97,7 +108,7 @@ def verify_fallen(frames: Sequence[Tuple[str, bytes]], kp_conf: float = 0.5,
         import numpy as np
         model = _get_pose_model()
         imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
-        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        results = model.predict(imgs, conf=conf, verbose=False, device=_cihaz())
         votes = []  # True=dusmus(yatay), False=dik(ADL)
         for r in results:
             kpts = getattr(r, "keypoints", None)
@@ -172,7 +183,7 @@ def detect_zone_intrusion(frames: Sequence[Tuple[str, bytes]], zones: Sequence[s
             return {}
         model = _get_model()
         imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
-        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        results = model.predict(imgs, conf=conf, verbose=False, device=_cihaz())
         hits: dict = {}
         for fi, r in enumerate(results):
             w, h = imgs[fi].size
@@ -204,7 +215,7 @@ def detect_vehicle_intrusion(frames: Sequence[Tuple[str, bytes]], zones: Sequenc
     try:
         model = _get_model()
         imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
-        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        results = model.predict(imgs, conf=conf, verbose=False, device=_cihaz())
         zones_n = {z.strip().lower() for z in zones if z and z.strip()}
         first: dict = {}          # (region_or_'*', label) -> (time, conf)
         frames_with_vehicle = 0
@@ -250,7 +261,7 @@ def crowd_stats(frames: Sequence[Tuple[str, bytes]], conf: float = 0.35,
     try:
         model = _get_model()
         imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
-        results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+        results = model.predict(imgs, conf=conf, verbose=False, device=_cihaz())
         counts = [sum(1 for c in r.boxes.cls.tolist() if int(c) == 0) for r in results]
         if not counts:
             return {}
@@ -429,7 +440,7 @@ def _ppe_say(frames: Sequence[Tuple[str, bytes]], conf: float,
     if model is None:
         return None
     imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
-    results = model.predict(imgs, conf=conf, verbose=False, device="cuda")
+    results = model.predict(imgs, conf=conf, verbose=False, device=_cihaz())
 
     # Sinif indeksini ADA gore coz — agirlik degisirse indeks kaymasina karsi.
     adlar = getattr(model, "names", None) or {0: k["var"], 1: k["yok"]}

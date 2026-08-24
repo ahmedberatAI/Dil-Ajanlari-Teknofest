@@ -64,8 +64,11 @@ def _yukle():
                     _son_hata = f"{MODEL_ADI} yuklenemedi: {ex}"
                     return None, None
         try:
-            if torch.cuda.is_available():
-                mdl = mdl.to("cuda")         # fp32 — K6 notuna bak
+            # CIHAZ TEK KAPIDAN: uzak kosumda yerel GPU YASAK -> "cpu".
+            from dilajan.config import yerel_cihaz
+            _c = yerel_cihaz()
+            if _c != "cpu":
+                mdl = mdl.to(_c)             # fp32 — K6 notuna bak
         except Exception as ex:
             _son_hata = f"CUDA'ya tasinamadi, CPU ile devam: {ex}"
         _person_idx = _dogrula_person_indeksi(mdl)
@@ -112,8 +115,10 @@ def kisileri_bul(frames: Sequence[Tuple[str, bytes]],
         imgs = [Image.open(io.BytesIO(j)).convert("RGB") for _, j in frames]
         with torch.no_grad():
             g = isl(images=imgs, return_tensors="pt")
-            if torch.cuda.is_available():
-                g = {k: v.to("cuda") for k, v in g.items()}
+            from dilajan.config import yerel_cihaz
+            _c = yerel_cihaz()
+            if _c != "cpu":
+                g = {k: v.to(_c) for k, v in g.items()}
             cik = mdl(**g)
             boy = torch.tensor([[im.height, im.width] for im in imgs])
             son = isl.post_process_object_detection(cik, target_sizes=boy, threshold=conf)

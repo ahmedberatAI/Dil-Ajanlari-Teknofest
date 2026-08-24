@@ -93,6 +93,33 @@ class EsikKurali(Kural):
                 "slot": self.slot, "deger": v}
 
 
+class AltEsikKurali(Kural):
+    """Sayisal slot < esik ise ihlal (EsikKurali'nin TERSI).
+
+    Ayri bir sinif olmasinin sebebi: yonu bir bayrakla degistirilebilir yapmak,
+    "sonuc kotu ciktiysa yonu cevir" kapisini acardi. Yon KURALIN TANIMINDA
+    sabittir ve hangi olcumden geldigi slot aciklamasinda yazilidir.
+    """
+
+    def __init__(self, kod, slot, sablon, esik_alani, esik_varsayilan, **kw):
+        super().__init__(kod, slot, sablon, **kw)
+        self.esik_alani = esik_alani
+        self.esik_varsayilan = esik_varsayilan
+
+    def degerlendir(self, kayit, ayar) -> Optional[dict]:
+        if not self.on_kosul_saglandi(kayit):
+            return None
+        v = kayit.al(self.slot)
+        if v is None:
+            return None                      # slot cozulemedi -> SESSIZ (K3)
+        esik = getattr(ayar, self.esik_alani, self.esik_varsayilan)
+        if v >= esik:
+            return None
+        return {"kod": self.kod, "metin": self.sablon.format(deger=v, esik=esik),
+                "severity": self.severity, "kategori": self.kategori,
+                "slot": self.slot, "deger": v}
+
+
 class EtiketKurali(Kural):
     """Etiket slotu belirli degere esitse ihlal."""
 
@@ -132,6 +159,18 @@ KURALLAR: List[Kural] = [
         sablon=("Pano kapagi acik birakilmis: elektrik/kontrol panosu bolgesinde "
                 "koyu oyuk goruluyor (koyuluk {deger}/10)"),
         esik_alani="panel_koyuluk_esik", esik_varsayilan=3,
+        severity=Severity.YUKSEK,
+    ),
+    AltEsikKurali(
+        kod="Safe_Walkway_Violation",
+        slot="yaya_cizgi_mesafe",
+        # METIN OLCULEN SEYI ANLATIR. Cizginin bu tesiste ne oldugunu
+        # bilmiyoruz; "yaya yolunun disina cikti" gibi bir NEDEN iddia etmek
+        # olcumun otesine gecmek olurdu.
+        sablon=("Yaya yolu ihlali: kisi yerdeki isaretli cizginin hemen "
+                "uzerinde/bitisiginde yuruyor (cizgiye uzaklik {deger}/10, "
+                "guvenli sinir {esik} ve uzeridir)"),
+        esik_alani="yol_mesafe_esik", esik_varsayilan=7,
         severity=Severity.YUKSEK,
     ),
     EtiketKurali(

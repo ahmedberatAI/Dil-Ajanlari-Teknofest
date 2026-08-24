@@ -257,6 +257,10 @@ class Settings(BaseSettings):
     # degisikligi hicbir uyari vermeden etkisiz kaliyordu.
     # `isg_kural.EsikKurali(esik_alani="forklift_esik")` tek tanimi okur.
     panel_koyuluk_esik: int = 3       # 0-10 olcekte; kalibrasyon tesise ozgu
+    # YAYA YOLU — ROI kirpmasi ZORUNLU (tam karede MCC +0,192, ROI ile +0,638).
+    # BOS = slot tam kareye sorulur = olculmus DUSUK performans.
+    yol_roi_vlm: str = ""
+    yol_mesafe_esik: int = 7          # cizgiye uzaklik < esik -> ihlal
     isg_slot_azami_kare: int = 8      # servis siniri 16; deponun diger problari 8
 
     adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)
@@ -398,7 +402,8 @@ class Settings(BaseSettings):
         """fast_mode acikken dusuk-gecikme profilini uygular (acik daha-dusuk override'lar korunur).
 
         Ayrica mock_mode acikken CUDA gerektiren TEK varsayilan-ACIK dedektor yolu kapatilir:
-        `verify_pose_falls` YOLO-poz modelini `device="cuda"` ile cagirir (dilajan/detector.py).
+        `verify_pose_falls` YOLO-poz modelini cagirir (dilajan/detector.py). NOT: cihaz
+        artik `yerel_cihaz()` kapisindan gecer; uzak kosumda CPU'ya duser.
         Mock modun hedef kitlesi GPU'su OLMAYAN makinelerdir; orada bu cagri fail-open ile
         ABSTAIN dondurur ama her segmentte gereksiz ultralytics yuklemesi/gecikmesi olusur.
         Diger dedektor bayraklari (use_detector / semantic_plausibility / detect_* ) ZATEN
@@ -478,6 +483,18 @@ class Settings(BaseSettings):
         """
         return self.api_timeout if self.uzak_api_mi else self.request_timeout
 
+    # YEREL GPU YASAGI — varsayilan olarak UZAK KOSUMDA ACIK.
+    # Yarisma tahsisi 8xH200 UZAK servistir; yerel GPU kullanmak yasaktir.
+    # Yasak GPU'YA OZGUDUR: yerel modeller CPU'da calismaya DEVAM EDER.
+    # Yerelde GPU kullanmak icin ACIKCA izin verilir:
+    #     DILAJAN_YEREL_GPU_IZNI=1
+    yerel_gpu_izni: bool = False
+
+    @property
+    def yerel_gpu_yasak(self) -> bool:
+        """Yerel GPU kullanimi yasak mi? (uzak kosumda EVET, izin verilmedikce)"""
+        return self.uzak_api_mi and not self.yerel_gpu_izni
+
     @property
     def uzak_api_mi(self) -> bool:
         """Uzak servise mi baglaniyoruz? (kunye/raporlama icin)"""
@@ -485,6 +502,28 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+def yerel_cihaz() -> str:
+    """Yerel modellerin KOSACAGI cihaz: "cuda" ya da "cpu".
+
+    Yasak GPU'YA OZGUDUR — yerel model calistirmak serbesttir, yerel GPU
+    kullanmak degil. Bu yuzden burada istisna FIRLATILMAZ; cihaz CPU'ya
+    cevrilir ve is CALISMAYA DEVAM EDER.
+
+    NEDEN TEK KAPI: bu kusur sinifi zaten islemisti — deterministik pano
+    dedektorunun kisi kontrolu her klipte RT-DETRv2'yi yerel GPU'da
+    calistiriyordu (~3,5 GB VRAM) ve hicbir yerde gorunmedigi icin kimse
+    fark etmedi. Cihaz secimi tek bir yerden gecerse boyle bir sey sessizce
+    geri gelemez.
+    """
+    if settings.yerel_gpu_yasak:
+        return "cpu"
+    try:
+        import torch
+        return "cuda" if torch.cuda.is_available() else "cpu"
+    except Exception:
+        return "cpu"
 
 
 # ---------------------------------------------------------------------------

@@ -109,5 +109,35 @@ for s_ in G.SLOT_KATALOG.values():
     c(f"{s_.ad}: 'ayirt edemiyorsan' ifadesi YOK",
       "ayirt edemiyorsan" not in s_.soru.lower() and "kacis" not in s_.soru.lower())
 
+
+print()
+print("=== ALT-ESIK KURALI (yaya yolu — yon KURALIN TANIMINDA sabit) ===")
+ky1 = G.GozlemKaydi(); ky1.koy(G.SLOT_YAYA_CIZGI_MESAFE, "0")
+oy1 = K.olaylari_uret(ky1, ay)
+c("cizgiye uzaklik 0 -> yaya yolu ihlali",
+  len(oy1) == 1 and getattr(oy1[0], "isg_kod", "") == "Safe_Walkway_Violation")
+ky2 = G.GozlemKaydi(); ky2.koy(G.SLOT_YAYA_CIZGI_MESAFE, "7")
+c("uzaklik 7 (esigin kendisi) -> olay YOK", K.olaylari_uret(ky2, ay) == [])
+ky3 = G.GozlemKaydi(); ky3.koy(G.SLOT_YAYA_CIZGI_MESAFE, "9")
+c("uzaklik 9 -> olay YOK", K.olaylari_uret(ky3, ay) == [])
+ky4 = G.GozlemKaydi(); ky4.koy(G.SLOT_YAYA_CIZGI_MESAFE, "GORUNMUYOR")
+c("olculemedi -> SESSIZ (K3, negatif DEGIL)", K.olaylari_uret(ky4, ay) == [])
+c("yon EsikKurali'nin TERSI (ayri sinif, cevrilebilir bayrak DEGIL)",
+  K.AltEsikKurali is not K.EsikKurali)
+c("yol slotu ROI alanina bagli", G.SLOT_YAYA_CIZGI_MESAFE.roi_alani == "yol_roi_vlm")
+c("yol slotu KLIP kapsamli (sevk edilen = olculen)",
+  G.SLOT_YAYA_CIZGI_MESAFE.kapsam == "klip")
+from tests.taban import sinif_varsayilani
+c("yol_roi_vlm varsayilani BOS (K2)", sinif_varsayilani("yol_roi_vlm") == "")
+c("yol_mesafe_esik varsayilani 7 (olculen esik)",
+  sinif_varsayilani("yol_mesafe_esik") == 7)
+
+print()
+print("=== KURAL KODU ILE SLOT SECIMI ===")
+a2 = A(); a2.isg_slotlari = "Safe_Walkway_Violation"
+c("kural KODU ile secilebilir", K.gerekli_slotlar(a2) == ["yaya_cizgi_mesafe"])
+a3 = A(); a3.isg_slotlari = "*"
+c("'*' yol slotunu da ister", "yaya_cizgi_mesafe" in K.gerekli_slotlar(a3))
+
 print(f"\ngecen={g}  kalan={k}")
 sys.exit(1 if k else 0)
