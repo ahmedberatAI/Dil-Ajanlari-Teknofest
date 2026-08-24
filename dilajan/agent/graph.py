@@ -990,12 +990,16 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                         (olculdu: tam kare MCC -0,192) ve karar-izine yazilir."""
                         if _y:
                             from dilajan.video import servis_videosu as _sv
+                            # YENIDEN KODLAMA KONTROLU: acikken ORTAK SPEK.
+                            _nk = ({"fps": settings.kodlama_fps,
+                                    "sabit_bit": settings.kodlama_bit}
+                                   if settings.kodlama_normalize else {})
                             if kapsam == "klip":
                                 # ON KOSUL sorusu TUM klibe sorulur: pencere
                                 # daraltilinca kisi goruntunun bir bolumunde
                                 # kaliyor ve kapi yanlis kapaniyordu.
-                                return _sv(_y, roi_str=roi)
-                            return _sv(_y, roi_str=roi, bas_sn=_b, sure_sn=_s)
+                                return _sv(_y, roi_str=roi, **_nk)
+                            return _sv(_y, roi_str=roi, bas_sn=_b, sure_sn=_s, **_nk)
                         return _mp4(_k)
 
                     kayit = _gz.slotlari_doldur_bolgeli(

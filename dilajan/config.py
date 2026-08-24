@@ -261,6 +261,15 @@ class Settings(BaseSettings):
     # BOS = slot tam kareye sorulur = olculmus DUSUK performans.
     yol_roi_vlm: str = ""
     yol_mesafe_esik: int = 7          # cizgiye uzaklik < esik -> ihlal
+    # YENIDEN KODLAMA KONTROLU (varsayilan KAPALI = eski davranis, K2).
+    # Acikken gozlem duzlemi videolari ORTAK SPEKTE kodlar: sabit fps + sabit
+    # bit hizi. Boylece "skor icerikten mi, kodlama izinden mi geliyor?"
+    # sorusu deneyle ayrilir. Olculdu: bu sette fps tek basina yetkisiz
+    # ciftinde MCC +1,000 (bizim gonderdigimiz baytlarda), bit hizi forklift
+    # ciftinde +0,882.
+    kodlama_normalize: bool = False
+    kodlama_fps: float = 8.0
+    kodlama_bit: str = "800k"
     isg_slot_azami_kare: int = 8      # servis siniri 16; deponun diger problari 8
 
     adaptive_reexamine: bool = True  # belirsiz (Orta) olaylari kosullu yeniden-incele (agentic dongu; ajan "tekrar bak" der)

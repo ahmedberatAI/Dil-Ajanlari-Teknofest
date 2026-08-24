@@ -291,11 +291,24 @@ def build_segments(
 # soruda alinmisti; yelek sinifina GENELLENMIYOR. O genelleme HATALIYDI.
 def servis_videosu(yol: str, max_side: int = 1280, crf: int = 26,
                    fps: float | None = None, roi_str: str = "",
-                   bas_sn: float | None = None, sure_sn: float | None = None) -> bytes:
+                   bas_sn: float | None = None, sure_sn: float | None = None,
+                   sabit_bit: str = "") -> bytes:
     """Klibi servise gonderilecek KUCUK bir mp4'e cevirir ve baytlari doner.
 
     Ag gövdesi ve piksel butcesi icin kucultulur. ffmpeg yoksa veya hata olursa
     ORIJINAL baytlar doner (K3 fail-open — olcum durmaz, yalnizca yavaslar).
+
+    `sabit_bit` (or. "800k") verilirse CRF yerine SABIT BIT HIZI kullanilir.
+    NEDEN VAR — YENIDEN KODLAMA KONTROLU: bu sette dosya ozellikleri etiketi
+    TEK BASINA tahmin edebiliyor (olculdu, orijinal dosyalar):
+        forklift cifti : bit hizi MCC +1,000 · boyut +1,000
+        yetkisiz cifti : fps      MCC +0,851
+    CRF ile yeniden kodlamak boyut sizintisini kiriyor ama bit hizini
+    kirmiyor (+0,882 kaliyor), cunku CRF kalite hedeflidir ve bit hizi sahne
+    karmasikligini izler. FPS ise hic dokunulmadigi icin AYNEN geciyor
+    (yeniden kodlama sonrasi +1,000).
+    `fps` + `sabit_bit` birlikte verildiginde iki kanal da kapanir; skor
+    HAYATTA KALIRSA icerikten geliyordur.
 
     `bas_sn`/`sure_sn` verilirse yalnizca O ZAMAN PENCERESI kodlanir.
     NEDEN: gozlem duzlemi HER SEGMENT icin slot dolduruyor, ama segmentin
@@ -331,11 +344,13 @@ def servis_videosu(yol: str, max_side: int = 1280, crf: int = 26,
             except (ValueError, TypeError):
                 pass                      # bozuk ROI -> kirpma YOK (K3)
         vf.append(f"scale={max_side}:-2")
+        _kalite = (["-b:v", sabit_bit, "-minrate", sabit_bit, "-maxrate", sabit_bit,
+                    "-bufsize", sabit_bit] if sabit_bit else ["-crf", str(crf)])
         komut = (["ffmpeg", "-y", "-v", "error"] + girdi_oncesi
                  + ["-i", yol]
                  + (["-t", f"{sure_sn:.3f}"] if sure_sn and sure_sn > 0 else [])
-                 + ["-vf", ",".join(vf), "-c:v", "libx264",
-                    "-crf", str(crf), "-preset", "fast", "-an"])
+                 + ["-vf", ",".join(vf), "-c:v", "libx264"]
+                 + _kalite + ["-preset", "fast", "-an"])
         if fps:
             komut += ["-r", str(fps)]
         komut.append(gecici)
