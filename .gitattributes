@@ -1,0 +1,24 @@
+# SATIR SONU SOZLESMESI
+#
+# NEDEN VAR (2026-08-25): depo Windows'tan (git autocrlf=true) ve WSL'den
+# (autocrlf ayarsiz) birden kullaniliyor. Ayni calisma agaci Windows git'te
+# TEMIZ, WSL git'te 6 dosyada "886 ekleme / 886 silme" gorunuyordu — icerik
+# ayni, yalnizca satir sonlari. Bu, WSL'den yapilan bir commit'in depoya
+# BINLERCE anlamsiz satir sokmasi demekti.
+#
+# Depodaki metin dosyalarinin TAMAMI zaten LF (286 dosyada 0 CRLF kontrol
+# edildi), bu yuzden asagidaki kural yeniden-normallestirme GEREKTIRMEZ.
+* text=auto eol=lf
+
+# Ikili dosyalar — donusturulmemeli
+*.mp4  binary
+*.avi  binary
+*.mkv  binary
+*.mov  binary
+*.jpg  binary
+*.jpeg binary
+*.png  binary
+*.pt   binary
+*.npy  binary
+*.npz  binary
+*.pdf  binary
