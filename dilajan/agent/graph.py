@@ -341,7 +341,7 @@ def _ingest_output(frames, info, trace: list, kaynak_yol: str = "") -> dict:
         _s.kaynak_yol = kaynak_yol
     cuts = detect_scene_cuts(frames) if settings.scene_cut_threshold > 0 else []
     if not segments:
-        trace.append("ingest: video okundu ama kare cikarilamadi (boş/bozuk olabilir)")
+        trace.append("ingest: video okundu ama kare çıkarılamadı (boş/bozuk olabilir)")
     else:
         note = f"ingest: {info.duration_str} video, {len(segments)} segment, {info.sampled_frames} kare"
         if cuts:
@@ -359,13 +359,13 @@ def ingest(state: AgentState) -> dict:
         try:
             return _ingest_output(pf, info, trace, state.get("video_path", "") or "")
         except Exception as ex:
-            trace.append(f"ingest: onceden-cikarilmis kare islenemedi: {ex}")
+            trace.append(f"ingest: önceden çıkarılmış kare işlenemedi: {ex}")
             return {"segments": [], "video_info": info, "trace": trace}
     try:
         frames, info = extract_timestamped_frames(state["video_path"])
         return _ingest_output(frames, info, trace, state["video_path"])
     except Exception as ex:  # okunamayan/bozuk video -> toleransli devam
-        trace.append(f"ingest: video okunamadi: {ex}")
+        trace.append(f"ingest: video okunamadı: {ex}")
         return {"segments": [], "video_info": None, "trace": trace}
 
 
@@ -1013,19 +1013,19 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                         system=_gz.GOZLEM_SISTEM, frames=seg.frames)
                     if getattr(kayit, "atlanan", None):
                         notes.append(
-                            f"perceive: segment {seg.index} gorus muhafizi -> "
+                            f"perceive: segment {seg.index} görüş muhafızı -> "
                             f"{list(kayit.atlanan)} slotu bu kamerada SORULMADI")
                     if not _yol:
                         notes.append(
-                            f"perceive: segment {seg.index} gozlem duzlemi "
-                            "KAYNAK VIDEO YOK -> kareler 768px'te yeniden "
-                            "kodlandi; ROI kirpmasi ve zaman penceresi "
-                            "UYGULANMADI (olculdu: bu kip DEJENERE)")
+                            f"perceive: segment {seg.index} gözlem düzlemi "
+                            "KAYNAK VİDEO YOK -> kareler 768px'te yeniden "
+                            "kodlandı; ROI kırpması ve zaman penceresi "
+                            "UYGULANMADI (ölçüldü: bu kip DEJENERE)")
                     yeni = _kr.olaylari_uret(kayit, settings,
                                              zaman=(kar[0][0] if kar else "00:00"))
                     out.extend(yeni)
                     notes.append(
-                        f"perceive: segment {seg.index} gozlem duzlemi "
+                        f"perceive: segment {seg.index} gözlem düzlemi "
                         f"[slot={list(kayit.degerler.items())}, "
                         f"hata={list(kayit.hatalar)}] -> {len(yeni)} deterministik olay")
                     # OLCULEMEYEN slot, "ihlal yok" DEGILDIR. Nedeni izde
@@ -1038,7 +1038,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                                 f"{a}: {n}" for a, n in
                                 list(kayit.hatalar.items())[:4]))
             except Exception as ex:
-                notes.append(f"perceive: segment {seg.index} gozlem duzlemi hatasi: {ex}")
+                notes.append(f"perceive: segment {seg.index} gözlem düzlemi hatasi: {ex}")
         # FORKLIFT ASIRI YUK (D40): catalda >= esik kasa -> deterministik ISG olayi.
         # K2: `forklift_yuk` bos iken blok TEK SATIR bile calistirmaz.
         # Kaynak makalenin ISLEMSEL tanimi: "3 blocks or more". Anlamsal soru
@@ -1195,7 +1195,7 @@ def _dedup_words(text: str) -> set:
 def _isg_tekille(events: List[Event]) -> List[Event]:
     """AYNI ISG kodunu tasiyan olaylardan yalnizca ILKINI tutar.
 
-    NEDEN: gozlem duzlemi HER SEGMENT icin slot doldurur; 3 segmentlik bir
+    NEDEN: gözlem düzlemi HER SEGMENT icin slot doldurur; 3 segmentlik bir
     klipte ayni pano/forklift ihlali 3 kez raporlaniyordu. Ayni ihlali
     tekrar yazmak operator icin gurultudur ve `_dedupe_events` bunu
     yakalayamaz — o ARDISIK ve METIN-BENZERLIGINE bakar, oysa bu olaylarin
@@ -1478,7 +1478,7 @@ def reexamine(state: PolicyAgentState) -> dict:
         trace.append(f"reexamine: dugum hatasi (toleransli devam, olaylar degistirilmedi): {ex}")
         return {"events": events, "reexamined": True, "trace": trace,
                 "reexamine_routine": routine}
-    trace.append(f"reexamine: belirsiz olaylar yeniden-incelendi (↑{n_up} ciddi, ↓{n_down} rutin)")
+    trace.append(f"reexamine: belirsiz olaylar yeniden incelendi (↑{n_up} ciddi, ↓{n_down} rutin)")
     return {"events": new_events, "reexamined": True, "trace": trace,
             "reexamine_routine": routine}
 
@@ -2015,7 +2015,7 @@ def act(state: PolicyAgentState) -> dict:
             trace.append(f"act: politika yukseltmesi var ({len(recs)}) ancak SEVK yolu kapali "
                          f"(policy_dispatch={settings.policy_dispatch}, sevk-yetkili kural="
                          f"{any(r.get('sevk') for r in recs)}); operatör teyidi önerisi aksiyonlarda")
-        trace.append("act: yuksek-risk sinyali yok, operasyonel cagri yapilmadi (dispatch kapisi)")
+        trace.append("act: yüksek risk sinyali yok, operasyonel çağrı yapılmadı (dispatch kapisi)")
         return {"triggered_functions": [], "action_log": [], "trace": trace}
 
     # Model cagrilacak fonksiyonlari JSON olarak secer; her birini ilgili mock
@@ -2053,7 +2053,7 @@ def act(state: PolicyAgentState) -> dict:
         trace.append(f"act: aksiyon seçimi hatasi: {ex}")
 
     triggered = [str(entry.get("function", "")) for entry in call_log]
-    trace.append(f"act: {len(triggered)} operasyonel fonksiyon çağrildi: {triggered}")
+    trace.append(f"act: {len(triggered)} operasyonel fonksiyon çağrıldı: {triggered}")
     return {"triggered_functions": triggered, "action_log": call_log, "trace": trace}
 
 
