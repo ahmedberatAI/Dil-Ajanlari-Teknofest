@@ -246,6 +246,29 @@ def respond(
         if m.get("role") in ("user", "assistant") and m.get("content"):
             messages.append({"role": m["role"], "content": m["content"]})
     messages.append({"role": "user", "content": message})
+    # D45 OLCULMUS KUSUR — METIN-EYLEM CELISKISI (2026-08-25, arsiv taramasi):
+    # GERCEK icra blogu iceren 18 yanittan 9'u (%50) AYNI MESAJDA onay
+    # istiyordu. Arsivden aynen:
+    #   "...icin ONAYINIZ VAR MI?"   +   "✅ Yurutulen operasyonel aksiyonlar: ..."
+    #   "ONAYLARSANIZ, hemen ... yonlendireyim. Talimatiniz nedir?" + ayni blok
+    # Sebep YAPISAL: respond() ONCE serbest metni uretir, SONRA
+    # `answer += _maybe_execute(...)` ile icra blogunu ekler. Yani model, kendi
+    # onerisinin O ANDA yurutulecegini BILMEDEN yaziyor ve onay istemeye devam
+    # ediyor. Cozum: icra kapisi ZATEN acikken modele bunu SOYLE.
+    # Kapi kosulu asagidaki `if` ile BIREBIR AYNI olmali (tek kaynak):
+    _icra_olacak = is_confirmation(message) and onaylanacak_oneri_var_mi(history)
+    if _icra_olacak:
+        # NOT SISTEM PROMPTUNUN SONUNA eklenir, AYRI bir system mesaji OLARAK
+        # DEGIL: sohbetin ORTASINA system rolu koymak servis tarafindan
+        # REDDEDILIYOR (BadRequestError -> respond() erken donuyor ve yanit
+        # "model servisine ulasilamiyor" oluyor). Olculdu ve duzeltildi.
+        messages[0]["content"] += (
+            "\n\nDURUM (bu tur icin): Operatör önerilen aksiyonu ONAYLADI ve "
+            "aksiyon BU YANITLA BİRLİKTE GERÇEKTEN YÜRÜTÜLÜYOR. Yanıtında "
+            "TEKRAR onay İSTEME ('onaylarsanız', 'onayınız var mı', "
+            "'talimatınız nedir' deme). Aksiyonun yürütüldüğünü BİLDİR ve varsa "
+            "bir sonraki adımı kısaca söyle. Yürütülen aksiyonların listesi "
+            "yanıtının altına sistem tarafından EKLENECEK; sen o listeyi YAZMA.")
     try:
         # D36 OLCUM KUSURU: burasi eskiden SABIT temperature=0.3 idi ve DILAJAN_TEMPERATURE
         # ayarini yok sayiyordu. Sonuc: diyalog olcumleri YENIDEN URETILEBILIR DEGILDI —
@@ -271,7 +294,7 @@ def respond(
     #    K5: onay tespiti olumsuzlama-farkindalikli ("gönderme"/"onaylamıyorum" icra ETMEZ)
     #    D42: onay TEK BASINA yetmez — ONAYLANACAK BIR ONERI de olmali. Bu onkosul
     #    DETERMINISTIKTIR; modele birakildiginda uc alias da ihlal etti (6/6).
-    if is_confirmation(message) and onaylanacak_oneri_var_mi(history):
+    if _icra_olacak:                      # yukaridaki kapiyla AYNI kosul (tek kaynak)
         executed = _maybe_execute(context, history, message, model=model)
         if executed:
             answer += "\n\n" + executed
