@@ -1,0 +1,294 @@
+{
+ "yelek": [
+  {
+   "i": 0,
+   "klip": "0_tr59.mp4",
+   "cift": "Safe_Walkway_Violation",
+   "ihlal": true,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 3,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 1,
+   "klip": "0_tr178.mp4",
+   "cift": "Safe_Walkway_Violation",
+   "ihlal": true,
+   "slotlar": {
+    "catal_kasa_sayisi": 0,
+    "pano_koyuluk_0_10": 3,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 2,
+   "klip": "3_tr28.mp4",
+   "cift": "Carrying_Overload_with_Forklift",
+   "ihlal": true,
+   "slotlar": {
+    "catal_kasa_sayisi": 3,
+    "pano_koyuluk_0_10": 0,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 3,
+   "klip": "6_tr1.mp4",
+   "cift": "Opened_Panel_Cover",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 2,
+    "pano_koyuluk_0_10": 3,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 4,
+   "klip": "4_te6.mp4",
+   "cift": "Safe_Walkway_Violation",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 0,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 5,
+   "klip": "7_tr21.mp4",
+   "cift": "Carrying_Overload_with_Forklift",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 2,
+    "pano_koyuluk_0_10": 0,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 6,
+   "klip": "6_tr17.mp4",
+   "cift": "Opened_Panel_Cover",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 2,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 7,
+   "klip": "0_tr108.mp4",
+   "cift": "Safe_Walkway_Violation",
+   "ihlal": true,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 2,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 8,
+   "klip": "6_tr19.mp4",
+   "cift": "Opened_Panel_Cover",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 3,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 9,
+   "klip": "7_tr4.mp4",
+   "cift": "Carrying_Overload_with_Forklift",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 2,
+    "pano_koyuluk_0_10": 0,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 10,
+   "klip": "0_tr11.mp4",
+   "cift": "Safe_Walkway_Violation",
+   "ihlal": true,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 1,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 11,
+   "klip": "6_te8.mp4",
+   "cift": "Opened_Panel_Cover",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 2,
+    "pano_koyuluk_0_10": 3,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  }
+ ],
+ "pano": [
+  {
+   "i": 0,
+   "klip": "4_tr13.mp4",
+   "cift": "Safe_Walkway_Violation",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 0,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 1,
+   "klip": "5_te13.mp4",
+   "cift": "Unauthorized_Intervention",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 0,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "VAR"
+   }
+  },
+  {
+   "i": 2,
+   "klip": "5_te6.mp4",
+   "cift": "Unauthorized_Intervention",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 0,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "VAR"
+   }
+  },
+  {
+   "i": 3,
+   "klip": "0_tr135.mp4",
+   "cift": "Safe_Walkway_Violation",
+   "ihlal": true,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 7,
+    "makine_basinda_kisi": 0,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 4,
+   "klip": "5_te11.mp4",
+   "cift": "Unauthorized_Intervention",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "VAR"
+   }
+  },
+  {
+   "i": 5,
+   "klip": "5_tr15.mp4",
+   "cift": "Unauthorized_Intervention",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 0,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "VAR"
+   }
+  },
+  {
+   "i": 6,
+   "klip": "5_te12.mp4",
+   "cift": "Unauthorized_Intervention",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "VAR"
+   }
+  },
+  {
+   "i": 7,
+   "klip": "5_tr6.mp4",
+   "cift": "Unauthorized_Intervention",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 0,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "VAR"
+   }
+  },
+  {
+   "i": 8,
+   "klip": "1_tr63.mp4",
+   "cift": "Unauthorized_Intervention",
+   "ihlal": true,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 1,
+    "makine_basinda_yelek": "YOK"
+   }
+  },
+  {
+   "i": 9,
+   "klip": "5_te5.mp4",
+   "cift": "Unauthorized_Intervention",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 0,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "VAR"
+   }
+  },
+  {
+   "i": 10,
+   "klip": "5_tr5.mp4",
+   "cift": "Unauthorized_Intervention",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 0,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "VAR"
+   }
+  },
+  {
+   "i": 11,
+   "klip": "4_tr41.mp4",
+   "cift": "Safe_Walkway_Violation",
+   "ihlal": false,
+   "slotlar": {
+    "catal_kasa_sayisi": 1,
+    "pano_koyuluk_0_10": 8,
+    "makine_basinda_kisi": 2,
+    "makine_basinda_yelek": "VAR"
+   }
+  }
+ ]
+}
