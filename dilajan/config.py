@@ -268,6 +268,21 @@ class Settings(BaseSettings):
     # YAYA YOLU — ROI kirpmasi ZORUNLU (tam karede MCC +0,192, ROI ile +0,638).
     # BOS = slot tam kareye sorulur = olculmus DUSUK performans.
     yol_roi_vlm: str = ""
+    # YELEK SLOTU ROI'SI — referans (grounding) sorununa saldiri.
+    # Kural "makinenin/panonun BASINDA duran kisi" diyor; `panel_roi_vlm`
+    # makine basini ZATEN tanimliyor (pano slotunda +0,960). Yelek sorusu o
+    # kirpmada sorulursa "basindaki kisi" referansi YAPISAL olarak tekleser —
+    # kadraj disindaki 10-12 kisi soruya karisamaz. Dedektor YOK, secici YOK,
+    # ek soru YOK (yalnizca bir ek video kodlamasi + bir ek oturum).
+    # OLCULDU (2026-08-25): kacirmalarin B grubunda model "yelek VAR" derken
+    # %92-99,7 EMIN ve HAKLI — sorun hangi kisiye baktigi.
+    # BOS = tam kare = SEVK EDILEN davranis (K2).
+    # On kayit: docs/on_kayit_yelek_roi_2026-08-25.md
+    yelek_roi_vlm: str = ""
+    # ON KOSUL slotunun ROI'si — AYRI alan, cunku kirpma makinenin ONUNDEKI
+    # kisiyi kadraj disinda birakip kapiyi yanlislikla kapatabilir. B1 kolu
+    # yalniz yelek slotunu tasir, B2 ikisini birden. Iki kol AYRI olculur.
+    yelek_on_roi_vlm: str = ""
     yol_mesafe_esik: int = 7          # cizgiye uzaklik < esik -> ihlal
     # GORUS MUHAFIZI — yol slotu YALNIZCA dogru kamerada sorulur.
     # `yol_dislanan_gorus`: DISLANAN kameranin (forklift, kamera 14) referans

@@ -195,6 +195,7 @@ SLOT_YELEK = Slot(
     kapsam="klip",      # kiyafet klip boyunca DEGISMEZ; pencere daraltmak zarar
 
     aciklama="Kaynak makale: yesil yelek = yetkili mudahale, yeleksiz = yetkisiz.",
+    roi_alani="yelek_roi_vlm",
 )
 
 
@@ -220,6 +221,7 @@ SLOT_MAKINE_KISI = Slot(
                         # kapiyi yanlis kapatiyor, MCC +0,689 -> +0,527)
     aciklama=("Yetkisiz mudahale kuralinin ON KOSULU. 0 ise kural HIC "
               "degerlendirilmez — yelek sorusu anlamsizdir."),
+    roi_alani="yelek_on_roi_vlm",
 )
 
 # YAYA YOLU — OLCULEN SEY, VARSAYILAN NEDEN DEGIL.
