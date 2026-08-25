@@ -58,6 +58,33 @@ kanıtlanmamıştı. Bunu kapatmak için tüm videoları ortak spekte kodladık
 
 fps kanalı tamamen kapatıldığı halde skorlar değişmedi.
 
+
+## 3b. "Yetkisiz müdahale çiftinde kamera açısı etiketi ele veriyor. Siz onu okumuyor musunuz?"
+
+Keskin bir soru ve **haklı** — o çiftte iki kamera görüşü var ve dağılım
+dengesiz: geniş planın %89'u ihlal. İçeriğe hiç bakmayan, sadece
+*"geniş plan ise ihlal de"* diyen bir sistem orada **MCC +0,618** alır.
+Bizim skorumuz +0,689; tek başına "üstünde olması" yeterli kanıt değil.
+
+Bu yüzden **katmanlı analiz** yaptık — karıştırıcıyı sabitleyip ilişkinin
+kalıp kalmadığına baktık:
+
+| katman | n | MCC |
+|---|---|---|
+| GÖRÜŞ-A (yakın) | 31 | **+0,563** |
+| GÖRÜŞ-B (geniş) | 19 | **+0,574** |
+
+Kural **her iki görüşün içinde** ayırt ediyor → skor kameradan değil,
+yelek varlığından geliyor.
+
+Diğer iki çiftte bu sorun yok: klipler tek görüşte ve dengeli; kameraya
+bakarak alınabilecek en yüksek skor 0,14 (pano +0,960, forklift +0,881).
+
+**Bu yüzden yapmadığımız şey:** geniş görüşte yelek kuralının 3 kaçırması
+var. "Geniş görüşte farklı soru sor" yaklaşımını **denemedik** — görüş
+etiketle 0,833 korele olduğu için görüşe göre davranış değiştirmek etiket
+bilgisi sızdırırdı. Bu, daha önce geofence'i reddetme sebebimizin aynısı.
+
 ## 4. "Yanlış alarm oranınız %60. Bu çok yüksek değil mi?"
 
 Sayı doğru ama **sistemin hata oranı değil**. Değerlendirme setinde kamera 9'un
@@ -69,9 +96,24 @@ koyu tulum, yeşil yelek nadir. Bakılan kliplerin neredeyse hepsinde makinenin
 başında **gerçekten yeleksiz bir kişi var**. Yani ateşlemeler olgusal olarak
 doğru; kıyas kümesi onları farklı bir eksende etiketliyor.
 
-Her kuralın **ölçülebildiği** eksende kesinliği:
+Bunu **ölçtük**: her kural için çapraz ateşlemelerden tohumlu rastgele 12
+örnek çekilip gözle etiketlendi (model yeniden sorulmadı — dairesel olurdu):
 
-    pano     1,000   ·   yelek 0,905   ·   forklift 0,920
+    yelek : 12/12 karede makine yakınında YELEKSİZ kişi VAR
+    pano  : 12/12 karede AÇIK pano boşluğu VAR
+
+Düzeltilmiş saha kesinliği:
+
+    pano   0,390 -> 1,000  [alt sınır 0,852]
+    yelek  0,237 -> 0,975  [alt sınır 0,796]
+    forklift              0,923  (çapraz ateşleme YOK)
+
+Tutarlılık: pano ateşlemelerinin çoğu yetkisiz müdahale kliplerinde —
+**birine müdahale etmek için pano açılır.** İki tehlike gerçekten birlikte
+oluşuyor; veri seti klip başına yalnız birini etiketliyor.
+
+Çekince: tek kareye bakılarak verilmiş insan hükmü; bu yüzden alt sınır da
+veriliyor.
 
 ## 5. "Ölçümleriniz tekrar üretilebilir mi?"
 

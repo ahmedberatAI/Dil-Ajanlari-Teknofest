@@ -59,3 +59,29 @@ için görüşe göre davranış değiştirmek etiket bilgisi sızdırır — ge
 reddedilme sebebinin ta kendisi.
 
 Bu yüzden yelek kuralı +0,689'da kalıyor ve tavanı belgeleniyor.
+
+---
+
+## Diğer iki çiftte durum — karıştırıcı yok
+
+Aynı test forklift ve pano çiftlerine de uygulandı:
+
+| çift | görüş dağılımı | yalnızca kamera tabanı | bizim skor | görüş içi |
+|---|---|---|---|---|
+| pano | 48/49 klip tek görüşte (24 ihlal / 24 normal) | 0,141 | +0,960 | **+0,959** |
+| forklift | 49/50 klip tek görüşte (24 ihlal / 25 normal) | 0,143 | +0,881 | **+0,878** |
+| yetkisiz | iki görüş, 8/23 ve 17/2 | **0,618** | +0,689 | **+0,563 / +0,574** |
+
+Pano ve forklift çiftlerinde klipler **tek kamera görüşünde** ve sınıflar
+dengeli dağılmış; kameraya bakarak alınabilecek en yüksek skor 0,14. Bu iki
+çiftte kamera karıştırıcısı **yok**.
+
+Yalnızca yetkisiz müdahale çiftinde ciddi bir karıştırıcı var ve orada da
+katman içi ayrım korunuyor.
+
+## Özet
+
+Üç kuralın hiçbirinin skoru kamera açısından gelmiyor:
+
+- pano ve forklift: karıştırıcı zaten yok (taban 0,14)
+- yetkisiz: karıştırıcı güçlü (taban 0,62) ama katman içi ayrım +0,56/+0,57
