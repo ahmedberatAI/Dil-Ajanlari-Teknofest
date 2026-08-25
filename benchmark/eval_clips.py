@@ -166,6 +166,25 @@ def _kosum_kunyesi() -> dict:
         # sevk arsivinin satirlarini "tamamlanmis" diye devralir ve hicbir
         # dagilim kaydedilmez -> kol OLCULEMEZ ama olculmus gorunur.
         "slot_guven": _s.slot_guven,
+        # YELEK SLOTU ROI'SI — KUNYEDE OLMAK ZORUNDA. Ilk denemede unutuldu ve
+        # B1 kolu, ROI KAPALI kosumun ara-kayit dosyasini (ayni md5) actı; o
+        # dosya silinmemis olsaydi B1 197 satiri "tamamlanmis" diye DEVRALIR ve
+        # "ROI acik" diye raporlanan sayilar aslinda KAPALI kolun sayilari
+        # olurdu. Ayni hata bu dosyada daha once `isg_lens` ve `panel_roi` icin
+        # de yasandi — kod yorumlari uyariyordu, yine de tekrarlandi.
+        "yelek_roi_vlm": _s.yelek_roi_vlm,
+        "yelek_on_roi_vlm": _s.yelek_on_roi_vlm,
+        # YAYA YOLU AYARLARI — bunlar da eksikti; `tests/test_kunye_tamligi.py`
+        # yakaladi. 10. kol kosumu tesadufen korundu (o kosumda `isg_slotlari`
+        # de degistigi icin ara dosya zaten ayrildi) ama ROI/esik/fps'i TEK
+        # BASINA degistiren bir kol sessizce onceki kolun satirlarini
+        # devralirdi. Gorus imzasi UZUN oldugu icin yalnizca uzunlugu yazilir —
+        # `panel_gorus_imza` ile ayni desen.
+        "yol_roi_vlm": _s.yol_roi_vlm,
+        "yol_mesafe_esik": _s.yol_mesafe_esik,
+        "yol_gorus_esik": _s.yol_gorus_esik,
+        "yol_kodlama_fps": _s.yol_kodlama_fps,
+        "yol_gorus_imza_uzunluk": len(_s.yol_dislanan_gorus or ""),
     }
 
 
