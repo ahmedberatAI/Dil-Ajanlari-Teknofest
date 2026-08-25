@@ -63,6 +63,10 @@ def main() -> int:
     else: _uy("kodlama normalizasyonu KAPALI"); sorun += 1
     if s.yeniden_deneme >= 1: _ok(f"servis yeniden deneme: {s.yeniden_deneme}")
     else: _uy("yeniden deneme KAPALI"); sorun += 1
+    # SUNUM ICIN KARARLI KIP: olculdu — kapaliyken pano demo klibi 3 tekrarda
+    # IKI FARKLI sonuc veriyordu; acikken 6/6 kol kararli VE dogru.
+    if s.kodlama_kararli: _ok("kararli kodlama ACIK (sahnede ayni sonuc)")
+    else: _uy("kararli kodlama KAPALI — ayni klip farkli sonuc verebilir"); sorun += 1
 
     print("\n=== 2. SERVIS ===")
     try:

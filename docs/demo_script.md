@@ -4,10 +4,23 @@
 nasıl yönettiğini göstermeli. Sunum demosu için ayrıca **1 dk**lık kısa versiyon hazırlanır.
 
 ## Hazırlık (kayıttan önce)
-1. `python serve_vllm.py` çalışıyor olsun (model + CUDA graph yüklü, ~90 sn).
+1. `.env` DOLU olsun (uzak servis anahtarı). **Yerel sunucu GEREKMEZ** —
+   `python serve_vllm.py` artık çalıştırılmaz; yerel GPU kod düzeyinde yasaktır.
+   Kontrol: `python scripts/demo_hazirla.py` → "0 sorun" görmelisiniz.
 2. `python app.py` → tarayıcıda `http://localhost:7860`.
 3. Elde 3 video hazır olsun:
-   - **Yüksek çözünürlüklü senaryo klibi** (önerilen ana demo): `data/eval_scenario/Fire/` altından net bir yangın klibi (1080p değil ama görsel net; yangın→Kritik, zaman damgalı olaylar, aksiyonlar).
+   - **PROVA EDİLMİŞ ÜÇ ZIT ÇİFT** (önerilen ana demo). Her çift aynı sahne,
+     aynı makine; tek fark ölçülen slot değeri. 2026-08-25'te tekrarlı koşumda
+     **6/6 kararlı ve doğru** çıktı:
+
+     | çift | NORMAL (susmalı) | İHLAL (ateşlemeli) | ayırt eden ölçüm |
+     |---|---|---|---|
+     | yelek | `Normal/Authorized_Intervention/5_te14.mp4` | `Anomali/Unauthorized_Intervention/1_tr2.mp4` | yelek VAR / YOK |
+     | forklift | `Normal/Safe_Carrying/7_te1.mp4` | `Anomali/Carrying_Overload_with_Forklift/3_tr45.mp4` | çatalda 2 / 3 kasa |
+     | pano | `Normal/Closed_Panel_Cover/6_te10.mp4` | `Anomali/Opened_Panel_Cover/2_tr58.mp4` | koyuluk 3 / 8 |
+
+     Anlatım: "Model **ölçüyor**, kural **karar veriyor**. Karar günlüğünde
+     ölçülen sayıyı ve eşiği görebilirsiniz." Süre: klip başına 10–26 sn.
    - **Yüksek çözünürlüklü endüstriyel/normal** klip: `data/industrial/class*/` (1080p gerçek fabrika CCTV) → "normal izleme, yanlış alarm yok" göstermek için.
    - **Gerçek düşük-çöz CCTV** (dayanıklılık): `data/ucf_explosion.mp4` (patlama/duman, grainy 320×240).
 4. Ekran kaydı + mikrofon. Türkçe anlatım.
@@ -17,7 +30,13 @@ nasıl yönettiğini göstermeli. Sunum demosu için ayrıca **1 dk**lık kısa 
 | Süre | Bölüm | Anlatım / Gösterim |
 |---|---|---|
 | 0:00–0:40 | **Problem & çözüm** | "Savunma/saha kameraları yüksek hacimli video üretir; manuel analiz maliyetli ve hataya açık. Biz Türkçe bir İSG karar destek ajanı geliştirdik; hükmü model değil deterministik kural motoru veriyor." Mimari diyagramını göster (docs/architecture.md). |
-| 0:40–1:20 | **Mimari** | "**Qwen3-VL-8B** (yerel vLLM, FP8); LangGraph ajan: ingest → perceive (iki aşamalı algı + **öz-doğrulama**: ajan yüksek-riskli tespiti yeniden sorgulayıp teyit eder + **mekânsal grounding** ile konumu çıkarır) → reason → act (mock fonksiyon dispatch) → finalize. Dış API/bulut yok. **Ayarlanabilir duyarlılık modları** (Yüksek-Duyarlılık / Dengeli / Kararlılık)." |
+| 0:40–1:20 | **Mimari** | "**Qwen3-VL** + **Qwen3.5**, yarışma tahsisli 8×H200 çıkarım servisinde.
+LangGraph ajan: ingest → perceive → reason → act → finalize.
+
+**İki düzlem:** *anlatı düzlemi* açık dünya tehlikelerini serbest metinle
+raporlar (yabancı veride %97 tehlike yakalama); *gözlem düzlemi* İSG için
+kapalı cevap uzayında ölçüm yapar ve hükmü **deterministik kural motoru** verir.
+Karar döngüsünde model yoktur — bu yüzden olay metni model nesri değil, şablon." |
 | 1:20–3:20 | **Canlı analiz (yüksek-res senaryo)** | Net **yangın** klibini yükle → "Analiz Et". Canlı ilerlemeyi göster. Sonuç: zaman çizelgesi (renkli olay işaretleri), **risk rozeti (Kritik)**, **temiz olay tablosu** (olay-birleştirme ile tekrarsız) + **Konum sütunu** (olayın karedeki bölgesi — "merkez/üst-sol"), aksiyon önerileri ve **tetiklenen operasyonel fonksiyonlar** (güvenlik ekibi, acil durdurma, olay kaydı). Ham şartname-JSON'u aç. **Vurgu:** olay net adlandırılıyor ("yangın, odun yığınında") + konumlanıyor — akıcı Türkçe. |
 | 3:20–4:10 | **Normal izleme (yanlış alarm yok)** | Yüksek-res **endüstriyel** klibi yükle → risk Düşük, kritik olay yok. "Elimizdeki 8 gerçek fabrika klibinin hiçbirinde yanlış alarm gözlemedik (0/8). Küçük örneklem olduğu için 'sıfır' demiyoruz: %95 üst sınır %32 — bunu raporumuzda böyle yazıyoruz." *(Dürüstlük vurgusu jüride puan getirir; abartılı "%0" iddiası riskli.)* |
 | 4:10–4:50 | **Dayanıklılık (grenli gerçek CCTV)** | `ucf_explosion.mp4` yükle → patlama/duman tespiti, risk Kritik. "Bozuk, 320×240 düşük çözünürlüklü CCTV'de bile olayı yakalıyor. Ama dürüst olalım: bu çözünürlükte olayın **tipini** birebir adlandırma oranımız 22/51 — bunu girdi-tavanı olarak ölçtük ve yayınladık." |
