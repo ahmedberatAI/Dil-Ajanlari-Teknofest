@@ -176,6 +176,9 @@ def _kosum_kunyesi() -> dict:
         "yelek_on_roi_vlm": _s.yelek_on_roi_vlm,
         # ON KOSUL KAPISI davranisi degistirir -> kunyede OLMAK ZORUNDA
         "yelek_on_kosul": _s.yelek_on_kosul,
+        # ALAN KILIDI davranisi degistirir -> kunyede OLMAK ZORUNDA
+        "isg_gorus_imza_uzunluk": len(_s.isg_gorus_imza or ""),
+        "isg_gorus_esik": _s.isg_gorus_esik,
         # YAYA YOLU AYARLARI — bunlar da eksikti; `tests/test_kunye_tamligi.py`
         # yakaladi. 10. kol kosumu tesadufen korundu (o kosumda `isg_slotlari`
         # de degistigi icin ara dosya zaten ayrildi) ama ROI/esik/fps'i TEK

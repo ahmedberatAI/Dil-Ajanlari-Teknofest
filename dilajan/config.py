@@ -259,6 +259,22 @@ class Settings(BaseSettings):
     #   "*"                          -> tum kurallar
     #   "catal_kasa_sayisi,..."      -> yalniz secilen slotlar
     isg_slotlari: str = ""
+    # TESIS TANIMA KAPISI — gozlem duzleminin ALAN KILIDI.
+    # OLCULDU (2026-08-25, 100 alan disi klip / iSafetyBench):
+    # Tesise KALIBRE ISG kurallari alan disinda GURULTU uretiyor. Normal
+    # kliplerin 22/50'sinde YALNIZCA ISG kurali atesliyor; tehlike tespitine
+    # katkisi SIFIR (recall her iki kipte de 0,900). Dahasi normal kliplerde
+    # (26/50) tehlike kliplerinden (13/50) DAHA SIK atesliyor — ters yonde.
+    #    ISG acik  : recall 0,900 · normal FP 0,540 · MCC +0,401
+    #    ISG kapali: recall 0,900 · normal FP 0,100 · MCC +0,800
+    # Cozum: slotlari SAHNE KILIDINE bagla. Imza DOLU iken slot yalnizca
+    # sahne kalibre tesise BENZIYORSA sorulur. BOS = kilit yok = eski
+    # davranis (K2) -> mevcut olcumler birebir yeniden uretilir.
+    # DIKKAT: bu bir ETIKET kapisi DEGIL, ALAN kapisidir. Etiket sizintisi
+    # riski yok cunku kilit "bu bizim tesisimiz mi" diye sorar, "bu hangi
+    # sinif" diye degil — ve kalibre tesiste TUM siniflar kilidi gecer.
+    isg_gorus_imza: str = ""
+    isg_gorus_esik: float = 0.708
     # NOT: `forklift_esik` YUKARIDA (D40 blogu) tanimli — burada TEKRAR
     # ETMIYORUZ. Ayni Settings govdesinde iki kez bildirildiginde ikinci tanim
     # birincisini SESSIZCE eziyordu: yukaridaki blokta yapilan bir esik

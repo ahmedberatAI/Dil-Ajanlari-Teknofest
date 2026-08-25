@@ -502,6 +502,23 @@ def gorus_uygun_mu(slot: Slot, ayar, frames) -> bool:
     Kare yoksa (or. onceden cikarilmis kare yolu) muhafiz UYGULANMAZ ve
     slot sorulur: sessizce kapatmak, olculmemis bir davranis uretmek olurdu.
     """
+    # ALAN KILIDI (tesis tanima) — DISLAMA kapisindan ONCE calisir.
+    # `dislanan_gorus_alani` "bu kamerada SORMA" der; bu ise "yalnizca
+    # KALIBRE TESISTE sor" der. Ikisi bagimsizdir.
+    ger = getattr(ayar, "isg_gorus_imza", "") or ""
+    if ger.strip():
+        try:
+            from dilajan.pano import gorus_uyuyor
+            esik = float(getattr(ayar, "isg_gorus_esik", 0.708))
+            # COK IMZA: tesis IKI kamera ile cekilmis; tek imza kendi
+            # kliplerimizin %45'ini disarida birakiyordu. Sahne imzalardan
+            # HERHANGI BIRINE benziyorsa kilit acilir.
+            imzalar = [x for x in ger.split(";") if x.strip()]
+            if frames and not any(gorus_uyuyor(frames, im, esik)
+                                  for im in imzalar):
+                return False              # ALAN DISI -> slot SORULMAZ
+        except Exception:
+            pass                          # K3: kilit cozulemezse engelleme
     ad = getattr(slot, "dislanan_gorus_alani", "")
     if not ad:
         return True
