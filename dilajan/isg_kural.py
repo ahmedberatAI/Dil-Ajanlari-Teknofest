@@ -38,7 +38,8 @@ class Kural:
     def __init__(self, kod: str, slot: str, sablon: str,
                  kategori: EventCategory = EventCategory.GUVENLIK,
                  severity: Severity = Severity.YUKSEK,
-                 on_slot: str = "", on_asgari: int = 1):
+                 on_slot: str = "", on_asgari: int = 1,
+                 on_azami: int = 10 ** 9):
         self.kod = kod              # ISG sinif kodu (etiket metrigi bunu okur)
         self.slot = slot
         self.sablon = sablon        # Event.event metni — MODEL NESRI DEGIL
@@ -48,6 +49,7 @@ class Kural:
         # Bos ise kural her sahnede degerlendirilir (eski davranis).
         self.on_slot = on_slot
         self.on_asgari = on_asgari
+        self.on_azami = on_azami
 
     def on_kosul_saglandi(self, kayit) -> bool:
         """Kuralin sorusu bu sahnede ANLAMLI mi?
@@ -62,9 +64,16 @@ class Kural:
         if v is None:
             return False            # olculemedi -> IDDIA ETME
         try:
-            return int(v) >= self.on_asgari
+            n = int(v)
         except (TypeError, ValueError):
             return False
+        # UST SINIR (`on_azami`) `on_asgari`nin simetrigidir: bazi kurallar
+        # on slotun COK olmasi degil AZ olmasi kosuluna baglidir. Yaya yolu
+        # kuralinda ayirt edici sey kisinin KONUMUDUR — pano/yetkisiz
+        # kliplerinde kisi makinenin basinda DURUR, yol kliplerinde zeminde
+        # YURUR. `on_azami=0` ayni kamerada iki tehlikeyi ayirir.
+        # VARSAYILAN SINIRSIZ -> mevcut kurallarin davranisi DEGISMEZ (K2).
+        return self.on_asgari <= n <= self.on_azami
 
     def degerlendir(self, kayit, ayar) -> Optional[dict]:
         raise NotImplementedError
@@ -180,6 +189,27 @@ KURALLAR: List[Kural] = [
                 "güvenli sınır {esik} ve üzeridir)"),
         esik_alani="yol_mesafe_esik", esik_varsayilan=7,
         severity=Severity.YUKSEK,
+    ),
+    # KOL 1 (BIRINCIL) — ILISKISEL degil YEREL soru.
+    # Mesafe kurali (yukarida) SILINMEDI: ayni kosumda YAN YANA doldurulur ve
+    # dort karar kurali (mesafe / mesafe+kapi / zemin / zemin+kapi) AYNI ileri
+    # gecis kumesinden ESLESMIS olarak puanlanir.
+    # On kayit: docs/on_kayit_yaya_zemin_2026-08-25.md
+    EtiketKurali(
+        kod="Safe_Walkway_Violation",
+        slot="yaya_zemin",
+        # METIN OLCULEN SEYI ANLATIR: olculen sey ayagin altindaki YUZEYDIR.
+        sablon=("Yaya yolu ihlali: kişi işaretli yaya yolunun dışında, "
+                "boyasız beton zeminde yürüyor"),
+        ihlal_degeri="GRI_BETON",
+        severity=Severity.YUKSEK,
+        # KOL 2 (IKINCIL) — CAPRAZ ON KOSUL.
+        # Ayni kamerada (kamera 9) yol ihlali, pano ve yetkisiz mudahale
+        # klipleriyle karisiyordu; gorus muhafizi bunlari AYIRAMIYOR cunku
+        # yol cizgisi o kliplerde de gorunur. Ayirt edici sey kisinin
+        # KONUMU: pano/yetkisiz kliplerinde kisi makinenin BASINDA DURUR.
+        # Ek VLM cagrisi YOK — bu slot zaten dolduruluyor.
+        on_slot="makine_basinda_kisi", on_asgari=0, on_azami=0,
     ),
     EtiketKurali(
         kod="Unauthorized_Intervention",

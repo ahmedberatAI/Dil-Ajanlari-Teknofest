@@ -261,9 +261,36 @@ SLOT_YAYA_CIZGI_MESAFE = Slot(
               "karede ayni soru MCC +0,192, ROI ile +0,638 (ayrilmis kume)."),
 )
 
+SLOT_YAYA_ZEMIN = Slot(
+    ad="yaya_zemin",
+    soru=("Yuruyen kisinin AYAKLARININ ALTINDAKI zemin hangisi? "
+          "YESIL_BOYALI_YOL = ayaklar yesil boyali yaya yolunun uzerinde. "
+          "SARI_CIZGI_UZERI = ayaklar sari sinir cizgisinin uzerinde. "
+          "GRI_BETON = ayaklar boyasiz gri beton zeminde. "
+          "GORUNMUYOR = ayaklar veya zemin secilemiyor."),
+    secenekler=["YESIL_BOYALI_YOL", "SARI_CIZGI_UZERI", "GRI_BETON", "GORUNMUYOR"],
+    gorev="algi",
+    coz=lambda c: (c or "").strip().upper() or None,
+    roi_alani="yol_roi_vlm",
+    kapsam="klip",
+    dislanan_gorus_alani="yol_dislanan_gorus",
+    gorus_esik_alani="yol_gorus_esik",
+    fps_alani="yol_kodlama_fps",
+    aciklama=(
+        "ILISKISEL degil YEREL soru. Reddedilen DOKUZ yaya yolu kolunun hepsi "
+        "'kisi ile cizgi arasindaki mesafe' ya da 'icinde/disinda' idi; degisen "
+        "sey hep ROI/fps/esikti, SORU TIPI hic degismedi. Emsal ayni depoda: "
+        "pano ikili/anlamsal sorulunca 34/34 ayni cevabi verip DEJENERE oldu, "
+        "ayni fizik yerel ve olculebilir sorulunca MCC +0,960 verdi. "
+        "ROI/kapsam/fps/gorus alanlari mesafe slotuyla BIREBIR ayni tutuldu -> "
+        "iki slot arasindaki TEK fark soru tipidir. "
+        "On kayit: docs/on_kayit_yaya_zemin_2026-08-25.md"),
+)
+
 SLOT_KATALOG: Dict[str, Slot] = {
     s.ad: s for s in (SLOT_CATAL_KASA, SLOT_PANO_KOYULUK, SLOT_YELEK,
-                      SLOT_MAKINE_KISI, SLOT_YAYA_CIZGI_MESAFE)
+                      SLOT_MAKINE_KISI, SLOT_YAYA_CIZGI_MESAFE,
+                      SLOT_YAYA_ZEMIN)
 }
 
 

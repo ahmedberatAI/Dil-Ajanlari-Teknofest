@@ -139,7 +139,17 @@ c("yol_mesafe_esik varsayilani 7 (olculen esik)",
 print()
 print("=== KURAL KODU ILE SLOT SECIMI ===")
 a2 = A(); a2.isg_slotlari = "Safe_Walkway_Violation"
-c("kural KODU ile secilebilir", K.gerekli_slotlar(a2) == ["yaya_cizgi_mesafe"])
+# 2026-08-25: `Safe_Walkway_Violation` kodunu artik IKI kural paylasiyor —
+# ILISKISEL soru (yaya_cizgi_mesafe) ve YEREL soru (yaya_zemin, + on kosul
+# slotu makine_basinda_kisi). Ikisi de AYNI kodu tasimak ZORUNDA cunku kod
+# ISG sinif etiketidir ve `isg_match` onun uzerinden eslesir. Dolayisiyla
+# kod ile secim her ikisinin slotlarini birden getirir — bu KASITLI.
+c("kural KODU ile secilebilir (iki kural ayni kodu paylasir)",
+  K.gerekli_slotlar(a2) == ["yaya_cizgi_mesafe", "makine_basinda_kisi",
+                            "yaya_zemin"])
+c("ILISKISEL slot hala secilebiliyor (kol karsilastirmasi icin sart)",
+  "yaya_cizgi_mesafe" in K.gerekli_slotlar(a2))
+c("YEREL slot da geliyor", "yaya_zemin" in K.gerekli_slotlar(a2))
 a3 = A(); a3.isg_slotlari = "*"
 c("'*' yol slotunu da ister", "yaya_cizgi_mesafe" in K.gerekli_slotlar(a3))
 
