@@ -1583,6 +1583,15 @@ def reason(state: PolicyAgentState) -> dict:
     instr = prompts.DECISION_SUPPORT_INSTRUCTION.format(
         events_block=_events_block_scened(events, cuts), duration=duration
     )
+    # TURKCE URETIM KOLLARI — VARSAYILAN KAPALI (K2: kapaliyken istek BAYT OZDES).
+    # Ikisi de TESPIT IDDIASI EKLEMEZ; yalnizca ZATEN uretilmis olayin nasil
+    # ADLANDIRILACAGINI (terim) ve nasil DIZILECEGINI (uslup) kisitlar.
+    # `facility_rules`/`isg_lens` redleriyle KARISTIRMA: onlar modele YENI
+    # tehlike arattiriyordu ve esik dusuruyordu.
+    if settings.ozet_terim_sozlugu:
+        instr += prompts.OZET_TERIM_SOZLUGU
+    if settings.ozet_uslup_kisiti:
+        instr += prompts.OZET_USLUP_KISITI
     # M3: cok-bolumlu/kopuk video -> bolumleri bagimsiz ele al, neden-sonuc/oyku kurma
     if cuts:
         instr += (

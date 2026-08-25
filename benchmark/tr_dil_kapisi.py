@@ -126,14 +126,37 @@ def sayaclar(ozet, olay, gerekce):
         1 for t in tum if any(a in _kat(t) for a in ASCII_TR)) / float(nt)
 
     # 6 TERIM TUTARLILIGI
-    for ad, tk in TERIM.items():
-        kan = var = 0
-        for t in ozet + olay:
-            k = _kat(t)
-            kan += sum(k.count(_kat(x)) for x in tk["kanonik"])
-            var += sum(k.count(_kat(x)) for x in tk["varyant"])
-        top = kan + var
-        d["kanonik_oran_" + ad] = (kan / float(top)) if top else None
+    # ONARIM (2026-08-25): varyant dizgesi KANONIGIN ALT-DIZGESI olabilir
+    # ("kontrol panosu" < "elektrik/kontrol panosu"). Duz `str.count` her
+    # kanonik gecisi AYNI ANDA varyant sayiyordu -> oranin TAVANI 0,50'ydi ve
+    # 0,70'lik bir esik MATEMATIKSEL OLARAK ulasilamazdi. Bu kusur veriye
+    # BAKMADAN, yalniz TERIM tablosundan kanitlanabilir.
+    # Cozum: kanonik gecisler metinden MASKELENIR, varyant kalan metinde aranir.
+    # Ayrica payda AYRISTIRILIR: kol yalniz OZETI kisitlayabilir; olay metni
+    # kural sablonundan gelir ve kol onu DEGISTIREMEZ.
+    def _terim_say(metinler):
+        cik = {}
+        for ad, tk in TERIM.items():
+            kan = var = 0
+            for t in metinler:
+                k = _kat(t)
+                for x in tk["kanonik"]:
+                    kx = _kat(x)
+                    n = k.count(kx)
+                    kan += n
+                    if n:
+                        k = k.replace(kx, " ")      # MASKELE -> cift sayma
+                for x in tk["varyant"]:
+                    var += k.count(_kat(x))
+            top = kan + var
+            cik[ad] = (kan / float(top)) if top else None
+            cik[ad + "_sayi"] = (kan, var)
+        return cik
+
+    for ad, v in _terim_say(ozet + olay).items():
+        d["kanonik_oran_" + ad] = v
+    for ad, v in _terim_say(ozet).items():
+        d["ozet_kanonik_" + ad] = v          # kolun GERCEKTEN kontrol ettigi duzlem
 
     # 7 DEJENERELIK: birebir ayni ozet + tekrarlanan 4-gram
     d["birebir_ayni_ozet_cifti"] = len(ozet) - len(set(ozet))
@@ -143,6 +166,10 @@ def sayaclar(ozet, olay, gerekce):
         for i in range(len(w) - 3):
             dortlu[" ".join(w[i:i + 4])] += 1
     tekrar = sum(c for c in dortlu.values() if c > 1)
+    # DIKKAT: bu oran KORPUS BOYUTUNA baglidir (ayni taban ozetleriyle
+    # olculdu: 15->0,228 · 30->0,315 · 45->0,398 · 60->0,415 · 855->0,861).
+    # Farkli n'de olculmus bir esik BURAYA UYGULANAMAZ; yalniz AYNI n'deki
+    # eslesmis tabanla karsilastirilir.
     d["tekrar_4gram_orani"] = tekrar / float(max(1, sum(dortlu.values())))
 
     # 8 KKD/YETKI KAVRAM KARISIMI

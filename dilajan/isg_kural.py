@@ -172,8 +172,8 @@ KURALLAR: List[Kural] = [
     EsikKurali(
         kod="Carrying_Overload_with_Forklift",
         slot="catal_kasa_sayisi",
-        sablon=("Forklift aşırı yük taşıyor: çatalda {deger} kasa istiflenmiş — "
-                "güvenli yük sınırı {esik} kasanın altıdır"),
+        sablon=("Forklift aşırı yük taşıyor: çatalda {deger} kasa istiflenmiş; "
+                "güvenli sınır {esik} kasanın altındadır, bu nedenle sınır aşılmıştır"),
         esik_alani="forklift_esik", esik_varsayilan=3,
         severity=Severity.YUKSEK,
     ),
@@ -181,7 +181,7 @@ KURALLAR: List[Kural] = [
         kod="Opened_Panel_Cover",
         slot="pano_koyuluk_0_10",
         sablon=("Pano kapağı açık bırakılmış: elektrik/kontrol panosu bölgesinde "
-                "koyu oyuk görülüyor (koyuluk {deger}/10)"),
+                "kapağın açık olduğunu gösteren koyu oyuk görülüyor"),
         esik_alani="panel_koyuluk_esik", esik_varsayilan=3,
         severity=Severity.YUKSEK,
     ),
@@ -192,8 +192,7 @@ KURALLAR: List[Kural] = [
         # bilmiyoruz; "yaya yolunun disina cikti" gibi bir NEDEN iddia etmek
         # olcumun otesine gecmek olurdu.
         sablon=("Yaya yolu ihlali: kişi yerdeki işaretli çizginin hemen "
-                "üzerinde/bitişiğinde yürüyor (çizgiye uzaklık {deger}/10, "
-                "güvenli sınır {esik} ve üzeridir)"),
+                "üzerinde/bitişiğinde yürüyor; güvenli mesafe korunmamış"),
         esik_alani="yol_mesafe_esik", esik_varsayilan=7,
         severity=Severity.YUKSEK,
     ),

@@ -273,6 +273,23 @@ class Settings(BaseSettings):
     # DIKKAT: bu bir ETIKET kapisi DEGIL, ALAN kapisidir. Etiket sizintisi
     # riski yok cunku kilit "bu bizim tesisimiz mi" diye sorar, "bu hangi
     # sinif" diye degil — ve kalibre tesiste TUM siniflar kilidi gecer.
+    # --- TURKCE URETIM KOLLARI — OLCULDU ve SEVK EDILDI (2026-08-25) ---
+    # docs/on_kayit_turkce_kol234_kosum2_2026-08-25.md (kosumdan ONCE yazildi)
+    # docs/sonuc_turkce_kol234_2026-08-25.md
+    #
+    # BIRLIKTE olculdu (n=60, temperature=0.2 = SEVK sicakligi, eslesmis):
+    #   acilis_Goruntu     0,917 -> 0,000      meta_son_cumle 0,417 -> 0,133
+    #   ort_karakter       291   -> 230        olay dusurme   10/64 -> 0/64
+    #   ozet_kanonik_pano  0,478 -> 1,000      yelek 0,583 -> 1,000
+    # KORUMA: isg_match BIREBIR AYNI · category_match 37->37 (McNemar p=1,000)
+    #
+    # DIKKAT — bu ikisi ETKILESIYOR ve AYRI AYRI acilmamalidir:
+    # Kol 4 TEK BASINA `ozet_kanonik_pano`yu 0,571 -> 0,158'e DUSURUYOR
+    # (uslup kisiti modeli kanonik terimden uzaklastiriyor). Kol 2 bunu
+    # 1,000'e cikariyor. SEVK EDILEN yapilandirma IKISI BIRDEN aciktir;
+    # yalniz birini acmak OLCULMEMIS bir yapilandirmadir.
+    ozet_terim_sozlugu: bool = True
+    ozet_uslup_kisiti: bool = True
     isg_gorus_imza: str = ""
     isg_gorus_esik: float = 0.708
     # NOT: `forklift_esik` YUKARIDA (D40 blogu) tanimli — burada TEKRAR

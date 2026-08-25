@@ -175,7 +175,11 @@ def _run_reason(query: str, payload: str = _DECISION_JSON, raise_on_chat: bool =
     original = G._get_vlm
     G._get_vlm = lambda: vlm  # type: ignore[assignment]
     try:
-        with _Cfg(analysis_query=query, perception_confidence=True, risk_recall_bias=False):
+        with _Cfg(analysis_query=query, perception_confidence=True,
+                  risk_recall_bias=False,
+                  # Turkce uretim kollari AYRI bir ozellik; bu test sorgu
+                  # blogunun NO-OP oldugunu olcuyor, onlari sabitliyoruz.
+                  ozet_terim_sozlugu=False, ozet_uslup_kisiti=False):
             out = G.reason({"events": (events if events is not None else [_FORKLIFT_EVENT, _FIRE_EVENT]),
                             "video_info": None, "scene_cuts": [], "trace": []})
     finally:

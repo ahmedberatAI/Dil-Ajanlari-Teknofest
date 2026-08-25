@@ -310,6 +310,47 @@ YALNIZCA şu JSON formatinda yanit ver:
   "risk": {{"level": "Düşük|Orta|Yüksek|Kritik", "rationale": "..."}},
   "actions": [{{"action": "...", "priority": "Düşük|Orta|Yüksek|Kritik", "rationale": "..."}}]}}"""
 
+# --- KOL 2: TERIM KORUNUMU (config.ozet_terim_sozlugu ile eklenir) ---
+# OLCULDU (855 ozet): sablon TEK ad uretiyor ama ozetleyici nesre gecirirken
+# adi degistiriyor. Pano icin KANONIK TERIM ORANI %34,5 — bes farkli adla
+# aniliyor. Terim tutarsizligi operatorun ayni tehlikeyi ayni sey olarak
+# gormesini engeller ve arama/filtreleme kirar.
+# BU BIR TESPIT IDDIASI EKLEMEZ: yalnizca ZATEN uretilmis olayin nasil
+# ADLANDIRILACAGINI kisitlar. (facility_rules/isg_lens redleriyle karistirma:
+# onlar modele YENI tehlike arattiriyordu.)
+OZET_TERIM_SOZLUGU = """
+
+TERİM KULLANIMI (yalnızca adlandırma; yeni bir tespit ekleme):
+Olay metninde geçen nesneyi ADLANDIRIRKEN şu terimleri kullan, eşanlamlı
+üretme:
+- "reflektif yelek" (güvenlik yeleği/uyarı yeleği/koruyucu yelek DEME)
+- "elektrik/kontrol panosu" (kontrol paneli/elektrik paneli DEME)
+- "yaya yolu" (yürüyüş yolu/trafik güvenliği DEME)
+- kişisel koruyucu donanım eksikliğinden söz ederken "KKD" kısaltmasını
+  ilk geçişte açık yaz: "kişisel koruyucu donanım (KKD)"."""
+
+# --- KOL 4: USLUP KISITI (config.ozet_uslup_kisiti ile eklenir) ---
+# OLCULDU (855 ozet): %88,9 "Goruntu..." ile basliyor · %43,5 meta cumleyle
+# bitiyor ("...gostermektedir") · 149 BIREBIR AYNI ozet cifti · tekrarlanan
+# 4-gram orani %86,1. Sartname: "gereksiz detaydan arindirilmis, operatorun
+# HIZLI KARAR ALMASINI destekleyecek sekilde yapilandirilmis".
+# Mevcut prompt ozet icin YALNIZCA uzunluk ve neden-sonuc yasagi veriyor;
+# hicbir USLUP kisiti yok.
+OZET_USLUP_KISITI = """
+
+ÖZET ÜSLUBU (operatör hızlı okuyacak):
+- İlk KELİME, olayın ÖZNESİ veya KONUMU olsun — örneğin "Forklift...",
+  "Merkez bölgede...", "İki kişi...", "Elektrik panosu...". Özet
+  "Görüntü", "Görüntüde", "Görüntülerde", "Videoda", "Sahnede" veya
+  "Kayıtta" kelimeleriyle BAŞLAYAMAZ.
+- Kapanışta değerlendirme cümlesi EKLEME ("...temsil etmektedir",
+  "...anlamına gelmektedir", "...olarak değerlendirilmiştir" yazma).
+  Son cümle de bir BİLGİ taşısın.
+- Ölçüm ölçeklerini ham hâlde yazma ("8/10", "N birim" deme); operatörün
+  kararına yarayan sonucu yaz.
+- Talimatlara şerh düşme ("bağımsız olarak", "neden-sonuç kurulmamıştır"
+  gibi ifadeler operatöre gitmemeli)."""
+
 # --- 2b) SORGU YANITI (reason: DECISION_SUPPORT_INSTRUCTION sonuna EKLENIR) ---
 # Model, tespit edilen olaylara DAYANARAK operatorun sorgusuna dogrudan yanit verir; yanit
 # JSON'a YENI bir alan ("query_answer") olarak gelir. Sozlesme korunur: bu alan zengin
