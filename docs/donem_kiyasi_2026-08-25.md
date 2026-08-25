@@ -81,3 +81,53 @@ Uzak servis ham hızda daha hızlı — gözlem düzlemi kapalıyken 5,7 s.
 **Tek cümleyle:** güçlü donanım tek başına hiçbir şey kazandırmadı; kazancın
 tamamı, soruyu serbest metinden kapalı cevap uzayına taşıyan mimariden geldi.
 Bedeli iki kat gecikme.
+
+---
+
+## EK — "Hâlâ geride olduğumuz yer var mı?" (net döküm)
+
+Aynı küme, tüm ölçütler yan yana:
+
+| ölçüt | yerel (18 Ağu) | şimdi | durum |
+|---|---|---|---|
+| anomali recall | 0,384 | 0,848 | **ileride** |
+| risk kalibrasyonu (≥Yüksek) | 0,172 | 0,828 | **ileride** |
+| kategori eşleşmesi | 0,364 | 0,828 | **ileride** |
+| olay / anomali klip | 0,42 | 1,30 | **ileride** |
+| İSG'ye özgü tespit | 0,152 | 0,646 | **ileride** |
+| **normal klipte yanlış alarm** | **0,071** | **0,602** | **geride** |
+| **normal klipte risk=Düşük** | **0,857** | **0,398** | **geride** |
+| **olay / normal klip** | **0,33** | **0,80** | **geride** |
+| **medyan gecikme** | **13,2 s** | **30,3 s** | **geride** |
+
+Geride görünen dört satırın **üçü aynı olgunun** farklı yüzü: normal
+kliplerde daha çok alarm üretiyoruz.
+
+### O alarmların kaynağı ayrıştırıldı
+
+| kaynak | normal klip oranı |
+|---|---|
+| yalnız **anlatı düzlemi** | **0,010** |
+| yalnız kural motoru | 0,541 |
+| ikisi birden | 0,020 |
+| toplam | 0,571 |
+
+Yerel dönemde tesise özgü kural **yoktu**; oradaki 0,071 saf anlatı
+düzlemiydi. Bugün anlatı düzleminin yanlış alarmı **0,010** — yani
+**7 kat daha iyi**.
+
+Artışın tamamı kural motorundan geliyor ve o ateşlemelerin örneklenen
+12/12'sinde gerçek bir tehlike vardı (makine başında yeleksiz kişi /
+açık pano). Kuralların **ölçülebildiği** eksende yanlış alarm 0,053 —
+yine yerel dönemden daha iyi.
+
+### Sonuç
+
+**Gerçekten geride olan tek şey hız:** 13,2 s → 30,3 s (2,4×).
+
+Normal klip alarmı ham sayıda geride görünüyor ama her eşdeğer
+karşılaştırmada ileride:
+- anlatı düzlemi: 0,071 → 0,010
+- kuralın ölçülebildiği eksen: 0,053
+
+Ham 0,602 rakamı, kliplerin tek etiketli olmasından doğuyor.
