@@ -62,3 +62,36 @@ kadar kapalı. Kod, muhafız, testler ve ölçüm kayıtları duruyor:
 Muhtemel yol: kamera 9 içinde yaya yolu ihlalini pano/yelek ihlallerinden
 ayıran bir **ön koşul** — örneğin "yürüyen kişi var mı" — ama bu ölçülmeden
 açılmamalıdır.
+
+---
+
+## GÜNCELLEME 2026-08-25 — ONUNCU KOL da reddedildi, ama NEDEN'i artık ölçülü
+
+Yukarıdaki dokuz kolun hepsi **aynı soru tipinin** varyasyonuydu ("mesafe" /
+"içinde-dışında"); değişen hep ROI, fps veya eşikti. Onuncu kol **soru tipini**
+değiştirdi: ilişkisel soru yerine yerel nitelik sorusu —
+*"yürüyen kişinin ayaklarının altındaki zemin hangisi?"*
+
+| # | kol | sonuç |
+|---|---|---|
+| 10 | yerel nitelik (zemin) | **MCC +0,000** — `GRI_BETON` 147 ölçümde **hiç** çıkmadı |
+| 10b | zemin + çapraz kapı | +0,000 |
+| 9b | mesafe + çapraz kapı (`on_azami=0`) | +0,089 · saha kesinliği **0,324** |
+
+**Post-hoc olarak hiçbir seçenek işe yaramıyor** (en iyisi +0,197) ve cevap
+dağılımı altı sınıfta neredeyse aynı — slot sınıf bilgisi taşımıyor.
+
+**Teşhis:** soru yereldi ama **kırpma yerel değildi**. `yol_roi_vlm` karenin
+alt yarısının tamamı; sarı sınır çizgisi her klipte kadrajda olduğu için model
+kişinin ayağına değil kadrajın baskın çizgisine demirliyor. Kırpmayı
+kişiye kilitlemek ayakların yerini bilmeyi gerektirir — ve tespitin geniş
+planlarda çöktüğü aynı gün ölçüldü (iki klipte 0 kişi).
+
+Pano slotunun neden çalıştığı da buradan anlaşılıyor: **panonun yeri sabit,
+yürüyen kişinin yeri değil.**
+
+`on_azami` çapraz kapısı saha kesinliğini 0,195 → 0,324'e çıkarıp 0,237
+eşiğini geçiriyor ama çift içi MCC'yi +0,370 → +0,089'a düşürüyor.
+**İki kapı hiçbir zaman birlikte geçmiyor.**
+
+Ayrıntı: `docs/yaya_zemin_sonuc_2026-08-25.md`
