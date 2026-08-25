@@ -51,5 +51,20 @@ print("=== GEREKCELI KARAR YANLISLIKLA DUSURULMEMELI ===")
 c("'IHLAL (baret yok)' IHLAL kalir", _norm_karar("IHLAL (baret yok)") == "IHLAL")
 
 print()
+print("=== IKI NORMALIZER IRAKSAMASIN ===")
+# Depoda IKI ayri Turkce normalizer var:
+#   dilajan/evidence_questions.py : katla()   <- DOGRU referans
+#   dilajan/policy.py             : _norm()   <- 'ı' katlamasi EKSIKTI (D57)
+# Ikisi de ASCII kaliplarla eslesmek icin var. Iraksarlarsa ayni kusur
+# sessizce geri gelir. Bu test ikisini de ayni ornek kumede karsilastirir.
+from dilajan.evidence_questions import katla
+ORNEK = ("İhlal", "bulunmadı", "değildir", "görülmemiş", "yoktur", "ışık",
+         "ÇĞİÖŞÜ", "kararsızım", "anlaşılmıyor", "YOKTUR", "Hayır")
+for t in ORNEK:
+    a, b = _norm(t), katla(t)
+    c(f"{t!r}: _norm={a!r} == katla={b!r}", a == b)
+    c(f"{t!r}: katla ciktisi ASCII", all(ord(ch) < 128 for ch in b))
+
+print()
 print(f"gecen={g}  kalan={k}")
 sys.exit(1 if k else 0)
