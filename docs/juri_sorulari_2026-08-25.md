@@ -187,3 +187,54 @@ bir soruya bu ayrımla cevap verin.
 - ~~"%X doğruluk"~~ tek başına — dengesiz sınıflarda MCC kullanın; hepsine
   "ihlal yok" diyen sistem %50 doğruluk alır ama MCC'si 0 çıkar.
 - ~~"Yanlış alarmımız yok"~~ — var; ama ölçülebilir eksende kesinlik 0,90–1,00.
+
+---
+
+## EK 2026-08-25 — "Neden bu sınıfı kapsamıyorsunuz?" ve türevleri
+
+### S: Dört İSG sınıfından birini (yaya yolu) hiç kapsamıyorsunuz. Neden?
+
+Denemedik değil — **on kol denedik, onu da reddettik**, ve artık *neden*
+olmadığını biliyoruz.
+
+İlk dokuz kol aynı soru tipinin varyasyonuydu ("kişi çizgiye ne kadar yakın").
+Onuncu kol soruyu **yerel** yaptı: *"ayağının altındaki zemin hangisi?"*
+Sonuç: cevap dağılımı **altı sınıfta neredeyse özdeş** — ihlal sınıfıyla onun
+normal karşılığı arasında bile ayrım yok. Slot sınıf bilgisi taşımıyor.
+
+Sebep ölçülü: soru yereldi ama **kırpma yerel değildi**. Kırpmayı kişiye
+kilitlemek kişinin yerini bilmeyi gerektirir; o çözünürlükte CPU dedektörü de
+kişiyi bulamıyor (üç geniş-plan klibinin ikisinde **0 kişi**).
+
+**Kapsamadığımız sınıfı kapsıyormuş gibi göstermek yerine sınırı ölçüp ilan
+ettik.** `isg_match`'i her zaman iki sayıyla veriyoruz: 0,646 (dört sınıf) ve
+0,865 (kapsanan üç sınıf).
+
+### S: Skorlarınız eşik ayarına mı bağlı? Eşikler kırılgan mı?
+
+Ölçtük. Kısıtlı çözmenin olasılık dağılımını okuyup sert eşik
+(`argmax ≥ T`) yerine yumuşak eşik (`P(değer ≥ T) ≥ 0,50`) denedik.
+Üç çiftte de kazanç **yok** (en iyi ΔMCC +0,006, ölçüt +0,03 idi).
+
+Bu bir başarısızlık değil, **bir kanıt**: eşikler dağılımın kararlı
+bölgesinde duruyor, sınırda değil.
+
+### S: Neden kişi tespiti / Set-of-Mark gibi güncel teknikleri kullanmıyorsunuz?
+
+İkisini de değerlendirdik:
+
+- **Set-of-Mark** (numaralı işaret bindirme): açık kaynak modellerde doğruluğu
+  **düşürdüğüne** dair ölçüm var. Denemedik çünkü beklenen kazanç negatif.
+- **Kişi-başına kırpma**: fizibilitesini ölçtük. Geniş plan kliplerinde CPU
+  dedektörü **hiç kişi bulamıyor**; kalabalık kliplerde 11-13 kişi arasından
+  "makinedeki kişi"yi seçmek belirsizliği modelden alıp bizim buluşumuza
+  taşır — daha önce tam bu sebeple bir kol reddedilmişti.
+
+### S: Model belirsizken bunu görebiliyor musunuz?
+
+Evet, ve **ek maliyet olmadan**. vLLM'in kısıtlı çözmesi ile `logprobs`
+birlikte çalışıyor: tek ileri geçişten izinli cevap kümesi üzerinde tam bir
+olasılık dağılımı okunuyor. Bu, kaçırmalarımızın kök nedenini ayırmamızı
+sağladı — model belirsiz değil, **emin ve yanlış yere bakıyor**.
+
+Ayrıntı: `docs/kalan_sinirlar_2026-08-25.md`
