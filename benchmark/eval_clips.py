@@ -160,6 +160,12 @@ def _kosum_kunyesi() -> dict:
         "model_yapi": _s.gorev_modeli("yapi"),
         "model_ozet": _s.gorev_modeli("ozet"),
         "forklift_yuk": _s.forklift_yuk,
+        # SLOT GUVENI: enstrumanli kosum, sevk kosumuyla AYNI ara-kayit
+        # dosyasini PAYLASMAMALI. Cevaplar birebir ayni cikiyor (8/8 dogrulandi)
+        # ama satirlar `guven` izini TASIYOR; kunyede olmazsa enstrumanli kosum
+        # sevk arsivinin satirlarini "tamamlanmis" diye devralir ve hicbir
+        # dagilim kaydedilmez -> kol OLCULEMEZ ama olculmus gorunur.
+        "slot_guven": _s.slot_guven,
     }
 
 
@@ -326,6 +332,16 @@ def evaluate_clip(path: str, category: str) -> dict:
         # BOS kalir -> arsivlenmis kosularla karsilastirma etkilenmez (yalnizca EK alan).
         "policy_trace": [t for t in (res.decision_trace or [])
                          if t.startswith("policy") or t.startswith("act: politika")],
+        # SLOT GUVEN DAGILIMLARI — `policy_trace` ile AYNI desende, filtrelenmis
+        # kesit. Arsiv satiri `decision_trace`i BUTUN olarak TASIMIYOR; ilk
+        # denemede guven izi graph.py'de uretildi ama buraya HIC ULASMADI ve
+        # kosum "calisiyor" gorunurken olcum bos kaliyordu (sessiz basarisizlik).
+        # Segment BASINA bir satir: forklift/pano SEGMENT kapsamli oldugu icin
+        # "herhangi bir segmentte ihlal" mantigi sonradan uygulanabilsin.
+        # `slot_guven` KAPALIYKEN bu liste BOS kalir -> arsivlenmis kosumlarla
+        # karsilastirma ETKILENMEZ (yalnizca EK alan).
+        "guven_trace": [t for t in (res.decision_trace or [])
+                        if "gözlem güveni" in t],
         "actions": [
             {"action": a.action, "priority": a.priority.value, "rationale": a.rationale}
             for a in res.actions

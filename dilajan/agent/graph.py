@@ -32,6 +32,8 @@ kayittan (mock_functions.get_log) + kendi YEREL listesinden toplar. Boylece
 """
 from __future__ import annotations
 
+import json as _json
+
 import datetime
 import difflib
 import re
@@ -1028,6 +1030,18 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                         f"perceive: segment {seg.index} gözlem düzlemi "
                         f"[slot={list(kayit.degerler.items())}, "
                         f"hata={list(kayit.hatalar)}] -> {len(yeni)} deterministik olay")
+                    # GUVEN DAGILIMI — yalniz `slot_guven` ACIKKEN. Karar izine
+                    # yazilir cunku degerlendirme arsivi zaten `decision_trace`
+                    # tutuyor: TEK enstrumanli kosum, sonradan COK sayida
+                    # yumusak-esik kolunun ESLESMIS olarak puanlanmasini saglar
+                    # (ayni klipler, ayni ileri gecisler, yeni API cagrisi YOK).
+                    if getattr(kayit, "guven", None):
+                        try:
+                            notes.append(
+                                f"perceive: segment {seg.index} gözlem güveni "
+                                + _json.dumps(kayit.guven, ensure_ascii=False))
+                        except Exception:
+                            pass
                     # OLCULEMEYEN slot, "ihlal yok" DEGILDIR. Nedeni izde
                     # ACIKCA yazilir; aksi halde coken bir kosum temiz bir
                     # kosumdan ayirt edilemez.

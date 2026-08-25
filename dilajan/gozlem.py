@@ -45,6 +45,8 @@ LISANS: saf Python + pydantic. Model cagrisi `llm_client` uzerinden.
 """
 from __future__ import annotations
 
+import math as _math
+
 from typing import Callable, Dict, List, Optional, Sequence
 
 # ---------------------------------------------------------------------------
@@ -268,6 +270,81 @@ SLOT_KATALOG: Dict[str, Slot] = {
 # ---------------------------------------------------------------------------
 # GOZLEM KAYDI
 # ---------------------------------------------------------------------------
+def secim_dagilimi(secenekler, ust) -> dict:
+    """Ilk-token top-logprob'larindan SECENEK uzerinde olasilik dagilimi.
+
+    NEDEN ILK TOKEN: kisitli cozmede (`structured_outputs.choice`) yasak
+    tokenlar -9999.0 ile maskelenir; izinli olanlar gercek logprob tasir.
+    Yani TEK ileri gecis, izinli cevap kumesi uzerinde tam bir dagilim verir.
+    Ek cagri YOK, ek gecikme YOK — yalnizca zaten yapilan hesabin okunmasi.
+
+    COK-TOKENLI SECENEK: "GORUNMUYOR" tek token degildir; model 'G' uretir ve
+    devam eder. Bu yuzden token -> SECENEK eslemesi ON EK ile yapilir.
+
+    BELIRSIZLIK — DURUSTCE KAYDEDILIR: bir token BIRDEN COK secenegin on eki
+    olabilir (pano 0-10 slotunda '1' hem "1" hem "10" on ekidir). Politika:
+    token bir secenege TAM ESITSE kutle o secenege yazilir; degilse ve birden
+    cok secenegi on ekliyorsa `belirsiz` kovasina gider. Bu bir YAKLASIKLIKTIR
+    ve `belirsiz` alani onun UST SINIRIDIR — denetim gorebilsin diye saklanir.
+
+    Doner: {"p": {secenek: olasilik}, "belirsiz": float, "yetim": float,
+            "maks": secenek, "p_maks": float}
+    Ust bos/kullanilamazsa {} doner (K3: cagiran normal yola devam eder).
+    """
+    if not ust:
+        return {}
+    ham = {t: lp for t, lp in ust.items() if lp > -900.0}   # maskelileri at
+    if not ham:
+        return {}
+    en_iyi = max(ham.values())
+    agirlik = {t: _math.exp(lp - en_iyi) for t, lp in ham.items()}
+    z = sum(agirlik.values()) or 1.0
+
+    ust_sec = [str(c).strip().upper() for c in secenekler]
+    p = {c: 0.0 for c in secenekler}
+    belirsiz = yetim = 0.0
+    for t, w in agirlik.items():
+        pay = w / z
+        anahtar = t.strip().upper()
+        if not anahtar:
+            yetim += pay
+            continue
+        tam = [c for c, u in zip(secenekler, ust_sec) if u == anahtar]
+        if len(tam) == 1:
+            p[tam[0]] += pay
+            continue
+        onek = [c for c, u in zip(secenekler, ust_sec) if u.startswith(anahtar)]
+        if len(onek) == 1:
+            p[onek[0]] += pay
+        elif len(onek) > 1:
+            belirsiz += pay
+        else:
+            yetim += pay
+    maks = max(p, key=lambda k: p[k]) if p else None
+    return {"p": p, "belirsiz": round(belirsiz, 6), "yetim": round(yetim, 6),
+            "maks": maks, "p_maks": round(p.get(maks, 0.0), 6)}
+
+
+def esik_ustu_kutle(dagilim: dict, esik: int) -> float:
+    """SAYISAL slotta P(deger >= esik). Sayiya cevrilemeyen secenekler ("6+",
+    "GORUNMUYOR") ozel islenir: "6+" 6 sayilir, metin secenekler DISLANIR.
+
+    Sert kural `argmax(deger) >= esik` diye sorar; bu ise ESIK USTUNDEKI
+    KUTLEYI sorar. Ikisi ayni degildir: olculdu ki argmax "3" (p=0,62) iken
+    P(>=3) = 1,00 olabiliyor — cunku kalan kutle "4"te duruyor ve o da esigi
+    asiyor. Esik sinirindaki kirilganligin kaynagi tam olarak budur.
+    """
+    p = (dagilim or {}).get("p") or {}
+    top = 0.0
+    for secenek, olasilik in p.items():
+        m = str(secenek).strip().rstrip("+")
+        if not m.isdigit():
+            continue                       # GORUNMUYOR vb. -> sayisal degil
+        if int(m) >= esik:
+            top += olasilik
+    return round(top, 6)
+
+
 class GozlemKaydi:
     """Bir segment icin doldurulmus slotlar. Tipli, serbest metin YOK."""
 
@@ -277,6 +354,9 @@ class GozlemKaydi:
         self.hatalar: Dict[str, str] = {}
         #: gorus muhafizi tarafindan ATLANAN slotlar (hata DEGIL — sahne gecersiz)
         self.atlanan: Dict[str, str] = {}
+        #: slot -> secim dagilimi (yalnizca settings.slot_guven ACIKKEN dolar).
+        #: KAPALIYKEN BOS KALIR ve hicbir kod yolu bunu okumaz (K2).
+        self.guven: Dict[str, dict] = {}
 
     def koy(self, slot: Slot, ham_cevap: str) -> None:
         self.ham[slot.ad] = ham_cevap
@@ -298,7 +378,7 @@ class GozlemKaydi:
 
 
 def slotlari_doldur(oturum, slotlar: Sequence[Slot], istemci,
-                    max_tokens: int = 12) -> GozlemKaydi:
+                    max_tokens: int = 12, guven: bool = False) -> GozlemKaydi:
     """Ayni VIDEO OTURUMU uzerinde slotlari doldurur.
 
     `hatirla=False` UC isi birden yapar (tasarim geregi, opsiyon degil):
@@ -329,9 +409,25 @@ def slotlari_doldur(oturum, slotlar: Sequence[Slot], istemci,
                 # .gorev() ayni HTTP baglantisini paylasir, yeni baglanti ACMAZ.
                 if istemci is not None:
                     oturum.istemci = istemci.gorev(s.gorev)
+                # K2 (BAYT OZDESLIK): kapaliyken `logprobs` argumani HIC
+                # GECIRILMEZ — cagri imzasi eskisiyle BIREBIR ayni kalir.
+                # Kosulsuz gecirmek, `sor()` imzasini duck-type eden her
+                # oturumu (test sahteleri dahil) TypeError ile kirardi.
+                #
+                # BAYRAK PARAMETREDEN GELIR, GLOBAL `settings`TEN DEGIL:
+                # bu modul BILEREK ayar-bagimsizdir (ayar cagirandan gecer).
+                # Ilk yazimda global `settings` okundu -> NameError -> K3
+                # fail-open onu YUTTU ve saglam slotlar sessizce
+                # "olculemedi"ye dondu. Testler yakaladi.
+                _ek = {"logprobs": True} if guven else {}
                 c = oturum.sor(s.soru, guided_choice=s.secenekler,
                                temperature=0.0, max_tokens=max_tokens,
-                               hatirla=False)
+                               hatirla=False, **_ek)
+                if guven:
+                    _lp = getattr(oturum, "son_logprob", None) or {}
+                    _d = secim_dagilimi(s.secenekler, _lp.get("ust"))
+                    if _d:
+                        kayit.guven[s.ad] = _d
                 if c is None:
                     # `sor()` istisnayi KENDI ICINDE yutar ve None doner
                     # (llm_client.py, K3 fail-open) — bu yuzden asagidaki
@@ -427,8 +523,15 @@ def slotlari_doldur_bolgeli(istemci, slotlar: Sequence[Slot], video_uret,
             for s_ in grup:
                 kayit.hatalar[s_.ad] = f"__HATA__ {type(e).__name__}: {e}"
             continue
-        alt = slotlari_doldur(oturum, grup, istemci, max_tokens=max_tokens)
+        alt = slotlari_doldur(oturum, grup, istemci, max_tokens=max_tokens,
+                              guven=bool(getattr(ayar, "slot_guven", False)))
         kayit.degerler.update(alt.degerler)
         kayit.ham.update(alt.ham)
         kayit.hatalar.update(alt.hatalar)
+        # ALAN KORUNUMU: `GozlemKaydi`ye yeni bir sozluk eklendiginde BURASI da
+        # guncellenmeli. `guven` ilk yazimda unutuldu — alt kayitlar dagilimi
+        # dogru topluyordu ama birlesik kayda TASINMIYORDU; kosum "calisiyor"
+        # gorunurken olcum bos kaldi (SESSIZ BASARISIZLIK, ayni sinif ucuncu kez).
+        # `tests/test_slot_guven.py` artik bu birlestirmeyi ayrica dogruluyor.
+        kayit.guven.update(alt.guven)
     return kayit

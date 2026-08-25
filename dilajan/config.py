@@ -536,6 +536,14 @@ class Settings(BaseSettings):
     #     DILAJAN_YEREL_GPU_IZNI=1
     yerel_gpu_izni: bool = False
 
+    # --- SLOT GUVENI (kisitli cozme dagilimi) ---
+    # ACIKKEN her slot cagrisi `logprobs` ile gider ve izinli secenekler uzerindeki
+    # olasilik dagilimi `GozlemKaydi.guven` icine yazilir. EK CAGRI YOK — zaten
+    # yapilan tek ileri gecisin dagilimi okunur; gecikme ve token maliyeti AYNI.
+    # KAPALIYKEN (varsayilan) istek govdesine `logprobs` alani HIC EKLENMEZ ve
+    # hicbir kod yolu `guven` sozlugunu okumaz -> sevk davranisi BAYT OZDES (K2).
+    slot_guven: bool = False
+
     @property
     def yerel_gpu_yasak(self) -> bool:
         """Yerel GPU kullanimi yasak mi? (uzak kosumda EVET, izin verilmedikce)"""

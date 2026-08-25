@@ -139,6 +139,8 @@ class VLMClient:
         guided_choice: Optional[Sequence[str]] = None,
         json_schema: Optional[Dict] = None,
         schema_name: str = "cikti",
+        logprobs: bool = False,
+        top_logprobs: int = 0,
     ) -> str:
         """`guided_choice`: vLLM KISITLI KOD COZME — model YALNIZCA verilen
         seceneklerden birini uretebilir (bicim gurultusu SIFIRLANIR).
@@ -212,9 +214,35 @@ class VLMClient:
                 "type": "json_schema",
                 "json_schema": {"name": schema_name, "schema": json_schema},
             }
+        if logprobs:
+            # KISITLI COZME + LOGPROB BIRLIKTE CALISIYOR (2026-08-25 sondasi).
+            # Yanit govdesinde maskelenmis tokenlar -9999.0 ile gelir; izinli
+            # secenekler GERCEK logprob tasir. Yani TEK ileri gecisten, EK
+            # MALIYET OLMADAN, izinli cevap kumesi uzerinde tam bir olasilik
+            # dagilimi okunabilir.
+            #
+            # §8'DE REDDEDILEN "self-consistency" ILE ALAKASI YOK: orada AYNI
+            # girdi N KEZ sorulup oylaniyordu ve model deterministik oldugu icin
+            # ornekler OZDES cikiyordu (bilgi eklemiyordu). Burada ek ornek YOK;
+            # zaten yapilan tek gecisin KENDI dagilimi okunuyor.
+            kwargs["logprobs"] = True
+            kwargs["top_logprobs"] = int(top_logprobs or 20)
         if ek:
             kwargs["extra_body"] = ek
         resp = self._cagir_yeniden_denemeli(kwargs)
+        # Son cagrinin ILK TOKEN dagilimi (istenmisse). Donus tipi DEGISMEZ.
+        self.son_logprob = None
+        if logprobs:
+            try:
+                lp = resp.choices[0].logprobs
+                t0 = (getattr(lp, "content", None) or [None])[0]
+                if t0 is not None:
+                    self.son_logprob = {
+                        "secilen": t0.token,
+                        "ust": {x.token: x.logprob for x in (t0.top_logprobs or [])},
+                    }
+            except Exception:
+                self.son_logprob = None
         # D42: son cagrinin token kullanimi OLCUM icin saklanir (donus tipi DEGISMEZ ->
         # tum mevcut cagrilar birebir ayni calisir). Servis usage dondurmezse None.
         try:
@@ -1005,7 +1033,7 @@ class _VideoOturumu:
 
     def sor(self, soru: str, guided_choice: Optional[Sequence[str]] = None,
             temperature: Optional[float] = None, max_tokens: Optional[int] = None,
-            hatirla: bool = True) -> Optional[str]:
+            hatirla: bool = True, logprobs: bool = False) -> Optional[str]:
         """Ayni video uzerine bir soru. Hata olursa None (K3 fail-open).
 
         hatirla=True: cevap konusma gecmisine eklenir (sonraki sorular gorur).
@@ -1015,9 +1043,14 @@ class _VideoOturumu:
         if not self.hazir:
             return None
         mesajlar = [{"role": "system", "content": self.sistem}] + self._mesajlar +                    [{"role": "user", "content": soru}]
+        self.son_logprob = None
         try:
             c = self.istemci.chat(mesajlar, temperature=temperature,
-                                  max_tokens=max_tokens, guided_choice=guided_choice)
+                                  max_tokens=max_tokens, guided_choice=guided_choice,
+                                  logprobs=logprobs)
+            # Slot seviyesinde model DEGISEBILIYOR (oturum.istemci yeniden atanir),
+            # bu yuzden dagilim CAGRILAN istemciden okunur, sabit bir alandan degil.
+            self.son_logprob = getattr(self.istemci, "son_logprob", None)
         except Exception as e:
             self.hata = f"{type(e).__name__}: {e}"
             return None
