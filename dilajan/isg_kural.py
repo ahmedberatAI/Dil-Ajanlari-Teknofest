@@ -39,7 +39,7 @@ class Kural:
                  kategori: EventCategory = EventCategory.GUVENLIK,
                  severity: Severity = Severity.YUKSEK,
                  on_slot: str = "", on_asgari: int = 1,
-                 on_azami: int = 10 ** 9):
+                 on_azami: int = 10 ** 9, on_bayrak_alani: str = ""):
         self.kod = kod              # ISG sinif kodu (etiket metrigi bunu okur)
         self.slot = slot
         self.sablon = sablon        # Event.event metni — MODEL NESRI DEGIL
@@ -50,8 +50,10 @@ class Kural:
         self.on_slot = on_slot
         self.on_asgari = on_asgari
         self.on_azami = on_azami
+        # Bos degilse: ayardaki bu bayrak False iken ON KOSUL ATLANIR.
+        self.on_bayrak_alani = on_bayrak_alani
 
-    def on_kosul_saglandi(self, kayit) -> bool:
+    def on_kosul_saglandi(self, kayit, ayar=None) -> bool:
         """Kuralin sorusu bu sahnede ANLAMLI mi?
 
         Kacirma degil, GECERSIZLIK filtresi: on slot cozulemediyse ya da
@@ -60,6 +62,11 @@ class Kural:
         """
         if not self.on_slot:
             return True
+        # BAYRAKLA KAPATILABILIR on kosul. `ayar` verilmezse (eski cagrilar)
+        # davranis BIREBIR ayni kalir -> K2.
+        if self.on_bayrak_alani and ayar is not None:
+            if not getattr(ayar, self.on_bayrak_alani, True):
+                return True                      # kapi KAPALI -> kural serbest
         v = kayit.al(self.on_slot)
         if v is None:
             return False            # olculemedi -> IDDIA ETME
@@ -89,7 +96,7 @@ class EsikKurali(Kural):
         self.esik_varsayilan = esik_varsayilan
 
     def degerlendir(self, kayit, ayar) -> Optional[dict]:
-        if not self.on_kosul_saglandi(kayit):
+        if not self.on_kosul_saglandi(kayit, ayar):
             return None                      # sahne kural icin GECERSIZ
         v = kayit.al(self.slot)
         if v is None:
@@ -116,7 +123,7 @@ class AltEsikKurali(Kural):
         self.esik_varsayilan = esik_varsayilan
 
     def degerlendir(self, kayit, ayar) -> Optional[dict]:
-        if not self.on_kosul_saglandi(kayit):
+        if not self.on_kosul_saglandi(kayit, ayar):
             return None
         v = kayit.al(self.slot)
         if v is None:
@@ -137,7 +144,7 @@ class EtiketKurali(Kural):
         self.ihlal_degeri = ihlal_degeri
 
     def degerlendir(self, kayit, ayar) -> Optional[dict]:
-        if not self.on_kosul_saglandi(kayit):
+        if not self.on_kosul_saglandi(kayit, ayar):
             return None                      # sahne kural icin GECERSIZ
         v = kayit.al(self.slot)
         if v is None or v != self.ihlal_degeri:
@@ -223,6 +230,7 @@ KURALLAR: List[Kural] = [
         # olmadan kural FORKLIFT kamerasinda da atesleniyordu (orada ne pano
         # ne kisi var; model yine de "yelek YOK" diyordu).
         on_slot="makine_basinda_kisi", on_asgari=1,
+        on_bayrak_alani="yelek_on_kosul",
     ),
 ]
 

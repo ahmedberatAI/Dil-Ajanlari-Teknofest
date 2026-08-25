@@ -174,6 +174,8 @@ def _kosum_kunyesi() -> dict:
         # de yasandi — kod yorumlari uyariyordu, yine de tekrarlandi.
         "yelek_roi_vlm": _s.yelek_roi_vlm,
         "yelek_on_roi_vlm": _s.yelek_on_roi_vlm,
+        # ON KOSUL KAPISI davranisi degistirir -> kunyede OLMAK ZORUNDA
+        "yelek_on_kosul": _s.yelek_on_kosul,
         # YAYA YOLU AYARLARI — bunlar da eksikti; `tests/test_kunye_tamligi.py`
         # yakaladi. 10. kol kosumu tesadufen korundu (o kosumda `isg_slotlari`
         # de degistigi icin ara dosya zaten ayrildi) ama ROI/esik/fps'i TEK

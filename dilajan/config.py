@@ -283,6 +283,28 @@ class Settings(BaseSettings):
     # kisiyi kadraj disinda birakip kapiyi yanlislikla kapatabilir. B1 kolu
     # yalniz yelek slotunu tasir, B2 ikisini birden. Iki kol AYRI olculur.
     yelek_on_roi_vlm: str = ""
+    # YELEK KURALININ ON KOSUL KAPISI — ACIK/KAPALI.
+    # OLCULDU (2026-08-25, 658 icerik): kapi ciftin NEGATIF tarafinda HIC IS
+    # YAPMIYOR. Dogru reddedilen 34 klibin 34'u de YELEK SLOTUNUN KENDISI
+    # tarafindan tutuluyor (`yelek=VAR`); kapinin tuttugu negatif SIFIR.
+    # Buna karsilik 12 DOGRU POZITIFI kesiyor: o kliplerde model
+    # "yelek=YOK" diyor (guven 1,000) ama ayri sorulan kisi sayimi 0 diyor
+    # ve CELISKIDE kapi kazaniyor. Yelek slotunun secenek kumesinde ZATEN
+    # `KISI_YOK` var — yani "kisi var mi" sorusu slot icinde soruluyor;
+    # ayri kapi bunu TEKRAR soruyor ve zayif olana guveniyor.
+    #   kapi ACIK : TP 91 FP 4 FN 17 TN 34  -> MCC +0,679
+    #   kapi KAPALI: TP103 FP 4 FN  5 TN 34 -> MCC +0,841   (+0,163)
+    # Kazanc her iki ayrimda da tutuyor (_tr +0,174 · _te +0,141).
+    # BEDEL: saha kesinligi 0,268 -> 0,175 (gorus muhafiziyla 0,206).
+    # VARSAYILAN True = SEVK EDILEN davranis (K2).
+    yelek_on_kosul: bool = True
+    # NOT — YELEK SLOTUNA GORUS MUHAFIZI KONULAMAZ.
+    # Kapinin isini bir gorus muhafizinin yapmasi denendi ve mevcut bir
+    # olcum tarafindan REDDEDILDI: bu ciftte GORUS ETIKETLE 0,833 KORELE
+    # (`tests/test_gorus_muhafizi.py`). Muhafiz, sahne gecerliligi yerine
+    # ETIKETI sizdirirdi. Yol slotunda muhafiz mesru cunku orada dislanan
+    # kamera (forklift) ciftin DISINDA kaliyor; yelek ciftinde ise gorus
+    # farkinin KENDISI etikete bagli.
     yol_mesafe_esik: int = 7          # cizgiye uzaklik < esik -> ihlal
     # GORUS MUHAFIZI — yol slotu YALNIZCA dogru kamerada sorulur.
     # `yol_dislanan_gorus`: DISLANAN kameranin (forklift, kamera 14) referans
