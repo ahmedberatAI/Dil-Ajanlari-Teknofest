@@ -45,14 +45,24 @@ def _norm(s: Optional[str]) -> str:
     Bu fonksiyon YALNIZ bu modulun kapilarinda kullanilir; graph.py'deki mevcut regex'lere
     DOKUNULMAZ (o duzeltme AYRI is / AYRI olcum kolu).
 
-    Normalizasyon sonrasi alfabe: ASCII harfler + 'ı' (U+0131'in ayrisimi yoktur).
+    U+0131 KATLAMA (2026-08-25): 'ı' harfinin AYRISIMI YOKTUR, dolayisiyla
+    combining-isaret silme onu ASCII 'i'ye cevirmez. Bu, ASCII yazilmis
+    kaliplarla eslesmeyi SESSIZCE bozuyordu:
+        "ihlal bulunmadı" -> "ihlal bulunmadı"  ama kalip "bulunmadi"
+    Olculdu: `_NEG_RE`'nin 17 kolundan 4'u (bulunmadi/saptanmadi/rastlanmadi/
+    olmadi) HIC eslesmiyordu; fail-closed olmasi gereken olumsuzlama kapisi
+    o kollarda ACIKTI ve "ihlal bulunmadı" IHLAL sayiliyordu.
+    Bu yuzden 'ı' artik 'i'ye katlanir. Karsilastirmalarin IKI TARAFI da bu
+    fonksiyondan gectigi icin katlama tutarlidir.
+
+    Normalizasyon sonrasi alfabe: YALNIZCA ASCII harfler.
 
     DAYANIKLILIK: model ciktisindaki bir alan str OLMAYABILIR (sayi, liste, sozluk). Boyle bir
     deger `unicodedata.normalize`i TypeError ile patlatir ve TEK bozuk alan yuzunden TUM
     kararlar dusrdu. Bu yuzden str-disi degerler once metne cevrilir (fail-open ayristirma).
     """
     if s is None:
-        return ""
+        _out = ""
     if not isinstance(s, str):
         try:
             s = str(s)
@@ -60,7 +70,10 @@ def _norm(s: Optional[str]) -> str:
             return ""
     d = unicodedata.normalize("NFD", s or "")
     stripped = "".join(c for c in d if not unicodedata.combining(c))
-    return unicodedata.normalize("NFC", stripped).casefold()
+    out = unicodedata.normalize("NFC", stripped).casefold()
+    # U+0131 ('ı') KATLAMASI — yukaridaki gerekce. Ayrisimi olmadigi icin
+    # combining-silme onu birakmisti ve ASCII kaliplarla eslesmiyordu.
+    return out.replace("ı", "i")
 
 
 # Epistemik CEKINCE deseni — DIL duzeyi (alan duzeyi DEGIL; K1 icin onemli ayrim).
@@ -334,7 +347,10 @@ def _norm_rid(raw, rids: set) -> str:
 #: parantezli/tireli GEREKCE iceren gecerli bir karar YANLISLIKLA dusurulmez.
 _NEG_RE = re.compile(
     r"(?:ihlal|violation)\s*(?:\w+\s+){0,1}"
-    r"(?:yok\b|degil|edilmemis|edilmedi|edilmez|etmemis|etmiyor|etmez|"
+    # `yok\b` Turkce EKLEMEYI kaciriyordu: "ihlal YOKTUR" en yaygin olumsuz
+    # ifade ama "yok" sonrasi kelime siniri YOK -> eslesmiyordu (olculdu).
+    # Artik ek alabilir: yok / yoktur / yoksa / yokken.
+    r"(?:yok\w*|degil|edilmemis|edilmedi|edilmez|etmemis|etmiyor|etmez|"
     r"bulunmuyor|bulunmadi|bulunmamak|gorulmedi|gorulmemis|saptanmadi|rastlanmadi|"
     r"olmamis|olmadi)"
     r"|\bno\s+violation\b|\bnot\s+a?\s*violation\b|\bnon-?violation\b"
