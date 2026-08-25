@@ -857,7 +857,9 @@ def test_16_arayuz_arite_ve_canli_akis() -> None:
 
     # (a) _blank() / yield / outputs UCLU TUTARLILIGI
     n_blank = len(_app._blank())
-    check(n_blank == 12, f"_blank() {n_blank} yer-tutucu donduruyor")
+    # 12 -> 13: ISG olcum paneli (`isg_out`) eklendi (2026-08-25). Bu sayi bir
+    # KANARYA: arite kazara kaymasin diye sabit. Degistirmek KASITLI olmali.
+    check(n_blank == 13, f"_blank() {n_blank} yer-tutucu donduruyor")
     first = next(_app.analyze(None))  # video yok -> tek uyari yield'i
     check(len(first) == n_blank + 1, f"analyze() yield ARITESI = 1 + _blank() = {len(first)}")
 

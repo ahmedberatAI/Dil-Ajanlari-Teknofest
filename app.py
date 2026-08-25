@@ -18,6 +18,7 @@ from __future__ import annotations
 import html as _html
 import json
 import os
+import re
 import subprocess
 import tempfile
 import urllib.request
@@ -45,6 +46,7 @@ _PIPELINE = [
     ("ingest", "Görüntü Alımı"),
     ("perceive", "Olay Algısı"),
     ("reexamine", "Yeniden İnceleme"),
+    ("policy_gate", "Politika Kapısı"),
     ("reason", "Değerlendirme"),
     ("act", "Aksiyon"),
     ("finalize", "Rapor"),
@@ -280,12 +282,114 @@ def query_panel_html(query: str, answer: str) -> str:
     )
 
 
+
+# --- ISG OLCUM PANELI --------------------------------------------------------
+# NEDEN VAR: sistemin ASIL yetenegi (gozlem duzlemi) arayuzde HIC gorunmuyordu.
+# Olay listesinde yalnizca sonuc vardi; "model OLCER, kural KARAR VERIR"
+# mimarisi ise karar gunlugunun icine gomuluydu. Bu panel olculen ham degeri,
+# kuralin esigini ve hukmu YAN YANA gosterir.
+#
+# Veriyi karar-izinden okur -> boru hattina DOKUNULMAZ (K2).
+_SLOT_RE = re.compile(r"slot=\[(.*?)\]")
+
+_SLOT_ETIKET = {
+    "catal_kasa_sayisi":     ("Çatalda kasa sayısı", "adet"),
+    "pano_koyuluk_0_10":     ("Pano bölgesi koyuluğu", "0-10"),
+    "makine_basinda_kisi":   ("Makine başındaki kişi", "kişi"),
+    "makine_basinda_yelek":  ("Reflektif yelek", ""),
+    "yaya_cizgi_mesafe":     ("Yaya çizgisine uzaklık", "0-10"),
+}
+
+
+def _slotlari_oku(result):
+    """Karar-izindeki slot degerlerini geri okur (ilk segment)."""
+    for t in (getattr(result, "decision_trace", None) or []):
+        m = _SLOT_RE.search(str(t))
+        if not m:
+            continue
+        try:
+            import ast
+            return dict(ast.literal_eval("[" + m.group(1) + "]"))
+        except Exception:
+            return {}
+    return {}
+
+
+def _isg_panel_html(result) -> str:
+    """Olculen deger + kural esigi + GERCEK hukum tablosu.
+
+    Hukum, kural mantigini burada TEKRAR YAZARAK degil, `isg_kural` motorunu
+    CAGIRARAK bulunur. Ilk surum mantigi kopyalamisti ve ON KOSULU atliyordu:
+    kapi kapaliyken (makinede kimse yokken) yelek slotu yine de "IHLAL"
+    gosteriyordu — oysa kural ATESLEMEMISTI. Panel, motorun kendisiyle ayni
+    cevabi vermek ZORUNDA.
+    """
+    from dilajan import gozlem as _gz, isg_kural as _kr
+    slotlar = _slotlari_oku(result)
+    if not slotlar:
+        return ("<div class='card-title'>🔬 İSG ÖLÇÜMLERİ</div>"
+                "<div class='empty'>Bu klipte İSG ölçümü yapılmadı "
+                "(gözlem düzlemi kapalı veya slot çözülemedi).</div>")
+
+    # MOTORU CAGIR: hangi kod GERCEKTEN atesledi?
+    kayit = _gz.GozlemKaydi()
+    kayit.degerler.update(slotlar)
+    atesleyen = {getattr(e, "isg_kod", None)
+                 for e in _kr.olaylari_uret(kayit, settings)}
+
+    # slot -> (esik metni, o slotu kullanan kural kodu, on kosul mu)
+    bilgi, on_slotlar = {}, {}
+    for k in _kr.KURALLAR:
+        esik = getattr(settings, getattr(k, "esik_alani", ""), None)
+        if isinstance(k, _kr.AltEsikKurali):
+            kosul = f"&lt; {esik}"
+        elif isinstance(k, _kr.EsikKurali):
+            kosul = f"≥ {esik}"
+        else:
+            kosul = f"= {k.ihlal_degeri}"
+        bilgi[k.slot] = (kosul, k.kod)
+        if getattr(k, "on_slot", ""):
+            on_slotlar[k.on_slot] = (f"≥ {k.on_asgari}", k.kod, k.on_asgari)
+
+    satir = []
+    for ad, deger in slotlar.items():
+        etiket, birim = _SLOT_ETIKET.get(ad, (ad, ""))
+        if ad in on_slotlar:
+            kosul, _kod, asgari = on_slotlar[ad]
+            acik = isinstance(deger, int) and deger >= asgari
+            kosul += " <span class='isg-unit'>(ön koşul)</span>"
+            rozet = ("<span class='isg-ok'>kapı açık</span>" if acik
+                     else "<span class='isg-dim'>kapı kapalı</span>")
+        else:
+            kosul, kod = bilgi.get(ad, ("—", None))
+            if kod is None:
+                rozet = "<span class='isg-dim'>kural yok</span>"
+            elif kod in atesleyen:
+                rozet = "<span class='isg-bad'>İHLAL</span>"
+            else:
+                rozet = "<span class='isg-ok'>uygun</span>"
+        satir.append(
+            f"<tr><td>{_html.escape(etiket)}</td>"
+            f"<td class='isg-num'>{_html.escape(str(deger))}"
+            f"<span class='isg-unit'>{_html.escape(birim)}</span></td>"
+            f"<td class='isg-num'>{kosul}</td><td>{rozet}</td></tr>")
+
+    return (
+        "<div class='card-title'>🔬 İSG ÖLÇÜMLERİ</div>"
+        "<div class='isg-note'>Model yalnızca <b>ölçüm</b> yapar (kapalı cevap "
+        "uzayı); hükmü <b>deterministik kural motoru</b> verir. Olay metinleri "
+        "model nesri değil, şablon render'ıdır.</div>"
+        "<table class='isg-tbl'><thead><tr>"
+        "<th>ölçüm</th><th>model ne gördü</th><th>kural eşiği</th><th>karar</th>"
+        "</tr></thead><tbody>" + "".join(satir) + "</tbody></table>")
+
 def _blank():
-    # status disindaki tum ciktilar (query, summary, risk, timeline, events, actions, funcs,
-    # trace, json, context_state, result_state, path_state) icin akis-arasi yer-tutucu.
+    # status disindaki tum ciktilar (query, summary, risk, ISG OLCUM, timeline, events,
+    # actions, funcs, trace, json, context_state, result_state, path_state) icin
+    # akis-arasi yer-tutucu.
     # !! Bu sayi, analyze()'in yield ettigi demet ve analyze_btn.click(outputs=[...]) listesiyle
-    #    TUTARLI olmak ZORUNDA (12 + status = 13). build_ui() testi bunu dogrular.
-    return (gr.update(),) * 12
+    #    TUTARLI olmak ZORUNDA (13 + status = 14). build_ui() testi bunu dogrular.
+    return (gr.update(),) * 13
 
 
 def analyze(video_path, facility_rules="", restricted_zones="",
@@ -373,7 +477,8 @@ def analyze(video_path, facility_rules="", restricted_zones="",
     else:
         query_block = gr.update(value="", visible=False)
     # result + video yolu State'lere yazilir -> Tutanak / Kanıt Paketi butonlari bunlari kullanir
-    yield (_pipeline_html(seen, done=True), query_block, result.summary, risk, timeline,
+    yield (_pipeline_html(seen, done=True), query_block, result.summary, risk,
+           _isg_panel_html(result), timeline,
            events_rows, actions_md, funcs_md, trace_md, raw, ctx, result, str(video_path))
 
 
@@ -742,6 +847,14 @@ def build_ui() -> gr.Blocks:
                 with gr.Group(elem_classes="panel"):
                     gr.HTML("<div class='card-title'>⚠️ RİSK DEĞERLENDİRMESİ</div>")
                     risk_out = gr.HTML("<div class='empty'>—</div>")
+                # ISG OLCUM PANELI — mimarinin gorunur oldugu yer.
+                # Model yalnizca olcer; hukmu kural motoru verir. Olculen ham
+                # deger, kuralin esigi ve hukum YAN YANA gosterilir.
+                with gr.Group(elem_classes="panel"):
+                    isg_out = gr.HTML(
+                        "<div class='card-title'>🔬 İSG ÖLÇÜMLERİ</div>"
+                        "<div class='empty'>Analiz sonrası ölçülen slot değerleri "
+                        "ve kural eşikleri burada görünecek.</div>")
                 # Sorgu yaniti — ozet panelinin USTUNDE, belirgin ve KENDI kartinda.
                 # Baslik da bu HTML'in icinde oldugu icin sorgu bosken blok TAMAMEN gizlenir.
                 query_out = gr.HTML(visible=False, elem_id="qa-out")
@@ -813,12 +926,12 @@ def build_ui() -> gr.Blocks:
         # Upload'ta tarayici-oynatilabilir H.264'e cevir (onizleme + analiz ayni dosyayi kullanir)
         video_in.upload(_ensure_playable, inputs=[video_in], outputs=[video_in])
 
-        # !! DIKKAT: outputs listesi (13) = analyze()'in yield ettigi demet = 1 (status) +
-        #    _blank() uzunlugu (12). Uclu tutarlilik build_ui() testinde assert edilir.
+        # !! DIKKAT: outputs listesi (14) = analyze()'in yield ettigi demet = 1 (status) +
+        #    _blank() uzunlugu (13). Uclu tutarlilik build_ui() testinde assert edilir.
         analyze_btn.click(
             analyze, inputs=[video_in, facility_in, zones_in, vehicles_in, vehicle_zones_in,
                              crowd_in, query_in, ppe_in],
-            outputs=[status_out, query_out, summary_out, risk_out, timeline_out,
+            outputs=[status_out, query_out, summary_out, risk_out, isg_out, timeline_out,
                      events_out, actions_out, funcs_out, trace_out, json_out, context_state,
                      result_state, path_state],
         )
