@@ -164,6 +164,49 @@ def main():
                   % (ad, ates, ham, ham / ates, cok, cok / ates,
                      "+%.3f" % ((cok - ham) / ates)))
 
+    # --- 2b) KATMANLI (kamera kumesi ICINDE) ---
+    kat_yol = os.path.join(KOK, "benchmark/results/kamera_katmanlari.json")
+    if os.path.exists(kat_yol):
+        kat = json.load(open(kat_yol, encoding="utf-8"))
+        # katman dosya ADIYLA tutuluyor -> icerige cevir
+        ad2h = {}
+        for h, v in kan.items():
+            for f in v["dosyalar"]:
+                ad2h[os.path.basename(f)] = h
+        CERCEVE = {"yaya": 0.728, "yetkisiz": 0.797, "pano": 0.661,
+                   "forklift": 0.750}
+        print()
+        print("KATMANLI (kanonik) — kamera kumesi ICINDE, celiskililer DISLI")
+        print("%-12s%-8s%6s%5s%5s%5s%5s%9s%11s" %
+              ("kural", "katman", "n", "TP", "FP", "FN", "TN", "MCC", "cerceve"))
+        print("-" * 70)
+        for ad, (slot, esik, yon, sinif) in KURAL.items():
+            gl = CIFT_GUVENLI[sinif]
+            for k in (kat.get("ciftler", {}).get(ad) or []):
+                if not k.get("kullanilabilir"):
+                    continue
+                hset = {ad2h[b] for b in k["klipler"] if b in ad2h}
+                tp = fp = fn = tn = 0
+                for h in hset:
+                    r = bagli.get(h)
+                    if r is None:
+                        continue
+                    et = set(kan[h]["etiketler"])
+                    poz, neg = sinif in et, gl in et
+                    if (poz and neg) or not (poz or neg):
+                        continue
+                    a = atesledi(dagilimlari_oku(r), slot, esik, yon)
+                    if poz:
+                        tp, fn = (tp + 1, fn) if a else (tp, fn + 1)
+                    else:
+                        fp, tn = (fp + 1, tn) if a else (fp, tn + 1)
+                n = tp + fp + fn + tn
+                if n:
+                    print("%-12s%-8s%6d%5d%5d%5d%5d%+9.3f%11s"
+                          % (ad, "kume%d" % k["kume"], n, tp, fp, fn, tn,
+                             mcc(tp, fp, fn, tn),
+                             "%.3f" % CERCEVE.get(ad, 0)))
+
     # --- 3) AYRIM (tr/te) ---
     print()
     print("AYRIM BAZLI (kanonik ayrim: bir kopyasi _te ise icerik TESTTE)")
