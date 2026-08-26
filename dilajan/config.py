@@ -121,7 +121,7 @@ class Settings(BaseSettings):
                                        # reason'daki HER-ZAMAN-acik neden-sonuc-bagimsizlik talimati. (0 = devre disi)
 
     # --- Uretim ---
-    temperature: float = 0.2
+    temperature: float = 0.0
     max_tokens: int = 1024
     request_timeout: float = 120.0
     max_parallel_segments: int = 6  # segment analizinde eszamanli istek sayisi (vLLM batch'ler)

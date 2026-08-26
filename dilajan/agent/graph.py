@@ -734,7 +734,7 @@ def _perceive_single_pass(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[st
             instr += _motion_cue(seg)
         # Sorgu-gudumlu odak — bkz. _analyze_one_segment'teki ayni satirin gerekcesi (EN SONA).
         instr += _query_focus_block()
-        raw = vlm.analyze_frames(seg.frames, instr, temperature=0.2, max_tokens=400,
+        raw = vlm.analyze_frames(seg.frames, instr, temperature=0.0, max_tokens=400,
                                  repetition_penalty=settings.perceive_repetition_penalty)
         return _events_from_extraction(extract_json(raw), seg), None
     except Exception as ex:
@@ -818,7 +818,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         #       kritik olayi bastirma riskine karsi en guclu konum.
         instr += _query_focus_block()
         desc = vlm.analyze_frames(
-            seg.frames, instr, temperature=0.2, max_tokens=400,
+            seg.frames, instr, temperature=0.0, max_tokens=400,
             repetition_penalty=settings.perceive_repetition_penalty,
             as_video=(settings.video_pruning_rate > 0),  # EVS video-path (yalniz perceive-describe)
         )
@@ -828,7 +828,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                 {"role": "user", "content": prompts.EVENT_EXTRACTION_INSTRUCTION.format(
                     description=desc, start=seg.start_str, end=seg.end_str)},
             ],
-            temperature=0.1, max_tokens=400,
+            temperature=0.0, max_tokens=400,
         )
         out: List[Event] = _events_from_extraction(extract_json(ext), seg)
         # Oz-dogrulama: yuksek-severity olaylari odakli sorguyla teyit et (FP azaltir, recall korur).
@@ -1614,7 +1614,7 @@ def reason(state: PolicyAgentState) -> dict:
     actions: List[Action] = []
     query_answer: Optional[str] = None
     try:
-        raw = vlm.chat(messages, temperature=0.2, max_tokens=800)
+        raw = vlm.chat(messages, temperature=0.0, max_tokens=800)
         data = extract_json(raw)
         summary = str(data.get("summary", summary)).strip()
         r = data.get("risk", {})
@@ -2059,7 +2059,7 @@ def act(state: PolicyAgentState) -> dict:
             {"role": "system", "content": prompts.SYSTEM_PERSONA},
             {"role": "user", "content": instr},
         ]
-        raw = vlm.chat(messages, temperature=0.1, max_tokens=600)
+        raw = vlm.chat(messages, temperature=0.0, max_tokens=600)
         data = extract_json(raw)
         for call in data.get("calls", []):
             name = str(call.get("function", "")).strip()
