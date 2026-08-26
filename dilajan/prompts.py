@@ -54,8 +54,15 @@ sokak, oda, koridor, mağaza, otopark, depo, fabrika vb.) — emin değilsen gen
 hattı olduğunu VARSAYMA. Orada OLAĞAN/rutin aktivite ne görünür.
 
 2) Sonra YALNIZCA bu beklenen normalden SAPAN ve karelerde AÇIKÇA gördüğün durumlari nesnel biçimde Türkçe \
-anlat; her birinin zaman damgasini belirt: duman, yangin, patlama, çarpişma/kaza, düşme veya yerde hareketsiz \
-kişi, kavga/saldiri, silah, yetkisiz giriş gibi. Her şey beklenen normale uyuyorsa SADECE "SAPMA YOK" yaz.
+anlat; her birinin zaman damgasini belirt. Sapmalar ÖNCELIK SIRASINA göre raporlanir:
+   a) ÖNCE ÇEVRESEL TEHLİKELER: duman, yangin, alev, patlama, parlama, kıvılcım veya yanan/tutuşan nesne — \
+bunlar varsa İLK OLARAK ve AYRI AYRI raporla.
+   b) SONRA KİŞİ DAVRANIŞI: kişilerin hareketlerini (koşma, kaçışma, panik, düşme, hareketsiz kalma, \
+itişme vb.) AYRI bir sapma olarak anlat. Kişilerin panikle kaçişmasi veya hizla uzaklaşmasi varsa bunun \
+SEBEBİNİ belirle — sahnede yangin/duman/patlama gibi çevresel tehlike VARSA bu kaçişma şiddetten değil \
+TEHLİKEDEN kaçiştir; kavga/saldiri DEĞİLDİR.
+   c) DİĞER SAPMALAR: çarpişma/kaza, silah, yetkisiz giriş vb.
+Her şey beklenen normale uyuyorsa SADECE "SAPMA YOK" yaz.
 
 ÖNEMLİ:
 - Rutin yürüme, çalişma, oturma, ayakta durma, merdiven kullanma, ekipman/yük taşima OLAY DEĞİLDİR — sapma sayma.
@@ -65,20 +72,35 @@ durmasi tek başina "yetkisiz giriş" değildir.
 hareketsiz kalmasi bir DÜŞME ve olasi sağlik acilidir; yaralanma görünmese bile MUTLAKA sapma olarak raporla \
 — rutin SAYMA. (Bir kişinin YATAĞA, koltuğa veya sandalyeye uzanmasi/oturmasi NORMALDİR, düşme değildir.)
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA (ör. görünmeyen duman/yangin/kaza/kişi ekleme). \
-Ancak görüntü düşük çözünürlüklü/belirsiz olsa bile GERÇEKTEN gördüğün bir sapmayi, küçük de olsa, raporla."""
+Ancak görüntü düşük çözünürlüklü/belirsiz olsa bile GERÇEKTEN gördüğün bir sapmayi, küçük de olsa, raporla.
+- NEDENSEL AYRIŞIM: Kişilerin panik/kaçiş/hizli hareketi her zaman kavga/saldiri DEMEK DEĞİLDİR. Sahnede \
+yangin, duman, patlama veya başka bir çevresel tehlike GÖRÜYORSAN, kişilerin tepkisini (panik, kaçiş, düşme) \
+bu tehlikeden kaçiş olarak değerlendir — kavga/şiddet olarak YANLIŞ ETIKETLEME."""
 
 # Güvenlik-analisti tehdit-yorumu katmani (config.threat_interpretation ile describe'a eklenir).
 # Genel sorun: notr betimleme grenli sahnelerde sucu yuzeysellestiriyor ("fiziksel temas", "bir sey
 # aliyor") -> severity/ad dusuk kaliyor. Bu katman olayi DOGRU adlandirir; anti-halusinasyon korunur.
 THREAT_LENS_SUFFIX = """
 
-3) GÜVENLİK ANALİSTİ YORUMU: Bir sapma gördüysen, onu YÜZEYSEL geçiştirme. Kişiler arası fiziksel \
-etkileşim, ani/sert hareket, birinin yere düşmesi/yığılması, panik veya kaçışma varsa; bir güvenlik analisti \
-gibi NE OLDUĞUNU yorumla — kavga/saldırı, gasp/soygun, silahlı tehdit/çatışma, bir kişinin vurulması/yaralanması \
-olabilir mi? Varsa olayı GERÇEK adıyla ve ciddiyetiyle yaz; "fiziksel temas" / "bir şey alıyor-bırakıyor" gibi \
-zayıf ifadelerle hafifletme. Düşük çözünürlükte silah/ayrıntı net seçilmese bile ŞİDDET ÖRÜNTÜSÜNÜ (saldırgan \
-temas, savrulma, yere yığılma, kaçışma) doğru adlandır. ANCAK görsel kanıt yoksa UYDURMA; gerçekten olağan/rutin \
-ise yine "SAPMA YOK" de (normal sahneyi tehdit gibi gösterme)."""
+3) GÜVENLİK ANALİSTİ YORUMU: Bir sapma gördüysen, onu YÜZEYSEL geçiştirme. Ama ÖNCE sahnedeki \
+sapmanin KAYNAĞINI belirle:
+
+ADIM A — ÇEVRESEL TEHLİKE KONTROLÜ: Sahnede yangın, duman, alev, patlama, kıvılcım veya yanan/tutuşan \
+bir nesne/madde var mı? VARSA bu TEHLİKENİN KENDİSİ birincil olaydır; kişilerin panik/kaçış/hızlı \
+hareketi bu tehlikeye VERİLEN TEPKİDİR — kavga/saldırı DEĞİLDİR. Tehlikeden kaçışı şiddet olarak YANLIŞ \
+ETİKETLEME. (Örnek: bir şey yanıyor + kişiler panikle koşuyor = YANGIN olayı, kavga DEĞİL.)
+
+ADIM B — ŞİDDET DEĞERLENDİRMESİ: Çevresel tehlike YOKSA ve kişiler arası fiziksel etkileşim, ani/sert \
+hareket, birinin yere düşmesi/yığılması, panik veya kaçışma varsa; bir güvenlik analisti gibi NE OLDUĞUNU \
+yorumla — kavga/saldırı, gasp/soygun, silahlı tehdit/çatışma, bir kişinin vurulması/yaralanması olabilir mi? \
+Kavga/saldırı demek için kişiler arasında BİLİNÇLİ, KARŞILIKLI veya TEK TARAFLI SALDIRGAN NİYETLİ fiziksel \
+temas (yumruk, tekme, itme, tutma, boğuşma) olmalı. Yalnızca dar alanda birbirine çarpma, panikle itişme \
+veya aynı yöne kaçarken temas kavga DEĞİLDİR.
+
+Varsa olayı GERÇEK adıyla ve ciddiyetiyle yaz; "fiziksel temas" / "bir şey alıyor-bırakıyor" gibi \
+zayıf ifadelerle hafifletme. Düşük çözünürlükte silah/ayrıntı net seçilmese bile ŞİDDET ÖRÜNTÜSÜNÜ doğru \
+adlandır. ANCAK görsel kanıt yoksa UYDURMA; gerçekten olağan/rutin ise yine "SAPMA YOK" de (normal sahneyi \
+tehdit gibi gösterme)."""
 
 # V2: siddet + MULK-sucu + kaza adlandirmasini da kapsar (AKSIYON-recall: Vandalism/Burglary zayifti).
 THREAT_LENS_SUFFIX_V2 = """
@@ -170,6 +192,14 @@ yoksa bunu olay olarak YAZMA.
 kalmasi, yaralanma görünmese bile bir DÜŞME/sağlik olayidir; MUTLAKA olay olarak çikar (Yüksek/Kritik), rutin sayma. \
 (Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değildir, olay yazma.)
 
+NEDENSEL AYRIM (kavga/saldiri halüsinasyonunu önle):
+- Açiklamada yangin/duman/alev/patlama gibi çevresel tehlike tariflenmiş VE kişilerin panik/kaçiş/hizli \
+hareketi anlatilmişsa: çevresel tehlike AYRI bir olay (Kritik), kişilerin kaçişi ise bu tehlikeye verilen \
+tepkidir — kavga/saldiri olarak ÇIKARMA. İki olayı BIRLESTIRME; çevresel tehlikeyi kendi başina çikar.
+- Kavga/saldiri olarak etiketlemek için açiklamada kişiler arasinda BİLİNÇLİ SALDIRGAN NİYETLİ temas \
+(yumruk, tekme, itme, boğuşma, silahla tehdit) AÇIKÇA geçmeli. "Panikle birbirine çarpma", "dar alanda \
+itişme", "koşarken düşme/çarpişma" kavga DEĞİLDİR.
+
 YALNIZCA şu JSON formatinda yanit ver:
 {{"events": [{{"time": "MM:SS", "event": "kisa Türkçe açiklama", "severity": "Düşük|Orta|Yüksek|Kritik", "category": "Normal|Güvenlik|Kaza|Sağlık|Anomali|Yetkisiz Erişim|Diğer"}}]}}"""
 
@@ -192,6 +222,9 @@ tek başina "yetkisiz giriş" değildir.
 DÜŞME/sağlik acilidir; MUTLAKA olay olarak raporla. (Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değil.)
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA. Tamamen rutin/normalse boş liste döndür.
 - Gerçekten gördüğün bir sapmayi, küçük de olsa, uygun severity ile raporla.
+- NEDENSEL AYRIM: Sahnede yangin/duman/alev/patlama VARSA ve kişiler panikle kaçiyorsa/itişiyorsa, bu \
+kavga/saldiri DEĞİLDİR — tehlikeden kaçiştir. Kavga demek için kişiler arasinda BİLİNÇLİ SALDIRGAN temas \
+(yumruk, tekme, boğuşma) gerekir. Panikle çarpişma/itişme kavga sayilmaz.
 
 SEVERITY: Kritik=yangin/patlama/duman, silah, ciddi kaza, yerde hareketsiz/yarali kişi · \
 Yüksek=kavga/darp, yetkisiz giriş, düşme, tahrip · Orta=şüpheli/anormal hareket · Düşük=rutin.
