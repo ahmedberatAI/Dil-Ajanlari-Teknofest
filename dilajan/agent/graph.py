@@ -379,6 +379,10 @@ _VERIFY_PROMPT = (
     "ya da ciddi gibi etiketlenmiş ama aslında ÖNEMSİZ ise — ör. yere düşmüş bir NESNE/alet/malzeme "
     "(kişi değil), birinin yürümesi/geçmesi, rutin çalışma/taşıma, ya da birinin YATAĞA/koltuğa/sandalyeye "
     "uzanmasi/oturmasi (bu normaldir, düşme değildir). "
+    "KAVGA/SALDIRI İÇİN: iddia kavga/saldırı/darp ise HAYIR de — ŞUNLARDAN BİRİ GÖRÜNMEDİKÇE: "
+    "yumruk atma, tekme, kafa atma, boğma, silahla vurma. Panikle itişme, dar alanda çarpma, "
+    "hızlı kaçış, kol hareketi, söndürme hareketi kavga DEĞİLDİR. Ayrıca sahnede ateş/alev/duman "
+    "VARSA kişilerin tüm hızlı hareketleri yangından kaçıştır — kavga HAYIR. "
     "Yalnızca yangın/duman/patlama, silah, ciddi kaza/çarpışma veya ZEMİNE düşmüş/yere çökmüş/yerde "
     "hareketsiz bir KİŞİ gibi gerçek ve acil tehlikelerde EVET de."
 )
@@ -401,6 +405,10 @@ _VERIFY_BATCH_PROMPT = (
     "Her olay için: karelerde AÇIKÇA görünen ve GERÇEKTEN ciddi/acil müdahale gerektiren bir güvenlik olayı mı? "
     "Şu durumlarda 'gercek' false olsun: belirsiz/zayıf ihtimal; yalnızca olağan/günlük aktivite; ya da ciddi "
     "etiketli ama ÖNEMSİZ (yere düşmüş NESNE/alet, yürüme/geçme, rutin çalışma/taşıma, yatağa/koltuğa uzanma/oturma). "
+    "KAVGA/SALDIRI İÇİN: kavga/saldırı/darp iddiası varsa 'gercek' false olsun — ŞUNLARDAN BİRİ AÇIKÇA "
+    "GÖRÜNMEDİKÇE: yumruk atma, tekme, kafa atma, boğma, silahla vurma. Panikle itişme, dar alanda çarpma, "
+    "hızlı kaçış, söndürme hareketi kavga DEĞİLDİR. Sahnede ateş/alev/duman varsa tüm hızlı hareketler "
+    "yangından kaçıştır — kavga false. "
     "Yalnızca yangın/duman/patlama, silah, ciddi kaza/çarpışma veya ZEMİNE düşmüş/yerde hareketsiz bir KİŞİ gibi "
     "gerçek+acil tehlikelerde 'gercek' true olsun. SADECE JSON: {{\"sonuc\":[{{\"no\":1,\"gercek\":true}}, ...]}}"
 )
