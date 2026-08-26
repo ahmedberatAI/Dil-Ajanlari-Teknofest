@@ -54,14 +54,12 @@ sokak, oda, koridor, mağaza, otopark, depo, fabrika vb.) — emin değilsen gen
 hattı olduğunu VARSAYMA. Orada OLAĞAN/rutin aktivite ne görünür.
 
 2) Sonra YALNIZCA bu beklenen normalden SAPAN ve karelerde AÇIKÇA gördüğün durumlari nesnel biçimde Türkçe \
-anlat; her birinin zaman damgasini belirt. Sapmalar KESİN ÖNCELIK SIRASINA göre raporlanir:
-   a) BİRİNCİL ÖNCELİK — YANGIN/ATEŞ/DUMAN: Karelerde herhangi bir alev, ateş, yanma, duman, kıvılcım, \
-parlama veya yanan/tutuşan nesne/madde GÖRÜYORSAN bunu EN BAŞTA ve EN ÖNEMLİ sapma olarak raporla. \
-Yangın/ateş HER ZAMAN en yüksek öncelikli olaydır — başka hiçbir sapma bunun önüne GEÇEMEZ.
-   b) İKİNCİL — KİŞİ DAVRANIŞI (YALNIZCA yangın/ateş raporlandıktan SONRA): Kişilerin hareketlerini anlat. \
-MUTLAK KURAL: Sahnede yangın/ateş/duman VARSA, kişilerin TÜM hızlı hareketleri (koşma, kaçışma, panik, \
-itişme, birbirine çarpma, düşme) TEHLİKEDEN KAÇIŞTIR — kavga/saldırı DEĞİLDİR. Bu durumda kavga/saldırı \
-kelimelerini KULLANMA.
+anlat; her birinin zaman damgasini belirt. Sapmalar şu ÖNCELIK SIRASINA göre raporlanir:
+   a) YANGIN/ATEŞ: Karelerde alev, ateş, yanma, duman, kıvılcım, parlama veya yanan nesne GÖRÜYORSAN \
+bunu İLK sapma olarak raporla. Küçük bir alev/ateş bile olsa MUTLAKA belirt.
+   b) KİŞİ DAVRANIŞI: Kişilerin hareketlerini anlat. Sahnede ateş/duman VARSA kişilerin panik/kaçış/hızlı \
+hareketleri tehlikeden kaçıştır — kavga DEĞİL. Ama ateş YOKSA ve birisi diğerine SALDIRGAN NİYETLE \
+vuruyor/tutuyor/itiyor/boğuşuyorsa bunu kavga/saldırı olarak raporla.
    c) DİĞER SAPMALAR: çarpişma/kaza, silah, yetkisiz giriş vb.
 Her şey beklenen normale uyuyorsa SADECE "SAPMA YOK" yaz.
 
@@ -74,12 +72,14 @@ hareketsiz kalmasi bir DÜŞME ve olasi sağlik acilidir; yaralanma görünmese 
 — rutin SAYMA. (Bir kişinin YATAĞA, koltuğa veya sandalyeye uzanmasi/oturmasi NORMALDİR, düşme değildir.)
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA (ör. görünmeyen duman/yangin/kaza/kişi ekleme). \
 Ancak görüntü düşük çözünürlüklü/belirsiz olsa bile GERÇEKTEN gördüğün bir sapmayi, küçük de olsa, raporla.
-- KAVGA/SALDIRI İÇİN ZORUNLU KANIT: Kavga/saldırı demek için YUMRUK ATMA, TEKME, KAFA ATMA, BOĞMA, \
-SİLAHLA VURMA gibi AÇIK SALDIRI HAREKETİ görmek ZORUNLUDUR. Aşağıdakiler ASLA kavga/saldırı DEĞİLDİR: \
-panikle koşma, dar alanda birbirine çarpma, aynı yöne kaçarken temas, itişerek geçmeye çalışma, düşme, \
-birini kenara çekme/yönlendirme, söndürme hareketi. Bu hareketleri kavga olarak ETİKETLEME.
-- YANGIN ÖNCELİĞİ: Sahnede ateş/alev/duman/yanma VARSA bu olay HER ŞEYİN önünde gelir. Yangın varken \
-kişilerin TÜM hızlı/panikli hareketleri yangından kaçış veya yangını söndürme çabasıdır — kavga DEĞİLDİR."""
+- ATEŞ/YANGIN TESPİTİ (KRİTİK): Karelerde herhangi bir TURUNCU/SARI PARLAMA, ALEV, ATEŞ, IŞIK SAÇAN \
+YANAN NESNE, DUMAN veya SİS görüyorsan bunu MUTLAKA raporla — çok küçük olsa bile. Bir eşya/nesne \
+yanıyorsa, bir yerde alev/kıvılcım varsa, tuhaf bir duman/sis yükseliyorsa bunu KESİNLİKLE belirt. \
+Ateşi/yangını GÖZDEN KAÇIRMA — bu en kritik olaydır.
+- YANGIN ÖNCELİĞİ: Sahnede ateş/alev/duman/yanma VARSA bunu mutlaka İLK ve EN ÖNEMLİ olay olarak yaz. \
+Yangın varken kişilerin panikli hareketleri yangından kaçış/söndürme çabasıdır — kavga DEĞİL.
+- KAVGA AYIRIMI: Kavga/saldırı demek için bir kişinin diğerine SALDIRGAN NİYETLE fiziksel temas etmesi gerekir \
+(vuruyor, tutuyor, itiyor, boğuşuyor). Panikle birbirine çarpma veya dar alanda istemeden temas kavga DEĞİL."""
 
 # Güvenlik-analisti tehdit-yorumu katmani (config.threat_interpretation ile describe'a eklenir).
 # Genel sorun: notr betimleme grenli sahnelerde sucu yuzeysellestiriyor ("fiziksel temas", "bir sey
@@ -89,29 +89,18 @@ THREAT_LENS_SUFFIX = """
 3) GÜVENLİK ANALİSTİ YORUMU: Bir sapma gördüysen, onu YÜZEYSEL geçiştirme. Ama ÖNCE sahnedeki \
 sapmanin KAYNAĞINI belirle:
 
-ADIM A — YANGIN/ATEŞ KONTROLÜ (EN YÜKSEK ÖNCELİK): Sahnede herhangi bir alev, ateş, yanma, duman, \
-kıvılcım veya yanan/tutuşan nesne/madde var mı? VARSA:
-  - Bu TEHLİKENİN KENDİSİ birincil ve EN ÖNEMLİ olaydır — YANGIN/ATEŞ olarak raporla.
-  - Sahnedeki TÜM kişi hareketleri (panik, koşma, kaçış, itişme, birbirine çarpma, düşme, \
-    söndürme çabası) bu tehlikeye verilen TEPKİDİR.
-  - Yangın/ateş varken kavga/saldırı etiketi KULLANMA. Bu MUTLAK bir kuraldır.
-  - Hızlı hareket, kol savurma (söndürme), birini çekme/itme (kurtarma) → kavga DEĞİL.
+ADIM A — YANGIN/ATEŞ KONTROLÜ: Sahnede alev, ateş, yanma, duman, kıvılcım veya yanan nesne var mı? \
+VARSA bunu İLK ve EN ÖNEMLİ olay olarak raporla. Yangın varken kişilerin panikli/hızlı hareketleri \
+bu tehlikeden kaçış veya söndürme çabasıdır — kavga DEĞİL.
 
-ADIM B — ŞİDDET DEĞERLENDİRMESİ (YALNIZCA yangın/ateş/duman YOKSA): Çevresel tehlike YOKSA ve \
-kişiler arası fiziksel etkileşim varsa; kavga/saldırı demek için şu ZORUNLU kanıtlardan EN AZ BİRİ \
-AÇIKÇA GÖRÜNMELİ:
-  - YUMRUK ATMA (kol geriye çekilip hedefe doğru vurma)
-  - TEKME (bacak kaldırıp vurma)
-  - KAFA ATMA
-  - BOĞMA/TUTUP SIKMA
-  - SİLAHLA VURMA/TEHDİT
-  - BİRİNİ YERE ATIP ÜSTÜNE ÇULLANMA
-Bu hareketlerden HİÇBİRİ görünmüyorsa kavga/saldırı YAZMA. Şunlar ASLA kavga değildir: \
-dar alanda birbirine çarpma, panikle itişme, aynı yöne kaçarken temas, birini kenara çekme, \
-hızlı yürüme/koşma, kol/el hareketleri (el kol hareketi yapma, işaret etme, söndürme).
+ADIM B — ŞİDDET DEĞERLENDİRMESİ: Sahnede ateş/duman YOKSA ve kişiler arası SALDIRGAN NİYETLİ \
+fiziksel temas varsa (birisi diğerine vuruyor, itiyor, tutuyor, boğuşuyor, tekmeliyor) bunu \
+kavga/saldırı olarak adlandır. Kavga/saldırı demek için bir tarafın diğerine ZARAR VERME NİYETİYLE \
+temas etmesi yeterlidir — net yumruk/tekme görmek şart değil, saldırgan niyet ve fiziksel temas yeter. \
+AMA: panikle birbirine çarpma veya dar alanda istemeden temas (iki kişi aynı yöne kaçarken) kavga DEĞİL.
 
-Varsa olayı GERÇEK adıyla ve ciddiyetiyle yaz. ANCAK görsel kanıt yoksa UYDURMA; gerçekten \
-olağan/rutin ise yine "SAPMA YOK" de (normal sahneyi tehdit gibi gösterme)."""
+Varsa olayı GERÇEK adıyla ve ciddiyetiyle yaz; "fiziksel temas" gibi zayıf ifadelerle hafifletme. \
+ANCAK görsel kanıt yoksa UYDURMA; gerçekten olağan/rutin ise "SAPMA YOK" de."""
 
 # V2: siddet + MULK-sucu + kaza adlandirmasini da kapsar (AKSIYON-recall: Vandalism/Burglary zayifti).
 THREAT_LENS_SUFFIX_V2 = """
@@ -203,15 +192,12 @@ yoksa bunu olay olarak YAZMA.
 kalmasi, yaralanma görünmese bile bir DÜŞME/sağlik olayidir; MUTLAKA olay olarak çikar (Yüksek/Kritik), rutin sayma. \
 (Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değildir, olay yazma.)
 
-NEDENSEL AYRIM (kavga/saldiri halüsinasyonunu önle — MUTLAK KURALLAR):
-- YANGIN ÖNCELİĞİ: Açiklamada yangin/ateş/alev/duman/yanma/kıvılcım tariflenmiş İSE bu olay HER ZAMAN \
-Kritik öncelikli YANGIN olayıdır. Yangın varken kavga/saldırı olayı ÇIKARMA — tüm kişi hareketleri \
-(panik, kaçış, itişme, çarpma, düşme, söndürme) yangına verilen tepkidir.
-- KAVGA İÇİN ZORUNLU KANIT: Kavga/saldırı etiketi YALNIZCA açıklamada şu hareketlerden en az biri \
-AÇIKÇA tariflenmiş İSE kullanılabilir: yumruk atma, tekme, kafa atma, boğma, silahla vurma/tehdit, \
-birini yere atıp üstüne çullanma. Bu hareketler YOKSA kavga/saldırı YAZMA.
-- KAVGA OLMAYAN HAREKETLER: panikle birbirine çarpma, dar alanda itişme, koşarken temas, birini \
-çekme/yönlendirme, kol/el hareketi, söndürme hareketi, hızlı kaçış → bunlar kavga DEĞİLDİR.
+NEDENSEL AYRIM:
+- YANGIN ÖNCELİĞİ: Açıklamada ateş/alev/yanma/duman tariflenmiş İSE bu Kritik öncelikli YANGIN olayıdır. \
+Yangın varken kişilerin panik/kaçış/hızlı hareketleri yangına tepkidir — ek kavga olayı ÇIKARMA.
+- KAVGA AYIRIMI: Kavga/saldırı olayı çıkarmak için açıklamada birinin diğerine SALDIRGAN NİYETLE fiziksel \
+temas ettiği (vuruyor, itiyor, tutuyor, tekmeliyor, boğuşuyor) tariflenmiş olmalı. Panikle birbirine \
+çarpma veya aynı yöne kaçarken istemeden temas kavga DEĞİL.
 
 YALNIZCA şu JSON formatinda yanit ver:
 {{"events": [{{"time": "MM:SS", "event": "kisa Türkçe açiklama", "severity": "Düşük|Orta|Yüksek|Kritik", "category": "Normal|Güvenlik|Kaza|Sağlık|Anomali|Yetkisiz Erişim|Diğer"}}]}}"""
@@ -235,11 +221,12 @@ tek başina "yetkisiz giriş" değildir.
 DÜŞME/sağlik acilidir; MUTLAKA olay olarak raporla. (Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değil.)
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA. Tamamen rutin/normalse boş liste döndür.
 - Gerçekten gördüğün bir sapmayi, küçük de olsa, uygun severity ile raporla.
-- YANGIN ÖNCELİĞİ: Sahnede ateş/alev/yanma/duman VARSA bu EN ÖNEMLİ olaydır (Kritik). Yangın varken \
-kişilerin TÜM hızlı hareketleri (kaçış, itişme, çarpma, söndürme) yangına tepkidir — kavga DEĞİLDİR.
-- KAVGA İÇİN ZORUNLU KANIT: Kavga demek için YUMRUK ATMA, TEKME, KAFA ATMA, BOĞMA veya SİLAHLA VURMA \
-gibi AÇIK SALDIRI HAREKETİ görmek ZORUNLU. Panikle çarpışma, itişme, dar alanda temas, birini çekme, \
-kol hareketi, söndürme hareketi kavga DEĞİLDİR — bunları kavga olarak ETİKETLEME.
+- ATEŞ/YANGIN TESPİTİ (KRİTİK): Karelerde TURUNCU/SARI PARLAMA, ALEV, ATEŞ, YANAN NESNE, DUMAN veya \
+SİS görüyorsan MUTLAKA raporla — çok küçük olsa bile. Ateşi/yangını GÖZDEN KAÇIRMA.
+- YANGIN ÖNCELİĞİ: Sahnede ateş/alev/yanma/duman VARSA bunu İLK ve EN ÖNEMLİ olay olarak raporla (Kritik). \
+Yangın varken kişilerin panikli hareketleri yangından kaçış/söndürme çabasıdır — kavga DEĞİL.
+- KAVGA AYIRIMI: Kavga/saldırı için birinin diğerine SALDIRGAN NİYETLE fiziksel temas etmesi gerekir \
+(vuruyor, itiyor, tutuyor, boğuşuyor). Panikle birbirine çarpma veya istemeden temas kavga DEĞİL.
 
 SEVERITY: Kritik=yangin/patlama/duman, silah, ciddi kaza, yerde hareketsiz/yarali kişi · \
 Yüksek=kavga/darp, yetkisiz giriş, düşme, tahrip · Orta=şüpheli/anormal hareket · Düşük=rutin.
