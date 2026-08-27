@@ -52,6 +52,9 @@ class FakeVLM:
         self.calls = 0
         self.last_prompt = ""
 
+    def gorev(self, _gorev: str):
+        return self
+
     def chat(self, messages, **kw):
         self.calls += 1
         self.last_prompt = messages[-1]["content"] if messages else ""
@@ -530,6 +533,9 @@ class _RouteVLM:
 
     def __init__(self):
         self.calls = 0
+
+    def gorev(self, _gorev: str):
+        return self
 
     def chat(self, messages, **kw):
         self.calls += 1

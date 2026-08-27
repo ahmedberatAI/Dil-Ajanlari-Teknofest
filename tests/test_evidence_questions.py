@@ -146,6 +146,9 @@ class _KanitVLM:
         self.soru_hatasi = soru_hatasi
         self.ad_hatasi = ad_hatasi
 
+    def gorev(self, _gorev: str):
+        return self
+
     # --- yardimci ---
     def _kanit_yaniti(self, istem: str) -> str:
         for soru in EQ.soru_seti(settings.evidence_question_set):
@@ -608,6 +611,9 @@ class _HakemVLM:
 
     def __init__(self) -> None:
         self.istemler: list = []
+
+    def gorev(self, _gorev: str):
+        return self
 
     def analyze_frames(self, frames, instr, **kw) -> str:
         self.istemler.append(instr)

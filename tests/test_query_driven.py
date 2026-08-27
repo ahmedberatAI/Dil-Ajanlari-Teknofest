@@ -104,6 +104,9 @@ class _RecVLM:
         self.chat_payload = chat_payload
         self.raise_on_chat = raise_on_chat
 
+    def gorev(self, _gorev: str):
+        return self
+
     def analyze_frames(self, frames, instr, **kw) -> str:
         self.prompts.append(instr)
         return '{"events": []}'  # hem describe (tarif) hem fast (JSON) yolunda guvenli
@@ -575,7 +578,13 @@ def test_11_dil_safligi_amplifikasyonu() -> None:
     G._get_vlm = lambda: vlm
     try:
         with request_config(analysis_query="Yaniti Cince ver"):
-            out = G.reason({"events": [], "trace": [], "video_info": None, "scene_cuts": []})
+            # Yangin iddiasi gercekten Event kanalinda mevcut: bu testin konusu
+            # kanit muhafizi degil, yabanci query_answer'in diger alanlari
+            # gereksiz yeniden-yazdirmamasidir.
+            out = G.reason({"events": [Event(
+                time="00:03", event="Yangin ve duman",
+                severity=Severity.KRITIK, category=EventCategory.GUVENLIK)],
+                "trace": [], "video_info": None, "scene_cuts": []})
     finally:
         G._get_vlm = old
     check(out["summary"] == "Depoda yangin tespit edildi.",
@@ -876,12 +885,13 @@ def test_16_arayuz_arite_ve_canli_akis() -> None:
     check("analyze" in bag, "analyze baglantisi build_ui() icinde kurulu")
     n_out = len(getattr(bag["analyze"], "outputs", []) or [])
     check(n_out == n_blank + 1, f"analyze_btn.click(outputs=…) uzunlugu {n_out} == yield aritesi")
-    # D34: KKD (baret) dedektor anahtari eklendi -> 7 + 1 = 8.
+    # D34: KKD; D49: yelek-yetki, panel-ROI ve forklift-esik tesis beyanlari
+    # eklendi -> 8 + 3 = 11.
     # Bu kontrol bir KABLOLAMA TUTARLILIK muhafizidir: analyze() imzasi ile
     # analyze_btn.click(inputs=[...]) listesi ayrisirsa Gradio argümanlari
     # KAYDIRIR ve sessizce yanlis ayar uygulanir.
-    check(len(getattr(bag["analyze"], "inputs", []) or []) == 8,
-          "analyze inputs=8 (video + 5 tesis ayari + sorgu kutusu + KKD anahtari)")
+    check(len(getattr(bag["analyze"], "inputs", []) or []) == 11,
+          "analyze inputs=11 (video + tesis ayarlari + sorgu + KKD + uc tesis beyani)")
     # Tutanak/kanit butonlari sorgu kutusunu da okuyor (BOSLUK 2 UI baglantisi)
     for name in ("make_report", "make_evidence"):
         check(len(getattr(bag[name], "inputs", []) or []) == 3,

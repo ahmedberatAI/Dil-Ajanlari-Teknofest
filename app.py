@@ -216,6 +216,7 @@ def _server_status() -> str:
             urllib.request.urlopen(istek, timeout=4)
             return (f"<div class='srv on'><span class='sdot online'></span>UZAK SERVİS ÇEVRİMİÇİ"
                     f"<span class='dim'> · algı {settings.gorev_modeli('algi')}"
+                    f" · olay {settings.gorev_modeli('olay')}"
                     f" · sayım {settings.gorev_modeli('sayim')}</span></div>")
         except Exception:
             return ("<div class='srv off'><span class='sdot offline'></span>UZAK SERVİSE ULAŞILAMIYOR"
@@ -315,7 +316,9 @@ def _slotlari_oku(result):
     return {}
 
 
-def _isg_panel_html(result) -> str:
+def _isg_panel_html(result, yelek_yetki_kurali=None,
+                    panel_koyuluk_kurali=None,
+                    forklift_kasa_kurali=None) -> str:
     """Olculen deger + kural esigi + GERCEK hukum tablosu.
 
     Hukum, kural mantigini burada TEKRAR YAZARAK degil, `isg_kural` motorunu
@@ -325,6 +328,18 @@ def _isg_panel_html(result) -> str:
     cevabi vermek ZORUNDA.
     """
     from dilajan import gozlem as _gz, isg_kural as _kr
+    # Panel render'i analizden SONRA yapilir. Istek-kapsamli yelek/yetki
+    # beyanini global `settings`e yeniden yazmak ikinci kullaniciyi uzun sure
+    # bekletebilirdi; salt-okunur Pydantic kopyasi ayni hukmu yarissiz kurar.
+    if (yelek_yetki_kurali is None and panel_koyuluk_kurali is None and
+            forklift_kasa_kurali is None):
+        ayar = settings
+    else:
+        ayar = settings.model_copy(update={
+            "yelek_yetki_kurali": bool(yelek_yetki_kurali),
+            "panel_koyuluk_kurali": bool(panel_koyuluk_kurali),
+            "forklift_kasa_kurali": bool(forklift_kasa_kurali),
+        })
     slotlar = _slotlari_oku(result)
     if not slotlar:
         return ("<div class='card-title'>🔬 İSG ÖLÇÜMLERİ</div>"
@@ -335,12 +350,14 @@ def _isg_panel_html(result) -> str:
     kayit = _gz.GozlemKaydi()
     kayit.degerler.update(slotlar)
     atesleyen = {getattr(e, "isg_kod", None)
-                 for e in _kr.olaylari_uret(kayit, settings)}
+                 for e in _kr.olaylari_uret(kayit, ayar)}
 
     # slot -> (esik metni, o slotu kullanan kural kodu, on kosul mu)
     bilgi, on_slotlar = {}, {}
     for k in _kr.KURALLAR:
-        esik = getattr(settings, getattr(k, "esik_alani", ""), None)
+        if not k.etkin_mi(ayar):
+            continue
+        esik = getattr(ayar, getattr(k, "esik_alani", ""), None)
         if isinstance(k, _kr.AltEsikKurali):
             kosul = f"&lt; {esik}"
         elif isinstance(k, _kr.EsikKurali):
@@ -394,7 +411,9 @@ def _blank():
 
 def analyze(video_path, facility_rules="", restricted_zones="",
             detect_vehicles=False, vehicle_zones="", detect_crowd=False,
-            analysis_query="", ppe_detection=False):
+            analysis_query="", ppe_detection=False,
+            yelek_yetki_kurali=False, panel_koyuluk_kurali=False,
+            forklift_kasa_kurali=False):
     if not video_path:
         yield (_alert("Lütfen önce bir video yükleyin."), *_blank())
         return
@@ -416,6 +435,16 @@ def analyze(video_path, facility_rules="", restricted_zones="",
         # dedektor digerinin analizini etkilemez). Varsayilan KAPALI (K2); agirlik
         # (yolo11n-ppe.pt) yoksa acik olsa bile sessizce devre disi (K3).
         ppe_detection=bool(ppe_detection),
+        # `yelek yok -> yetkisiz` evrensel bir goruntu bilgisi degil, tesise
+        # ozgu bir yetki politikasidir. Operator acikca beyan etmedikce kural
+        # ve ona ait model slotu calismaz.
+        yelek_yetki_kurali=bool(yelek_yetki_kurali),
+        # Sabit panel ROI'sinin bu kameraya kalibre edildigi beyan edilmeden
+        # koyu bolgeyi "acik birakilmis pano" diye yorumlama.
+        panel_koyuluk_kurali=bool(panel_koyuluk_kurali),
+        # Kasa sayisi tek basina evrensel bir asiri-yuk hukmu degildir; esik
+        # ancak tesis/arac icin operator tarafindan tanimlanmissa uygulanir.
+        forklift_kasa_kurali=bool(forklift_kasa_kurali),
     ):
         seen: list = []
         yield (_pipeline_html(seen), *_blank())  # baslangic: Görüntü Alımı aktif
@@ -477,8 +506,13 @@ def analyze(video_path, facility_rules="", restricted_zones="",
     else:
         query_block = gr.update(value="", visible=False)
     # result + video yolu State'lere yazilir -> Tutanak / Kanıt Paketi butonlari bunlari kullanir
+    # Analiz bittiginde istek ayarlari geri yuklenmistir; panel AYNI tesis
+    # beyanini global ayarlari mutasyona ugratmadan salt-okunur kopyada kullanir.
+    isg_panel = _isg_panel_html(
+        result, yelek_yetki_kurali, panel_koyuluk_kurali,
+        forklift_kasa_kurali)
     yield (_pipeline_html(seen, done=True), query_block, result.summary, risk,
-           _isg_panel_html(result), timeline,
+           isg_panel, timeline,
            events_rows, actions_md, funcs_md, trace_md, raw, ctx, result, str(video_path))
 
 
@@ -822,11 +856,27 @@ def build_ui() -> gr.Blocks:
                         # Varsayilan KAPALI; agirlik yoksa acik olsa bile sessizce devre disi.
                         ppe_in = gr.Checkbox(
                             label="🦺 KKD tespiti (baret + yelek) — deterministik dedektör", value=False)
+                        vest_authority_in = gr.Checkbox(
+                            label=("🪪 Bu tesiste yeşil reflektif yelek yetki işaretidir "
+                                   "(yoksa 'yetkisiz müdahale' üret)"),
+                            value=False)
+                        panel_calibration_in = gr.Checkbox(
+                            label=("⚡ Bu kamera için sabit pano ROI kalibrasyonu geçerlidir "
+                                   "(koyu oyuk = açık bırakılmış pano)"),
+                            value=False)
+                        forklift_threshold_in = gr.Checkbox(
+                            label=("🏗️ Bu forklift/yük için kasa eşiği tanımlıdır "
+                                   "(≥3 kasa = aşırı yük)"),
+                            value=False)
                         gr.HTML("<div class='qa-hint'>Baretsiz personel <b>YOLO ile</b> tespit "
                                 "edilir (dil modeli bu ayrımı güvenilir yapamıyor — ölçüldü). "
                                 "Bulunan ihlal olay listesinde <b>görünür</b> ancak varsayılan "
                                 "olarak <b>ekip çağırmaz</b>: tesis alanındaki doğruluğu henüz "
-                                "ölçülmedi.</div>")
+                                "ölçülmedi. Yeşil yelek/yetki eşlemesi evrensel değildir; "
+                                "yalnızca yukarıdaki tesis beyanı açıkken kullanılır. Sabit pano "
+                                "ROI kuralı da yalnız kalibre edildiği kamerada açılmalıdır. "
+                                "Kasa eşiği, forklift kapasitesi ve yük tipine göre tesiste "
+                                "doğrulanmadan kullanılmamalıdır.</div>")
                         vehicle_zones_in = gr.Textbox(
                             label="Araç yasak bölgeleri (3×3 ızgara, virgülle — boşsa durağan araç bilgi amaçlı)",
                             placeholder="Örn: alt sağ, sağ  → bu bölgelerde araç = Yetkisiz/Yanlış Konumlu Araç (Yüksek)")
@@ -930,7 +980,8 @@ def build_ui() -> gr.Blocks:
         #    _blank() uzunlugu (13). Uclu tutarlilik build_ui() testinde assert edilir.
         analyze_btn.click(
             analyze, inputs=[video_in, facility_in, zones_in, vehicles_in, vehicle_zones_in,
-                             crowd_in, query_in, ppe_in],
+                             crowd_in, query_in, ppe_in, vest_authority_in,
+                             panel_calibration_in, forklift_threshold_in],
             outputs=[status_out, query_out, summary_out, risk_out, isg_out, timeline_out,
                      events_out, actions_out, funcs_out, trace_out, json_out, context_state,
                      result_state, path_state],

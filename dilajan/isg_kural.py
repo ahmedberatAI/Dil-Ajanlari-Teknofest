@@ -39,7 +39,8 @@ class Kural:
                  kategori: EventCategory = EventCategory.GUVENLIK,
                  severity: Severity = Severity.YUKSEK,
                  on_slot: str = "", on_asgari: int = 1,
-                 on_azami: int = 10 ** 9, on_bayrak_alani: str = ""):
+                 on_azami: int = 10 ** 9, on_bayrak_alani: str = "",
+                 etkin_bayrak_alani: str = ""):
         self.kod = kod              # ISG sinif kodu (etiket metrigi bunu okur)
         self.slot = slot
         self.sablon = sablon        # Event.event metni — MODEL NESRI DEGIL
@@ -52,6 +53,17 @@ class Kural:
         self.on_azami = on_azami
         # Bos degilse: ayardaki bu bayrak False iken ON KOSUL ATLANIR.
         self.on_bayrak_alani = on_bayrak_alani
+        # Kuralin kendisini tesis beyanina baglar. Ornek: yesil yelek ancak
+        # operator bu tesiste bir YETKI isareti oldugunu beyan ederse
+        # `yelek=YOK -> yetkisiz` hukmune donusebilir.
+        self.etkin_bayrak_alani = etkin_bayrak_alani
+
+    def etkin_mi(self, ayar=None) -> bool:
+        """Kural bu tesis/istek icin etkin mi? Eksik bayrakta fail-closed."""
+        if not self.etkin_bayrak_alani:
+            return True
+        return bool(ayar is not None and
+                    getattr(ayar, self.etkin_bayrak_alani, False))
 
     def on_kosul_saglandi(self, kayit, ayar=None) -> bool:
         """Kuralin sorusu bu sahnede ANLAMLI mi?
@@ -176,6 +188,7 @@ KURALLAR: List[Kural] = [
                 "güvenli sınır {esik} kasanın altındadır, bu nedenle sınır aşılmıştır"),
         esik_alani="forklift_esik", esik_varsayilan=3,
         severity=Severity.YUKSEK,
+        etkin_bayrak_alani="forklift_kasa_kurali",
     ),
     EsikKurali(
         kod="Opened_Panel_Cover",
@@ -184,6 +197,7 @@ KURALLAR: List[Kural] = [
                 "kapağın açık olduğunu gösteren koyu oyuk görülüyor"),
         esik_alani="panel_koyuluk_esik", esik_varsayilan=3,
         severity=Severity.YUKSEK,
+        etkin_bayrak_alani="panel_koyuluk_kurali",
     ),
     AltEsikKurali(
         kod="Safe_Walkway_Violation",
@@ -230,6 +244,7 @@ KURALLAR: List[Kural] = [
         # ne kisi var; model yine de "yelek YOK" diyordu).
         on_slot="makine_basinda_kisi", on_asgari=1,
         on_bayrak_alani="yelek_on_kosul",
+        etkin_bayrak_alani="yelek_yetki_kurali",
     ),
 ]
 
@@ -246,6 +261,8 @@ def olaylari_uret(kayit, ayar, zaman: str = "00:00") -> List[Event]:
     if not kayit:
         return out
     for k in KURALLAR:
+        if not k.etkin_mi(ayar):
+            continue
         s = k.degerlendir(kayit, ayar)
         if not s:
             continue
@@ -274,8 +291,9 @@ def gerekli_slotlar(ayar) -> List[str]:
                     out.append(ad)
         return out
 
+    etkin = [k for k in KURALLAR if k.etkin_mi(ayar)]
     if acik == "*":
-        return _ile_on(KURALLAR)
+        return _ile_on(etkin)
     istenen = {x.strip() for x in acik.split(",") if x.strip()}
-    return _ile_on([k for k in KURALLAR
+    return _ile_on([k for k in etkin
                     if k.slot in istenen or k.kod in istenen])

@@ -69,6 +69,9 @@ class FakeVLM:
     def __init__(self, payload=""):
         self.payload, self.calls = payload, 0
 
+    def gorev(self, _gorev):
+        return self
+
     def chat(self, messages, **kw):
         self.calls += 1
         return self.payload

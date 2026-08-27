@@ -145,7 +145,9 @@ def _kosum_kunyesi() -> dict:
         "kodlama_bit": _s.kodlama_bit,
         "panel_roi_vlm": _s.panel_roi_vlm,
         "panel_koyuluk_esik": _s.panel_koyuluk_esik,
+        "panel_koyuluk_kurali": _s.panel_koyuluk_kurali,
         "forklift_esik": _s.forklift_esik,
+        "forklift_kasa_kurali": _s.forklift_kasa_kurali,
         "panel_roi": _s.panel_roi,
         "panel_luma_esik": _s.panel_luma_esik,
         "panel_kisi_kontrolu": _s.panel_kisi_kontrolu,
@@ -157,8 +159,14 @@ def _kosum_kunyesi() -> dict:
         "uzak_api": _s.uzak_api_mi,
         "base_url": _s.base_url,
         "model_algi": _s.gorev_modeli("algi"),
+        "model_olay": _s.gorev_modeli("olay"),
         "model_yapi": _s.gorev_modeli("yapi"),
         "model_ozet": _s.gorev_modeli("ozet"),
+        # Serbest-metin ISG halusinasyon savunmalari: ara-kayit kimliginde
+        # bulunmazlarsa acik/kapali kosular birbirinin satirlarini devralir.
+        "claim_guard": _s.claim_guard,
+        "summary_evidence_guard": _s.summary_evidence_guard,
+        "risk_event_ceiling": _s.risk_event_ceiling,
         "forklift_yuk": _s.forklift_yuk,
         # SLOT GUVENI: enstrumanli kosum, sevk kosumuyla AYNI ara-kayit
         # dosyasini PAYLASMAMALI. Cevaplar birebir ayni cikiyor (8/8 dogrulandi)
@@ -176,6 +184,7 @@ def _kosum_kunyesi() -> dict:
         "yelek_on_roi_vlm": _s.yelek_on_roi_vlm,
         # ON KOSUL KAPISI davranisi degistirir -> kunyede OLMAK ZORUNDA
         "yelek_on_kosul": _s.yelek_on_kosul,
+        "yelek_yetki_kurali": _s.yelek_yetki_kurali,
         # ALAN KILIDI davranisi degistirir -> kunyede OLMAK ZORUNDA
         "isg_gorus_imza_uzunluk": len(_s.isg_gorus_imza or ""),
         "isg_gorus_esik": _s.isg_gorus_esik,
