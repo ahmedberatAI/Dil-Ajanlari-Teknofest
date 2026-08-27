@@ -55,23 +55,35 @@ hattı olduğunu VARSAYMA. Orada OLAĞAN/rutin aktivite ne görünür.
 
 2) Sonra YALNIZCA bu beklenen normalden SAPAN ve karelerde AÇIKÇA gördüğün durumlari nesnel biçimde Türkçe \
 anlat; her birinin zaman damgasini belirt. Sapmalar şu ÖNCELIK SIRASINA göre raporlanir:
-   a) YANGIN/ATEŞ: Karelerde alev, ateş, yanma, duman, kıvılcım, parlama veya yanan nesne GÖRÜYORSAN \
-bunu İLK sapma olarak raporla. Küçük bir alev/ateş bile olsa MUTLAKA belirt.
-   b) KİŞİ DAVRANIŞI: Kişilerin hareketlerini anlat. Sahnede ateş/duman VARSA kişilerin panik/kaçış/hızlı \
-hareketleri tehlikeden kaçıştır — kavga DEĞİL. Ama ateş YOKSA ve birisi diğerine SALDIRGAN NİYETLE \
-vuruyor/tutuyor/itiyor/boğuşuyorsa bunu kavga/saldırı olarak raporla.
+   a) YANGIN/ATEŞ/DUMAN — MUTLAK ÖNCELİK: ALEV, ATEŞ, YANMA, DUMAN, KIVLICIM, PARLAMA = YANGIN - MUTLAKA raporla.
+      * ATEŞ: Yerde/nesnede TURUNCU/SARI/KIRMIZI parlayan/titreyen ışık (ASLA "silah" DEĞİL)
+      * DUMAN: Havada/üstte/tavanda GRİ/SİYAH/KOYU bulanık alan/bulut/sis yükseliyor = DUMAN. Normal hava \
+değil - bulanık/koyu/gri alan varsa DUMAN olabilir, MUTLAKA raporla. "Tavan gölgesi" değil, DUMAN.
+      * PANİK/KAÇIŞ: Birden fazla kişi AYNI YÖNE/ÇIKIŞA HIZLI hareket = yangından kaçış, MUTLAKA raporla.
+   b) KİŞİ DAVRANIŞI: Kişilerin hareketlerini anlat. Sahnede ateş/duman VARSA kişilerin hareketleri yangına \
+tepkidir (kaçış/söndürme) — kavga/saldırı DEĞİL. Yerde ateş varken kişi eğiliyorsa SÖNDÜRME çabasıdır, \
+SALDIRI DEĞİL. Ateş YOKSA ve birisi diğerine SALDIRGAN NİYETLE vuruyor/tutuyor/itiyor/boğuşuyorsa kavga/saldırı.
    c) DİĞER SAPMALAR: çarpişma/kaza, silah, yetkisiz giriş vb.
 Her şey beklenen normale uyuyorsa SADECE "SAPMA YOK" yaz.
 
 ÖNEMLİ:
 - Rutin yürüme, çalişma, oturma, ayakta durma, merdiven kullanma, ekipman/yük taşima OLAY DEĞİLDİR — sapma sayma.
+  ANCAK: Birden fazla kişi AYNI YÖNE HIZLI hareket/koşuyor = PANİK/KAÇIŞ, bu OLAY. Normal yürüme ≠ kaçış.
 - Yere düşmüş/duran bir NESNE (alet, koli, malzeme, eşya) önemli bir sapma DEĞİLDİR; birinin yürümesi/geçmesi/\
 durmasi tek başina "yetkisiz giriş" değildir.
 - BUNA KARŞIN, bir KİŞİNİN aniden YERE/zemine düşmesi/çökmesi veya doğrudan YERDE (yatakta/koltukta DEĞİL) \
 hareketsiz kalmasi bir DÜŞME ve olasi sağlik acilidir; yaralanma görünmese bile MUTLAKA sapma olarak raporla \
 — rutin SAYMA. (Bir kişinin YATAĞA, koltuğa veya sandalyeye uzanmasi/oturmasi NORMALDİR, düşme değildir.)
+- KRİTİK AYIRIMLAR — görmedikçe iddia etme:
+  * ÇARPMA: Kişi ve makine/nesne FİZİKSEL TEMAS etmeli. Yakından geçmek/yanından yürümek = ÇARPMADI.
+  * DÜŞME: Kişi KONTROLSÜZ şekilde YERE ÇAKILMALI. Çömelmek/eğilmek/yavaşça inmek/diz çökmek = DÜŞMEDI.
+  * HAREKETSİZ KALMA: SON karelerde kişi HALA YERDE olmalı. Düştükten sonra ayağa kalktıysa = HAREKETSİZ KALMADI.
+  * YARALANMA: Kan/açık yara/kırık kemik/bilinçsizlik görmedikçe "yaralanma" deme, "düşme" de.
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA (ör. görünmeyen duman/yangin/kaza/kişi ekleme). \
 Ancak görüntü düşük çözünürlüklü/belirsiz olsa bile GERÇEKTEN gördüğün bir sapmayi, küçük de olsa, raporla.
+- DEVRİLME HALÜSINASYONU YASAĞI: Forklift/araç/ekipman "devrildi" demek için ÖNCEKİ karelerde o \
+nesne DİK/AYAKTA, SONRAKİ karelerde YERDE/YATIK olmalı. Tüm karelerde aynı pozisyonda duruyorsa \
+DEVRİLME YOK. Hareket ediyor = devrildi DEĞİL. Yük düştü = forklift devrildi DEĞİL.
 - ATEŞ/YANGIN TESPİTİ (KRİTİK): Karelerde herhangi bir TURUNCU/SARI PARLAMA, ALEV, ATEŞ, IŞIK SAÇAN \
 YANAN NESNE, DUMAN veya SİS görüyorsan bunu MUTLAKA raporla — çok küçük olsa bile. Bir eşya/nesne \
 yanıyorsa, bir yerde alev/kıvılcım varsa, tuhaf bir duman/sis yükseliyorsa bunu KESİNLİKLE belirt. \
@@ -89,9 +101,12 @@ THREAT_LENS_SUFFIX = """
 3) GÜVENLİK ANALİSTİ YORUMU: Bir sapma gördüysen, onu YÜZEYSEL geçiştirme. Ama ÖNCE sahnedeki \
 sapmanin KAYNAĞINI belirle:
 
-ADIM A — YANGIN/ATEŞ KONTROLÜ: Sahnede alev, ateş, yanma, duman, kıvılcım veya yanan nesne var mı? \
-VARSA bunu İLK ve EN ÖNEMLİ olay olarak raporla. Yangın varken kişilerin panikli/hızlı hareketleri \
-bu tehlikeden kaçış veya söndürme çabasıdır — kavga DEĞİL.
+ADIM A — YANGIN/ATEŞ KONTROLÜ (MUTLAK ÖNCELİK): Sahnede alev, ateş, yanma, duman, kıvılcım, yanan nesne, \
+yerde/zeminde TURUNCU/SARI/KIRMIZI parlayan ışık, havada/üstte/tavanda GRİ/SİYAH/KOYU bulanık alan/bulut, \
+veya birden fazla kişi AYNI YÖNE HIZLI kaçışıyor mu? VARSA bunu İLK ve EN ÖNEMLİ YANGIN olayı olarak raporla. \
+KRİTİK: Yerde parlayan turuncu/sarı ışık YANGINDIR ("silah" DEĞİL). Üstte koyu gri bulanık alan DUMAN olabilir \
+("tavan gölgesi" demeden önce DUMAN olduğunu düşün). Birden fazla kişi aynı yöne koşuyorsa PANİK/KAÇIŞTIR. \
+Yangın varken kişilerin hareketleri yangına tepkidir (kaçış/söndürme) — kavga/saldırı DEĞİL.
 
 ADIM B — ŞİDDET DEĞERLENDİRMESİ: Sahnede ateş/duman YOKSA ve kişiler arası SALDIRGAN NİYETLİ \
 fiziksel temas varsa (birisi diğerine vuruyor, itiyor, tutuyor, boğuşuyor, tekmeliyor) bunu \
@@ -160,7 +175,12 @@ başına hâlâ OLAY DEĞİLDİR. Olay olan, yukarıda sayılan GÜVENSİZ KOŞU
 sapma değildir; "yük dengesiz/aşırı" veya "yükü taşıyan araç yayaya tehlikeli yakınlıkta" sapmadır.
 
 UYDURMA YASAĞI korunur: güvensiz koşulu GERÇEKTEN görmüyorsan yazma. Emin değilsen olayı yazma; \
-kararsız kaldığın durumu betimlemende "belirsiz" diye geç. Her şey güvenliyse "SAPMA YOK" de."""
+kararsız kaldığın durumu betimlemende "belirsiz" diye geç. Her şey güvenliyse "SAPMA YOK" de.
+
+DEVRILME HALÜSINASYONU YASAĞI: Forklift/araç hareket ediyor diye "iskele/raf devrildi" UYDURMA. \
+Devrilme iddiası için ÖNCEKİ karelerde yapı/nesne DİK, SONRAKİ karelerde YERDE olmalı. Tüm karelerde \
+aynı pozisyondaysa devrilme YOK. KKD eksikliği tek başına "çarpışma/devrilme riski var" demek için \
+yeterli DEĞİL - gerçek bir tehlike (hareket eden araç yaklaşıyor, yük altında kişi var) görmelisin."""
 
 EVENT_EXTRACTION_INSTRUCTION = """Aşağida bir güvenlik kamerasi segmentinin ({start}-{end}) sahne açiklamasi var:
 ---
@@ -191,13 +211,23 @@ yoksa bunu olay olarak YAZMA.
 - BUNA KARŞIN bir kişinin YERE/zemine düşmesi/çökmesi veya doğrudan YERDE (yatakta/koltukta değil) hareketsiz \
 kalmasi, yaralanma görünmese bile bir DÜŞME/sağlik olayidir; MUTLAKA olay olarak çikar (Yüksek/Kritik), rutin sayma. \
 (Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değildir, olay yazma.)
+- KRİTİK: Açıklamada şunlar AÇIKÇA yazıyorsa olay çıkar, yoksa ÇIKARMA:
+  * "Çarptı" → açıklamada FİZİKSEL TEMAS tarif edilmeli (yakından geçti ≠ çarptı)
+  * "Düştü" → açıklamada YERE ÇAKILMA tarif edilmeli (eğildi/çömeldi ≠ düştü)
+  * "Hareketsiz kaldı" → açıklamada SON karelerde YERDE tarif edilmeli (ayağa kalktı ≠ hareketsiz kaldı)
 
 NEDENSEL AYRIM:
-- YANGIN ÖNCELİĞİ: Açıklamada ateş/alev/yanma/duman tariflenmiş İSE bu Kritik öncelikli YANGIN olayıdır. \
-Yangın varken kişilerin panik/kaçış/hızlı hareketleri yangına tepkidir — ek kavga olayı ÇIKARMA.
+- YANGIN ÖNCELİĞİ (MUTLAK): Açıklamada ateş/alev/yanma/duman/kıvılcım, "yerde turuncu/sarı parlayan ışık", \
+"havada/üstte gri/koyu bulanık alan", "birden fazla kişi hızlı kaçışıyor" tariflenmiş İSE bu Kritik YANGIN \
+olayıdır. KRİTİK: "Sarı nesne", "turuncu parlama", "gri sis", "koyu bulanık alan" = YANGINTIR, silah/araç DEĞİL. \
+Yangın varken kişilerin hareketleri yangına tepkidir (kaçış/söndürme) — kavga olayı ÇIKARMA. Kişi "yerdeki şeye \
+eğiliyor" veya "birden fazla kişi aynı yöne koşuyor" = yangın olayıdır.
 - KAVGA AYIRIMI: Kavga/saldırı olayı çıkarmak için açıklamada birinin diğerine SALDIRGAN NİYETLE fiziksel \
 temas ettiği (vuruyor, itiyor, tutuyor, tekmeliyor, boğuşuyor) tariflenmiş olmalı. Panikle birbirine \
-çarpma veya aynı yöne kaçarken istemeden temas kavga DEĞİL.
+çarpma veya aynı yöne kaçarken istemeden temas kavga DEĞİL. Açıklamada YANGIN varsa şiddet olayı ÇIKARMA.
+- DEVRİLME KONTROLÜ: Açıklamada "devrildi" geçiyorsa ANCAK ÖNCEKİ karelerde DİK, SONRAKİ karelerde \
+YERDE diye AÇIKÇA belirtilmişse olay çıkar. "Forklift hareket etti" → "forklift devrildi" UYDURMA. \
+"Yük düştü" → "forklift devrildi" UYDURMA. Şüpheliyse devrilme olayı YAZMA.
 
 YALNIZCA şu JSON formatinda yanit ver:
 {{"events": [{{"time": "MM:SS", "event": "kisa Türkçe açiklama", "severity": "Düşük|Orta|Yüksek|Kritik", "category": "Normal|Güvenlik|Kaza|Sağlık|Anomali|Yetkisiz Erişim|Diğer"}}]}}"""
@@ -215,16 +245,19 @@ duman/yangin/patlama, çarpişma/kaza, düşme veya yerde hareketsiz kişi, kavg
 
 ÖNEMLİ:
 - Rutin yürüme, çalişma, oturma, ayakta durma, merdiven kullanma, ekipman/yük taşima OLAY DEĞİLDİR — olay sayma.
+  ANCAK: Birden fazla kişi AYNI YÖNE HIZLI hareket/koşuyor = PANİK/KAÇIŞ, bu OLAY (Normal yürüme ≠ kaçış).
 - Yere düşmüş/duran bir NESNE (alet, koli, malzeme) kritik/sağlik olayi DEĞİLDİR; birinin yürümesi/geçmesi \
 tek başina "yetkisiz giriş" değildir.
 - BUNA KARŞIN bir KİŞİNİN aniden YERE/zemine düşmesi/çökmesi veya doğrudan YERDE hareketsiz kalmasi bir \
 DÜŞME/sağlik acilidir; MUTLAKA olay olarak raporla. (Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değil.)
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA. Tamamen rutin/normalse boş liste döndür.
 - Gerçekten gördüğün bir sapmayi, küçük de olsa, uygun severity ile raporla.
-- ATEŞ/YANGIN TESPİTİ (KRİTİK): Karelerde TURUNCU/SARI PARLAMA, ALEV, ATEŞ, YANAN NESNE, DUMAN veya \
-SİS görüyorsan MUTLAKA raporla — çok küçük olsa bile. Ateşi/yangını GÖZDEN KAÇIRMA.
-- YANGIN ÖNCELİĞİ: Sahnede ateş/alev/yanma/duman VARSA bunu İLK ve EN ÖNEMLİ olay olarak raporla (Kritik). \
-Yangın varken kişilerin panikli hareketleri yangından kaçış/söndürme çabasıdır — kavga DEĞİL.
+- ATEŞ/YANGIN/DUMAN TESPİTİ (MUTLAK ÖNCELİK):
+  * ATEŞ: Yerde/nesnede TURUNCU/SARI/KIRMIZI parlayan ışık = YANGINTIR (ASLA "silah/araç" DEĞİL)
+  * DUMAN: Havada/üstte/tavanda GRİ/SİYAH/KOYU bulanık alan/bulut/sis yükseliyor = DUMAN olabilir, \
+MUTLAKA raporla. "Tavan gölgesi" demeden önce DUMAN ihtimalini değerlendir.
+  * PANİK/KAÇIŞ: Birden fazla kişi AYNI YÖNE/ÇIKIŞA HIZLI hareket = yangından kaçış, MUTLAKA raporla.
+  Yangın varken kişilerin hareketleri yangına tepkidir (kaçış/söndürme) — kavga DEĞİL.
 - KAVGA AYIRIMI: Kavga/saldırı için birinin diğerine SALDIRGAN NİYETLE fiziksel temas etmesi gerekir \
 (vuruyor, itiyor, tutuyor, boğuşuyor). Panikle birbirine çarpma veya istemeden temas kavga DEĞİL.
 
@@ -330,8 +363,12 @@ Video toplam süresi: {duration}
 
 Bu olaylara dayanarak şunlari üret:
 1. summary: Videonun 2-4 cümlelik, operatörün hizli karar almasini sağlayacak Türkçe özeti. \
-Olaylar arasinda otomatik NEDEN-SONUÇ veya tek bir öykü KURMA ("önce ... olduğu için sonra ..." deme); \
-yalnizca AÇIKÇA ayni sahneye ait ve bağlantili olaylari ilişkilendir, aksi halde her olayi BAĞIMSIZ aktar.
+YALNIZCA yukarıdaki olay listesinde GEÇEN olayları özetle — listeye OLMAYAN yeni olay/tehlike EKLEME. \
+KRİTİK: Olay listesinde "devrilme/çarpma/düşme/hareketsiz kalma" yoksa özette bunları YAZMA. Olay listesinde \
+yangın yoksa özette yangından bahsetme. HALÜSİNASYON YAPMA: Olay listesi "personel yakından geçti" diyorsa \
+özette "çarptı" UYDURMA. Liste "eğildi" diyorsa "düştü" UYDURMA. Liste "ayağa kalktı" diyorsa "hareketsiz kaldı" UYDURMA. \
+Olaylar arasında otomatik NEDEN-SONUÇ veya tek bir öykü KURMA ("önce ... olduğu için sonra ..." deme); \
+yalnızca AÇIKÇA aynı sahneye ait ve bağlantılı olayları ilişkilendir, aksi halde her olayı BAĞIMSIZ aktar.
 2. risk: Genel risk değerlendirmesi (level + kisa gerekçe). Risk, tespit edilen EN CİDDİ olayla \
 TUTARLI olmali: yangin/patlama/silah/ciddi kaza/yarali kişi gibi kritik bir olay varsa risk en az \
 Yüksek, çoğunlukla Kritik olmalidir. Gerçek tehdidi düşük gösterme; ama olaylar rutin/normalse riski \
