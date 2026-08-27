@@ -1,4 +1,4 @@
-"""LangGraph ajan grafigi.
+﻿"""LangGraph ajan grafigi.
 
 GERCEK AKIS (kosullu kenar dahil):
 
@@ -186,6 +186,7 @@ _FALL_KW = {
 
 # F1: kisi-dusmesi/hareketsizlik olayi mi? (poz-tabanli dogrulama yalniz bunlara uygulanir)
 _FALL_EVENT_RE = re.compile(r"düş|dus|zemine|yere|yerde|yığıl|yigil|çök|hareketsiz|baygın|baygin|bayıl|bayil")
+_VIOLENCE_CONTEXT_RE = re.compile(r"kavga|saldır|saldir|darp|itiş|itis|mücadele|mucadele|fiziksel")
 
 
 def _tr_lower(s: str) -> str:
@@ -219,34 +220,24 @@ def _is_person_fall_event(text: str) -> bool:
     return bool(_PERSON_RE.search(t)) and bool(_FALL_EVENT_RE.search(t))
 
 
-# SOMUT ISG/ACIL-DURUM IDDIA AILELERI. Bu liste bir olay SINIFLANDIRICISI
-# degildir; serbest-metin alginin hangi iddialarinin ikinci, fiziksel bir
-# kanit sorusuna girmek zorunda oldugunu belirler. Ozellikle modelin olayi
-# "Dusuk" yazarak eski Yuksek-only verify kapisini atlamasini engeller.
-_CLAIM_FAMILY_PATTERNS = (
-    ("yangın/duman", re.compile(
-        r"yangın|yangin|duman|alev|patlam|kıvılcım|kivilcim|smoke|fire|flame|explosion")),
-    ("düşme/yaralı kişi", re.compile(
-        r"düş|dus|yığıl|yigil|çök|cok|yaralı|yarali|hareketsiz|baygın|baygin|"
-        r"bilinçsiz|bilincsiz|kanama|yerde yat|yere uzan|fallen|injured|unconscious|collapsed")),
-    ("şiddet/silah", re.compile(
-        r"kavga|dövüş|dovus|darp|saldır|saldir|şiddet|siddet|silah|bıçak|bicak|"
-        r"ateş et|ates et|fight|assault|weapon|gun|knife")),
-    ("çarpışma/devrilme", re.compile(
-        r"çarpış|carpis|çarpma|carpma|devril|kaza|collision|crash|overturn|rollover")),
-    ("yetkisiz giriş/müdahale", re.compile(
-        r"yetkisiz|izinsiz|zorla gir|kısıtlı bölge|kisitli bolge|yasak bölge|yasak bolge|"
-        r"unauthorized|intruder|trespass")),
-    ("KKD eksikliği", re.compile(
-        r"\bkkd\b|baret|reflektif yelek|koruyucu gözlük|koruyucu gozl|koruyucu eldiven|"
-        r"kişisel koruyucu|kisisel koruyucu|hardhat|helmet|safety vest|ppe")),
-)
+def _apply_pose_fall_verdict(events: List[Event], verdict: str) -> Tuple[List[Event], int]:
+    """Remove pure person-fall claims when pose verification confidently rejects them.
 
-
-def _claim_families(text: str) -> List[str]:
-    """Metindeki somut, gorsel kanit gerektiren iddia ailelerini dondurur."""
-    t = _tr_lower(text or "")
-    return [ad for ad, rx in _CLAIM_FAMILY_PATTERNS if rx.search(t)]
+    Lowering severity was not enough: the unchanged "person fell" text could still make
+    the reason layer write a health-emergency summary and raise risk again.
+    """
+    if verdict != "REJECT":
+        return events, 0
+    out: List[Event] = []
+    removed = 0
+    for ev in events:
+        t = _tr_lower(ev.event or "")
+        pure_health_or_accident = ev.category in {EventCategory.SAGLIK, EventCategory.KAZA}
+        if _is_person_fall_event(ev.event) and (pure_health_or_accident or not _VIOLENCE_CONTEXT_RE.search(t)):
+            removed += 1
+            continue
+        out.append(ev)
+    return out, removed
 
 
 def _calibrate_severity(text: str, model_sev: Severity) -> Severity:
@@ -339,25 +330,6 @@ def _events_block(events: List[Event]) -> str:
     )
 
 
-def _unsupported_claim_families(text: str, events: List[Event]) -> List[str]:
-    """`text` olay listesinde bulunmayan hangi somut iddia ailelerini ekliyor?"""
-    allowed = {family for e in events for family in _claim_families(e.event)}
-    return [family for family in _claim_families(text) if family not in allowed]
-
-
-def _extractive_summary(events: List[Event]) -> str:
-    """Modele yeni olgu ekletmeden dogrulanmis olaylardan kisa ozet kurar."""
-    prefix = "[MOCK] " if settings.mock_mode else ""
-    if not events:
-        return prefix + "Videoda doğrulanmış yüksek öncelikli bir İSG veya güvenlik olayı tespit edilmedi."
-    sirali = sorted(events, key=lambda e: (_secs(e.time), -_SEV_ORD.get(e.severity, 0)))
-    parcalar = [f"{e.time}'da {e.event} ({e.severity.value})" for e in sirali[:3]]
-    ozet = "; ".join(parcalar)
-    if len(sirali) > 3:
-        ozet += f"; ayrıca {len(sirali) - 3} doğrulanmış olay daha var"
-    return prefix + "Doğrulanmış olaylar: " + ozet + "."
-
-
 def _scene_index(time_str: str, cuts: List[float]) -> int:
     """Bir olay zaman-damgasinin hangi sahne/bolume dustugunu dondurur (kesimlere gore)."""
     t = _secs(time_str)
@@ -433,76 +405,6 @@ _VERIFY_PROMPT = (
 )
 
 
-_CLAIM_VERIFY_PROMPT = (
-    "Bu güvenlik kamerası karelerinde şu olay iddia edildi: \"{event}\".\n"
-    "Kanıtlanması gereken iddia ailesi: {families}.\n\n"
-    "Yalnızca karelerde AÇIK ve DOĞRUDAN fiziksel kanıt varsa EVET de. "
-    "Belirsizlikte, uzaktaki/örtülü ayrıntıda veya yalnızca olasılık varsa HAYIR de.\n"
-    "Fiziksel ön koşullar:\n"
-    "- yangın/duman: görünür duman bulutu, alev, patlama veya kıvılcım olmalı; gri nesne, gölge, "
-    "bulanıklık, ışık parlaması ya da makine parçası yeterli değildir.\n"
-    "- düşme/yaralı: zeminde düşmüş/yığılmış gerçek bir KİŞİ açıkça görünmeli; oturan/çalışan kişi, "
-    "kutu, alet, tekerlekli platform veya başka bir nesne kişi değildir.\n"
-    "- şiddet/silah: görünür silah ya da açık saldırı/fiziksel şiddet olmalı; rutin temas, çalışma, "
-    "el hareketi veya yan yana durma yeterli değildir.\n"
-    "- çarpışma/devrilme: iki varlığın açık teması veya aracın/yükün gerçekten devrilmesi görünmeli; "
-    "yakın durma ya da olağan taşıma yeterli değildir.\n"
-    "- yetkisiz giriş/müdahale: zorlanan bariyer/kilit, açıkça kısıtlı bölgeye geçiş veya tehlikeli "
-    "makineye fiilî müdahale görünmeli; üniforma/yelek yokluğu tek başına yetki kanıtı değildir.\n"
-    "- KKD: ilgili kişi ve korunması gereken bölge net görünmeli ve gerekli ekipmanın gerçekten "
-    "eksik olduğu seçilebilmeli; görünmüyor olması 'yok' demek değildir.\n\n"
-    "Yanıtın ilk kelimesi yalnızca EVET veya HAYIR olsun; sonra tek cümle gerekçe yaz."
-)
-
-
-def _verify_claim(vlm: VLMClient, frames, event_text: str,
-                  families: List[str]) -> bool:
-    """Somut bir iddiayi odakli gorsel soruyla FAIL-CLOSED dogrular.
-
-    Bu kapinin amaci bir olayın onemini tahmin etmek degil, iddia edilen
-    fiziksel olgunun karelerde bulunup bulunmadigini saptamaktir. Yalnizca
-    acik `EVET/YES` kabul edilir; hata, bos veya muğlak yanit iddiayi uretmez.
-    """
-    try:
-        ans = vlm.analyze_frames(
-            frames,
-            _CLAIM_VERIFY_PROMPT.format(
-                event=event_text, families=", ".join(families)),
-            temperature=0.0,
-            max_tokens=90,
-        )
-        a = _tr_lower((ans or "").strip())
-        return bool(re.match(r"^(evet|yes)\b", a))
-    except Exception:
-        return False
-
-
-def _guard_narrative_claims(vlm: VLMClient, seg,
-                            events: List[Event]) -> Tuple[List[Event], Optional[str]]:
-    """Serbest-metin olaylarindaki somut iddialari siddetten bagimsiz suzer.
-
-    Deterministik ISG kural olaylari bu fonksiyondan SONRA eklendigi icin
-    burada yalniz model nesri denetlenir. Desteklenmeyen iddia severity
-    dusurulerek ekranda birakilmaz; olay listesinden tamamen cikarilir.
-    """
-    if not settings.claim_guard or not events:
-        return events, None
-    verifier = vlm.gorev("algi")
-    kept: List[Event] = []
-    rejected: List[str] = []
-    for ev in events:
-        families = _claim_families(ev.event)
-        if not families or _verify_claim(verifier, seg.frames, ev.event, families):
-            kept.append(ev)
-        else:
-            rejected.append(f"{ev.time} {','.join(families)}")
-    if not rejected:
-        return kept, None
-    return kept, (f"perceive: segment {seg.index} kanıt muhafızı "
-                  f"{len(rejected)} desteklenmeyen somut iddiayı sildi "
-                  f"[{'; '.join(rejected)}]")
-
-
 def _verify_event(vlm: VLMClient, frames, event_text: str) -> bool:
     """Yuksek-severity bir olayi segment kareleriyle teyit eder (deduce-then-verify).
     Dogrulanmazsa False (toleransli: hata olursa True dondurup olayi korur)."""
@@ -542,6 +444,103 @@ def _verify_events_batch(vlm: VLMClient, frames, texts: List[str]) -> List[bool]
         return [res.get(i + 1, True) for i in range(len(texts))]  # eksik = koru (fail-safe)
     except Exception:
         return [True] * len(texts)
+
+
+_CLAIM_CHECK_RE = re.compile(
+    r"elektrik|çarp|carp|yaral|hareketsiz|yerde|yere|düş|dus|bayıl|bayil|"
+    r"devril|kaza|çatış|catis|kavga|saldır|saldir|silah|ateş|ates|"
+    r"yangın|yangin|duman|patlama"
+)
+_CLAIM_SPLIT_KEEP_RE = re.compile(
+    r"pano|elektrik|kablo|makine|koruma|forklift|araç|arac|yük|yuk|"
+    r"yangın|yangin|duman|silah|kavga|saldır|saldir"
+)
+
+
+def _claim_check_candidate(e: Event) -> bool:
+    """Few-shot alt-iddia kontrolune girecek VLM olaylarini dar ve guvenli tutar."""
+    if not getattr(settings, "high_risk_claim_check", False):
+        return False
+    if _SEV_ORD.get(e.severity, 0) < _SEV_ORD[Severity.YUKSEK]:
+        return False
+    if getattr(e, "isg_kod", None) or getattr(e, "ppe_src", False):
+        return False
+    if e.category not in _DANGER_CATS and e.category != EventCategory.ANOMALI:
+        return False
+    return bool(_CLAIM_CHECK_RE.search(_tr_lower(e.event)))
+
+
+def _claim_check_events(vlm: VLMClient, frames, events: List[Event]) -> Tuple[List[Event], List[str]]:
+    """Kanitsiz dramatik yuksek-risk iddialari fail-open ve opt-in sekilde yumusatir.
+
+    Bu katman yeni olay uretmez, olay silmez. `confirm` ve `abstain` kararlarinda olayi
+    aynen korur; sadece acikca desteksiz sonuc/nedensellik varsa severity'yi Orta'ya
+    indirir veya gorulen riski kisa bir metne ayirir.
+    """
+    if not getattr(settings, "high_risk_claim_check", False) or not events:
+        return events, []
+
+    out: List[Event] = []
+    notes: List[str] = []
+    checked = 0
+    try:
+        limit = max(1, int(getattr(settings, "high_risk_claim_check_max_events", 2)))
+    except Exception:
+        limit = 2
+
+    for ev in events:
+        if checked >= limit or not _claim_check_candidate(ev):
+            out.append(ev)
+            continue
+
+        checked += 1
+        try:
+            raw = vlm.analyze_frames(
+                frames,
+                prompts.CLAIM_CHECK_INSTRUCTION.format(event=ev.event),
+                temperature=0.0,
+                max_tokens=320,
+            )
+            data = extract_json(raw)
+            verdict = str(data.get("verdict", "abstain")).strip().lower()
+            reason = str(data.get("reason", "")).strip()
+            kept = str(data.get("kept_event", "")).strip()
+            removed = str(data.get("removed_claim", "")).strip()
+
+            if verdict == "weaken":
+                out.append(ev.model_copy(update={"severity": Severity.ORTA}))
+                notes.append(
+                    f"claim_check: [{ev.time}] iddia yumusatildi -> Orta"
+                    + (f" ({reason})" if reason else "")
+                )
+                continue
+
+            if verdict == "split" and kept and _CLAIM_SPLIT_KEEP_RE.search(_tr_lower(kept + " " + ev.event)):
+                out.append(ev.model_copy(update={
+                    "event": kept,
+                    "severity": Severity.YUKSEK,
+                    "category": EventCategory.GUVENLIK if ev.category == EventCategory.SAGLIK else ev.category,
+                }))
+                notes.append(
+                    f"claim_check: [{ev.time}] iddia ayrildi; korunan='{kept}'"
+                    + (f", kanitsiz='{removed}'" if removed else "")
+                    + (f" ({reason})" if reason else "")
+                )
+                continue
+
+            out.append(ev)
+            if verdict in ("confirm", "abstain", "split"):
+                notes.append(
+                    f"claim_check: [{ev.time}] {verdict} -> olay korundu"
+                    + (f" ({reason})" if reason else "")
+                )
+        except Exception as ex:
+            out.append(ev)
+            notes.append(f"claim_check: [{ev.time}] atlandi (fail-open): {ex}")
+
+    if checked:
+        notes.append(f"claim_check: {checked} yuksek-risk iddia denetlendi (yeni olay uretilmedi)")
+    return out, notes
 
 
 def _normalize_time(raw, fallback: str) -> str:
@@ -853,7 +852,7 @@ def _perceive_single_pass(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[st
             instr += _motion_cue(seg)
         # Sorgu-gudumlu odak — bkz. _analyze_one_segment'teki ayni satirin gerekcesi (EN SONA).
         instr += _query_focus_block()
-        raw = vlm.analyze_frames(seg.frames, instr, temperature=0.0, max_tokens=400,
+        raw = vlm.analyze_frames(seg.frames, instr, temperature=0.2, max_tokens=400,
                                  repetition_penalty=settings.perceive_repetition_penalty)
         return _events_from_extraction(extract_json(raw), seg), None
     except Exception as ex:
@@ -900,8 +899,6 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
     NOT: `hata_notu` birden cok satir icerebilir (karar-izine tek girdi olarak yazilir)."""
     if settings.single_pass_perceive:
         evs, note = _perceive_single_pass(vlm, seg)
-        evs, guard_note = _guard_narrative_claims(vlm, seg, evs)
-        note = "\n".join(filter(None, [note, guard_note])) or None
         # ASK-HINT hizli modda UYGULANMAZ: tek-gecisli algida ayri bir betimleme metni yoktur
         # ve fast_mode'un tek amaci gecikmedir (K4). Sessiz kalmamak icin karar-izine yazilir.
         if settings.evidence_questions:
@@ -939,7 +936,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         #       kritik olayi bastirma riskine karsi en guclu konum.
         instr += _query_focus_block()
         desc = vlm.analyze_frames(
-            seg.frames, instr, temperature=0.0, max_tokens=400,
+            seg.frames, instr, temperature=0.2, max_tokens=400,
             repetition_penalty=settings.perceive_repetition_penalty,
             as_video=(settings.video_pruning_rate > 0),  # EVS video-path (yalniz perceive-describe)
         )
@@ -949,17 +946,12 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                 {"role": "user", "content": prompts.EVENT_EXTRACTION_INSTRUCTION.format(
                     description=desc, start=seg.start_str, end=seg.end_str)},
             ],
-            temperature=0.0, max_tokens=400,
+            temperature=0.1, max_tokens=400,
         )
         out: List[Event] = _events_from_extraction(extract_json(ext), seg)
-        notes: List[str] = []
         # Oz-dogrulama: yuksek-severity olaylari odakli sorguyla teyit et (FP azaltir, recall korur).
         if settings.verify_events and out:
-            # Somut iddia aileleri asagidaki severity-bagimsiz ve fail-closed
-            # muhafiza gider; burada ikinci kez, eski fail-open kapida sorulmaz.
-            hi = [i for i, ev in enumerate(out)
-                  if _SEV_ORD[ev.severity] >= _SEV_ORD[Severity.YUKSEK]
-                  and not (settings.claim_guard and _claim_families(ev.event))]
+            hi = [i for i, ev in enumerate(out) if _SEV_ORD[ev.severity] >= _SEV_ORD[Severity.YUKSEK]]
             # PERF: >=2 yuksek-sev olay -> TEK batch cagri (N->1); aksi halde per-event (degisiklik yok). Recall-safe.
             if settings.batch_verify and len(hi) >= 2:
                 keep = _verify_events_batch(vlm, seg.frames, [out[i].event for i in hi])
@@ -969,9 +961,6 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                 if not keep[k]:
                     ev = out[i]
                     out[i] = Event(time=ev.time, event=ev.event, severity=Severity.ORTA, category=ev.category)
-        out, guard_note = _guard_narrative_claims(vlm, seg, out)
-        if guard_note:
-            notes.append(guard_note)
         # NEUROSIMBOLIK semantik-olabilirlik: KİŞİ-merkezli yuksek-sev olay (yarali/dusmus/saldiri vb.) iddia
         # ediliyor ama YOLO segmentte nesne bulup KİŞİ bulamadiysa -> fiziksel olarak suheli -> Orta'ya cek.
         # FAIL-OPEN: YOLO abstain (None) veya kisi-var (True) ise DOKUNMA -> grenli'de gercek kisi-olayi recall'i korunur.
@@ -990,22 +979,17 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         # VLM "kisi yere dusmus/hareketsiz" der ama YOLO-poz kisinin EMIN bicimde DIK (comelmis/egilmis)
         # oldugunu gosterirse severity'yi dispatch-esiginin ALTINA (Orta) cek -> sahte "dusmus kisi Kritik+cagri"
         # kesilir. FAIL-OPEN: poz guvenilmez/kisi yoksa (ABSTAIN) VLM korunur -> gercek dusme recall'i bozulmaz.
+        notes: List[str] = []
         if settings.verify_pose_falls and out and any(_is_person_fall_event(e.event) for e in out):
             try:
                 from dilajan import detector
                 verdict, vnote = detector.verify_fallen(seg.frames)
             except Exception as ex:
                 verdict, vnote = "ABSTAIN", f"detector hata: {ex}"
-            if verdict == "REJECT":
-                adj: List[Event] = []
-                for ev in out:
-                    if _is_person_fall_event(ev.event) and _SEV_ORD[ev.severity] > _SEV_ORD[Severity.ORTA]:
-                        ev = Event(time=ev.time, end_time=ev.end_time, event=ev.event,
-                                   severity=Severity.ORTA, category=ev.category, bbox=ev.bbox, region=ev.region)
-                    adj.append(ev)
-                out = adj
-                notes.append(f"perceive: segment {seg.index} poz-doğrulama [{vnote}] "
-                             "-> kişi-düşme severity↓Orta")
+            out, removed = _apply_pose_fall_verdict(out, verdict)
+            if removed:
+                notes.append(f"perceive: segment {seg.index} poz-dogrulama [{vnote}] "
+                             f"-> {removed} kisi-dusme iddiasi olay listesinden cikarildi")
         # Mekansal grounding: onemli olaylarin karedeki konumunu (bbox + bölge) cikar
         if settings.spatial_grounding and out:
             grounded: List[Event] = []
@@ -1025,6 +1009,8 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         #      eklenmedi -> LLM adlandirmasi onlarin sabit metnini BOZAMAZ.
         out, kanit_notlari = _kanit_adlandirma(vlm, seg, desc, out)
         notes.extend(kanit_notlari)
+        out, claim_notlari = _claim_check_events(vlm, seg.frames, out)
+        notes.extend(claim_notlari)
         # SAVUNMA geofence: yasak/kisitli bolgelerde KISI -> "Yasak Bölge İhlali" (deterministik YOLO).
         # Opt-in (restricted_zones bos=kapali -> mevcut davranis degismez); VLM zone-reasoning guvenilmez
         # oldugu icin uzman dedektorle yapilir (perimetre/tesis guvenligi cekirdegi).
@@ -1518,11 +1504,7 @@ def perceive(state: AgentState) -> dict:
                                   " (kritik olaylar bastırılmadı — sorgu odaklar, filtrelemez)")
         if qline:
             trace.append(qline)
-        # Acik-dunya video olay algisi yapisal JSON cikarimi degildir. Tam
-        # benchmarkta `llm-fast` bu noktada sahte duman/yangin iddialarini
-        # katladi; bu nedenle ayri `olay` aliasi (varsayilan: model_name /
-        # llm-large) kullanilir. Kapali-slot algisi `algi=vlm` olarak kalir.
-        vlm = _get_vlm().gorev("olay")
+        vlm = _get_vlm()
         segments = list(state.get("segments", []))
         if segments:
             N = max(1, settings.event_consistency_n)
@@ -1584,7 +1566,7 @@ def reexamine(state: PolicyAgentState) -> dict:
     # (guvenli varsayilan: severity'ye dokunma), akis reason'a devam eder.
     try:
         segments = state.get("segments", [])
-        vlm = _get_vlm().gorev("olay")
+        vlm = _get_vlm()
         n_up = n_down = 0
         new_events: List[Event] = []
         for ev in events:
@@ -1670,7 +1652,7 @@ def policy_gate(state: PolicyAgentState) -> dict:
                          "veya reexamine 'RUTIN' demis) -> model cagrisi YAPILMADI")
             return {"trace": trace}
         trace.append("policy: " + policy.rules_summary(rules))  # K5: kural tablosu AYNEN karar-izine
-        raw = _get_vlm().gorev("yapi").chat(
+        raw = _get_vlm().chat(
             [{"role": "system", "content": prompts.SYSTEM_PERSONA},
              {"role": "user", "content": policy.build_prompt(rules, cands)}],
             temperature=0.0, max_tokens=400,  # GORUNTUSUZ + video basina TEK cagri
@@ -1684,7 +1666,7 @@ def policy_gate(state: PolicyAgentState) -> dict:
         if settings.policy_verify_frames and adj.records:  # OPT-IN, varsayilan KAPALI
             segments = state.get("segments", []) or []
             adj = policy.verify_with_frames(
-                _get_vlm().gorev("algi"), lambda t: _frames_at(segments, t), adj, rules)
+                _get_vlm(), lambda t: _frames_at(segments, t), adj, rules)
         trace.extend(adj.trace)  # K5: her yukseltme/red NEDENIYLE yazildi
         st = adj.stats
         trace.append(
@@ -1706,7 +1688,7 @@ def policy_gate(state: PolicyAgentState) -> dict:
 
 def reason(state: PolicyAgentState) -> dict:
     trace = state.get("trace", [])
-    vlm = _get_vlm().gorev("ozet")
+    vlm = _get_vlm()
     events = state.get("events", [])
     info = state.get("video_info")
     duration = info.duration_str if info else "?"
@@ -1746,7 +1728,7 @@ def reason(state: PolicyAgentState) -> dict:
     actions: List[Action] = []
     query_answer: Optional[str] = None
     try:
-        raw = vlm.chat(messages, temperature=0.0, max_tokens=800)
+        raw = vlm.chat(messages, temperature=0.2, max_tokens=800)
         data = extract_json(raw)
         summary = str(data.get("summary", summary)).strip()
         r = data.get("risk", {})
@@ -1767,49 +1749,6 @@ def reason(state: PolicyAgentState) -> dict:
     except Exception as ex:
         trace.append(f"reason: hata: {ex}")
 
-    # MODELIN KENDI risk yargisi (hicbir taban/tavan uygulanmadan ONCE).
-    # Politika sevk maskesi bu ham degeri kullanir; kanit muhafizi bu bilgiyi
-    # sonradan degistirmis gibi gosteremez.
-    model_risk_ord = _SEV_ORD.get(risk.level, 0)
-
-    # OZET/AKSIYON KANIT MUHAFIZI: reason modeli olay listesinden yeni yangin,
-    # yarali, yetkisiz kisi vb. uyduramaz. Desteklenmeyen aile varsa ozet
-    # dogrulanmis Event metinlerinden deterministik olarak kurulur; kanitsiz
-    # aksiyon atilir. Olay yoksa acik ve durust bir negatif sonuc uretilir.
-    if settings.summary_evidence_guard:
-        if not events:
-            summary = _extractive_summary(events)
-            risk = RiskAssessment(
-                level=Severity.DUSUK,
-                rationale="Doğrulanmış bir olay bulunmadığı için risk düşük tutuldu.",
-            )
-            if actions:
-                trace.append(f"reason: olay yok -> {len(actions)} kanıtsız model aksiyonu silindi")
-            actions = []
-        else:
-            summary_extra = _unsupported_claim_families(summary, events)
-            rationale_extra = _unsupported_claim_families(risk.rationale, events)
-            if summary_extra:
-                summary = _extractive_summary(events)
-                trace.append("reason: özet kanıt muhafızı olay listesinde olmayan iddiaları sildi "
-                             f"[{', '.join(summary_extra)}]")
-            if rationale_extra:
-                risk = risk.model_copy(update={
-                    "rationale": "Risk, yalnızca doğrulanmış olayların önem derecesine göre değerlendirildi."
-                })
-                trace.append("reason: risk gerekçesi olay listesinde olmayan iddialardan arındırıldı "
-                             f"[{', '.join(rationale_extra)}]")
-            temiz_actions: List[Action] = []
-            for action in actions:
-                metin = action.action + " " + (action.rationale or "")
-                if _unsupported_claim_families(metin, events):
-                    continue
-                temiz_actions.append(action)
-            if len(temiz_actions) != len(actions):
-                trace.append("reason: olay listesinde dayanağı olmayan "
-                             f"{len(actions) - len(temiz_actions)} aksiyon silindi")
-            actions = temiz_actions
-
     # K3 FAIL-OPEN: sorgu yaniti uretilemediyse (model alani dondurmedi / JSON bozuk / cagri
     # coktu) ANALIZ NORMAL DEVAM EDER; operatore uydurma yerine DURUST bir not gosterilir.
     if qa_block:
@@ -1828,6 +1767,10 @@ def reason(state: PolicyAgentState) -> dict:
                             "özet ve olay listesini inceleyiniz.")
             trace.append("reason: operatör sorgusu yanıtlanamadı -> fail-open "
                          "(analiz ve şartname çıktısı normal şekilde tamamlandı)")
+
+    # MODELIN KENDI risk yargisi (taban/yukseltme uygulanmadan ONCE) — politika kaynakli
+    # risk artisini modelin kendi yargisindan ayirt etmek icin gerekli (act sevk cebiri).
+    model_risk_ord = _SEV_ORD.get(risk.level, 0)
 
     # Risk tabani (guardrail): gercek tehdidi dusuk gostermeyi onle.
     # Risk, tespit edilen en yuksek olay severity'sinden dusuk olamaz.
@@ -1892,33 +1835,6 @@ def reason(state: PolicyAgentState) -> dict:
                 action=f"Düşük görüntü çözünürlüğü ({info.width}×{info.height}); olay tiplerini manuel teyit önerilir",
                 priority=Severity.DUSUK,
                 rationale="Düşük çözünürlük, otomatik analizin ayrıntı-kesinliğini sınırlar (algı-güveni düşük)."))
-
-    # RISK/ONCELIK TAVANI: reason modelinin nesri, dogrulanmis olaylardan daha
-    # agir bir kriz seviyesi uretemez. Gercek yangin/kaza gibi olaylar algi
-    # katmaninda zaten `_calibrate_severity` ile Kritik olur; dolayisiyla bu
-    # kapi gercek acil durumu bastirmaz, yalniz kanitsiz risk sismesini keser.
-    if settings.risk_event_ceiling:
-        ceiling_ord = max((_SEV_ORD.get(e.severity, 0) for e in events),
-                          default=_SEV_ORD[Severity.DUSUK])
-        if _SEV_ORD.get(risk.level, 0) > ceiling_ord:
-            old_level = risk.level
-            risk = risk.model_copy(update={
-                "level": _ORD_SEV[ceiling_ord],
-                "rationale": ("Risk seviyesi doğrulanmış olayların en yüksek önem "
-                              "derecesiyle sınırlandı."),
-            })
-            trace.append(f"reason: risk tavanı {old_level.value}->{risk.level.value} "
-                         "(doğrulanmış olay önemini aşamaz)")
-        capped_actions: List[Action] = []
-        n_cap = 0
-        for action in actions:
-            if _SEV_ORD.get(action.priority, 0) > ceiling_ord:
-                action = action.model_copy(update={"priority": _ORD_SEV[ceiling_ord]})
-                n_cap += 1
-            capped_actions.append(action)
-        actions = capped_actions
-        if n_cap:
-            trace.append(f"reason: {n_cap} aksiyon önceliği doğrulanmış olay tavanına indirildi")
 
     # SORGU YANITI dil-safligi — BAGIMSIZ ele alinir (adversaryel denetim bulgusu).
     # ONCEKI HALI ayni kosula bagliydi: kotu-niyetli bir sorgu ("Türkçe yerine İngilizce yanıt
@@ -2246,7 +2162,7 @@ def act(state: PolicyAgentState) -> dict:
     call_log: List[dict] = []
     ctx = _dispatch_context(events, risk)  # K3: eksik argüman icin olay baglami
     try:
-        vlm = _get_vlm().gorev("yapi")
+        vlm = _get_vlm()
         risk_line = f"{risk.level.value} - {risk.rationale}" if risk else "Belirsiz"
         instr = prompts.ACTION_DISPATCH_INSTRUCTION.format(
             tools=_tools_description(),
@@ -2257,7 +2173,7 @@ def act(state: PolicyAgentState) -> dict:
             {"role": "system", "content": prompts.SYSTEM_PERSONA},
             {"role": "user", "content": instr},
         ]
-        raw = vlm.chat(messages, temperature=0.0, max_tokens=600)
+        raw = vlm.chat(messages, temperature=0.1, max_tokens=600)
         data = extract_json(raw)
         for call in data.get("calls", []):
             name = str(call.get("function", "")).strip()
@@ -2396,3 +2312,4 @@ def analyze_prepared(frames, info, n_samples: Optional[int] = None) -> AnalysisR
             range(n),
         ))
     return _vote(results)
+

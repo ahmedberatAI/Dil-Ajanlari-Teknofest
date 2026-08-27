@@ -56,19 +56,10 @@ def main():
         src = os.path.join(KOK, tems.replace("/", os.sep))
         dst = os.path.join(dst_dir, os.path.basename(tems))
         if not os.path.lexists(dst):
-            # SABIT BAG ONCE (olculdu 2026-08-26): WSL'de kurulan sembolik
-            # bagi Windows COZEMIYOR -> ReparsePoint, Length 0, "Sistem
-            # dosyaya erisemiyor". 1449 klip bu yuzden tarayicinin dosya
-            # seciciden GORUNMEZ oldu; Gradio WSL icinden okudugu icin
-            # kusur SESSIZDI. Sabit bag ayni birimde 0 ek yer kaplar ve
-            # HER IKI taraftan da okunur.
             try:
-                os.link(src, dst)
+                os.symlink(os.path.relpath(src, dst_dir), dst)
             except OSError:
-                try:
-                    os.symlink(os.path.relpath(src, dst_dir), dst)
-                except OSError:
-                    shutil.copy2(src, dst)
+                shutil.copy2(src, dst)
         say[ad] = say.get(ad, 0) + 1
         n += 1
     print("%-34s%6s" % ("dizin", "klip"))

@@ -63,12 +63,9 @@ def main():
             if os.path.lexists(d):
                 continue
             try:
-                os.link(p, d)               # SABIT BAG once (Windows da okur)
+                os.symlink(os.path.relpath(p, dst), d)
             except OSError:
-                try:
-                    os.symlink(os.path.relpath(p, dst), d)
-                except OSError:
-                    shutil.copy2(p, d)
+                shutil.copy2(p, d)
         toplam += len(sec)
         print("%-10s%-28s%7d%9d" % (alt, kova + "/" + ad, len(havuz), len(sec)))
     print("-" * 56)

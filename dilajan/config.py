@@ -62,11 +62,6 @@ class Settings(BaseSettings):
     # Bu yuzden tek alias DEGIL, SORU TIPINE gore yonlendirme.
     model_algi: str = ""        # kisi/oznitelik algisi          -> vlm (video-yerli)
     model_sayim: str = ""       # sayma/geometri sorulari        -> llm-large
-    # Serbest video olay algisi, JSON cikarimindan FARKLI bir gorevdir.
-    # `llm-fast` yapisal JSON'da iyi olsa da tam eval_defense kosumunda olay
-    # algisina verildiginde sahte duman iddialarini 5'ten 32'ye cikardi.
-    # BOS = model_name (uzak sevkte llm-large); slot `algi=vlm` uzmanligi korunur.
-    model_olay: str = ""         # acik-dunya olay algisi/yeniden inceleme -> llm-large
     model_yapi: str = ""        # olay cikarimi, JSON, siniflama -> llm-fast
     model_ozet: str = ""        # Turkce ozet + aksiyon onerisi  -> llm-large
     model_diyalog: str = ""     # operator diyalogu (Otonomi %20)-> llm-large
@@ -126,7 +121,7 @@ class Settings(BaseSettings):
                                        # reason'daki HER-ZAMAN-acik neden-sonuc-bagimsizlik talimati. (0 = devre disi)
 
     # --- Uretim ---
-    temperature: float = 0.0
+    temperature: float = 0.2
     max_tokens: int = 1024
     request_timeout: float = 120.0
     max_parallel_segments: int = 6  # segment analizinde eszamanli istek sayisi (vLLM batch'ler)
@@ -192,16 +187,13 @@ class Settings(BaseSettings):
     verify_events: bool = True   # öz-doğrulama (deduce-then-verify): yüksek-severity olaylari teyit et,
                                  # dogrulanmazsa severity DUSUR (silme). FP kontrol + agentic oz-kontrol.
                                  # "Yuksek-Duyarlilik modu" icin DILAJAN_VERIFY_EVENTS=false.
-    claim_guard: bool = True     # Duman/yangin, dusme/yarali, siddet, carpisma ve yetkisiz-giris
-                                 # gibi somut iddialari ONEM DERECESINDEN BAGIMSIZ odakli ikinci
-                                 # gorsel soruyla dogrular; desteklenmeyen iddiayi olay listesinden
-                                 # cikarir. Boylece modeli "Dusuk" yazarak dogrulamayi atlayamaz.
-    summary_evidence_guard: bool = True  # Ozette olay listesinde olmayan kritik iddia ailesi
-                                         # gecerse modeli degil dogrulanmis olaylari kullanarak
-                                         # deterministik, cikarimsal ozet kurar.
-    risk_event_ceiling: bool = True      # Genel risk, dogrulanmis en yuksek olay onemini ASAMAZ.
-                                         # Gercek kritik olaylar `_calibrate_severity` ile zaten
-                                         # Kritik olur; bu kapi yalniz reason-asamasi sismesini keser.
+    high_risk_claim_check: bool = False  # OPT-IN: Yuksek/Kritik VLM olaylarinda few-shot destekli
+                                         # alt-iddia kontrolu. Yeni olay URETMEZ, olay SILMEZ;
+                                         # yalniz kanitsiz dramatik saglik/kaza/nedensellik
+                                         # iddiasini Orta'ya yumusatir veya gorulen riske
+                                         # ayirir. Varsayilan KAPALI: mevcut olcum/davranis
+                                         # birebir korunur; teslim oncesi A/B'siz acilmaz.
+    high_risk_claim_check_max_events: int = 2  # video segmenti basina en cok kac aday denetlenir (K4).
     spatial_grounding: bool = True  # yuksek-severity olayin karedeki konumunu (bbox + bölge) cikar (Qwen3-VL native grounding)
     facility_rules: str = ""        # tesise-ozgu kurallar (dagitimda set edilir); politika-ihlali tespitini saglar (W4)
     restricted_zones: str = ""      # SAVUNMA: yasak/kisitli bolgeler (3x3 izgara etiketleri, virgulle:
@@ -256,10 +248,6 @@ class Settings(BaseSettings):
     # Varsayilan BOS = KAPALI (K2: bayrak kapaliyken cikti birebir ayni).
     forklift_yuk: str = ""            # "" | "vlm" | "geometri" | "ikisi"
     forklift_esik: int = 3            # kaynak makale: >= 3 kasa ihlal
-    # Kasa sayisi esigi evrensel bir forklift kapasitesi DEGILDIR. Yalnizca
-    # bu tesis/arac/yuk kombinasyonu icin operator acikca etkinlestirirse
-    # `catal_kasa_sayisi >= forklift_esik` hukmu uretilir.
-    forklift_kasa_kurali: bool = False
     forklift_y_ufuk: float = 0.3      # tesise ozgu; etiketsiz kestirildi
     forklift_f_pers_esik: float = 0.5751   # tesise ozgu
     forklift_severity: str = "Yüksek"
@@ -317,10 +305,6 @@ class Settings(BaseSettings):
     # degisikligi hicbir uyari vermeden etkisiz kaliyordu.
     # `isg_kural.EsikKurali(esik_alani="forklift_esik")` tek tanimi okur.
     panel_koyuluk_esik: int = 3       # 0-10 olcekte; kalibrasyon tesise ozgu
-    # Sabit ROI'deki koyulugu "acik birakilmis pano" olarak yorumlamak bu
-    # kamera/tesise ozgu bir kalibrasyondur; evrensel video bilgisi degildir.
-    # Operator acikca etkinlestirmedikce kural ve slot cagrisi calismaz.
-    panel_koyuluk_kurali: bool = False
     # YAYA YOLU — ROI kirpmasi ZORUNLU (tam karede MCC +0,192, ROI ile +0,638).
     # BOS = slot tam kareye sorulur = olculmus DUSUK performans.
     yol_roi_vlm: str = ""
@@ -354,12 +338,6 @@ class Settings(BaseSettings):
     # BEDEL: saha kesinligi 0,268 -> 0,175 (gorus muhafiziyla 0,206).
     # VARSAYILAN True = SEVK EDILEN davranis (K2).
     yelek_on_kosul: bool = True
-    # YESIL YELEK -> YETKILI eslemesi goruntuden cikarilabilen evrensel bir
-    # olgu DEGIL, tesise ozgu bir politikadir. Varsayilan KAPALI: operator bu
-    # tesiste yesil reflektif yelegin yetki isareti oldugunu ACIKCA beyan
-    # etmedikce `yelek=YOK` gozlemi "yetkisiz kisi" alarmi uretmez.
-    # Benchmarktaki eski tesis sozlesmesini yeniden uretmek icin acikca 1 verilir.
-    yelek_yetki_kurali: bool = False
     # NOT — YELEK SLOTUNA GORUS MUHAFIZI KONULAMAZ.
     # Kapinin isini bir gorus muhafizinin yapmasi denendi ve mevcut bir
     # olcum tarafindan REDDEDILDI: bu ciftte GORUS ETIKETLE 0,833 KORELE
@@ -574,7 +552,7 @@ class Settings(BaseSettings):
     def gorev_modeli(self, gorev: str) -> str:
         """Gorev icin kullanilacak model adi. Tanimli degilse `model_name`.
 
-        gorev: "algi" | "olay" | "yapi" | "ozet" | "diyalog" | "yonlendirme" |
+        gorev: "algi" | "yapi" | "ozet" | "diyalog" | "yonlendirme" |
                "guvenlik" | "gomme"
         Bilinmeyen gorev -> `model_name` (sessiz basarisizlik YOK: cagiran taraf
         yanlis ad verirse varsayilana duser, ASLA baska bir modele kaymaz).
@@ -730,13 +708,6 @@ REQUEST_SCOPED_FIELDS = (
     # KKD (baret) deterministik tespiti: bir operatorun actigi dedektor, eszamanli
     # calisan baska bir analize SIZMAMALI (facility_rules ile ayni gerekce).
     "ppe_detection",
-    # Kasa sayisi/yuk esiginin bu tesis ve forklift icin gecerli oldugu beyani.
-    "forklift_kasa_kurali",
-    # Yesil reflektif yelegin bu tesiste YETKI isareti oldugu beyanidir.
-    # Bir operatorun tesise ozgu bu anlami baska istege sizmamali.
-    "yelek_yetki_kurali",
-    # Sabit panel ROI kalibrasyonunun bu kamera icin gecerli oldugu beyani.
-    "panel_koyuluk_kurali",
     # Kanit sorulari (ASK-HINT): ozelligin acik/kapali olmasi ve hangi soru setinin
     # kullanildigi da ISTEK-KAPSAMLIDIR — bir operatorun "tesis" seti, eszamanli kosan
     # baska bir analizin sorularini degistiremez (analysis_query ile AYNI desen).

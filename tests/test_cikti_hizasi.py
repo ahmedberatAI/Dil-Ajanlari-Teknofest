@@ -64,7 +64,7 @@ BEKLENEN = {
     "query_out":    ("query_block",),
     "summary_out":  ("summary",),
     "risk_out":     ("risk",),
-    "isg_out":      ("_isg_panel_html", "isg_panel"),
+    "isg_out":      ("_isg_panel_html",),
     "timeline_out": ("timeline",),
     "events_out":   ("events_rows",),
     "actions_out":  ("actions_md",),

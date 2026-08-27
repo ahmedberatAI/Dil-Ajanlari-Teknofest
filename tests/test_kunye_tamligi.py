@@ -79,14 +79,12 @@ for s in G.SLOT_KATALOG.values():
         if ad:
             ALANLAR.add(ad)
 for kr in K.KURALLAR:
-    for nitelik in ("esik_alani", "on_bayrak_alani", "etkin_bayrak_alani"):
-        ad = getattr(kr, nitelik, "")
-        if ad:
-            ALANLAR.add(ad)
+    ad = getattr(kr, "esik_alani", "")
+    if ad:
+        ALANLAR.add(ad)
 # katalogdan turemeyen ama davranisi degistiren bayraklar
 ALANLAR |= {"isg_slotlari", "slot_guven", "kodlama_normalize", "kodlama_fps",
-            "kodlama_bit", "forklift_yuk", "model_olay", "claim_guard",
-            "summary_evidence_guard", "risk_event_ceiling"}
+            "kodlama_bit", "forklift_yuk"}
 
 # Bazi alanlar SAYISAL/BOOL — deneme degeri tipe gore secilir
 DENEME = {
@@ -95,10 +93,6 @@ DENEME = {
     "slot_guven": "1", "kodlama_normalize": "0", "kodlama_bit": "1200k",
     "isg_slotlari": "catal_kasa_sayisi", "forklift_yuk": "1",
     "panel_luma_esik": "9",
-    "model_olay": "vlm", "claim_guard": "0", "summary_evidence_guard": "0",
-    "risk_event_ceiling": "0", "yelek_yetki_kurali": "1",
-    "yelek_on_kosul": "0", "panel_koyuluk_kurali": "1",
-    "forklift_kasa_kurali": "1",
 }
 
 print("=== KUNYE, DAVRANIS DEGISTIREN HER ALANI AYIRT ETMELI ===")

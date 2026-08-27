@@ -88,9 +88,7 @@ c("iki kural AYNI kodu paylasir",
   len([kr for kr in K.KURALLAR if kr.kod == "Safe_Walkway_Violation"]) == 2)
 
 print("=== K2: SEVK YAPILANDIRMASI DEGISMEDI ===")
-class Sevk:
-  isg_slotlari = "catal_kasa_sayisi,makine_basinda_yelek,pano_koyuluk_0_10"
-  yelek_yetki_kurali = True
+class Sevk: isg_slotlari = "catal_kasa_sayisi,makine_basinda_yelek,pano_koyuluk_0_10"
 c("sevk ayarinda yol slotu SORULMAZ",
   not any("yaya" in a for a in K.gerekli_slotlar(Sevk())))
 c("yaya_zemin SINIF varsayilaninda kapali",

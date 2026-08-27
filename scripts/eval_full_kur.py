@@ -65,13 +65,9 @@ def main():
                 if kopyala:
                     shutil.copy2(s, d)
                 else:
-                    # SABIT BAG once — gerekce: eval_kanonik_kur.py
-                    try:
-                        os.link(s, d)
-                    except OSError:
-                        os.symlink(os.path.relpath(s, dst), d)
+                    os.symlink(os.path.relpath(s, dst), d)
             except OSError:
-                shutil.copy2(s, d)          # ikisi de olmazsa kopyala
+                shutil.copy2(s, d)          # symlink desteklenmiyorsa kopyala
             n += 1
         toplam += n
         print("%-10s %-34s %6d" % (sinif, kova + "/" + ad, n))

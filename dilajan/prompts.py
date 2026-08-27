@@ -18,9 +18,20 @@ SYSTEM_PERSONA = (
     "gördüğünü adlandır; emin değilsen 'iç mekân', 'dış mekân', 'sokak', 'oda' gibi genel ve "
     "nötr ifadeler kullan, asla fabrika/üretim hattı çıkarımı yapma. Bilgiyi destekleyen bir "
     "gözlem yoksa boşluğu doldurmak yerine 'belirsiz' ya da 'görüntüden anlaşılmıyor' de; uydurma "
-    "yapma. Tüm çıktılarını akıcı Türkçe üret; yanıtlarında Türkçe dışında kelime veya karakter "
+    "bilgi verme. Görsel kanıtı olmayan ayrıntıyı, nedeni, kişi sayısını, mesleği, konumu veya sonucu "
+    "kesin bilgi gibi yazma; gerekiyorsa 'olası' veya 'belirsiz' diye etiketle. Tüm çıktılarını akıcı Türkçe üret; yanıtlarında Türkçe dışında kelime veya karakter "
     "(ör. Çince/İngilizce) KULLANMA."
 )
+
+KANIT_DISIPLINI = """
+
+KANIT DİSİPLİNİ:
+- Çıktıdaki her olay, açıklama ve öneri karelerde görülen veya analiz bağlamında açıkça verilen bir kanıta dayanmalıdır.
+- Görsel karşılığı olmayan ayrıntı ekleme; boşluğu tahminle doldurma. Kişi sayısı, nesne türü, meslek, neden-sonuç, yaralanma ve konum yalnızca kanıt varsa yazılır.
+- Belirsiz ama güvenlik açısından önemli bir bulgu varsa kesinleştirme: "olası" veya "belirsiz" olarak etiketle ve manuel teyit gereğini koru.
+- Kanıtla desteklenmeyen yüksek/kritik iddiayı büyütme; gerçek riski de sırf belirsiz diye yok sayma.
+- Bu bölüm yalnızca doğruluk sınırıdır; istenen JSON/başlık/alan formatını değiştirme.
+"""
 
 # --- 1) Segment analizi ---
 SEGMENT_ANALYSIS_INSTRUCTION = """Aşağida bir güvenlik kamerasi videosunun {start}-{end} aralığindan \
@@ -43,6 +54,8 @@ YALNIZCA şu JSON formatinda yanit ver (başka metin yok):
 
 Hiçbir kayda değer durum yoksa: {{"events": []}}"""
 
+SEGMENT_ANALYSIS_INSTRUCTION += KANIT_DISIPLINI
+
 # --- 1b) Iki asamali algi: once serbest tarif, sonra olay cikarimi ---
 # (Kati JSON prompt'u dusuk cozunurluklu gercek goruntude modeli asiri temkinli
 #  yaptigi icin; serbest tarif modelin tam algisini ortaya cikarir, sonra yapilandiririz.)
@@ -54,15 +67,8 @@ sokak, oda, koridor, mağaza, otopark, depo, fabrika vb.) — emin değilsen gen
 hattı olduğunu VARSAYMA. Orada OLAĞAN/rutin aktivite ne görünür.
 
 2) Sonra YALNIZCA bu beklenen normalden SAPAN ve karelerde AÇIKÇA gördüğün durumlari nesnel biçimde Türkçe \
-anlat; her birinin zaman damgasini belirt. Sapmalar ÖNCELIK SIRASINA göre raporlanir:
-   a) ÖNCE ÇEVRESEL TEHLİKELER: duman, yangin, alev, patlama, parlama, kıvılcım veya yanan/tutuşan nesne — \
-bunlar varsa İLK OLARAK ve AYRI AYRI raporla.
-   b) SONRA KİŞİ DAVRANIŞI: kişilerin hareketlerini (koşma, kaçışma, panik, düşme, hareketsiz kalma, \
-itişme vb.) AYRI bir sapma olarak anlat. Kişilerin panikle kaçişmasi veya hizla uzaklaşmasi varsa bunun \
-SEBEBİNİ belirle — sahnede yangin/duman/patlama gibi çevresel tehlike VARSA bu kaçişma şiddetten değil \
-TEHLİKEDEN kaçiştir; kavga/saldiri DEĞİLDİR.
-   c) DİĞER SAPMALAR: çarpişma/kaza, silah, yetkisiz giriş vb.
-Her şey beklenen normale uyuyorsa SADECE "SAPMA YOK" yaz.
+anlat; her birinin zaman damgasini belirt: duman, yangin, patlama, çarpişma/kaza, düşme veya yerde hareketsiz \
+kişi, kavga/saldiri, silah, yetkisiz giriş gibi. Her şey beklenen normale uyuyorsa SADECE "SAPMA YOK" yaz.
 
 ÖNEMLİ:
 - Rutin yürüme, çalişma, oturma, ayakta durma, merdiven kullanma, ekipman/yük taşima OLAY DEĞİLDİR — sapma sayma.
@@ -72,35 +78,22 @@ durmasi tek başina "yetkisiz giriş" değildir.
 hareketsiz kalmasi bir DÜŞME ve olasi sağlik acilidir; yaralanma görünmese bile MUTLAKA sapma olarak raporla \
 — rutin SAYMA. (Bir kişinin YATAĞA, koltuğa veya sandalyeye uzanmasi/oturmasi NORMALDİR, düşme değildir.)
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA (ör. görünmeyen duman/yangin/kaza/kişi ekleme). \
-Ancak görüntü düşük çözünürlüklü/belirsiz olsa bile GERÇEKTEN gördüğün bir sapmayi, küçük de olsa, raporla.
-- NEDENSEL AYRIŞIM: Kişilerin panik/kaçiş/hizli hareketi her zaman kavga/saldiri DEMEK DEĞİLDİR. Sahnede \
-yangin, duman, patlama veya başka bir çevresel tehlike GÖRÜYORSAN, kişilerin tepkisini (panik, kaçiş, düşme) \
-bu tehlikeden kaçiş olarak değerlendir — kavga/şiddet olarak YANLIŞ ETIKETLEME."""
+Ancak görüntü düşük çözünürlüklü/belirsiz olsa bile GERÇEKTEN gördüğün bir sapmayi, küçük de olsa, raporla."""
+
+SEGMENT_DESCRIBE_INSTRUCTION += KANIT_DISIPLINI
 
 # Güvenlik-analisti tehdit-yorumu katmani (config.threat_interpretation ile describe'a eklenir).
 # Genel sorun: notr betimleme grenli sahnelerde sucu yuzeysellestiriyor ("fiziksel temas", "bir sey
 # aliyor") -> severity/ad dusuk kaliyor. Bu katman olayi DOGRU adlandirir; anti-halusinasyon korunur.
 THREAT_LENS_SUFFIX = """
 
-3) GÜVENLİK ANALİSTİ YORUMU: Bir sapma gördüysen, onu YÜZEYSEL geçiştirme. Ama ÖNCE sahnedeki \
-sapmanin KAYNAĞINI belirle:
-
-ADIM A — ÇEVRESEL TEHLİKE KONTROLÜ: Sahnede yangın, duman, alev, patlama, kıvılcım veya yanan/tutuşan \
-bir nesne/madde var mı? VARSA bu TEHLİKENİN KENDİSİ birincil olaydır; kişilerin panik/kaçış/hızlı \
-hareketi bu tehlikeye VERİLEN TEPKİDİR — kavga/saldırı DEĞİLDİR. Tehlikeden kaçışı şiddet olarak YANLIŞ \
-ETİKETLEME. (Örnek: bir şey yanıyor + kişiler panikle koşuyor = YANGIN olayı, kavga DEĞİL.)
-
-ADIM B — ŞİDDET DEĞERLENDİRMESİ: Çevresel tehlike YOKSA ve kişiler arası fiziksel etkileşim, ani/sert \
-hareket, birinin yere düşmesi/yığılması, panik veya kaçışma varsa; bir güvenlik analisti gibi NE OLDUĞUNU \
-yorumla — kavga/saldırı, gasp/soygun, silahlı tehdit/çatışma, bir kişinin vurulması/yaralanması olabilir mi? \
-Kavga/saldırı demek için kişiler arasında BİLİNÇLİ, KARŞILIKLI veya TEK TARAFLI SALDIRGAN NİYETLİ fiziksel \
-temas (yumruk, tekme, itme, tutma, boğuşma) olmalı. Yalnızca dar alanda birbirine çarpma, panikle itişme \
-veya aynı yöne kaçarken temas kavga DEĞİLDİR.
-
-Varsa olayı GERÇEK adıyla ve ciddiyetiyle yaz; "fiziksel temas" / "bir şey alıyor-bırakıyor" gibi \
-zayıf ifadelerle hafifletme. Düşük çözünürlükte silah/ayrıntı net seçilmese bile ŞİDDET ÖRÜNTÜSÜNÜ doğru \
-adlandır. ANCAK görsel kanıt yoksa UYDURMA; gerçekten olağan/rutin ise yine "SAPMA YOK" de (normal sahneyi \
-tehdit gibi gösterme)."""
+3) GÜVENLİK ANALİSTİ YORUMU: Bir sapma gördüysen, onu YÜZEYSEL geçiştirme. Kişiler arası fiziksel \
+etkileşim, ani/sert hareket, birinin yere düşmesi/yığılması, panik veya kaçışma varsa; bir güvenlik analisti \
+gibi NE OLDUĞUNU yorumla — kavga/saldırı, gasp/soygun, silahlı tehdit/çatışma, bir kişinin vurulması/yaralanması \
+olabilir mi? Varsa olayı GERÇEK adıyla ve ciddiyetiyle yaz; "fiziksel temas" / "bir şey alıyor-bırakıyor" gibi \
+zayıf ifadelerle hafifletme. Düşük çözünürlükte silah/ayrıntı net seçilmese bile ŞİDDET ÖRÜNTÜSÜNÜ (saldırgan \
+temas, savrulma, yere yığılma, kaçışma) doğru adlandır. ANCAK görsel kanıt yoksa UYDURMA; gerçekten olağan/rutin \
+ise yine "SAPMA YOK" de (normal sahneyi tehdit gibi gösterme)."""
 
 # V2: siddet + MULK-sucu + kaza adlandirmasini da kapsar (AKSIYON-recall: Vandalism/Burglary zayifti).
 THREAT_LENS_SUFFIX_V2 = """
@@ -192,16 +185,10 @@ yoksa bunu olay olarak YAZMA.
 kalmasi, yaralanma görünmese bile bir DÜŞME/sağlik olayidir; MUTLAKA olay olarak çikar (Yüksek/Kritik), rutin sayma. \
 (Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değildir, olay yazma.)
 
-NEDENSEL AYRIM (kavga/saldiri halüsinasyonunu önle):
-- Açiklamada yangin/duman/alev/patlama gibi çevresel tehlike tariflenmiş VE kişilerin panik/kaçiş/hizli \
-hareketi anlatilmişsa: çevresel tehlike AYRI bir olay (Kritik), kişilerin kaçişi ise bu tehlikeye verilen \
-tepkidir — kavga/saldiri olarak ÇIKARMA. İki olayı BIRLESTIRME; çevresel tehlikeyi kendi başina çikar.
-- Kavga/saldiri olarak etiketlemek için açiklamada kişiler arasinda BİLİNÇLİ SALDIRGAN NİYETLİ temas \
-(yumruk, tekme, itme, boğuşma, silahla tehdit) AÇIKÇA geçmeli. "Panikle birbirine çarpma", "dar alanda \
-itişme", "koşarken düşme/çarpişma" kavga DEĞİLDİR.
-
 YALNIZCA şu JSON formatinda yanit ver:
 {{"events": [{{"time": "MM:SS", "event": "kisa Türkçe açiklama", "severity": "Düşük|Orta|Yüksek|Kritik", "category": "Normal|Güvenlik|Kaza|Sağlık|Anomali|Yetkisiz Erişim|Diğer"}}]}}"""
+
+EVENT_EXTRACTION_INSTRUCTION += KANIT_DISIPLINI
 
 # --- 1c) Hizli mod: tek-gecisli algi (describe+extract birlesik, dusuk gecikme) ---
 # (fast_mode icin: segment basina TEK VLM cagrisi. W1 anti-halusinasyon cercevesi korunur;
@@ -222,9 +209,6 @@ tek başina "yetkisiz giriş" değildir.
 DÜŞME/sağlik acilidir; MUTLAKA olay olarak raporla. (Yatağa/koltuğa uzanmak/oturmak NORMALDİR — düşme değil.)
 - Karelerde gerçekten OLMAYAN bir durumu UYDURMA. Tamamen rutin/normalse boş liste döndür.
 - Gerçekten gördüğün bir sapmayi, küçük de olsa, uygun severity ile raporla.
-- NEDENSEL AYRIM: Sahnede yangin/duman/alev/patlama VARSA ve kişiler panikle kaçiyorsa/itişiyorsa, bu \
-kavga/saldiri DEĞİLDİR — tehlikeden kaçiştir. Kavga demek için kişiler arasinda BİLİNÇLİ SALDIRGAN temas \
-(yumruk, tekme, boğuşma) gerekir. Panikle çarpişma/itişme kavga sayilmaz.
 
 SEVERITY: Kritik=yangin/patlama/duman, silah, ciddi kaza, yerde hareketsiz/yarali kişi · \
 Yüksek=kavga/darp, yetkisiz giriş, düşme, tahrip · Orta=şüpheli/anormal hareket · Düşük=rutin.
@@ -232,6 +216,8 @@ Yüksek=kavga/darp, yetkisiz giriş, düşme, tahrip · Orta=şüpheli/anormal h
 YALNIZCA şu JSON formatinda yanit ver (başka metin yok):
 {{"events": [{{"time": "MM:SS", "event": "kisa Türkçe açiklama", "severity": "Düşük|Orta|Yüksek|Kritik", "category": "Normal|Güvenlik|Kaza|Sağlık|Anomali|Yetkisiz Erişim|Diğer"}}]}}
 Hiçbir kayda değer durum yoksa: {{"events": []}}"""
+
+SEGMENT_FAST_INSTRUCTION += KANIT_DISIPLINI
 
 # --- 1d) SORGU-GUDUMLU ODAK (perceive: SEGMENT_DESCRIBE / SEGMENT_FAST sonuna EKLENIR) ---
 # NEDEN AYRI BIR EK: yukaridaki algi sablonlarinin HICBIRI degistirilmedi. `analysis_query`
@@ -318,6 +304,97 @@ gibi ayrıntıları yalnızca açıklamada geçiyorsa yaz.
 YALNIZCA şu JSON formatinda yanit ver (başka metin yok):
 {{"adlar": [{{"no": 1, "ad": "kisa Türkçe olay adi"}}]}}"""
 
+# --- 1f) YUKSEK-RISK ALT IDDIA KONTROLU (few-shot + claim decomposition) ---
+# Varsayilan KAPALI (`settings.high_risk_claim_check`). Amac yeni olay bulmak degil,
+# Yuksek/Kritik serbest-metin VLM olayinda kanitsiz dramatik genislemeyi (or.
+# "pano acik" -> "elektrik carpti / kisi dustu") yumusatmaktir.
+CLAIM_CHECK_INSTRUCTION = """Bu güvenlik kamerası karelerinde aşağıdaki YÜKSEK/KRİTİK olay iddiasını \
+denetleyeceksin:
+
+İDDİA: "{event}"
+
+GÖREVİN: İddiayı küçük görsel alt iddialara ayır ve yalnızca karelerde AÇIKÇA görülen kanıta göre \
+denetle. Yeni olay ekleme. Belirsizlik ana nesne/kişi gerçekten görünürken ayrıntı düzeyindeyse \
+"abstain" kullan; temel görsel kanıt yoksa "weaken" kullan.
+
+KARAR SINIRI:
+- confirm: iddianın ana olayı ve kritik sonucu açık görsel kanıtla destekleniyor.
+- split: karelerde gerçek bir risk var, fakat iddiadaki dramatik neden/sonuç kanıtsız; riski koru, \
+kanıtsız kısmı ayır.
+- weaken: iddianın ana nesnesi/kişisi veya temel olay kanıtı görüntüde desteklenmiyor.
+- abstain: ana nesne/kişi görüntüde seçiliyor, fakat kritik sonucun nedeni veya ayrıntısı belirsiz; \
+olay korunur ve manuel teyit gerekir.
+
+KARAR SIRASI:
+1. Önce iddianın ana görsel varlığını ara: kişi, araç/forklift, alev/duman, silah, pano/makine.
+2. Ana varlık yoksa veya yerdeki şey insan değilse weaken.
+3. Ana varlık ve gerçek risk var, ama iddiadaki yaralanma/neden/sonuç kanıtsızsa split.
+4. Ana olay açık, yalnızca nedeni veya ayrıntısı seçilemiyorsa abstain.
+5. Ana olay ve kritik sonuç birlikte açıkça görülüyorsa confirm.
+
+- Açık elektrik/kontrol panosu, açık kapak, kablo veya makine riski tek başına "elektrik çarptı", \
+"kişi yaralandı" veya "kişi yere düştü" kanıtı DEĞİLDİR. Bunlar için ayrıca kişinin zeminde/hareketsiz \
+olması, doğrudan temas, kıvılcım/ark, ani kasılma, düşme anı veya yardım müdahalesi gibi görsel kanıt gerekir.
+- Yangın/duman/patlama, silah, kavga/saldırı, araç/forklift kazası gibi iddialarda da olayın kendisini \
+destekleyen ayrı görsel kanıt ara; yalnızca bağlamdan neden-sonuç uydurma.
+- Nesne/malzeme yerdeyse bunu kişi düşmesi veya sağlık acili sayma.
+- kept_event yalnızca karelerde görülen riski adlandırır; removed_claim içindeki kanıtsız dramatik sonucu \
+kept_event içinde tekrar etme.
+
+FEW-SHOT KARAR ÖRNEKLERİ:
+1) Görüntü: elektrik panosu açık, yakında ayakta duran kişi var; düşme, hareketsizlik, temas veya kıvılcım yok.
+   Doğru karar: split. Korunan olay "açık pano kaynaklı elektrik riski"; kaldırılan iddia "elektrik çarptı/kişi düştü".
+2) Görüntü: kişi aniden zemine düşüyor ve sonraki karelerde yerde kalıyor; düşme nedeni seçilmiyor.
+   Doğru karar: confirm. Düşme/sağlık olayı korunur; "elektrik çarptı" gibi neden yazılmaz.
+3) Görüntü: açık pano yakınında kişi zeminde ve birden çok karede hareketsiz; elektrik teması net değil.
+   Doğru karar: abstain. Sağlık acili korunur; elektrik çarpması manuel teyit gerektirir.
+4) Görüntü: yerdeki şey koli veya alet; insan değil.
+   Doğru karar: weaken. Kişi düşmesi/sağlık acili iddiası desteklenmiyor.
+5) Görüntü: forklift yükle ilerliyor; çarpışma, devrilme, yük düşmesi veya yaya ile tehlikeli yakınlık yok.
+   Doğru karar: weaken. Forklift kazası iddiası desteklenmiyor.
+6) Görüntü: araç/forklift devrilmiş veya çarpışma anı açıkça görülüyor; yaralanma görünmüyor.
+   Doğru karar: split. Korunan olay "araç/forklift kazası"; kaldırılan iddia "yaralanma".
+7) Görüntü: alev veya yoğun duman açıkça seçiliyor.
+   Doğru karar: confirm. Yangın/duman olayı korunur; patlama nedeni görünmüyorsa eklenmez.
+8) Görüntü: ışık yansıması/parlama var; alev, duman veya patlama yok.
+   Doğru karar: weaken. Yangın/patlama iddiası desteklenmiyor.
+9) Görüntü: iki kişi birbirine vuruyor/itiyor; silah seçilmiyor.
+   Doğru karar: split. Korunan olay "fiziksel kavga/saldırı"; kaldırılan iddia "silahlı saldırı".
+10) Görüntü: kişi doğrudan yerde hareketsiz, yakınında yardım etmeye çalışan biri var; yaralanma türü seçilmiyor.
+   Doğru karar: confirm. Sağlık acili korunur; yaralanmanın türü veya nedeni yazılmaz.
+
+ALT İDDİALARI yes/no/unknown olarak doldur:
+- person_visible
+- person_on_floor
+- person_motionless_or_fallen
+- direct_contact_or_impact
+- vehicle_impact_or_rollover_visible
+- fire_or_smoke_visible
+- weapon_visible
+- causal_link_supported
+- object_not_person_risk
+
+verdict seçenekleri:
+- confirm: iddia açık görsel kanıtla destekleniyor.
+- weaken: iddianın temel görsel kanıtı açıkça desteklenmiyor.
+- split: iddiada gerçek bir risk var ama kanıtsız dramatik sonuç/neden ayrılmalı.
+- abstain: ana nesne/kişi görülüyor ama ayrıntı belirsiz; olay korunmalı, manuel teyit gerekir.
+
+YALNIZCA şu JSON formatında yanıt ver:
+{{"verdict":"confirm|weaken|split|abstain",
+  "kept_event":"split ise karelerde gerçekten görülen riskin kısa adı; değilse boş",
+  "removed_claim":"kanıtsız dramatik iddia; yoksa boş",
+  "subclaims":{{"person_visible":"yes|no|unknown",
+                "person_on_floor":"yes|no|unknown",
+                "person_motionless_or_fallen":"yes|no|unknown",
+                "direct_contact_or_impact":"yes|no|unknown",
+                "vehicle_impact_or_rollover_visible":"yes|no|unknown",
+                "fire_or_smoke_visible":"yes|no|unknown",
+                "weapon_visible":"yes|no|unknown",
+                "causal_link_supported":"yes|no|unknown",
+                "object_not_person_risk":"yes|no|unknown"}},
+  "reason":"kısa Türkçe gerekçe"}}"""
+
 # --- 2) Karar destek (özet + risk + aksiyon) ---
 DECISION_SUPPORT_INSTRUCTION = """Bir güvenlik operatörü için video analiz raporu hazirliyorsun.
 Aşağida videonun tamaminda tespit edilen olaylar zaman sirasiyla listelenmiştir:
@@ -342,6 +419,8 @@ YALNIZCA şu JSON formatinda yanit ver:
 {{"summary": "...",
   "risk": {{"level": "Düşük|Orta|Yüksek|Kritik", "rationale": "..."}},
   "actions": [{{"action": "...", "priority": "Düşük|Orta|Yüksek|Kritik", "rationale": "..."}}]}}"""
+
+DECISION_SUPPORT_INSTRUCTION += KANIT_DISIPLINI
 
 # --- KOL 2: TERIM KORUNUMU (config.ozet_terim_sozlugu ile eklenir) ---
 # OLCULDU (855 ozet): sablon TEK ad uretiyor ama ozetleyici nesre gecirirken
@@ -484,7 +563,9 @@ CHAT_SYSTEM = (
     "DAVRANIŞ KURALLARI:\n"
     "1. GERÇEKLİK: Yalnızca aşağidaki ANALİZ BAĞLAMI'na dayan. Bağlamda olmayan bir şey "
     "sorulursa açıkça 'Bu bilgi analizde bulunmuyor' de ve gerekiyorsa videoyu yeniden "
-    "analiz etmeyi öner. ASLA uydurma bilgi verme. Operatör 'ne kadar eminsin / güvenilir mi' "
+    "analiz etmeyi öner. ASLA uydurma bilgi verme; bağlamda olmayan sayı, konum, neden, "
+    "kişi kimliği, meslek, yaralanma veya sonuç ekleme. Bir bilgi belirsizse kesinleştirme, "
+    "'belirsiz' diye belirt. Operatör 'ne kadar eminsin / güvenilir mi' "
     "diye sorarsa ALGI GÜVENİ alanına dayan (düşükse açıkça düşük çözünürlük + manuel teyit öner); "
     "'neden bu karar/risk' diye sorarsa KARAR İZİ adımlarına dayanarak kısaca açikla.\n"
     # D36 OLCULMUS KUSUR — ASIMETRIK ITAAT:

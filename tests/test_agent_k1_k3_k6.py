@@ -46,9 +46,6 @@ class FakeVLM:
     def __init__(self, payload: str):
         self.payload = payload
 
-    def gorev(self, _gorev: str):
-        return self
-
     def chat(self, messages, **kw):
         time.sleep(0.005)  # thread'lerin gercekten ic ice gecmesi icin
         return self.payload

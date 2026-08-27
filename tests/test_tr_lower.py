@@ -17,9 +17,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from dilajan.agent.graph import (_calibrate_severity, _is_person_fall_event,  # noqa: E402
+from dilajan.agent.graph import (_apply_pose_fall_verdict, _calibrate_severity, _is_person_fall_event,  # noqa: E402
                                  _PERSON_RE, _tr_lower)
-from dilajan.schema import Severity  # noqa: E402
+from dilajan.schema import Event, EventCategory, Severity  # noqa: E402
 
 _gecti = 0
 _kaldi = 0
@@ -74,6 +74,24 @@ check("İ ile baslayan KISI dusmesi severity YUKSELTIYOR",
       kisi != Severity.DUSUK, f"-> {kisi}")
 check("NESNE dusmesi severity YUKSELTMIYOR (kural korundu)",
       nesne == Severity.DUSUK, f"-> {nesne}")
+
+print("\n=== POZ REDDI: reddedilen dusme reason katmanina TASINMAZ ===")
+olaylar = [
+    Event(time="00:00", event="Kişinin zemindeki engeli fark edemeyip sert bir şekilde yere düşmesi",
+          severity=Severity.YUKSEK, category=EventCategory.SAGLIK),
+    Event(time="00:00", event="Pano kapağı açık bırakılmış",
+          severity=Severity.YUKSEK, category=EventCategory.GUVENLIK),
+    Event(time="00:02", event="Mücadele sırasında iki kişinin yere yığılması",
+          severity=Severity.YUKSEK, category=EventCategory.GUVENLIK),
+]
+filtreli, silinen = _apply_pose_fall_verdict(olaylar, "REJECT")
+check("REJECT saf kisi-dusme iddiasini siliyor", silinen == 1 and len(filtreli) == 2,
+      f"silinen={silinen} kalan={len(filtreli)}")
+check("REJECT diger olayi koruyor", filtreli[0].event == "Pano kapağı açık bırakılmış")
+check("REJECT siddet baglamli dusmeyi koruyor", "Mücadele" in filtreli[1].event)
+korunan, silinen2 = _apply_pose_fall_verdict(olaylar, "ABSTAIN")
+check("ABSTAIN fail-open: olaylari koruyor", silinen2 == 0 and len(korunan) == 3,
+      f"silinen={silinen2} kalan={len(korunan)}")
 
 print(f"\ngecen={_gecti}  kalan={_kaldi}")
 sys.exit(1 if _kaldi else 0)

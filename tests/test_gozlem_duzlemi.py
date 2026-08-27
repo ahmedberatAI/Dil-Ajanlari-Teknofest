@@ -29,7 +29,7 @@ c("kapali iken gerekli slot YOK", K.gerekli_slotlar(_Kapali()) == [])
 
 print("\n=== slot secimi ===")
 class A: pass
-a = A(); a.isg_slotlari = "*"; a.yelek_yetki_kurali = True; a.panel_koyuluk_kurali = True; a.forklift_kasa_kurali = True
+a = A(); a.isg_slotlari = "*"
 c("'*' tum kural slotlarini ister", 
   set(K.gerekli_slotlar(a)) >= {k.slot for k in K.KURALLAR})
 c("'*' ON KOSUL slotlarini da ister", 
@@ -54,15 +54,10 @@ for ham, bek in (("VAR", "VAR"), ("YOK", "YOK"), ("KISI_YOK", None), ("GORUNMUYO
 
 print("\n=== KURAL MOTORU — deterministik, modelsiz ===")
 ay = Settings()
-ay.yelek_yetki_kurali = True  # bu bolum eski, beyanli tesis sozlesmesini olcer
-ay.panel_koyuluk_kurali = True
-ay.forklift_kasa_kurali = True
 kayit = G.GozlemKaydi()
 kayit.koy(G.SLOT_CATAL_KASA, "3")
 o = K.olaylari_uret(kayit, ay, zaman="00:04")
 c("3 kasa -> 1 olay", len(o) == 1, f"-> {len(o)}")
-c("tesis esigi beyan edilmezse 3 kasa otomatik ihlal DEGIL",
-  K.olaylari_uret(kayit, Settings(_env_file=None)) == [])
 if o:
     e = o[0]
     c("olay isg_kod tasiyor", getattr(e, "isg_kod", None) == "Carrying_Overload_with_Forklift",
@@ -89,9 +84,6 @@ c("koyuluk 1 -> olay YOK", K.olaylari_uret(kp2, ay) == [])
 ky = G.GozlemKaydi(); ky.koy(G.SLOT_MAKINE_KISI, "1"); ky.koy(G.SLOT_YELEK, "YOK")
 oy = K.olaylari_uret(ky, ay)
 c("kisi VAR + yelek YOK -> yetkisiz mudahale", len(oy) == 1 and getattr(oy[0], "isg_kod", "") == "Unauthorized_Intervention")
-ay_yetkisiz_kapali = Settings(_env_file=None)
-c("tesis beyani YOK -> yelek yoklugu yetkisiz mudahale DEGIL",
-  K.olaylari_uret(ky, ay_yetkisiz_kapali) == [])
 ky2 = G.GozlemKaydi(); ky2.koy(G.SLOT_MAKINE_KISI, "1"); ky2.koy(G.SLOT_YELEK, "VAR")
 c("yelek VAR -> olay YOK", K.olaylari_uret(ky2, ay) == [])
 ky3 = G.GozlemKaydi(); ky3.koy(G.SLOT_MAKINE_KISI, "1"); ky3.koy(G.SLOT_YELEK, "KISI_YOK")
@@ -158,7 +150,7 @@ c("kural KODU ile secilebilir (iki kural ayni kodu paylasir)",
 c("ILISKISEL slot hala secilebiliyor (kol karsilastirmasi icin sart)",
   "yaya_cizgi_mesafe" in K.gerekli_slotlar(a2))
 c("YEREL slot da geliyor", "yaya_zemin" in K.gerekli_slotlar(a2))
-a3 = A(); a3.isg_slotlari = "*"; a3.yelek_yetki_kurali = True; a3.panel_koyuluk_kurali = True; a3.forklift_kasa_kurali = True
+a3 = A(); a3.isg_slotlari = "*"
 c("'*' yol slotunu da ister", "yaya_cizgi_mesafe" in K.gerekli_slotlar(a3))
 
 print(f"\ngecen={g}  kalan={k}")
