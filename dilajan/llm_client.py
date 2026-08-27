@@ -32,7 +32,11 @@ Frame = Tuple[str, bytes]
 
 
 def _frames_to_mp4(frames: Sequence[Frame], fps: int = 2) -> bytes:
-    """JPEG karelerini bellek-ici bir MP4'e kodlar (EVS video-path icin). PyAV; libx264->mpeg4 fallback."""
+    """JPEG karelerini bellek-ici bir MP4'e kodlar (EVS video-path icin). PyAV; libx264->mpeg4 fallback.
+
+    Kalite: CRF=18 (yüksek kalite) — duman/sis gibi ince detayların korunması için.
+    Varsayılan CRF (~23-28) bu tür yarı-saydam detayları kaybediyordu.
+    """
     import av  # lazy: yalniz video-path'te gerekli
     import numpy as np
     from PIL import Image
@@ -44,6 +48,7 @@ def _frames_to_mp4(frames: Sequence[Frame], fps: int = 2) -> bytes:
     cont = av.open(buf, mode="w", format="mp4")
     try:
         stream = cont.add_stream("libx264", rate=fps)
+        stream.options = {"crf": "18", "preset": "fast"}
     except Exception:
         stream = cont.add_stream("mpeg4", rate=fps)
     stream.width, stream.height, stream.pix_fmt = w, h, "yuv420p"

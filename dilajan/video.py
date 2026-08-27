@@ -74,6 +74,37 @@ def _enhance_clahe(img: Image.Image) -> Image.Image:
         return img  # cv2 yoksa/hata olursa orijinali dondur (toleransli)
 
 
+def _enhance_smoke_detection(img: Image.Image) -> Image.Image:
+    """DUMAN TESPİTİ için güçlendirilmiş CLAHE + gamma düzeltme.
+
+    Strateji: Hedefli parlatma yapılmaz (zemin de gri olduğu için seçicilik yok).
+    Bunun yerine: güçlü CLAHE (duman sınırları belirginleşir) + gamma düzeltme
+    (koyu alanlar açılır, duman-arka plan kontrast farkı artar).
+    """
+    try:
+        import cv2
+        import numpy as np
+
+        arr = np.asarray(img.convert("RGB"))
+        lab = cv2.cvtColor(arr, cv2.COLOR_RGB2LAB)
+        l, a, b = cv2.split(lab)
+
+        # 1. Güçlü CLAHE — duman sınırları belirginleşir
+        clahe = cv2.createCLAHE(clipLimit=4.0, tileGridSize=(8, 8))
+        l = clahe.apply(l)
+
+        # 2. Gamma düzeltme (gamma < 1 = koyu alanlar açılır)
+        l_f = l.astype(np.float32) / 255.0
+        l_f = np.power(l_f, 0.8)
+        l = (l_f * 255).astype(np.uint8)
+
+        # 3. RGB'ye geri dön
+        out = cv2.cvtColor(cv2.merge((l, a, b)), cv2.COLOR_LAB2RGB)
+        return Image.fromarray(out)
+    except Exception:
+        return img
+
+
 def _resize_jpeg(img: Image.Image, max_side: int, min_side: int = 0, quality: int = 88) -> bytes:
     w, h = img.size
     longest = max(w, h)
@@ -88,7 +119,10 @@ def _resize_jpeg(img: Image.Image, max_side: int, min_side: int = 0, quality: in
         img = img.resize((max(1, int(w * scale)), max(1, int(h * scale))), Image.LANCZOS)
     if img.mode != "RGB":
         img = img.convert("RGB")
-    if settings.frame_enhance:
+    # Ön işleme: duman tespiti için akromatik vurgulama (öncelikli)
+    if settings.smoke_enhancement:
+        img = _enhance_smoke_detection(img)
+    elif settings.frame_enhance:
         img = _enhance_clahe(img)
     buf = io.BytesIO()
     img.save(buf, format="JPEG", quality=quality)

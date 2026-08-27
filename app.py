@@ -238,24 +238,54 @@ def _ensure_playable(path):
     codec'lerini OYNATAMIYOR ("video not playable"). format='mp4' yalnizca container'i
     degistiriyor, codec'i degil -> yetmiyor. Bu fonksiyon codec'i universal H.264 yapar.
 
-    - Zaten H.264 mp4 ise dokunmaz (hizli). Degilse ffmpeg ile transcode eder.
-    - PyAV analiz zaten her codec'i okuyabiliyor; bu yalniz TARAYICI ONIZLEMESI icindir
-      (transcode edilen dosya analizde de kullanilir; crf=23 ~gorsel-kayipsiz, algi 768'e iniyor).
-    - FAIL-OPEN: ffmpeg yoksa/hata/zaman asimi -> orijinal yol (analiz yine calisir)."""
+    Strateji: ONCE ffmpeg ile dene (en hizli/en iyi kalite). ffmpeg YOKSA PyAV ile
+    transcode et (her zaman mevcut, biraz yavas ama CALISIR).
+    FAIL-OPEN: ikisi de basarisizsa orijinal yol (analiz yine calisir)."""
     if not path or not os.path.exists(path):
         return path
+    out = os.path.join(tempfile.gettempdir(), f"dilajan_play_{abs(hash(path)) % 10**9}.mp4")
+    # 1. ffmpeg ile dene (hizli, en iyi kalite)
     try:
         codec = subprocess.run(
             ["ffprobe", "-v", "error", "-select_streams", "v:0",
              "-show_entries", "stream=codec_name", "-of", "default=nw=1:nk=1", path],
             capture_output=True, text=True, timeout=30).stdout.strip()
         if codec == "h264" and path.lower().endswith(".mp4"):
-            return path  # zaten oynatilabilir
-        out = os.path.join(tempfile.gettempdir(), f"dilajan_play_{abs(hash(path)) % 10**9}.mp4")
+            return path
         subprocess.run(
             ["ffmpeg", "-y", "-i", path, "-c:v", "libx264", "-pix_fmt", "yuv420p",
              "-preset", "veryfast", "-crf", "23", "-an", "-movflags", "+faststart", out],
             capture_output=True, timeout=600)
+        if os.path.exists(out) and os.path.getsize(out) > 0:
+            return out
+    except (FileNotFoundError, OSError):
+        pass  # ffmpeg/ffprobe yok → PyAV fallback
+    except Exception:
+        pass
+    # 2. PyAV fallback (ffmpeg yoksa veya hata verdiyse)
+    try:
+        import av
+        import numpy as np
+        inp = av.open(path)
+        vs = inp.streams.video[0]
+        if vs.codec_context.name == "h264" and path.lower().endswith(".mp4"):
+            inp.close()
+            return path
+        outp = av.open(out, mode="w", format="mp4")
+        ostream = outp.add_stream("libx264", rate=vs.average_rate or 24)
+        ostream.width = vs.width - (vs.width % 2)
+        ostream.height = vs.height - (vs.height % 2)
+        ostream.pix_fmt = "yuv420p"
+        ostream.options = {"preset": "veryfast", "crf": "23"}
+        for frame in inp.decode(video=0):
+            frame = frame.reformat(width=ostream.width, height=ostream.height,
+                                   format="yuv420p")
+            for pkt in ostream.encode(frame):
+                outp.mux(pkt)
+        for pkt in ostream.encode():
+            outp.mux(pkt)
+        outp.close()
+        inp.close()
         if os.path.exists(out) and os.path.getsize(out) > 0:
             return out
     except Exception:

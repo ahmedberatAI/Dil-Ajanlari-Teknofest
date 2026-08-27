@@ -114,6 +114,7 @@ class Settings(BaseSettings):
     frame_max_side: int = 768      # kare uzun kenari ust siniri (token tasarrufu)
     frame_min_side: int = 640      # dusuk cozunurluklu CCTV kareleri bu boyuta buyutulur
     frame_enhance: bool = False    # CLAHE kontrast iyilestirme (dusuk cozunurluklu CCTV legibility)
+    smoke_enhancement: bool = True # LAB-akromatik duman vurgulama (L yuksek + a*/b* dusuk pikselleri parlat)
     scene_cut_threshold: float = 0.30  # M3: ardisik kare RENK-HISTOGRAM mesafe esigi; ustu = sert sahne-kesimi.
                                        # KONSERVATIF: yangin/parlama sahne-ICI titremesi gercek-kesime rakip
                                        # (olculdu: yangin 0.208 > splice 0.197), bu yuzden YANLIZCA cok-dramatik
