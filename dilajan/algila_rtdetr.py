@@ -13,8 +13,8 @@ icinde yerlesik. COCO sinif indeksleri: **person = 0** (calisma zamaninda
 
 K3 (fail-open): her genel giris noktasi hata durumunda **bos** sonuc dondurur;
 cagiran taraf sebebi `son_hata()` ile okuyup karar-izine yazabilir.
-K5 (offline): agirliklar HF onbelleginden okunur; once `local_files_only=True`
-denenir, yalnizca o basarisiz olursa ag denenir.
+K5 (offline): agirliklar varsayilan olarak yalniz HF onbelleginden okunur.
+Agdan indirme ancak `DILAJAN_MODEL_INDIRME_IZNI=1` ile acikca izinliyse denenir.
 K6 (24 GB): model ~86M parametre, fp32 ~350 MB. fp16 KULLANILMAZ — bu ortamda
 `nvrtc: libnvrtc-builtins.so.13.0` JIT hatasi veriyor (olculdu, 2026-08-18).
 """
@@ -48,19 +48,24 @@ def _yukle():
         if _model is not None:
             return _model, _islemci
         try:
+            from dilajan.config import settings
+            if settings.yerel_ogrenilmis_yasak:
+                _son_hata = "özel API profilinde yerel öğrenilmiş model yasak"
+                return None, None
             import torch
             from transformers import AutoImageProcessor, RTDetrV2ForObjectDetection
         except Exception as ex:
             _son_hata = f"transformers/torch ithal edilemedi: {ex}"
             return None, None
-        for yerel in (True, False):          # K5: once offline dene
+        kipler = (True, False) if settings.model_indirme_izni else (True,)
+        for yerel in kipler:                 # K5: varsayilan yalniz offline
             try:
                 isl = AutoImageProcessor.from_pretrained(MODEL_ADI, local_files_only=yerel)
                 mdl = RTDetrV2ForObjectDetection.from_pretrained(
                     MODEL_ADI, local_files_only=yerel).eval()
                 break
             except Exception as ex:
-                if not yerel:
+                if not yerel or not settings.model_indirme_izni:
                     _son_hata = f"{MODEL_ADI} yuklenemedi: {ex}"
                     return None, None
         try:

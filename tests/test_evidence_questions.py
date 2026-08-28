@@ -95,6 +95,9 @@ _KONTROL = dict(
     threat_interpretation=True, motion_saliency_cue=True, restricted_zones="",
     detect_vehicles=False, detect_crowd=False, verify_events=True, spatial_grounding=True,
     semantic_plausibility=False, verify_pose_falls=False, batch_verify=False,
+    claim_guard=False, atomic_claim_guard=False, narrative_event_policy="all",
+    closed_family_fallback=False, structured_fire_dust_veto=False,
+    thermal_fallback=False, physical_expert_fallback=False,
     analysis_query="", event_consistency_n=1, evidence_question_set="sokak",
 )
 

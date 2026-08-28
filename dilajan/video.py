@@ -358,7 +358,13 @@ def servis_videosu(yol: str, max_side: int = 1280, crf: int = 26,
                           f"trunc(iw*{x1:.6f}):trunc(ih*{y1:.6f})")
             except (ValueError, TypeError):
                 pass                      # bozuk ROI -> kirpma YOK (K3)
-        vf.append(f"scale={max_side}:-2")
+        # En uzun kenarı sınırla; küçük videoyu büyütme. Eski `scale=N:-2`
+        # her zaman genişliği N yapıyor, portreyi yanlış boyutluyor ve küçük
+        # kaynakları yapay olarak büyütüyordu.
+        _m = max(2, int(max_side))
+        vf.append(
+            "scale=w='if(gte(iw\\,ih)\\,min(iw\\,%d)\\,-2)':"
+            "h='if(gte(iw\\,ih)\\,-2\\,min(ih\\,%d))'" % (_m, _m))
         _kalite = (["-b:v", sabit_bit, "-minrate", sabit_bit, "-maxrate", sabit_bit,
                     "-bufsize", sabit_bit] if sabit_bit else ["-crf", str(crf)])
         # TEKRAR URETILEBILIRLIK — OLCULDU (2026-08-25):

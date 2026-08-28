@@ -18,6 +18,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
+PRIVATE_API_BASE_URL = "https://evren-llmapi.ssyz.org.tr/v1"
+FIXED_MODEL_ALIASES = frozenset({"vlm", "llm-large", "llm-fast"})
 
 
 class Settings(BaseSettings):
@@ -34,13 +36,13 @@ class Settings(BaseSettings):
     )
 
     # --- Model / servisleme ---
-    # SOTA secim (2026-06-21 A/B): Qwen3-VL-8B (Qwen3 omurgasi -> akici Turkce, kategori %0->%100).
-    # Onceki: Qwen/Qwen2.5-VL-7B-Instruct (hassasiyet-oncelikli yedek; DILAJAN_MODEL_NAME ile gecilir).
-    model_name: str = "Qwen/Qwen3-VL-8B-Instruct-FP8"
+    # Proje sozlesmesi: ogrenilmis cikarim yalniz ozel API'deki sabit uc alias
+    # ile yapilir. Anahtar koda gomulmez; DILAJAN_API_KEY ile verilmelidir.
+    model_name: str = "llm-large"
 
-    # --- D41: GOREVE GORE MODEL (uzak serviste 10 alias acik) ----------------
-    # HEPSI BOS = tek model (model_name) -> yerel davranis BIREBIR AYNI (K2).
-    # Uzak serviste doldurulur; her alan farkli bir alias'a gidebilir.
+    # --- D41: GOREVE GORE SABIT UC MODEL -------------------------------------
+    # Bos bir alan `model_name`e duser. Varsayilan profil yalniz
+    # vlm / llm-large / llm-fast aliaslarini kullanir.
     #
     # NEDEN AYRI MODEL (dokumantasyonun KENDI olcumleri):
     #   JSON uretimi     : llm-fast 1,000 = llm-large 1,000  -> BUYUK MODEL BOSUNA
@@ -60,28 +62,30 @@ class Settings(BaseSettings):
     #   vlm       : KISI/OZNITELIK'te tek basarili (yelek MCC +0,500 dagitim-durustu;
     #               yerel model orada TAMAMEN cokmustu) AMA saymada en zayifi (FP=13)
     # Bu yuzden tek alias DEGIL, SORU TIPINE gore yonlendirme.
-    model_algi: str = ""        # kisi/oznitelik algisi          -> vlm (video-yerli)
-    model_sayim: str = ""       # sayma/geometri sorulari        -> llm-large
+    model_algi: str = "vlm"        # kisi/oznitelik algisi       -> vlm (video-yerli)
+    model_sayim: str = "llm-large" # sayma/geometri sorulari     -> llm-large
     # Serbest video olay algisi, JSON cikarimindan FARKLI bir gorevdir.
     # `llm-fast` yapisal JSON'da iyi olsa da tam eval_defense kosumunda olay
     # algisina verildiginde sahte duman iddialarini 5'ten 32'ye cikardi.
-    # BOS = model_name (uzak sevkte llm-large); slot `algi=vlm` uzmanligi korunur.
-    model_olay: str = ""         # acik-dunya olay algisi/yeniden inceleme -> llm-large
-    model_yapi: str = ""        # olay cikarimi, JSON, siniflama -> llm-fast
-    model_ozet: str = ""        # Turkce ozet + aksiyon onerisi  -> llm-large
-    model_diyalog: str = ""     # operator diyalogu (Otonomi %20)-> llm-large
-    model_yonlendirme: str = "" # ajan ici yonlendirme kararlari -> router (8B)
-    model_guvenlik: str = ""    # icerik guvenligi siniflamasi   -> guard (4B)
-    model_gomme: str = ""       # getirme/RAG                    -> bge-m3-embed
+    # Olay kolu llm-large; yapilandirma/ozet ekonomik ve kisitli llm-fast.
+    model_olay: str = "llm-large"       # acik-dunya olay algisi/yeniden inceleme
+    model_yapi: str = "llm-fast"        # olay cikarimi, JSON, siniflama
+    model_ozet: str = "llm-fast"        # Turkce ozet + aksiyon onerisi
+    model_diyalog: str = "llm-large"    # operator diyalogu
+    model_yonlendirme: str = "llm-fast" # metin tabanli gorev siniflama
+    model_guvenlik: str = "llm-fast"    # metin tabanli guvenlik siniflama
+    # RAG sevk edilmis degildir. Bos kalirsa llm-large'a duser; yeni/dorduncu
+    # bir model aliasi sessizce ana profile sokulmaz.
+    model_gomme: str = ""
     vllm_host: str = "127.0.0.1"
     vllm_port: int = 8000
-    api_key: str = "EMPTY"  # yerel vLLM sunucusu anahtari yok sayar
-    # D41: uzak cikarim servisi (yarisma tahsisi). BOS = yerel vLLM (varsayilan).
-    #   .env ->  DILAJAN_API_BASE_URL=https://evren-llmapi.ssyz.org.tr/v1
-    #            DILAJAN_API_KEY=sk-evren-teamNN-...
+    api_key: str = "EMPTY"  # Gercek anahtar yalniz ortam/.env uzerinden gelir.
+    # D41: uzak cikarim servisi (yarisma tahsisi). Temiz kurulumda dahi ozel
+    # API varsayilandir; eksik .env sessizce yerel modele dusmez.
+    #   .env -> DILAJAN_API_KEY=sk-evren-teamNN-...
     # Dokumantasyonun kendi ornekleri EVREN_API_KEY / EVREN_BASE_URL kullaniyor;
     # ikisi de desteklenir (bkz. `etkin_api_key`, `base_url`).
-    api_base_url: str = ""
+    api_base_url: str = PRIVATE_API_BASE_URL
     api_timeout: float = 1800.0   # dokuman: istemci varsayilani 600 s YETERSIZ
     max_model_len: int = 8192
     gpu_memory_utilization: float = 0.90  # PERF: 0.85->0.90 (VRAM headroom ~21/24GB olculdu) -> daha fazla KV blogu
@@ -196,6 +200,36 @@ class Settings(BaseSettings):
                                  # gibi somut iddialari ONEM DERECESINDEN BAGIMSIZ odakli ikinci
                                  # gorsel soruyla dogrular; desteklenmeyen iddiayi olay listesinden
                                  # cikarir. Boylece modeli "Dusuk" yazarak dogrulamayi atlayamaz.
+    atomic_claim_guard: bool = True   # İSG iddiasini tek EVET/HAYIR sorusuna birakmaz.
+                                      # Nesne/olgu (`vlm`) ve fiziksel iliski/zaman
+                                      # (`llm-large`) ayri, kapali sorularla olculur;
+                                      # deterministik AND yalniz SUPPORTED sonucunu tutar.
+                                      # Güvenli varsayilan: ortam ayari unutulsa da atomik kapı acik kalir.
+    atomic_claim_decomposition: bool = False  # DENEYSEL: karma iddiada destekli atomu
+                                               # sabit şablonla korur.
+    atomic_extended_families: bool = False  # DENEYSEL: yük/çökme ve makine sıkışması
+                                             # taksonomilerini ayrıca etkinleştirir.
+    closed_family_fallback: bool = False  # v12 kodu mevcut; v12 holdout recall kapısı
+                                          # geçilmediği için üretim varsayılanı kapalı.
+    structured_fire_dust_veto: bool = False  # v12 kodu mevcut; yeni bağımsız kabul
+                                              # tamamlanana kadar varsayılan kapalı.
+    thermal_fallback: bool = False  # v12 kodu mevcut; yeni bağımsız kabul tamamlanana
+                                    # kadar varsayılan kapalı.
+    physical_expert_fallback: bool = False  # v12 kodu mevcut; yeni bağımsız kabul
+                                             # tamamlanana kadar varsayılan kapalı.
+    industrial_incident_fallback: bool = False  # v13c: olay-sız segmentte saflaştırılmış
+                                                 # tek endüstriyel scout + atomik kapı.
+    narrow_industrial_retry: bool = False  # v13f: geniş scout da olay üretmezse yalnız
+                                            # kişi-makine sıkışması / destek kaybı için
+                                            # ikinci dar scout + aynı atomik AND kapısı.
+    continuous_fall_fallback: bool = False  # v13m: olay-sız klipte kaynak videodan
+                                             # kişi + kontrolsüz geçiş + fiziksel sonuç
+                                             # + aynı kişi/kesintisiz plan AND kapısı.
+    narrative_event_policy: str = "isg_grounded"  # "all" = genel guvenlik/anomali davranisi korunur.
+                                          # "isg_grounded" = serbest anlatidan yalniz somut ISG/
+                                          # acil-durum aileleri kalir; ailesiz "nesne belirdi" ve
+                                          # tek basina muğlak kisi-hareketi alarm olamaz. Yapilandirilmis
+                                          # slot/dedektor olaylari bu filtreden sonra eklendigi icin etkilenmez.
     summary_evidence_guard: bool = True  # Ozette olay listesinde olmayan kritik iddia ailesi
                                          # gecerse modeli degil dogrulanmis olaylari kullanarak
                                          # deterministik, cikarimsal ozet kurar.
@@ -584,7 +618,7 @@ class Settings(BaseSettings):
 
     @property
     def base_url(self) -> str:
-        """Model API adresi. Bos ise YEREL vLLM (varsayilan davranis, K5).
+        """Model API adresi. Bos deger bile sabit ozel API'ye duser.
 
         D41 (2026-08-21): yarisma duzenleyicisi ortak bir cikarim servisi tahsis
         etti (8xH200, BF16, kuantizasyon yok). Servis OpenAI uyumlu oldugundan
@@ -592,11 +626,12 @@ class Settings(BaseSettings):
         Sartnamedeki "offline/yerel" ifadesinin iptal edildigi takim tarafindan
         bildirildi (2026-08-21).
 
-        Oncelik: DILAJAN_API_BASE_URL > EVREN_BASE_URL > yerel vLLM.
+        Oncelik: DILAJAN_API_BASE_URL > EVREN_BASE_URL > sabit ozel API.
+        Yerel gelistirme ancak localhost adresi ACIKCA verilirse mumkundur.
         """
         import os as _os
         u = (self.api_base_url or _os.environ.get("EVREN_BASE_URL") or "").strip()
-        return u.rstrip("/") if u else f"http://{self.vllm_host}:{self.vllm_port}/v1"
+        return (u or PRIVATE_API_BASE_URL).rstrip("/")
 
     @property
     def etkin_api_key(self) -> str:
@@ -634,6 +669,13 @@ class Settings(BaseSettings):
     # Yerelde GPU kullanmak icin ACIKCA izin verilir:
     #     DILAJAN_YEREL_GPU_IZNI=1
     yerel_gpu_izni: bool = False
+    # Uzak/özel API profilinde tüm öğrenilmiş çıkarım servis üzerindeki sabit
+    # üç alias ile yapılır. OpenCV/ffmpeg gibi öğrenilmemiş işlemler serbesttir;
+    # YOLO/RT-DETR/pose gibi yerel ağırlıklar ancak açıkça izin verilirse koşar.
+    yerel_ogrenilmis_izni: bool = False
+    # Hiçbir çalışma-zamanı yolu ağırlık indirmesin. Yerel uzman açıkça izinli
+    # olsa bile yalnız önceden mevcut/cached dosya kullanılabilir.
+    model_indirme_izni: bool = False
 
     # --- SLOT GUVENI (kisitli cozme dagilimi) ---
     # ACIKKEN her slot cagrisi `logprobs` ile gider ve izinli secenekler uzerindeki
@@ -647,6 +689,11 @@ class Settings(BaseSettings):
     def yerel_gpu_yasak(self) -> bool:
         """Yerel GPU kullanimi yasak mi? (uzak kosumda EVET, izin verilmedikce)"""
         return self.uzak_api_mi and not self.yerel_gpu_izni
+
+    @property
+    def yerel_ogrenilmis_yasak(self) -> bool:
+        """Özel API koşusunda yerel öğrenilmiş çıkarım yasak mı?"""
+        return self.uzak_api_mi and not self.yerel_ogrenilmis_izni
 
     @property
     def uzak_api_mi(self) -> bool:

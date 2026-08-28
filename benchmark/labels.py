@@ -691,6 +691,55 @@ KAPSAM: Dict[str, str] = {
 #: tetigi) benchmark/isg_rescore.py'de HER ZAMAN yan yana raporlanir — kalip
 #: listesini genisletmek ozgullugu dusurursek bu tabloda GORUNUR.
 ISG_SINIFLAR: Dict[str, dict] = {
+    # NVIDIA SDG-Warehouse ile eklenen GENEL depo olay aileleri. Bunlar eski
+    # tesisin class0-7 etiketleri degildir; kodlar kaynak senaryo tanimindan ve
+    # on-kayitli fiziksel onkosullardan gelir.
+    "Industrial_Visible_Plume": {
+        "kod": "Industrial_Visible_Plume",
+        "tr_ad": "Görünür endüstriyel duman/plüm gözlemi",
+        "guvensiz": True,
+        "tanim": (
+            "Sabit bir fiziksel kaynaktan çıkıp zamanla biçim değiştiren bir "
+            "duman/plüm gözlenir; bu sınıf tek başına akut yangın ilanı değildir."
+        ),
+        # `Warehouse_Visible_Fire` ile bilerek ayrık tutulur: yalnız genel
+        # "görünür duman" sözü, gözlem olayını akut yangın diye etiketlemesin.
+        "kaliplar": ["duman/plüm emisyonu adayı", "plüm emisyonu adayı"],
+    },
+    "Warehouse_Visible_Fire": {
+        "kod": "Warehouse_Visible_Fire",
+        "tr_ad": "Görünür depo yangını",
+        "guvensiz": True,
+        "tanim": "Depoda doğrudan görünür alev, duman veya yanan nesne vardır.",
+        "kaliplar": ["depo yangını", "görünür alev", "yanan nesne"],
+    },
+    "Forklift_Shelf_Collision": {
+        "kod": "Forklift_Shelf_Collision",
+        "tr_ad": "Forklift-raf/yapı çarpışması",
+        "guvensiz": True,
+        "tanim": "Forklift rafa veya sabit depo yapısına çarpar ve fiziksel hareket/hasar oluşturur.",
+        "kaliplar": ["forklift rafa çarp", "forklift sabit depo yapısına çarp",
+                      "forklift raf çarpış",
+                      # Cumlecik ayirici `ile` oldugu icin kalip onun ardindan
+                      # baslar; aksi halde sablon kendi sinifiyla eslesmez.
+                      "ayrı depo ekipmanı arasında doğrudan fiziksel etkileşim"],
+    },
+    "Forklift_Human_NearMiss": {
+        "kod": "Forklift_Human_NearMiss",
+        "tr_ad": "Forklift-insan ramak kala",
+        "guvensiz": True,
+        "tanim": "Hareketli forklift kişiyle tehlikeli yakınlaşma/temas veya kaçınma oluşturur.",
+        "kaliplar": ["forklift kişi arasında ramak kala", "hareketli araç tehlikeli yakınlaş",
+                      "forklift kişi tehlikeli yakınlaş", "ani kaçınma"],
+    },
+    "Worker_Under_Suspended_Load": {
+        "kod": "Worker_Under_Suspended_Load",
+        "tr_ad": "Askıda yük düşme bölgesi ihlali",
+        "guvensiz": True,
+        "tanim": "Çalışan askıda yükün düşme veya salınım bölgesinde kalır.",
+        "kaliplar": ["askıda yük düşme bölgesi", "havada asılı yükün düşme",
+                      "yükün salınım bölgesinde"],
+    },
     # ---------------- GUVENSIZ (class0-3) ----------------
     "Safe_Walkway_Violation": {
         "kod": "class0",
@@ -781,6 +830,11 @@ ISG_SINIFLAR: Dict[str, dict] = {
 #: ETMIYORUZ (RISK_ACCEPT_ANOMALY ile ayni felsefe): bir yurume-yolu ihlaline
 #: hem "Güvenlik" hem "Yetkisiz Erişim" demek operatorde AYNI mudahaleyi dogurur.
 ISG_OPERASYONEL_KABUL: Dict[str, Set[str]] = {
+    "Industrial_Visible_Plume": {"Anomali", "Güvenlik"},
+    "Warehouse_Visible_Fire": {"Güvenlik", "Kaza", "Anomali"},
+    "Forklift_Shelf_Collision": {"Kaza", "Güvenlik", "Anomali"},
+    "Forklift_Human_NearMiss": {"Kaza", "Güvenlik", "Anomali"},
+    "Worker_Under_Suspended_Load": {"Güvenlik", "Kaza", "Anomali"},
     "Safe_Walkway_Violation": {"Güvenlik", "Yetkisiz Erişim", "Anomali"},
     "Unauthorized_Intervention": {"Yetkisiz Erişim", "Güvenlik", "Anomali"},
     "Opened_Panel_Cover": {"Güvenlik", "Anomali"},

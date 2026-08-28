@@ -51,6 +51,16 @@ for ham, bek in (("3", 3), ("0", 0), ("6+", 6), ("GORUNMUYOR", None), ("", None)
     c(f"sayi {ham!r} -> {bek}", G._sayi(ham) == bek)
 for ham, bek in (("VAR", "VAR"), ("YOK", "YOK"), ("KISI_YOK", None), ("GORUNMUYOR", None)):
     c(f"uclu {ham!r} -> {bek}", G._uclu(ham) == bek)
+for ham, bek in (("DOGRUDAN_ETKILESIM", "VAR"), ("YANINDAN_GECIS", "YOK"),
+                 ("ARAC_YOK", "YOK"), ("GORUNMUYOR", None), ("VAR", None)):
+    c(f"carpisma dogrulama {ham!r} -> {bek}",
+      G._carpisma_dogrulama(ham) == bek)
+for ham, bek in (("ASILI_YUK", "VAR"), ("YUK_YERDE_VEYA_ARACTA", "YOK"),
+                 ("YUK_YOK", "YOK"), ("GORUNMUYOR", None)):
+    c(f"askida yuk {ham!r} -> {bek}", G._askida_yuk(ham) == bek)
+for ham, bek in (("DUSME_BOLGESINDE_1S", "VAR"), ("YALNIZ_YAKIN", "YOK"),
+                 ("KISA_GECIS", "YOK"), ("GORUNMUYOR", None)):
+    c(f"askida yuk iliskisi {ham!r} -> {bek}", G._askida_yuk_iliskisi(ham) == bek)
 
 print("\n=== KURAL MOTORU — deterministik, modelsiz ===")
 ay = Settings()
@@ -115,6 +125,58 @@ print("\n=== SLOT SEVIYESINDE MODEL SECIMI (modeller ters uzmanlasmis) ===")
 c("kasa sayimi -> 'sayim' gorevi", G.SLOT_CATAL_KASA.gorev == "sayim")
 c("yelek -> 'algi' gorevi (vlm)", G.SLOT_YELEK.gorev == "algi")
 c("pano koyulugu -> 'sayim' gorevi", G.SLOT_PANO_KOYULUK.gorev == "sayim")
+c("eski tesis slotlari olculmus 1280 spekini korur",
+  G.SLOT_YELEK.max_side == 1280 and G.SLOT_PANO_KOYULUK.max_side == 1280)
+c("genel depo olay slotlari kaynak 1080p kullanir",
+  all(x.max_side == 1920 for x in (G.SLOT_DEPO_YANGIN,
+                                   G.SLOT_DEPO_HAREKETLI_FORKLIFT,
+                                   G.SLOT_DEPO_FORKLIFT_CARPISMA_DOGRULAMA,
+                                   G.SLOT_DEPO_FORKLIFT_CARPISMA,
+                                   G.SLOT_DEPO_FORKLIFT_KISI,
+                                   G.SLOT_DEPO_ASKIDA_YUK,
+                                   G.SLOT_DEPO_ASKIDA_YUK_KISI)))
+c("ilişki/doğrulama slotları olay rolünde",
+  G.SLOT_DEPO_FORKLIFT_CARPISMA_DOGRULAMA.gorev == "olay"
+  and G.SLOT_DEPO_FORKLIFT_KISI.gorev == "olay"
+  and G.SLOT_DEPO_ASKIDA_YUK_KISI.gorev == "olay")
+c("yangin slotu tehlike adini degil fiziksel bulut olgusunu olcer",
+  "BULUTUMSU" in G.SLOT_DEPO_YANGIN.soru.upper()
+  and "yangın var mı" not in G.SLOT_DEPO_YANGIN.soru.lower())
+c("ramak kala kurali once hareketli arac varligini ister",
+  all(k.on_slot == "depo_hareketli_forklift" and k.on_etiket == "VAR"
+      for k in K.KURALLAR if k.kod == "Forklift_Human_NearMiss"))
+c("carpisma kurali bagimsiz dogrudan-etkilesim destegi ister",
+  all(k.on_slot == "depo_forklift_carpisma_dogrulama" and k.on_etiket == "VAR"
+      for k in K.KURALLAR if k.kod == "Forklift_Shelf_Collision"))
+c("askida yuk kurali varlik kapisi ister",
+  all(k.on_slot == "depo_askida_yuk" and k.on_etiket == "VAR"
+      for k in K.KURALLAR if k.kod == "Worker_Under_Suspended_Load"))
+
+_gate_yok = G.GozlemKaydi()
+_gate_yok.degerler.update({"depo_hareketli_forklift": "YOK",
+                           "depo_forklift_kisi_tehlike": "VAR"})
+c("forklift yoksa iliski VAR olsa bile ramak kala olayi uretilmez",
+  not any(getattr(e, "isg_kod", "") == "Forklift_Human_NearMiss"
+          for e in K.olaylari_uret(_gate_yok, a)))
+_gate_var = G.GozlemKaydi()
+_gate_var.degerler.update({"depo_hareketli_forklift": "VAR",
+                           "depo_forklift_kisi_tehlike": "VAR"})
+c("forklift varlik kapisi aciksa ramak kala iliskisi korunur",
+  any(getattr(e, "isg_kod", "") == "Forklift_Human_NearMiss"
+      for e in K.olaylari_uret(_gate_var, a)))
+
+_carpisma_celiski = G.GozlemKaydi()
+_carpisma_celiski.degerler.update({"depo_forklift_raf_carpisma": "VAR",
+                                   "depo_forklift_carpisma_dogrulama": "YOK"})
+c("carpisma onerisi VAR ama bagimsiz destek YOK -> olay uretilmez",
+  not any(getattr(e, "isg_kod", "") == "Forklift_Shelf_Collision"
+          for e in K.olaylari_uret(_carpisma_celiski, a)))
+_carpisma_destek = G.GozlemKaydi()
+_carpisma_destek.degerler.update({"depo_forklift_raf_carpisma": "VAR",
+                                  "depo_forklift_carpisma_dogrulama": "VAR"})
+c("iki bagimsiz carpisma olcumu VAR -> deterministik olay",
+  any(getattr(e, "isg_kod", "") == "Forklift_Shelf_Collision"
+      for e in K.olaylari_uret(_carpisma_destek, a)))
 
 print("\n=== CEKIMSERLIGE DAVET YOK (olculdu: MCC 0,885 -> 0,000) ===")
 for s_ in G.SLOT_KATALOG.values():

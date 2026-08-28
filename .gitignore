@@ -2,9 +2,13 @@
 __pycache__/
 *.py[cod]
 *.egg-info/
+.pytest_cache/
 .venv/
 venv/
 .env
+
+# Yerel ajan/IDE calistirma ayarlari
+.claude/
 
 # Data & models (large, downloaded separately)
 data/
@@ -21,6 +25,10 @@ hf_cache/
 outputs/
 *.log
 .cache/
+
+# Benchmark kosularinin yeniden baslatilabilir ara kayitlari. Nihai JSON,
+# manifest, kilit ve insan-okunur raporlar ayri tutulur.
+benchmark/results/.*.jsonl
 
 # Ultralytics egitim/dogrulama artiklari (scripts/train_ppe.py). Agirlik zaten
 # *.pt ile disarida; bu dizin yalnizca grafik/log tasir ve yeniden uretilebilir.

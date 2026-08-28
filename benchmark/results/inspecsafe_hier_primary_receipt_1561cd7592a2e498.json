@@ -1,0 +1,56 @@
+{
+  "calibration_result_sha256": "f4503858424bb72a9eb432828f654138344fbf43c18a4a409c124d31f2404086",
+  "calibration_run_key": "999a6975370227ee",
+  "constraints": {
+    "local_learned_inference_forbidden": true,
+    "model_download_allowed": false,
+    "models": {
+      "llm-fast": "formatter_and_structure",
+      "llm-large": "flat_binary_and_severity_decision",
+      "vlm": "visual_observation"
+    },
+    "private_api": "https://evren-llmapi.ssyz.org.tr/v1"
+  },
+  "decision_spec": {
+    "architecture": "hybrid",
+    "rescue_threshold": 0.7,
+    "veto_threshold": 0.21
+  },
+  "failed_epv_not_integrated": {
+    "binary_false_positives_after": 11,
+    "binary_false_positives_before": 11,
+    "binary_false_negatives_after": 83,
+    "binary_false_negatives_before": 79,
+    "reason": "FP azalmazken dort gercek unsafe alarmi silindi"
+  },
+  "gate": {
+    "coverage_at_least_99pct": true,
+    "normal_fpr_at_most_5pct": true,
+    "pass": true,
+    "test_prior_unsafe_precision_at_least_80pct": true
+  },
+  "manifest_sha256": "1561cd7592a2e49881e502fed75c9def303172e4d6f05998512cd3bcef843fba",
+  "metrics": {
+    "binary": {
+      "empirical_accuracy": 0.8773842,
+      "empirical_f1": 0.86486486,
+      "empirical_precision": 0.9632107,
+      "false_negative": 79,
+      "false_positive": 11,
+      "normal_fpr": 0.02997275,
+      "recall": 0.78474114,
+      "test_prior_f1": 0.82429274,
+      "test_prior_precision": 0.8680428,
+      "true_negative": 356,
+      "true_positive": 288
+    },
+    "coverage": 1.0,
+    "four_class_empirical_accuracy": 0.75476839,
+    "four_class_test_prior_weighted_accuracy": 0.88370997,
+    "macro_recall": 0.49959502,
+    "severity_call_rate": 0.08446866
+  },
+  "profile": "primary_high_performance",
+  "runner_sha256": "751c9ea8bf0eb22e331b5d4c528e1621dd9d2cab73a0a6ff419833846e1e301b",
+  "status": "calibration_locked_pending_development_and_holdout"
+}

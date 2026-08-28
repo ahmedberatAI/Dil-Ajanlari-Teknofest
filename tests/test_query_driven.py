@@ -143,7 +143,9 @@ def _perceive_prompt(query: str = "") -> str:
     with _Cfg(analysis_query=query, facility_rules="", use_detector=False,
               single_pass_perceive=False, threat_interpretation=True,
               motion_saliency_cue=True, restricted_zones="", detect_vehicles=False,
-              detect_crowd=False, verify_events=True, spatial_grounding=True):
+              detect_crowd=False, verify_events=True, spatial_grounding=True,
+              closed_family_fallback=False, structured_fire_dust_veto=False,
+              thermal_fallback=False, physical_expert_fallback=False):
         events, note = G._analyze_one_segment(vlm, seg)
     assert events == [] and note is None, (events, note)
     return vlm.prompts[0]
@@ -832,11 +834,13 @@ def test_15_kanit_manifesti() -> None:
         with open(b1["manifest"], encoding="utf-8") as f:
             m1 = json.load(f)
 
-        check(list(m0) == ["video", "olusturma", "genel_risk", "olaylar"],
-              f"SORGUSUZ manifest anahtarlari BIREBIR eski hali: {list(m0)} (B2)")
-        check(list(m1) == ["video", "olusturma", "genel_risk", "operator_sorgusu",
-                           "ajan_sorgu_yaniti", "sorgu_notu", "olaylar"],
-              f"sorgulu manifeste 3 alan eklendi: {list(m1)}")
+        ortak = {"sema_surumu", "video", "video_boyut_bayt", "video_sha256",
+                 "olusturma", "genel_risk", "olaylar", "zincir_koku_sha256",
+                 "zincir_sonu_sha256"}
+        check(set(m0) == ortak,
+              f"SORGUSUZ manifest v2 anahtarlari eksiksiz: {list(m0)}")
+        check(set(m1) == ortak | {"operator_sorgusu", "ajan_sorgu_yaniti", "sorgu_notu"},
+              f"sorgulu manifeste yalnız 3 sorgu alanı eklendi: {list(m1)}")
         check(m1["operator_sorgusu"].startswith(NARROW_QUERY[:40]), "sorgu metni manifestte")
         check(m1["ajan_sorgu_yaniti"] == qa, "ajan yaniti manifestte")
         check("TALİMAT DEĞİLDİR" in m1["sorgu_notu"],
@@ -848,8 +852,9 @@ def test_15_kanit_manifesti() -> None:
 
         # SHA-256 DOGRULAMASI: her manifest kaydinin ozeti, diskteki PNG ile UYUSUYOR mu?
         for bundle, man in ((b0, m0), (b1, m1)):
-            check(len(man["olaylar"]) == bundle["count"] >= 1,
-                  f"{bundle['count']} kanit karesi uretildi ve manifeste yazildi")
+            check(len(man["olaylar"]) == bundle["event_count"] >= 1
+                  and sum(len(o["kareler"]) for o in man["olaylar"]) == bundle["count"],
+                  f"{bundle['event_count']} olay/{bundle['count']} storyboard karesi manifeste yazildi")
             for kayit in man["olaylar"]:
                 fp = os.path.join(bundle["dir"], kayit["dosya"])
                 with open(fp, "rb") as fh:

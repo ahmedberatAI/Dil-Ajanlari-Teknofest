@@ -171,6 +171,11 @@ def main() -> int:
     if not os.path.isdir(KOK):
         print("[HATA] data/isafety_bench yok — once: python scripts/get_isafety_bench.py")
         return 1
+    if settings.uzak_api_mi:
+        print("[HATA] Bu eski betik 8 ayrı görüntü gönderir ve özel API'nin azami 2 "
+              "görüntü sözleşmesine uymaz. Satır-bazlı, video-native geçerli koşu için: "
+              "python benchmark/isafety_uzak_v2.py")
+        return 2
     # LISANS: degerlendirme SERBEST olmali (egitim degil)
     if not degerlendirmede_kullanilabilir("data/isafety_bench"):
         print("[HATA] lisans kapisi degerlendirmeye izin vermiyor")

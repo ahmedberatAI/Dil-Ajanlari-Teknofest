@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""D42 — MODEL-TABANLI yonlendirme (router alias, Qwen3-8B).
+"""D42 — MODEL-TABANLI yonlendirme (sabit profilde ``llm-fast``).
 
 SARTNAME BAGI (docs/sartname_metni_2026.txt s.206-211):
   "sabit kurallara dayali basit bir pipeline yerine ... MODEL TABANLI KARAR
@@ -13,7 +13,7 @@ soru tipinden birine ayirir, sonra ON-KAYITLI bir tablo ile hedef alias'a esler.
   KURAL olan kisim         : soru_tipi -> hedef alias (denetlenebilir politika)
 
 ⚠️ DURUSTLUK SINIRI — BU KODUN IDDIA ETMEDIGI SEY:
-  router alias'i **Qwen3-8B, YALNIZ METIN**. VIDEO GOREMEZ. Yonlendirme karari
+  yonlendirme modeli **YALNIZ METIN** gorur. VIDEO GOREMEZ. Yonlendirme karari
   video ICERIGINE degil, SORU/BETIMLEME METNINE dayanir. "Router videoyu analiz
   edip model seciyor" ifadesi YANLIS olur. Klip betimlemesi girdi olarak
   verildiginde bile router, betimlemeyi URETEN modelin ciktisini okur — kendisi
@@ -119,7 +119,8 @@ def yonlendir(metin: str, istemci=None, temperature: float = 0.0,
               max_tokens: int = 16) -> Yonlendirme:
     """Girdiyi siniflandirip hedef alias'i secer. HATA -> genel + varsayilan model.
 
-    `istemci` verilmezse `VLMClient().gorev("yonlendirme")` kurulur (router alias).
+    `istemci` verilmezse `VLMClient().gorev("yonlendirme")` kurulur (varsayilan
+    sabit uc-model profilinde ``llm-fast``).
     Kisitli kod cozme (`structured_outputs.choice`) ile cikti MUTLAKA 4 etiketten
     biridir; ayristirma hatasi YUZEY YOK.
     """

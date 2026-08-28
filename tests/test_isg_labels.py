@@ -56,18 +56,26 @@ def check(kosul: bool, mesaj: str) -> None:
 
 # ===========================================================================
 def test_1_taksonomi_butunlugu() -> None:
-    """8 sinif, class0-7, 4+4. Dizin adlari GERCEK klasorlerle birebir olmali."""
+    """Eski class0-7 çifti ve ek genel-depo sınıfları birlikte korunmalı."""
     print("TEST 1 — taksonomi butunlugu")
     kodlar = sorted(v["kod"] for v in ISG_SINIFLAR.values())
-    check(kodlar == [f"class{i}" for i in range(8)],
-          f"8 sinif ve kodlar class0..class7 ({kodlar})")
+    eski_kodlar = {f"class{i}" for i in range(8)}
+    genel_kodlar = {"Industrial_Visible_Plume", "Warehouse_Visible_Fire",
+                    "Forklift_Shelf_Collision",
+                    "Forklift_Human_NearMiss", "Worker_Under_Suspended_Load"}
+    check(set(kodlar) == eski_kodlar | genel_kodlar,
+          f"8 tesis + 5 genel depo sınıfı ({kodlar})")
 
     guvensiz = {s for s in ISG_SINIFLAR if isg_guvensiz(s)}
     guvenli = set(ISG_SINIFLAR) - guvensiz
-    check(len(guvensiz) == 4 and len(guvenli) == 4,
-          f"4 GUVENSIZ (class0-3) + 4 GUVENLI (class4-7) — {len(guvensiz)}+{len(guvenli)}")
+    check(len(guvensiz) == 9 and len(guvenli) == 4,
+          f"4 tesis+5 genel GUVENSIZ, 4 tesis GUVENLI — {len(guvensiz)}+{len(guvenli)}")
     # MANIFEST.json'daki eslemeyle karsilastir: class0-3 = Anomali, class4-7 = Normal
     for s, v in ISG_SINIFLAR.items():
+        if not v["kod"].startswith("class"):
+            check(v["guvensiz"] is True,
+                  f"{v['kod']} {s}: genel depo olayı güvensiz")
+            continue
         beklenen = int(v["kod"].replace("class", "")) <= 3
         check(v["guvensiz"] == beklenen,
               f"{v['kod']} {s}: guvensiz={v['guvensiz']} (MANIFEST beklentisi {beklenen})")
@@ -80,9 +88,11 @@ def test_1_taksonomi_butunlugu() -> None:
             p = os.path.join(kok, ust)
             if os.path.isdir(p):
                 diskte |= {d for d in os.listdir(p) if os.path.isdir(os.path.join(p, d))}
-        check(diskte == set(ISG_SINIFLAR),
+        tesis_siniflari = {s for s, v in ISG_SINIFLAR.items()
+                           if v["kod"].startswith("class")}
+        check(diskte == tesis_siniflari,
               f"dizin adlari data/eval_defense ile BIREBIR (fark: "
-              f"{diskte ^ set(ISG_SINIFLAR) or 'yok'})")
+              f"{diskte ^ tesis_siniflari or 'yok'})")
     else:
         print("  [ATLA] data/eval_defense yok — dizin adi karsilastirmasi atlandi")
 

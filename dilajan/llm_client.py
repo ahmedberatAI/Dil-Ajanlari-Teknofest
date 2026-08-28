@@ -285,17 +285,19 @@ class VLMClient:
         if settings.mock_mode:  # MOCK: kare/mp4 kodlamasi ve ag cagrisi YOK; tohum karelerden gelir
             return mock_reply(instruction, frames=frames)
         content: List[dict] = []
-        # D41 — UZAK SERVISTE VIDEO YOLU ZORUNLU.
-        # Servis istek basina EN FAZLA 2 GORUNTU kabul ediyor (olculdu: 8 kare -> HTTP 400
-        # "At most 2 image(s) may be provided in one prompt"; vlm ise 0 goruntu).
-        # Bizim boru hattimiz 8-12 kare gonderiyor -> uzak serviste HER KLIPTE patlardi.
-        # Bu yuzden uzak API aktifken kare yolu KULLANILMAZ, kareler mp4'e kodlanip
-        # video olarak gonderilir. Yerelde davranis DEGISMEZ (K2).
+        # D41/D49 — UZAK SERVISTE VIDEO YOLU ZORUNLU.
+        # Servis genelinde bir zamanlar en fazla 2 görüntü kabul edilse de sabit `vlm`
+        # aliası 0 image kabul ediyor. Eski `len(frames)>2` koşulu yüzünden 1-2 kareli
+        # kısa klipler image-path'e düşüp HTTP 400 veriyordu. Uzak profilde kare sayısı
+        # ne olursa olsun video gönderilir; tek kare iki kez yazılarak geçerli MP4 olur.
+        # Yerelde davranis DEGISMEZ (K2).
         _zorunlu_video = False
         try:
-            _zorunlu_video = settings.uzak_api_mi and len(frames) > 2
+            _zorunlu_video = settings.uzak_api_mi and bool(frames)
         except Exception:
             pass
+        if _zorunlu_video and len(frames) == 1:
+            frames = (frames[0], frames[0])
         if (as_video or _zorunlu_video) and len(frames) >= 2:
             try:
                 mp4 = _frames_to_mp4(frames)
@@ -1033,7 +1035,9 @@ class _VideoOturumu:
 
     def sor(self, soru: str, guided_choice: Optional[Sequence[str]] = None,
             temperature: Optional[float] = None, max_tokens: Optional[int] = None,
-            hatirla: bool = True, logprobs: bool = False) -> Optional[str]:
+            hatirla: bool = True, logprobs: bool = False,
+            json_schema: Optional[Dict] = None,
+            schema_name: str = "video_olcumu") -> Optional[str]:
         """Ayni video uzerine bir soru. Hata olursa None (K3 fail-open).
 
         hatirla=True: cevap konusma gecmisine eklenir (sonraki sorular gorur).
@@ -1047,7 +1051,8 @@ class _VideoOturumu:
         try:
             c = self.istemci.chat(mesajlar, temperature=temperature,
                                   max_tokens=max_tokens, guided_choice=guided_choice,
-                                  logprobs=logprobs)
+                                  logprobs=logprobs, json_schema=json_schema,
+                                  schema_name=schema_name)
             # Slot seviyesinde model DEGISEBILIYOR (oturum.istemci yeniden atanir),
             # bu yuzden dagilim CAGRILAN istemciden okunur, sabit bir alandan degil.
             self.son_logprob = getattr(self.istemci, "son_logprob", None)

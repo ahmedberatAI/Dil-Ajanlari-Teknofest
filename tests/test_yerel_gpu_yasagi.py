@@ -31,8 +31,8 @@ try:
     settings.yerel_gpu_izni = True
     c("ACIK izin yasagi kaldirir", settings.yerel_gpu_yasak is False)
     settings.yerel_gpu_izni = False
-    settings.api_base_url = ""
-    c("YEREL kosumda yasak KAPALI (K2: eski davranis)",
+    settings.api_base_url = "http://127.0.0.1:8000/v1"
+    c("ACIK localhost kosumunda yasak KAPALI",
       settings.yerel_gpu_yasak is False)
 finally:
     settings.yerel_gpu_izni, settings.api_base_url = _eski

@@ -148,8 +148,11 @@ def test_a_config() -> None:
 def test_b_regression_real_path() -> None:
     print("B — REGRESYON: mock KAPALIYKEN gercek kod yolu degismedi")
     prev = settings.mock_mode
+    prev_base = settings.api_base_url
     settings.mock_mode = False
     try:
+        # Yerel profil image-path davranışını korur.
+        settings.api_base_url = "http://127.0.0.1:8000/v1"
         c = llm_client.VLMClient()
         fake = _FakeOpenAI()
         c.client = fake
@@ -164,8 +167,22 @@ def test_b_regression_real_path() -> None:
               "mock KAPALI: kareler base64 image_url olarak GERCEKTEN gonderildi")
         check(c.health_check() is True and len(fake.calls) == 3,
               "mock KAPALI: health_check() models.list() cagirdi")
+
+        # Özel API'de `vlm` aliası image kabul etmez. Tek kare dahi iki kareli
+        # geçerli MP4'e çevrilmeli; aksi hâlde kısa klipler HTTP 400 ile düşer.
+        settings.api_base_url = "https://evren-llmapi.ssyz.org.tr/v1"
+        c_remote = llm_client.VLMClient()
+        fake_remote = _FakeOpenAI()
+        c_remote.client = fake_remote
+        out_remote = c_remote.analyze_frames([("00:00", _jpeg())], "talimat")
+        remote_content = fake_remote.calls[-1]["messages"][-1]["content"]
+        check(out_remote == "GERCEK-YOL-YANITI"
+              and any(p.get("type") == "video_url" for p in remote_content)
+              and not any(p.get("type") == "image_url" for p in remote_content),
+              "uzak API: tek kare image degil, gecerli video olarak gonderildi")
     finally:
         settings.mock_mode = prev
+        settings.api_base_url = prev_base
 
     with _MockOn():
         c2 = llm_client.VLMClient()

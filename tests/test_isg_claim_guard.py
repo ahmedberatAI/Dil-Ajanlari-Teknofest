@@ -47,14 +47,40 @@ print("=== IDDIA AILELERI ===")
 for text, family in (
     ("Makineden yoğun duman yükseliyor", "yangın/duman"),
     ("Zeminde hareketsiz yaralı kişi var", "düşme/yaralı kişi"),
+    ("Kişi panikle koşup dengesini kaybetti", "olağandışı kişi hareketi"),
     ("İki çalışan kavga ediyor", "şiddet/silah"),
     ("Forklift devrildi", "çarpışma/devrilme"),
     ("Yetkisiz kişi kısıtlı bölgeye girdi", "yetkisiz giriş/müdahale"),
     ("İşçide KKD eksikliği var", "KKD eksikliği"),
+    ("İşçi askıda yük altında düşme bölgesinde", "askıda yük/düşme bölgesi"),
 ):
     check(f"{family}: yakalanir", family in G._claim_families(text))
 check("yaya yolu ihlali yetkisiz-erisim sayilmaz",
       "yetkisiz giriş/müdahale" not in G._claim_families("Yaya yolu ihlali"))
+check("onem etiketi Dusuk, dusme iddiasi sayilmaz",
+      "düşme/yaralı kişi" not in G._claim_families("Önem derecesi: Düşük"))
+check("dusunmek, dusme iddiasi sayilmaz",
+      "düşme/yaralı kişi" not in G._claim_families("Kişi ne yapacağını düşünüyor"))
+
+print("\n=== GENISLETILMIS FIZIKSEL AILELER BAYRAKLI ===")
+old_decomp = G.settings.atomic_claim_decomposition
+old_extended = G.settings.atomic_extended_families
+try:
+    G.settings.atomic_claim_decomposition = False
+    G.settings.atomic_extended_families = False
+    check("bayrak kapaliyken yeni yük ailesi davranışı değiştirmez",
+          "kontrolsüz yük/çökme" not in G._claim_families("Raf devrilerek yere düştü"))
+    G.settings.atomic_claim_decomposition = True
+    G.settings.atomic_extended_families = True
+    check("kontrolsüz yük/çökme ayrı aile olarak yakalanır",
+          "kontrolsüz yük/çökme" in G._claim_families("Raf devrilerek yere düştü"))
+    check("yük devrilmesi açık çarpışma yoksa çarpışma atomu istemez",
+          "çarpışma/devrilme" not in G._claim_families("Ağır yük devrilerek yere düştü"))
+    check("makineye sıkışma ayrı aile olarak yakalanır",
+          "makineye sıkışma/ezilme" in G._claim_families("İşçinin giysisi makineye takılıp sıkıştı"))
+finally:
+    G.settings.atomic_claim_decomposition = old_decomp
+    G.settings.atomic_extended_families = old_extended
 
 
 print("\n=== SIDDDETTEN BAGIMSIZ FAIL-CLOSED GORSEL KAPI ===")
@@ -68,16 +94,163 @@ events = [
 ]
 verifier = _Verifier(["HAYIR. Gri platform duman değildir.", RuntimeError("servis")])
 old_claim = G.settings.claim_guard
+old_policy = G.settings.narrative_event_policy
+old_atomic = G.settings.atomic_claim_guard
 try:
     G.settings.claim_guard = True
+    G.settings.atomic_claim_guard = False
+    G.settings.narrative_event_policy = "all"
     kept, note = G._guard_narrative_claims(verifier, _Segment(), events)
 finally:
     G.settings.claim_guard = old_claim
+    G.settings.atomic_claim_guard = old_atomic
+    G.settings.narrative_event_policy = old_policy
 check("HAYIR denilen Dusuk duman iddiasi tamamen silinir", events[0] not in kept)
 check("dogrulama hatasi fail-closed: yarali iddiasi silinir", events[1] not in kept)
 check("somut alarm iddiasi olmayan rutin olay korunur", kept == [events[2]])
 check("yalniz iki somut iddia icin iki cagri", verifier.calls == 2)
 check("redler karar izine acikca yazilir", bool(note and "2 desteklenmeyen" in note))
+
+
+print("\n=== ISG-ODAKLI SERBEST ANLATI POLITIKASI ===")
+policy_events = [
+    Event(time="00:01", event="Raf arkasında kırmızı bir nesne anlık belirdi",
+          severity=Severity.ORTA, category=EventCategory.ANOMALI),
+    Event(time="00:02", event="Personel aceleci hareket edip dengesini kaybetti",
+          severity=Severity.ORTA, category=EventCategory.ANOMALI),
+    Event(time="00:03", event="Forklift rafa çarparak rafı devirdi",
+          severity=Severity.YUKSEK, category=EventCategory.KAZA),
+]
+policy_verifier = _Verifier(["EVET. Açık temas ve devrilme görülüyor."])
+old_claim = G.settings.claim_guard
+old_policy = G.settings.narrative_event_policy
+old_atomic = G.settings.atomic_claim_guard
+try:
+    G.settings.claim_guard = True
+    G.settings.atomic_claim_guard = False
+    G.settings.narrative_event_policy = "isg_grounded"
+    policy_kept, policy_note = G._guard_narrative_claims(
+        policy_verifier, _Segment(), policy_events)
+finally:
+    G.settings.claim_guard = old_claim
+    G.settings.atomic_claim_guard = old_atomic
+    G.settings.narrative_event_policy = old_policy
+check("ailesiz görsel değişim alarm değildir", policy_events[0] not in policy_kept)
+check("tek başına muğlak kişi hareketi alarm değildir", policy_events[1] not in policy_kept)
+check("doğrulanmış fiziksel çarpışma korunur", policy_kept == [policy_events[2]])
+check("politika yalnız doğrulanabilir fiziksel aile için VLM çağırır",
+      policy_verifier.calls == 1)
+check("politika redleri karar izine yazılır",
+      bool(policy_note and "2 desteklenmeyen" in policy_note))
+
+print("\n=== KKD YALNIZ ACIK TESIS BEYANIYLA OLAYDIR ===")
+kkd_event = Event(time="00:06", event="Personelin güvenlik baretini takmaması",
+                  severity=Severity.ORTA, category=EventCategory.GUVENLIK)
+old_claim = G.settings.claim_guard
+old_atomic = G.settings.atomic_claim_guard
+old_policy = G.settings.narrative_event_policy
+old_rules = G.settings.facility_rules
+old_facility_policy = G.settings.facility_policy
+old_ppe = G.settings.ppe_detection
+old_kits = G.settings.ppe_kits
+try:
+    G.settings.claim_guard = True
+    G.settings.atomic_claim_guard = False
+    G.settings.narrative_event_policy = "isg_grounded"
+    G.settings.facility_rules = ""
+    G.settings.facility_policy = ""
+    G.settings.ppe_detection = False
+    G.settings.ppe_kits = "baret,yelek"
+    no_policy_v = _Verifier([])
+    no_policy_kept, no_policy_note = G._guard_narrative_claims(
+        no_policy_v, _Segment(), [kkd_event])
+    check("varsayılan ppe_kits tek başına KKD politikası değildir",
+          not no_policy_kept and no_policy_v.calls == 0)
+    check("KKD beyan yokluğu karar izine yazılır",
+          bool(no_policy_note and "KKD_BEYANI_YOK" in no_policy_note))
+
+    G.settings.facility_rules = "Üretim alanında baret zorunludur"
+    declared_v = _Verifier(["EVET. Baret açıkça eksik."])
+    declared_kept, _ = G._guard_narrative_claims(
+        declared_v, _Segment(), [kkd_event])
+    check("açık baret zorunluluğu ve görsel destek olayı korur",
+          declared_kept == [kkd_event] and declared_v.calls == 1)
+
+    G.settings.facility_rules = "Bu alanda baret zorunlu değildir"
+    negative_v = _Verifier([])
+    negative_kept, _ = G._guard_narrative_claims(
+        negative_v, _Segment(), [kkd_event])
+    check("olumsuz kural baret zorunluluğu sayılmaz",
+          not negative_kept and negative_v.calls == 0)
+
+    G.settings.facility_rules = "Baret zorunludur"
+    mixed = Event(time="00:07", event="Baret ve koruyucu eldiven eksik",
+                  severity=Severity.ORTA, category=EventCategory.GUVENLIK)
+    mixed_v = _Verifier([])
+    mixed_kept, _ = G._guard_narrative_claims(mixed_v, _Segment(), [mixed])
+    check("spekte olmayan eldiven iddiası birleşik KKD olayından sızmaz",
+          not mixed_kept and mixed_v.calls == 0)
+finally:
+    G.settings.claim_guard = old_claim
+    G.settings.atomic_claim_guard = old_atomic
+    G.settings.narrative_event_policy = old_policy
+    G.settings.facility_rules = old_rules
+    G.settings.facility_policy = old_facility_policy
+    G.settings.ppe_detection = old_ppe
+    G.settings.ppe_kits = old_kits
+
+print("\n=== ATOMIK KAPIDA YARDIMCI HAREKET AILESI ANA OLAYI VETO ETMEZ ===")
+karma = Event(time="00:04",
+              event="Forklift rafa çarptı, yakındaki kişi ani kaçınma hareketi yaptı",
+              severity=Severity.KRITIK, category=EventCategory.KAZA)
+atomik_verifier = _Verifier(["IKI_AYRI_VARLIK", "DOGRUDAN_TEMAS_VE_SONUC"])
+old_claim = G.settings.claim_guard
+old_policy = G.settings.narrative_event_policy
+old_atomic = G.settings.atomic_claim_guard
+try:
+    G.settings.claim_guard = True
+    G.settings.atomic_claim_guard = True
+    G.settings.narrative_event_policy = "isg_grounded"
+    atomik_kept, _atomik_note = G._guard_narrative_claims(
+        atomik_verifier, _Segment(), [karma])
+finally:
+    G.settings.claim_guard = old_claim
+    G.settings.atomic_claim_guard = old_atomic
+    G.settings.narrative_event_policy = old_policy
+check("doğrulanmış çarpışma yardımcı kaçınma ifadesine rağmen korunur",
+      atomik_kept == [karma])
+check("yalnız çarpışmanın iki fiziksel atomu sorulur", atomik_verifier.calls == 2)
+
+print("\n=== KARMA IDDIADA DESTEKLI ATOM KORUNUR ===")
+partial = Event(time="00:05",
+                event="Sürücü araçtan yere düştü ve araç duvara çarptı",
+                severity=Severity.KRITIK, category=EventCategory.KAZA)
+# düşme SUPPORTED; çarpışma REFUTED
+partial_verifier = _Verifier([
+    "KISI_VAR", "DUSME_GECISI",
+    "AYRI_HEDEF_YOK", "GORUNMUYOR",
+])
+old_claim = G.settings.claim_guard
+old_policy = G.settings.narrative_event_policy
+old_atomic = G.settings.atomic_claim_guard
+old_decomp = G.settings.atomic_claim_decomposition
+try:
+    G.settings.claim_guard = True
+    G.settings.atomic_claim_guard = True
+    G.settings.atomic_claim_decomposition = True
+    G.settings.narrative_event_policy = "isg_grounded"
+    partial_kept, partial_note = G._guard_narrative_claims(
+        partial_verifier, _Segment(), [partial])
+finally:
+    G.settings.claim_guard = old_claim
+    G.settings.atomic_claim_guard = old_atomic
+    G.settings.atomic_claim_decomposition = old_decomp
+    G.settings.narrative_event_policy = old_policy
+check("reddedilen çarpışma nesri korunmaz",
+      len(partial_kept) == 1 and "çarpışma" not in partial_kept[0].event.lower())
+check("desteklenen düşme sabit şablonla korunur",
+      len(partial_kept) == 1 and "Kişi düşmesi" in partial_kept[0].event)
+check("kısmi karar izde görünür", bool(partial_note and "atomik-kısmi" in partial_note))
 
 
 print("\n=== OZET + RISK + AKSIYON KANIT SINIRI ===")
@@ -140,5 +313,5 @@ check("risk dogrulanmis en yuksek olay onemini asamaz",
 check("aksiyon onceligi olay tavanini asamaz",
       one["actions"] and one["actions"][0].priority == Severity.DUSUK)
 
-print(f"\ngecen={18 - len(fails)} kalan={len(fails)}")
+print(f"\nkalan={len(fails)}")
 raise SystemExit(1 if fails else 0)

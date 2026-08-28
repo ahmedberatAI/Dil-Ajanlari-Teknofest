@@ -15,7 +15,8 @@ buraya bir satir eklenmelidir.
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from dilajan.agent.graph import _dedupe_events, _isg_tekille
+from dilajan.agent.graph import (_dedupe_events, _isg_anlati_golgele,
+                                 _isg_tekille)
 from dilajan.schema import Event, EventCategory, Severity
 
 g = k = 0
@@ -95,13 +96,52 @@ c("_isg_tekille ISG'siz listeyi BIREBIR dondurur",
   [x.event for x in _isg_tekille(list(duz))] == [x.event for x in duz])
 
 print()
-print("=== _isg_tekille: AYNI KOD TEKRAR ETMEZ ===")
+print("=== _isg_tekille: BITISIK TEKRAR BIRLESIR, YENI OLAY KORUNUR ===")
 r7 = _isg_tekille([isg("00:00", METIN), anlati, isg("00:20", METIN)])
-c("ayni kod bir kez kalir",
-  sum(1 for x in r7 if getattr(x, "isg_kod", None) == "Unauthorized_Intervention") == 1)
-c("anlati olayi silinmedi", len(r7) == 2)
+c("20 saniye sonra yeniden olusan ayni kod korunur",
+  sum(1 for x in r7 if getattr(x, "isg_kod", None) == "Unauthorized_Intervention") == 2)
+c("anlati olayi silinmedi", len(r7) == 3)
 c("EN ERKEN zaman korunur",
   next(x for x in r7 if getattr(x, "isg_kod", None)).time == "00:00")
+r7b = _isg_tekille([isg("00:00", METIN), anlati, isg("00:05", METIN)])
+c("bitisik iki segment tek surekli olaya iner",
+  sum(1 for x in r7b if getattr(x, "isg_kod", None) == "Unauthorized_Intervention") == 1)
+
+print()
+print("=== YAPILANDIRILMIS ISG, AYNI SERBEST ANLATI KOPYASINI GOLGELER ===")
+near = isg("00:00", "Forklift ile kisi arasinda ramak kala",
+           kod="Forklift_Human_NearMiss", slot="depo_forklift_kisi_tehlike",
+           deger="VAR", kat=EventCategory.KAZA)
+near_kopya = Event(
+    time="00:01",
+    event="Personel ile palet kaldiricisi arasinda carpisma riski ve ani kacis hareketi",
+    severity=Severity.KRITIK, category=EventCategory.KAZA)
+gercek_carpisma = Event(
+    time="00:02", event="Forklift rafa carpti ve raf devrildi",
+    severity=Severity.KRITIK, category=EventCategory.KAZA)
+r8, silinen = _isg_anlati_golgele([near, near_kopya, gercek_carpisma])
+c("near-miss serbest anlati kopyasi silindi", near_kopya.event in silinen)
+c("yapisal near-miss korundu", near in r8)
+c("ayni anda gercek ayri carpisma olayi korunur", gercek_carpisma in r8)
+r9, silinen9 = _isg_anlati_golgele([near, near_kopya], etkin=False)
+c("politika kapaliyken liste BIREBIR korunur",
+  r9 == [near, near_kopya] and silinen9 == [])
+
+print()
+print("=== KKD VE ASKIDA YUK YAPISAL OLAYLARI DA ANLATI KOPYASINI GOLGELER ===")
+ppe = Event(time="00:10", event="Baret eksikliği", severity=Severity.YUKSEK,
+            category=EventCategory.GUVENLIK).model_copy(update={"ppe_src": True})
+ppe_nesir = Event(time="00:11", event="Çalışanda KKD ve baret eksikliği var",
+                  severity=Severity.KRITIK, category=EventCategory.GUVENLIK)
+askida = isg("00:20", "Askıda yük düşme bölgesi ihlali",
+             kod="Worker_Under_Suspended_Load", slot="depo_askida_yuk_kisi_iliskisi",
+             deger="VAR", kat=EventCategory.GUVENLIK)
+askida_nesir = Event(time="00:21", event="İşçi asılı yük altında ve düşme bölgesinde",
+                     severity=Severity.KRITIK, category=EventCategory.GUVENLIK)
+r10, silinen10 = _isg_anlati_golgele([ppe, ppe_nesir, askida, askida_nesir])
+c("KKD serbest anlatı kopyası silindi", ppe_nesir.event in silinen10)
+c("askıda yük serbest anlatı kopyası silindi", askida_nesir.event in silinen10)
+c("iki yapısal olay korundu", ppe in r10 and askida in r10)
 
 print()
 print(f"gecen={g}  kalan={k}")

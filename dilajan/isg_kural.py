@@ -40,7 +40,7 @@ class Kural:
                  severity: Severity = Severity.YUKSEK,
                  on_slot: str = "", on_asgari: int = 1,
                  on_azami: int = 10 ** 9, on_bayrak_alani: str = "",
-                 etkin_bayrak_alani: str = ""):
+                 etkin_bayrak_alani: str = "", on_etiket: str = ""):
         self.kod = kod              # ISG sinif kodu (etiket metrigi bunu okur)
         self.slot = slot
         self.sablon = sablon        # Event.event metni — MODEL NESRI DEGIL
@@ -51,6 +51,9 @@ class Kural:
         self.on_slot = on_slot
         self.on_asgari = on_asgari
         self.on_azami = on_azami
+        # Sayisal ON kosulun etiket karsiligi. Bosken eski sayisal davranis
+        # birebir korunur; doluyken slotun tam etiketi istenir (or. VAR).
+        self.on_etiket = on_etiket
         # Bos degilse: ayardaki bu bayrak False iken ON KOSUL ATLANIR.
         self.on_bayrak_alani = on_bayrak_alani
         # Kuralin kendisini tesis beyanina baglar. Ornek: yesil yelek ancak
@@ -82,6 +85,8 @@ class Kural:
         v = kayit.al(self.on_slot)
         if v is None:
             return False            # olculemedi -> IDDIA ETME
+        if self.on_etiket:
+            return str(v).strip().upper() == str(self.on_etiket).strip().upper()
         try:
             n = int(v)
         except (TypeError, ValueError):
@@ -181,6 +186,55 @@ class EtiketKurali(Kural):
 #       olcum onu kacirma sayiyordu.
 # Kod yorumlari ASCII kalir (depo kurali); KULLANICIYA GIDEN metin Turkcedir.
 KURALLAR: List[Kural] = [
+    # Genel endustriyel olaylar: kapali slot + sabit olay adi. Sabit ROI, kamera
+    # imzasi veya tesise ozgu sayisal esik kullanmazlar; etkinlestirme
+    # `isg_slotlari`nda ilgili slot/kodun acikca secilmesiyle olur.
+    EtiketKurali(
+        kod="Industrial_Visible_Plume",
+        slot="depo_gorunur_yangin",
+        # Bu yalniz GENIS ADAY olayidir. duman_kanit iki bagimsiz kanalla bunu
+        # dogrular/curutur ve ayri akut kapida gerekirse yangina yukseltir.
+        sablon=("Görünür duman/plüm emisyonu adayı: sabit bir fiziksel kaynaktan "
+                "çıkıp zamanla biçim değiştiren, yükselen veya yayılan yumuşak "
+                "sınırlı oluşum; madde türü ve acil durum statüsü bu gözlemle "
+                "tek başına kesinleştirilmedi"),
+        ihlal_degeri="VAR",
+        kategori=EventCategory.ANOMALI,
+        severity=Severity.ORTA,
+    ),
+    EtiketKurali(
+        kod="Forklift_Shelf_Collision",
+        slot="depo_forklift_raf_carpisma",
+        sablon=("Forklift ile ayrı depo ekipmanı arasında doğrudan fiziksel "
+                "etkileşim: araç hedefe ulaştı ve hedefi itti, sürükledi, eğdi "
+                "veya görünür sınırları temas anında birleşti"),
+        ihlal_degeri="VAR",
+        # IKI BAGIMSIZ API OLCUMU AYNI FIZIKSEL ILISKIYI desteklemeli.
+        # Oneri VAR + dogrulama YOK/GORUNMUYOR => INSUFFICIENT, alarm YOK.
+        on_slot="depo_forklift_carpisma_dogrulama", on_etiket="VAR",
+        kategori=EventCategory.KAZA,
+        severity=Severity.KRITIK,
+    ),
+    EtiketKurali(
+        kod="Forklift_Human_NearMiss",
+        slot="depo_forklift_kisi_tehlike",
+        sablon=("Forklift ile kişi arasında ramak kala: hareketli araç tehlikeli "
+                "yakınlaşma, temas veya ani kaçınma hareketi oluşturdu"),
+        ihlal_degeri="VAR",
+        on_slot="depo_hareketli_forklift", on_etiket="VAR",
+        kategori=EventCategory.KAZA,
+        severity=Severity.YUKSEK,
+    ),
+    EtiketKurali(
+        kod="Worker_Under_Suspended_Load",
+        slot="depo_askida_yuk_kisi_iliskisi",
+        sablon=("Askıda yük düşme bölgesi ihlali: çalışan, havada asılı yükün "
+                "düşme veya salınım bölgesinde en az 1 saniye kaldı"),
+        ihlal_degeri="VAR",
+        on_slot="depo_askida_yuk", on_etiket="VAR",
+        kategori=EventCategory.GUVENLIK,
+        severity=Severity.KRITIK,
+    ),
     EsikKurali(
         kod="Carrying_Overload_with_Forklift",
         slot="catal_kasa_sayisi",
@@ -266,11 +320,19 @@ def olaylari_uret(kayit, ayar, zaman: str = "00:00") -> List[Event]:
         s = k.degerlendir(kayit, ayar)
         if not s:
             continue
-        out.append(Event(
+        event = Event(
             time=zaman, event=s["metin"], severity=s["severity"],
             category=s["kategori"],
         ).model_copy(update={"isg_kod": s["kod"], "isg_slot": s["slot"],
-                             "isg_deger": s["deger"]}))
+                             "isg_deger": s["deger"]})
+        if s["kod"] == "Industrial_Visible_Plume":
+            # SEMA-DISI operasyon isaretleri: olay operatora gorunur fakat
+            # akut kanit olmadan reexamine/persistence/dispatch ile yukseltilemez.
+            event = event.model_copy(update={
+                "smoke_observation_src": True,
+                "dispatch_eligible": False,
+            })
+        out.append(event)
     return out
 
 

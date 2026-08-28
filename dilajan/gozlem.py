@@ -85,7 +85,8 @@ class Slot:
                  aciklama: str = "", roi_alani: str = "",
                  kapsam: str = "segment",
                  dislanan_gorus_alani: str = "", gorus_esik_alani: str = "",
-                 fps_alani: str = ""):
+                 fps_alani: str = "", tesis_kilidi: bool = True,
+                 max_side: int = 1280):
         self.ad = ad
         self.soru = soru
         self.secenekler = list(secenekler)
@@ -131,6 +132,15 @@ class Slot:
         # (pano +0,960 · forklift +0,881, normalize spekte olculdu).
         # Bos ise genel `kodlama_fps` gecerlidir.
         self.fps_alani = fps_alani
+        # Eski pano/yelek/yaya/kasa slotlari TEK bir kameraya kalibre edildi ve
+        # tesis imzasi olmadan alan disinda gurultu uretiyor. Genel depo olay
+        # slotlari ise sabit ROI/esik kullanmaz; eski tesis imzasina baglanirlarsa
+        # yeni depoda HIC SORULMAZLAR. Bu bayrak iki kapsamı yapisal ayirir.
+        self.tesis_kilidi = bool(tesis_kilidi)
+        # Video oturumunun uzun kenarı. Eski tesis slotlarında ölçülmüş 1280
+        # korunur. Genel depo olaylarında ince duman/uzak kişi/temas 320-768
+        # temas sayfalarında kaybolduğu için kaynak 1080p korunur.
+        self.max_side = int(max_side)
 
     def __repr__(self) -> str:      # pragma: no cover
         return f"<Slot {self.ad} -> {self.gorev}>"
@@ -153,6 +163,42 @@ def _uclu(c: str) -> Optional[str]:
     c = (c or "").strip().upper()
     if c in ("VAR", "YOK"):
         return c
+    return None
+
+
+def _carpisma_dogrulama(c: str) -> Optional[str]:
+    """Anlamli fiziksel etiketleri kural motorunun VAR/YOK duzlemine esle.
+
+    OLCULDU (ayni klip, ayni model, ayni video): soyut VAR/YOK secenekleri
+    dogrudan temasi YOK'a cevirdi; fiziksel eylemi adlandiran kapali etiketler
+    pozitif/negatif cifti ayirdi. Sabit sozluk disi yanit olculemedi sayilir.
+    """
+    c = (c or "").strip().upper()
+    if c == "DOGRUDAN_ETKILESIM":
+        return "VAR"
+    if c in ("YANINDAN_GECIS", "ARAC_YOK"):
+        return "YOK"
+    return None
+
+
+def _askida_yuk(c: str) -> Optional[str]:
+    """Askida-yuk varlik etiketini kural motorunun VAR/YOK duzlemine esle."""
+    c = (c or "").strip().upper()
+    if c == "ASILI_YUK":
+        return "VAR"
+    if c in ("YUK_YERDE_VEYA_ARACTA", "YUK_YOK"):
+        return "YOK"
+    return None
+
+
+def _askida_yuk_iliskisi(c: str) -> Optional[str]:
+    """Dusme bolgesi + en az bir saniye bilesik iliskisini cozer."""
+    c = (c or "").strip().upper()
+    if c == "DUSME_BOLGESINDE_1S":
+        return "VAR"
+    if c in ("YALNIZ_YAKIN", "KISA_GECIS", "FARKLI_DERINLIK_VEYA_ENGEL",
+             "ASILI_YUK_YOK", "KISI_YOK"):
+        return "YOK"
     return None
 
 
@@ -289,10 +335,172 @@ SLOT_YAYA_ZEMIN = Slot(
         "On kayit: docs/on_kayit_yaya_zemin_2026-08-25.md"),
 )
 
+
+# ---------------------------------------------------------------------------
+# GENEL DEPO OLAY SLOTLARI — 1280p ozgun video + kapali cevap uzayi
+# ---------------------------------------------------------------------------
+# Bunlar eski tesise ait kasa/pano/yelek/yaya esikleri DEGILDIR. Yalnizca
+# goruntude dogrudan fiziksel kaniti olan uc olay ailesini olcer. Serbest
+# betimleme -> olay cikarimi -> sozcuk eslestirme zincirini atlar; model yalniz
+# VAR/YOK slotunu doldurur, olay adi asagidaki kural motorunda sabittir.
+SLOT_DEPO_YANGIN = Slot(
+    ad="depo_gorunur_yangin",
+    # Alan adi geriye uyumluluk icin korunur; soru artik DEPO/YANGIN varsaymaz.
+    # Renk tek basina kanit degildir: Project RISE'ta gercek endustriyel duman
+    # beyaz da olabilir. Bu genis aday olcumudur; nihai plum ve akutluk hukmu
+    # duman_kanit.py'deki iki bagimsiz API kanaliyla verilir.
+    soru=("Videoyu ilk andan son ana karşılaştır. Bina, baca, boru, makine, "
+          "havalandırma veya zemin gibi aynı fiziksel noktadan çıkıp sınırları "
+          "yumuşak biçimde şekil değiştiren, yükselen ya da yayılan görünür bir "
+          "plüm/bulutumsu oluşum var mı? Renk tek başına karar değildir; beyaz "
+          "endüstriyel emisyon da plüm olabilir. Böyle kaynaklı ve zamansal "
+          "oluşum varsa VAR; yalnız atmosferik bulut/sis, tek kısa toz-buhar "
+          "pufu, sabit yüzey/parlaklık/gölge veya oluşum yoksa YOK; ayırt "
+          "edilemiyorsa GORUNMUYOR. "
+          "Sonuçta yalnız VAR, YOK veya GORUNMUYOR yaz."),
+    secenekler=["VAR", "YOK", "GORUNMUYOR"],
+    gorev="algi",
+    coz=_uclu,
+    kapsam="segment",
+    tesis_kilidi=False,
+    max_side=1920,
+    aciklama=("Genel endüstriyel plüm/duman adayı; tek başına yangın, Kritik "
+              "veya sevk hükmü değildir."),
+)
+
+SLOT_DEPO_HAREKETLI_FORKLIFT = Slot(
+    ad="depo_hareketli_forklift",
+    soru=("Videoda kendi tekerlekleri üzerinde yer değiştiren gerçek bir forklift "
+          "veya endüstriyel araç açıkça görünüyor mu? Raf dikmesi, raf kirişi, "
+          "kutu, sabit makine parçası, gölge veya kamera hareketi araç değildir. "
+          "Hareketli araç açıkça varsa VAR; yoksa YOK; araç olup olmadığı ayırt "
+          "edilemiyorsa GORUNMUYOR yaz."),
+    secenekler=["VAR", "YOK", "GORUNMUYOR"],
+    gorev="algi",
+    coz=_uclu,
+    kapsam="segment",
+    tesis_kilidi=False,
+    max_side=1920,
+    aciklama=("Forklift ilişkisi kurallarının nesne-varlık kapısı. Normal kutu "
+              "görüşündeki raf dikmesini forklift sanan ilişki FP'sini keser."),
+)
+
+SLOT_DEPO_FORKLIFT_CARPISMA_DOGRULAMA = Slot(
+    ad="depo_forklift_carpisma_dogrulama",
+    # OLCULMUS METIN: benchmark probu da bu Slot.soru degerini dogrudan okur.
+    # Ayri kopya tutulmaz; prob/uretim prompt kaymasi yapisal olarak engellenir.
+    soru=("Videoyu kronolojik izle. Hareketli forklift/endüstriyel aracın sürüş "
+          "yolunun hemen önünde, araçtan ayrı ve başlangıçta serbest duran bir raf "
+          "parçası, tekerlekli raf/araba, bariyer, sehpa, istif veya depo ekipmanı var "
+          "mı? Araç mesafeyi kapatıp bu ayrı hedefin sınırına fiziksel olarak ulaşıyor "
+          "ve hedefi iterek/sürükleyerek/eğerek ilerliyor ya da temas sırasında hedef "
+          "aracın arkasında örtülüyorsa DOGRUDAN_ETKILESIM yaz. Hedef yalnız aracın "
+          "yanında veya arka planda kalıyor, araç koridordan yanından geçiyor ya da "
+          "yalnız perspektif örtüşmesi varsa YANINDAN_GECIS; hareketli araç yoksa "
+          "ARAC_YOK; temas anı ayırt edilemiyorsa GORUNMUYOR yaz. Çatallarda baştan "
+          "beri taşınan yük hedef değildir. Hedefin sadece sonradan görünmemesi tek "
+          "başına temas kanıtı değildir. Yalnız etiketi yaz."),
+    secenekler=["DOGRUDAN_ETKILESIM", "YANINDAN_GECIS", "ARAC_YOK", "GORUNMUYOR"],
+    # Öneri slotundan farklı sabit model rolü: aynı `vlm` kararını iki kez
+    # bağımsız kanıt diye saymayız. Model aliasları değişmez.
+    gorev="olay",
+    coz=_carpisma_dogrulama,
+    kapsam="segment",
+    tesis_kilidi=False,
+    max_side=1920,
+    aciklama=("Çarpışma önerisinden bağımsız doğrudan-etkileşim doğrulaması. "
+              "Öneriyle çelişirse olay üretilmez; kanıt yetersiz sayılır."),
+)
+
+SLOT_DEPO_FORKLIFT_CARPISMA = Slot(
+    ad="depo_forklift_raf_carpisma",
+    soru=("Videoyu kronolojik olarak karşılaştır. Kendi tekerlekleri üzerinde hareket "
+          "eden bir forklift/endüstriyel araç ile başlangıçta sabit duran ve aracın "
+          "taşımadığı bir raf, raf parçası, bariyer, istif veya depo ekipmanı ara. "
+          "Araç bu hedefe ulaştığı anda hedef hemen ardından belirgin biçimde yer "
+          "değiştiriyor, eğiliyor, devriliyor ya da araçla fiziksel sınırları birleşiyorsa "
+          "VAR; araç yalnız yakınından geçiyor ve hedef yerinde kalıyorsa YOK; hareketli "
+          "araç, ayrı hedef veya gerekli an ayırt edilemiyorsa GORUNMUYOR yaz. "
+          "Forkliftin baştan beri çatallarında taşıdığı yük hedef değildir. İnsan "
+          "davranışından veya senaryo varsayımından sonuç çıkarma. Sonuçta yalnız VAR, "
+          "YOK veya GORUNMUYOR yaz."),
+    secenekler=["VAR", "YOK", "GORUNMUYOR"],
+    gorev="algi",
+    coz=_uclu,
+    kapsam="segment",
+    tesis_kilidi=False,
+    max_side=1920,
+    aciklama=("Forklift-raf/yapı temas önerisi; bağımsız doğrudan-etkileşim slotu "
+              "desteklemeden alarma dönüşmez."),
+)
+
+SLOT_DEPO_FORKLIFT_KISI = Slot(
+    ad="depo_forklift_kisi_tehlike",
+    soru=("Önce videonun tamamında hareketli forklift/endüstriyel araç, gerçek kişi, "
+          "aralarındaki en yakın an ve kişinin kaçınma hareketini içinden karşılaştır. "
+          "Araç kişiye temas ediyor, tehlikeli ölçüde yaklaşıyor veya kişiyi ani "
+          "kaçınmaya zorluyorsa VAR; aynı geniş alanda olağan bulunuyor ya da "
+          "uzaktan geçiyorsa YOK; kişi/araç ilişkisi değerlendirilemiyorsa "
+          "GORUNMUYOR. Sonuçta yalnız VAR, YOK veya GORUNMUYOR yaz."),
+    secenekler=["VAR", "YOK", "GORUNMUYOR"],
+    # Bu bir nesne-varlığı değil, fiziksel ilişki/zaman sorusudur.
+    gorev="olay",
+    coz=_uclu,
+    kapsam="segment",
+    tesis_kilidi=False,
+    max_side=1920,
+    aciklama="Araç+kişi+tehlikeli ilişkiyi tek ölçümde ister; salt nesne varlığı yetmez.",
+)
+
+SLOT_DEPO_ASKIDA_YUK = Slot(
+    ad="depo_askida_yuk",
+    soru=("Videoda bir vinç, kanca, sapan, zincir veya halat tarafından taşınan; "
+          "altı zemin ya da taşıyıcı yüzeyle temas etmeyen gerçek bir yük var mı? "
+          "Yük açıkça havada asılıysa ASILI_YUK; yerde, kamyon kasasında, çatallarda "
+          "veya bir yüzey üzerinde destekleniyorsa YUK_YERDE_VEYA_ARACTA; yük yoksa "
+          "YUK_YOK; yükün destek durumu seçilemiyorsa GORUNMUYOR yaz. Vinç bomu, "
+          "kanca ve halat tek başına yük değildir. Yalnız etiketi yaz."),
+    secenekler=["ASILI_YUK", "YUK_YERDE_VEYA_ARACTA", "YUK_YOK", "GORUNMUYOR"],
+    gorev="algi",
+    coz=_askida_yuk,
+    kapsam="segment",
+    tesis_kilidi=False,
+    max_side=1920,
+    aciklama="Yükün gerçekten askıda olduğunu nesne/olgu rolünde ölçen ön kapı.",
+)
+
+SLOT_DEPO_ASKIDA_YUK_KISI = Slot(
+    ad="depo_askida_yuk_kisi_iliskisi",
+    soru=("Videoyu kronolojik izle ve yalnız askıda yük ile çalışan ilişkisini ölç. "
+          "Çalışanın gövdesi veya ayak noktası, yük düşerse ya da salınırsa erişeceği "
+          "düşme bölgesinde kesintisiz en az 1 saniye kalıyorsa DUSME_BOLGESINDE_1S; "
+          "çalışan yalnız yakınında fakat bölgenin dışındaysa YALNIZ_YAKIN; bölgeden "
+          "1 saniyeden kısa geçiyorsa KISA_GECIS; perspektifte örtüşse de farklı "
+          "derinlikte veya fiziksel engel arkasındaysa FARKLI_DERINLIK_VEYA_ENGEL; "
+          "gerçek askıda yük yoksa ASILI_YUK_YOK; kişi yoksa KISI_YOK; ilişki ya da "
+          "süre güvenilir biçimde seçilemiyorsa GORUNMUYOR yaz. Yalnız etiketi yaz."),
+    secenekler=["DUSME_BOLGESINDE_1S", "YALNIZ_YAKIN", "KISA_GECIS",
+                "FARKLI_DERINLIK_VEYA_ENGEL", "ASILI_YUK_YOK", "KISI_YOK",
+                "GORUNMUYOR"],
+    # Fiziksel iliski ve sure, acik-dunya olay rolünün isidir. Böylece varlik
+    # kapisiyla ayni model hatasini iki kez "bagimsiz kanit" diye saymayiz.
+    gorev="olay",
+    coz=_askida_yuk_iliskisi,
+    kapsam="segment",
+    tesis_kilidi=False,
+    max_side=1920,
+    aciklama=("Askıda yük + düşme bölgesi + >=1 saniye ilişkisi; algı rolündeki "
+              "askıda-yük ön kapısıyla deterministik AND yapılır."),
+)
+
 SLOT_KATALOG: Dict[str, Slot] = {
     s.ad: s for s in (SLOT_CATAL_KASA, SLOT_PANO_KOYULUK, SLOT_YELEK,
                       SLOT_MAKINE_KISI, SLOT_YAYA_CIZGI_MESAFE,
-                      SLOT_YAYA_ZEMIN)
+                      SLOT_YAYA_ZEMIN, SLOT_DEPO_YANGIN,
+                      SLOT_DEPO_HAREKETLI_FORKLIFT,
+                      SLOT_DEPO_FORKLIFT_CARPISMA_DOGRULAMA,
+                      SLOT_DEPO_FORKLIFT_CARPISMA, SLOT_DEPO_FORKLIFT_KISI,
+                      SLOT_DEPO_ASKIDA_YUK, SLOT_DEPO_ASKIDA_YUK_KISI)
 }
 
 
@@ -493,6 +701,14 @@ def fps_coz(slot: Slot, ayar):
     return v if v > 0 else 0.0          # 0.0 = "kare hizina DOKUNMA"
 
 
+def max_side_coz(slot: Slot) -> int:
+    """Slot videosunun uzun kenarı; bozuk özel değerde ölçülmüş 1280'e dön."""
+    try:
+        return max(256, int(getattr(slot, "max_side", 1280)))
+    except (TypeError, ValueError):
+        return 1280
+
+
 def gorus_uygun_mu(slot: Slot, ayar, frames) -> bool:
     """Bu slot BU SAHNEDE sorulmali mi? (kamera gorus muhafizi)
 
@@ -506,7 +722,7 @@ def gorus_uygun_mu(slot: Slot, ayar, frames) -> bool:
     # `dislanan_gorus_alani` "bu kamerada SORMA" der; bu ise "yalnizca
     # KALIBRE TESISTE sor" der. Ikisi bagimsizdir.
     ger = getattr(ayar, "isg_gorus_imza", "") or ""
-    if ger.strip():
+    if getattr(slot, "tesis_kilidi", True) and ger.strip():
         try:
             from dilajan.pano import gorus_uyuyor
             esik = float(getattr(ayar, "isg_gorus_esik", 0.708))
@@ -541,9 +757,9 @@ def slotlari_doldur_bolgeli(istemci, slotlar: Sequence[Slot], video_uret,
                             max_tokens: int = 12, frames=None) -> GozlemKaydi:
     """Slotlari ROI'ye GORE GRUPLAYIP doldurur.
 
-    `video_uret(roi_str) -> bytes` her FARKLI ROI icin BIR KEZ cagrilir; ayni
-    ROI'yi paylasan slotlar TEK video oturumunu paylasir. Boylece kirpma
-    destegi eklenirken cagri sayisi ARTMAZ (K4).
+    `video_uret(roi_str, kapsam, fps, max_side) -> bytes` her farklı servis
+    speki için bir kez çağrılır; aynı ROI/zaman/fps/çözünürlük slotları TEK
+    video oturumunu paylaşır.
 
     K3 fail-open: bir ROI grubunun videosu/oturumu kurulamazsa yalnizca O
     GRUP hata kaydeder, digerleri devam eder.
@@ -555,16 +771,27 @@ def slotlari_doldur_bolgeli(istemci, slotlar: Sequence[Slot], video_uret,
         for x in _atlanan:
             kayit.atlanan[x.ad] = "gorus muhafizi: bu kamera bu soru icin gecersiz"
         slotlar = [x for x in slotlar if x not in _atlanan]
-    # GRUPLAMA (ROI, KAPSAM) ikilisine gore: ayni bolgeyi VE ayni zaman
-    # olcegini paylasan slotlar TEK video oturumunu paylasir.
+    # GRUPLAMA (ROI, KAPSAM, FPS, COZUNURLUK): ayni servis spekini paylaşan
+    # slotlar TEK video oturumunu kullanır.
     gruplar: Dict[tuple, List[Slot]] = {}
     for s in slotlar:
         gruplar.setdefault((roi_coz(s, ayar),
                             getattr(s, "kapsam", "segment"),
-                            fps_coz(s, ayar)), []).append(s)
-    for (roi, kapsam, fps), grup in gruplar.items():
+                            fps_coz(s, ayar),
+                            max_side_coz(s)), []).append(s)
+    for (roi, kapsam, fps, max_side), grup in gruplar.items():
         try:
-            oturum = istemci.video_oturumu(video_uret(roi, kapsam, fps), system=system)
+            # Eski çağıranların 3-parametreli üreticisini kırma. Üreticinin
+            # imzasını çağrıdan önce denetlemek, içerideki gerçek TypeError'ı
+            # yanlışlıkla "eski API" sanıp iki kez çalıştırmayı önler.
+            import inspect as _inspect
+            _imza = _inspect.signature(video_uret)
+            _params = list(_imza.parameters.values())
+            _dort = (any(p.kind == p.VAR_POSITIONAL for p in _params)
+                     or len(_params) >= 4)
+            veri = (video_uret(roi, kapsam, fps, max_side) if _dort
+                    else video_uret(roi, kapsam, fps))
+            oturum = istemci.video_oturumu(veri, system=system)
         except Exception as e:
             for s_ in grup:
                 kayit.hatalar[s_.ad] = f"__HATA__ {type(e).__name__}: {e}"

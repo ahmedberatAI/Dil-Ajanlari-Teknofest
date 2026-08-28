@@ -14,7 +14,12 @@ from collections import Counter
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from dilajan.config import Settings, settings  # noqa: E402
+from dilajan.config import (  # noqa: E402
+    FIXED_MODEL_ALIASES,
+    PRIVATE_API_BASE_URL,
+    Settings,
+    settings,
+)
 from dilajan.llm_client import VLMClient  # noqa: E402
 
 FAILS: list[str] = []
@@ -61,6 +66,13 @@ check("toplam tam 6 gorev yonlendirmesi", len(all_calls) == 6, f"gelen={all_call
 
 
 print("\n=== CONFIG: BOS ALIAS K2, DOLU ALIAS GERCEK MODEL ===")
+defaults = Settings(_env_file=None)
+default_roles = ("algi", "sayim", "olay", "yapi", "ozet", "diyalog",
+                 "yonlendirme", "guvenlik", "gomme")
+check("temiz kurulum sabit ozel API'ye gider",
+      defaults.base_url == PRIVATE_API_BASE_URL)
+check("temiz kurulum yalniz sabit uc modeli kullanir",
+      {defaults.gorev_modeli(role) for role in default_roles} <= FIXED_MODEL_ALIASES)
 plain = Settings(
     _env_file=None,
     model_name="base-model",
@@ -94,5 +106,5 @@ finally:
     for name, value in old.items():
         setattr(settings, name, value)
 
-print(f"\ngecen={10 - len(FAILS)}  kalan={len(FAILS)}")
+print(f"\ngecen={12 - len(FAILS)}  kalan={len(FAILS)}")
 raise SystemExit(1 if FAILS else 0)

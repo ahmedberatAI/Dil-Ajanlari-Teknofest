@@ -114,5 +114,27 @@ G.slotlari_doldur_bolgeli(ist5, [G.SLOT_MAKINE_KISI, G.SLOT_YELEK], video_uret, 
 c("ayni kapsam+ROI -> TEK video (K4)", uretilen == [("", "klip")])
 
 print()
+print("=== SLOT COZUNURLUGU (ince duman / uzak temas) ===")
+uretilen4 = []
+def video_uret4(roi, kapsam="segment", fps=None, max_side=1280):
+    uretilen4.append((roi, kapsam, fps, max_side))
+    return f"VIDEO[{roi}|{kapsam}|{fps}|{max_side}]"
+ist6 = SahteIstemci()
+G.slotlari_doldur_bolgeli(
+    ist6,
+    [G.SLOT_DEPO_YANGIN, G.SLOT_DEPO_FORKLIFT_CARPISMA_DOGRULAMA,
+     G.SLOT_DEPO_FORKLIFT_CARPISMA,
+     G.SLOT_DEPO_FORKLIFT_KISI],
+    video_uret4, ay)
+c("dort genel depo slotu 1920 spekinde TEK video paylasir",
+  uretilen4 == [("", "segment", None, 1920)] and len(ist6.acilan) == 1)
+
+uretilen4.clear(); ist7 = SahteIstemci()
+G.slotlari_doldur_bolgeli(
+    ist7, [G.SLOT_CATAL_KASA, G.SLOT_DEPO_YANGIN], video_uret4, ay)
+c("1280 ve 1920 spekleri sessizce ayni oturuma karismaz",
+  sorted(x[3] for x in uretilen4) == [1280, 1920] and len(ist7.acilan) == 2)
+
+print()
 print(f"gecen={g}  kalan={k}")
 sys.exit(1 if k else 0)

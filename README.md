@@ -1,378 +1,501 @@
-# 🎥 DilAjanları — Yerel Video Analiz ve Karar Destek Ajanı
+# DilAjanları — Kanıta Dayalı İSG Video Analiz Ajanı
 
 **TEKNOFEST 2026 · Türkçe Yapay Zekâ Dil Ajanları Yarışması · 3. Senaryo**
 
-Endüstriyel tesisler ve saha operasyonları için, bir videoyu girdi alıp
-**iş sağlığı ve güvenliği (İSG) ihlallerini** tespit eden, multimodal
-(video + metin) bir yapay zekâ ajanı. Sistem
-videodaki olayları **zaman damgasıyla** tespit eder, **Türkçe özet** ve **risk
-değerlendirmesi** üretir, operatöre **aksiyon önerileri** sunar ve uygun **operasyonel
-fonksiyonları dinamik olarak çağırır** — çıktının tamamı yapılandırılmış JSON'dur.
+DilAjanları, endüstriyel videolardan zaman damgalı İş Sağlığı ve Güvenliği
+(İSG) olayları çıkaran, risk ve aksiyon üreten, sonuçlarını Türkçe ve
+yapılandırılmış biçimde sunan çok modelli bir karar destek ajanıdır.
 
-> Yığın: **Qwen3-VL** (görsel-dil) + **Qwen3.5** (dil) · yarışma düzenleyicisinin
-> tahsis ettiği **8×H200 çıkarım servisi** · **LangGraph** (ajan) · **Gradio** (arayüz).
-> Ücretli/kapalı yazılım yok; tüm bileşenler Apache-2.0 uyumlu.
->
-> ⚠️ **Çalışma kipi hakkında:** proje başlangıçta tamamen yerel/offline tasarlandı ve
-> yerel vLLM ile çalışabilir durumda (`.env.yerel`). 2026-08-21'de yarışma
-> düzenleyicisi 8×H200'lük ortak bir çıkarım servisi tahsis etti ve offline şartı
-> kaldırıldı; sevk edilen yapılandırma bu servisi kullanır. **Yerel GPU kullanımı
-> kod düzeyinde yasaklanmıştır** (`config.yerel_cihaz()`), çünkü tahsis edilen
-> kaynak uzak servistir.
->
-> Kararın kendisi **model dışıdır**: İSG hükmünü deterministik bir kural motoru
-> verir, model yalnızca kapalı cevap uzayında ölçüm yapar.
+Bu proje bir VLM'e yalnızca “videoda ne oldu?” diye sorup serbest metin cevabını
+doğru kabul etmez. Görsel iddialar küçük kanıt atomlarına ayrılır; gözlem,
+fiziksel ilişki ve zaman bilgisi ayrı sorularla ölçülür; son hüküm ve operasyonel
+sevk deterministik kapılardan geçer. Ana hedef, İSG kapsamını artırırken
+halüsinasyonların gerçek bir alarm veya müdahale çağrısına dönüşmesini önlemektir.
 
----
+> **Güncel sürüm profili — 28 Ağustos 2026:** Öğrenilmiş çıkarım yalnızca
+> `https://evren-llmapi.ssyz.org.tr/v1` özel API'sinde ve sabit
+> `vlm`, `llm-large`, `llm-fast` model takma adlarıyla yapılır. Model indirme ve
+> yerel öğrenilmiş çıkarım varsayılan olarak kapalıdır. API anahtarı hiçbir zaman
+> repoya yazılmaz.
 
 ## İçindekiler
-- [Özellikler](#özellikler) · [Mimari](#mimari) · [Gereksinimler](#gereksinimler)
-- [Kurulum](#kurulum) · [Çalıştırma](#çalıştırma) · [Çıktı Formatı](#çıktı-formatı)
-- [Veri Seti](#veri-seti) · [Değerlendirme (KPI)](#değerlendirme-kpi) · [**Ölçüm Sınırlarımız**](#ölçüm-sınırlarımız)
-- [Proje Yapısı](#proje-yapısı) · [Karşılaşılan Zorluklar](#karşılaşılan-zorluklar-ve-çözümler)
 
-## Özellikler
-- ⏱️ Zaman damgalı olay tespiti (önem + kategori ile)
-- 📝 Operatör odaklı Türkçe özet
-- ⚠️ Gerekçeli risk değerlendirmesi (Düşük/Orta/Yüksek/Kritik)
-- ✅ Önceliklendirilmiş aksiyon önerileri
-- 🛠️ Mock operasyonel fonksiyonların **dinamik** çağrılması (ajanın araçları)
-- 💬 Analiz hakkında doğal Türkçe sohbet (operatör asistanı)
-- 📊 Yapılandırılmış JSON çıktı + KPI ölçüm çerçevesi
-- 🪖 **KKD (baret) tespiti — deterministik YOLO doğrulayıcı** (opsiyonel, varsayılan kapalı).
-  Dil modelinin ince ikili görsel durumları güvenilir okuyamadığı **ölçüldüğü için**
-  ayrı bir dedektöre verildi; bulunan ihlal operatöre görünür ama varsayılan olarak
-  ekip çağırmaz. → [`docs/kkd_dogrulayici_2026-08-16.md`](docs/kkd_dogrulayici_2026-08-16.md)
+- [Sistem ne üretir?](#sistem-ne-üretir)
+- [Halüsinasyonları nasıl sınırlar?](#halüsinasyonları-nasıl-sınırlar)
+- [Mimari ve üç modelin rolleri](#mimari-ve-üç-modelin-rolleri)
+- [Hızlı kurulum](#hızlı-kurulum)
+- [Kullanım](#kullanım)
+- [Yapılandırma](#yapılandırma)
+- [Benchmark sonuçları](#benchmark-sonuçları)
+- [Test ve doğrulama](#test-ve-doğrulama)
+- [Veri, lisans ve gizlilik](#veri-lisans-ve-gizlilik)
+- [Bilinen sınırlar](#bilinen-sınırlar)
+- [Sorun giderme](#sorun-giderme)
+- [Proje yapısı](#proje-yapısı)
 
-## Mimari
-Ayrıntı için → [`docs/architecture.md`](docs/architecture.md)
+## Sistem ne üretir?
 
+Bir video için sistem şunları üretir:
+
+- zaman damgalı olay listesi;
+- olay başına önem derecesi, kategori ve varsa görüntü bölgesi;
+- Türkçe operasyon özeti;
+- gerekçeli genel risk seviyesi;
+- önceliklendirilmiş aksiyon önerileri;
+- çağrılan operasyonel fonksiyonlar ve ayrıntılı çağrı günlüğü;
+- düğüm düğüm karar izi;
+- isteğe bağlı operatör sorusuna, yalnız analiz kanıtlarına dayalı yanıt;
+- olay tutanağı, kanıt paketi ve vardiya brifingi.
+
+Operasyonel fonksiyonlar bu depoda **simülasyon/mock** niteliğindedir. Gerçek bir
+acil durdurma, sağlık ekibi veya saha otomasyonu entegrasyonu yapılmadan fiziksel
+bir sistemi kontrol etmez.
+
+## Halüsinasyonları nasıl sınırlar?
+
+Ana çalışma yolu şu güvenlik ilkelerine dayanır:
+
+1. **İddia ayrıştırma:** “Yangın var ve bir kişi yaralandı” gibi birleşik bir
+   cümle tek doğru/yanlış kararı olarak kabul edilmez. Yangın, kişi, fiziksel
+   sonuç ve zamansal ilişki ayrı kanıtlanır.
+2. **Kapalı cevap uzayı:** Kanıt soruları serbest nesir yerine sınırlı seçeneklerle
+   yanıtlanır. Belirsiz görüntüde sistemin kaçış/çekimser kalma seçeneği vardır.
+3. **Rol ayrımı:** `vlm` görünür nesne ve belirtileri; `llm-large` ilişki, zaman ve
+   olay mantığını; `llm-fast` yapılandırma ve kontrollü metin üretimini üstlenir.
+4. **Deterministik birleştirme:** Gerekli kanıt atomlarının tamamı desteklenmeden
+   kritik olay tutulmaz. Modelin kendinden emin yazması bu kapıyı aşmaz.
+5. **İSG-odaklı anlatı filtresi:** Ailesiz “şüpheli hareket”, “nesne belirdi” veya
+   sahne türünden türetilen genel anomali iddiaları tek başına alarm olamaz.
+6. **Tesis beyanı kapısı:** KKD, yetki işareti, forklift yük eşiği ve sabit pano
+   ROI'si evrensel gerçekler gibi yorumlanmaz. İhlal üretmek için ilgili tesis
+   kuralı veya kalibrasyon açıkça beyan edilmelidir.
+7. **Sevk ayrımı:** Bir olayın operatöre gösterilmesi ile operasyonel fonksiyon
+   çağırması aynı karar değildir. Sevk daha dar bir kapıdan geçer.
+8. **Hata görünürlüğü:** API hatası veya tamamlanmayan analiz “temiz video” diye
+   sunulmaz; arayüz sonucu eksik olarak işaretler.
+
+Özellikle duman konusunda, görünür plüm/bulanıklık tek başına “yangın” sayılmaz.
+Akut yangın iddiası için görünür kaynak/alev, tutarlı zamansal gelişim veya başka
+zorunlu atomların desteği gerekir. Duman sonrası insan hareketliliği yalnızca
+ikincil bağlamdır; tek başına yangın üretmez.
+
+Deneysel recall artırıcı fallback'ler kodda araştırma amacıyla bulunur ancak
+bağımsız kabul kapılarını geçmedikleri için varsayılan olarak kapalıdır.
+
+## Mimari ve üç modelin rolleri
+
+```mermaid
+flowchart LR
+    V[Video] --> I[ingest<br/>segment ve kare hazırlığı]
+    I --> P[perceive<br/>gözlem + olay adayı + atomik kanıt]
+    P -->|belirsiz olay| X[reexamine<br/>odaklı yeniden inceleme]
+    P -->|doğrudan| G[policy_gate<br/>tesis beyanı ve politika]
+    X --> G
+    G --> R[reason<br/>özet + risk + aksiyon]
+    R --> A[act<br/>dar sevk kapısı]
+    A --> F[finalize<br/>JSON + karar izi]
 ```
-                             ┌──────────────┐
-                             │  reexamine   │  (koşullu — belirsiz "Orta" olay varsa)
-                             └──▲────────┬──┘
-              belirsiz olay var │        │
-                                │        ▼
-Video → [ingest] → [perceive] ──┴──────→ [reason] → [act] → [finalize] → JSON
-        kare/segment  VLM olay              özet/risk   mock       birleştir
-                      tespiti                /aksiyon   fonk.
-```
-LangGraph **6 düğümlü** (ingest · perceive · *reexamine* · reason · act · finalize),
-**koşullu kenarlı** ve hata toleranslı bir durum makinesidir: `perceive` sonrası belirsiz
-olay varsa ajan kendi tespitini yeniden sorgular (döngü muhafızı ile en fazla bir kez).
-Her düğümün dış gövdesi try/except ile sarılıdır; ayrıca segment içi hatalarda fail-open
-davranır. Tüm model çağrıları yerel vLLM sunucusuna gider.
 
-## Gereksinimler
-**Donanım:** NVIDIA GPU (CUDA). Önerilen ≥ 24 GB VRAM (Qwen3-VL-8B-FP8 için; 7B-yedek de sığar).
-Geliştirme ortamı: RTX 5090 Laptop (24 GB, Blackwell), 64 GB RAM, WSL2 + Ubuntu 24.04.
+LangGraph akışı yedi düğümlüdür. `reexamine` yalnız koşul oluştuğunda çalışır;
+diğer durumda akış doğrudan `policy_gate` düğümüne geçer. Her düğüm hata
+yakalayıcıları ve karar iziyle çevrilidir.
 
-**Yazılım:** Linux veya WSL2 (Ubuntu 24.04), Python 3.12, güncel NVIDIA sürücüsü.
+| Model | Ana görev | Karar sınırı |
+|---|---|---|
+| `vlm` | Videodan nötr görsel gözlem; kişi, nesne, görünür belirti ve nitelik | Serbest nesri doğrudan alarm değildir |
+| `llm-large` | Açık dünya olay taraması; fiziksel ilişki, zaman, çarpışma/düşme gibi olay mantığı | Kanıt kapıları ve kural motoru tarafından doğrulanır |
+| `llm-fast` | JSON yapılandırma, kontrollü özet, yönlendirme ve operasyon argümanları | Yeni görsel olgu ekleyemez |
 
-## Kurulum
+Üç model **aynı sistemin farklı aşamalarında birlikte** kullanılır. Her video için
+üçüne de koşulsuz aynı soru gönderilmez; gerekli aşama ve kanıt ailesine göre çağrı
+yapılır. Bu, “üç ayrı benchmark modeli” değil, tek bir üç-modelli boru hattıdır.
 
-> Windows'ta vLLM yereli desteklemediği için **WSL2 + Ubuntu** kullanılır.
+İstek ayarları analiz süresince yalıtılır. Bir videonun tesis kuralı, sohbet
+bağlamı, olayları veya yükleme durumu ikinci videoya taşınmaz. Yeni video
+yüklendiğinde video-kapsamlı durum tamamen sıfırlanır.
+
+## Hızlı kurulum
+
+### Ön koşullar
+
+- Linux veya WSL2 üzerinde Ubuntu 24.04 önerilir;
+- Python 3.12;
+- `ffmpeg`;
+- özel API için geçerli takım anahtarı.
+
+Güncel özel-API profilinde yerel GPU gerekmez ve çalışma zamanında model ağırlığı
+indirilmez. `requirements-api.txt` yalnız istemci, ajan, video işleme ve arayüz
+paketlerini kurar; vLLM, Torch, Transformers veya YOLO içermez.
 
 ```bash
-# 1) (gerekiyorsa) WSL2 + Ubuntu 24.04
-wsl --install -d Ubuntu-24.04
+git clone https://github.com/ahmedberatAI/Dil-Ajanlari-Teknofest.git
+cd Dil-Ajanlari-Teknofest
 
-# 2) Sistem paketleri
-sudo apt update && sudo apt install -y python3-venv python3-pip ffmpeg fonts-dejavu-core
+sudo apt update
+sudo apt install -y python3-venv python3-pip ffmpeg
 
-# 3) Sanal ortam
-python3 -m venv ~/teknofest/.venv
-source ~/teknofest/.venv/bin/activate
-pip install --upgrade pip
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements-api.txt
 
-# 4) PyTorch (Blackwell / RTX 50xx -> CUDA 13.0 tekerlekleri)
-pip install torch==2.11.0 torchvision==0.26.0 torchaudio==2.11.0 \
-    --index-url https://download.pytorch.org/whl/cu130
-
-# 5) Proje bağımlılıkları
-pip install -r requirements.txt
+cp .env.ornek .env
 ```
 
-**Blackwell / karışık-CTK notu:** Bu GPU ailesinde vLLM JIT derlemesi için ek ortam
-değişkenleri gerekir; tümü `dilajan/config.py:apply_cuda_env()` içinde otomatik ayarlanır
-(standart CUDA kurulumlarında zararsız no-op). Manuel kabuk için `env.sh` kullanılabilir.
+Tarihsel yerel geliştirme, eski model-servisleme araçları veya bütün deney
+bağımlılıkları gerçekten gerekiyorsa WSL/Linux üzerinde ayrıca
+`python -m pip install -r requirements.txt` kullanılabilir. Güncel özel-API
+uygulamasını ve InspecSafe koşucularını çalıştırmak için buna gerek yoktur.
 
-## Çalıştırma
+Ardından `.env` içindeki yalnızca örnek anahtarı gerçek takım anahtarıyla
+değiştirin:
+
+```dotenv
+DILAJAN_API_BASE_URL=https://evren-llmapi.ssyz.org.tr/v1
+DILAJAN_API_KEY=sk-evren-teamNN-XXXXXXXX
+```
+
+`.env` Git tarafından yok sayılır. Anahtarı terminal çıktısına, ekran görüntüsüne,
+commit'e veya benchmark raporuna koymayın.
+
+### Profil ve bağlantı kontrolü
+
+Bu komutlar anahtarı yazdırmadan etkin sözleşmeyi ve API erişimini doğrular:
 
 ```bash
-# 1) Model sunucusu (ayrı terminal) — ilk açılış ~90s (model + CUDA graph)
-python serve_vllm.py        # http://127.0.0.1:8000/v1
-
-# 2a) CLI ile analiz
-python run_analysis.py data/test_clip.mp4
-python run_analysis.py data/test_clip.mp4 --sartname --json outputs/sonuc.json
-
-# 2b) Web arayüzü
-python app.py               # http://127.0.0.1:7860
-
-# 3) KPI değerlendirmesi
-python benchmark/evaluate.py
-
-# (test videosu üretmek için)
-python scripts/make_test_video.py
+python -c "from dilajan.config import settings; print(settings.base_url, settings.gorev_modeli('algi'), settings.gorev_modeli('olay'), settings.gorev_modeli('yapi'))"
+python -c "from dilajan.llm_client import VLMClient; assert VLMClient().health_check(), 'Özel API erişilemiyor'; print('Özel API hazır')"
 ```
 
-### Takım üyeleri — modeli kendi makinenizde çalıştıramıyorsanız
-GPU'suz / WSL'siz makinelerden **kaptanın makinesindeki modele ağ üzerinden** bağlanabilirsiniz
-(kod değişikliği gerekmez):
+Beklenen ilk çıktı:
+
+```text
+https://evren-llmapi.ssyz.org.tr/v1 vlm llm-large llm-fast
+```
+
+> Üretim/yarışma profilinde `serve_vllm.py` çalıştırmayın ve `.env.yerel`
+> kullanmayın. Bunlar tarihsel yerel geliştirme yoludur; güncel sürümün model
+> sözleşmesi değildir.
+
+## Kullanım
+
+### Web arayüzü
 
 ```bash
-# Kaptan (WSL, GPU'lu makine)
-DILAJAN_VLLM_HOST=0.0.0.0 python serve_vllm.py
-
-# Üye (GPU gerekmez)
-DILAJAN_VLLM_HOST=192.168.1.102 python app.py
+python app.py
 ```
-> WSL2 varsayılan olarak NAT ağı kullanır → LAN'dan erişim için kaptanın makinesinde ek bir
-> ağ adımı gerekir. Adım adım kurulum, GPU'suz katkı listesi ve hata çözümleri →
-> [**`docs/takim_kurulum.md`**](docs/takim_kurulum.md)
 
-## Çıktı Formatı
+Ardından [http://127.0.0.1:7860](http://127.0.0.1:7860) adresini açın.
+
+Önerilen kullanım sırası:
+
+1. Videoyu yükleyin.
+2. Varsa tesise özgü kuralları ve gerçekten kalibre edilmiş seçenekleri girin.
+3. İsterseniz “analiz sorgusu” ile forklift, duman veya belirli bir bölgeye odak
+   verin. Sorgu kritik başka olayları filtrelemez.
+4. **ANALİZİ BAŞLAT** düğmesine basın ve akışın tamamlanmasını bekleyin.
+5. Özet, risk, İSG ölçümleri, olay tablosu, aksiyonlar, çağrılar ve karar izini
+   birlikte değerlendirin.
+
+Yeni bir video seçildiğinde önceki videonun özeti, sohbeti, olayları, JSON'u,
+raporu ve istek ayarları temizlenir. İkinci analiz birinciden bağımsızdır.
+
+`DILAJAN_HOST=0.0.0.0` aynı ağdan erişimi, `DILAJAN_SHARE=1` geçici Gradio
+paylaşımını açar. Paylaşım açıldığında videoların ve tesis bilgilerinin erişim
+kapsamını ayrıca değerlendirin.
+
+### Komut satırı
+
+```bash
+python run_analysis.py data/ornek.mp4
+python run_analysis.py data/ornek.mp4 --sartname --json outputs/sonuc.json
+python run_analysis.py data/ornek.mp4 --query "Dumanın kaynağı ve zamansal gelişimi nedir?"
+```
+
+`--sartname` çıktısı tam olarak `summary`, `events`, `risk`, `actions` olmak üzere
+dört anahtar içerir. Bayrak kullanılmazsa karar izi, çağrı günlüğü, bölge ve
+operatör sorgusu yanıtı gibi zengin alanlar da döner.
+
+### Örnek çıktı
+
+Aşağıdaki yalnızca şema örneğidir:
 
 ```json
 {
-  "summary": "00:06'ta forklift devrildi ve 00:08'de bir kişi yerde hareketsiz...",
-  "events": [
-    {"time": "00:06", "event": "Forklift devrildi", "severity": "Kritik", "category": "Kaza"},
-    {"time": "00:08", "event": "Bir kişi yerde yatıyor", "severity": "Kritik", "category": "Sağlık"}
-  ],
-  "risk": {"level": "Kritik", "rationale": "Kaza ve olası yaralanma; acil müdahale gerekiyor."},
-  "actions": [{"action": "Sağlık ekibini yönlendir", "priority": "Kritik", "rationale": "..."}],
-  "video_duration": "00:12",
-  "triggered_functions": ["acil_durdurma_tetikle", "saglik_ekibi_yonlendir", "olay_kaydi_olustur"]
+  "summary": "Doğrulanmış yüksek riskli bir İSG olayı bulunmadı.",
+  "events": [],
+  "risk": {
+    "level": "Düşük",
+    "rationale": "Analiz edilen kanıtlarda sevk gerektiren bir olay doğrulanmadı."
+  },
+  "actions": [],
+  "video_duration": "00:18",
+  "triggered_functions": [],
+  "action_log": [],
+  "decision_trace": [
+    "ingest: video segmentlere ayrıldı",
+    "perceive: atomik kanıt kapısı uygulandı",
+    "act: operasyonel çağrı yapılmadı"
+  ]
 }
 ```
-Sade şartname formatı için `--sartname` (summary/events/risk/actions).
 
-## Veri Seti
-Depoda **hiçbir video dağıtılmaz**; her klip açık kaynaklardan indirme script'leriyle çekilir.
-Tam envanter, lisanslar ve bilinen kusurlar → [`docs/veri_kaynaklari.md`](docs/veri_kaynaklari.md).
+## Yapılandırma
 
-| | Değer (2026-07-25 `md5sum` + `ffprobe` denetimi) |
+Kanonik örnek dosya [`.env.ornek`](.env.ornek), merkezi tanımlar ise
+[`dilajan/config.py`](dilajan/config.py) içindedir.
+
+| Ayar | Güncel değer / anlam |
 |---|---|
-| `data/` altındaki video dosyası | 412 |
-| **Benzersiz video (MD5)** | **214** |
-| **Doğruluk ölçümüne giren benzersiz klip** | **140 klip / 44.0 dakika** |
+| `DILAJAN_API_BASE_URL` | Sabit özel API; boş bırakmak yerel modele sessiz düşüş oluşturmaz |
+| `DILAJAN_API_KEY` | Zorunlu gizli takım anahtarı |
+| `DILAJAN_API_TIMEOUT` | Uzun video çağrıları için `1800` saniye |
+| `DILAJAN_MODEL_ALGI` | `vlm` |
+| `DILAJAN_MODEL_OLAY` | `llm-large` |
+| `DILAJAN_MODEL_YAPI`, `DILAJAN_MODEL_OZET` | `llm-fast` |
+| `DILAJAN_ATOMIC_CLAIM_GUARD` | `1`; kritik iddiaları atomik kanıta bağlar |
+| `DILAJAN_NARRATIVE_EVENT_POLICY` | `isg_grounded`; ailesiz anlatı alarmını keser |
+| `DILAJAN_YEREL_OGRENILMIS_IZNI` | `0`; YOLO/RT-DETR/pose gibi yerel öğrenilmiş yollar kapalı |
+| `DILAJAN_MODEL_INDIRME_IZNI` | `0`; çalışma zamanında ağırlık indirilmez |
 
-> Ham dosya sayısını video sayısı olarak raporlamıyoruz: kopyaların çoğu aynı klibin birden fazla
-> değerlendirme setinde bulunmasından gelir; kalanı ham indirme artığı (`scenario/_dl/`) ve
-> denenip kullanılmayan veridir (`nvidia/`).
+`CLOSED_FAMILY_FALLBACK`, `STRUCTURED_FIRE_DUST_VETO`, `THERMAL_FALLBACK`,
+`PHYSICAL_EXPERT_FALLBACK`, `INDUSTRIAL_INCIDENT_FALLBACK`,
+`NARROW_INDUSTRIAL_RETRY` ve `CONTINUOUS_FALL_FALLBACK` deneysel araştırma
+kollarıdır. Geliştirme ve bağımsız holdout kapıları geçmeden üretimde açılmamalıdır.
 
-**Bilinen veri kusurları (gizlemiyoruz):**
-- `data/eval`, `data/eval_big`'in **%100 alt kümesiydi** (31/31 MD5 aynı) → "bağımsız büyük-n
-  doğrulaması" iddiası **geri çekildi**. Düzeltme olarak `eval_big` ayrık `data/eval_tune` (31) ve
-  `data/eval_holdout` (32) alt-kümelerine bölündü (kesişim = 0); **temiz holdout ölçümü henüz koşulmadı**,
-  yayınlanan `eval_big` rakamları bölünmeden öncedir.
-- `data/eval_scenario/Fall` klipleri **video değildi** (tek PNG'nin sarılmış hâli: 1024×1024, 3.0 sn,
-  sıfır hareket) → **gerçek düşme videolarıyla değiştirildi** (9 × GMDCSA 720p60 + 6 × URFD 480p15).
-  Bu 15 klip `data/falls_real` + `data/falls_surveillance` ile birebir aynıdır — kalite kazancıdır ama
-  **bağımsız kanıt eklemez**. Ayrıca **senaryo-seti rakamları eski kompozisyona aittir; yeniden ölçülecek.**
-- `data/test_clip.mp4` olayı **kareye gömülü metinle** taşır → model orada OCR yapar;
-  bu klip bir yetenek kanıtı değil, yalnızca duman testidir.
-- **UCF-Crime Creative Commons değildir** (akademik/araştırma) ve klipler üçüncü-taraf bir
-  HuggingFace aynasından çekilir.
-- **Hızlı doğrulama:** `python scripts/make_test_video.py` ile sentetik test klibi.
+Arayüzdeki tesis kuralları istek-kapsamlıdır. Örneğin “yelek yoksa yetkisiz” veya
+“üç kasa üzeri aşırı yük” ancak gerçekten o tesiste doğrulanmış bir politika ise
+etkinleştirilmelidir. Bu kutuları gelişigüzel açmak model başarısını artırmaz;
+tesise özgü yanlış pozitif üretir.
 
-### İSG veri zenginleştirmesi (2026-08-16)
+## Benchmark sonuçları
 
-| Set | Boyut | Lisans | **Kullanım** |
-|---|---|---|---|
-| [iSafetyBench](https://huggingface.co/datasets/raiyaanabdullah/isafety-bench) | 1.100 klip (420 tehlike + 680 normal) | **CC BY-NC-SA 4.0** | ⛔ **YALNIZCA DEĞERLENDİRME** |
-| [keremberke/hard-hat-detection](https://huggingface.co/datasets/keremberke/hard-hat-detection) | 19.745 görsel | **CC BY 4.0** | ✅ eğitim (KKD dedektörü) |
-| [keremberke/construction-safety](https://huggingface.co/datasets/keremberke/construction-safety-object-detection) | 398 görsel, 17 sınıf | **CC BY 4.0** | ✅ eğitim |
+Sonuçları tek bir yüzdeye indirgemiyoruz. Precision, recall, normal yanlış pozitif,
+kapsama ve karar kapısı birlikte okunmalıdır.
 
-> **ShareAlike zehirli haptır.** iSafetyBench ile ince ayar yapılırsa model ağırlıkları
-> türev eser sayılabilir → modelimiz de CC BY-NC-SA olmak zorunda kalır. Bu kural bir
-> belgede değil **kodda** durur: `dilajan/veri_lisans.py` yasaklı bir dizin görürse
-> eğitimi **istisna fırlatarak durdurur** (bilerek fail-closed), `tests/test_isg_lisans.py`
-> kilidi sürekli sınar. Aynı sebeple **SH17** (alan eşleşmesi en iyi aday, üretim sanayi)
-> ve **Ultralytics Construction-PPE** (AGPL-3.0) **elendi**.
->
-> ⚠️ İki alan uyarısı: iSafetyBench **YouTube** kaynaklıdır (bizim ortamımız sabit-kamera
-> CCTV) → genelleme *stres testi*, aynı-alan kanıtı değil. KKD setleri **şantiye**
-> görüntüsüdür (tesisimiz üretim) → deterministik dedektör için fark küçüktür ama sıfır
-> değildir. Ayrıntı: [`docs/veri_lisans_karari.md`](docs/veri_lisans_karari.md) §11.
+### 1. InspecSafe-V1 resmî test — 1.250 örnek
 
-## Değerlendirme (KPI)
-Veriye dayalı bir değerlendirme altyapısı kurulmuştur:
-- `benchmark/eval_clips.py` — dengeli set (anomali + normal) üzerinde anomali recall, **normal yanlış-pozitif oranı**, risk kalibrasyonu, kategori eşleşmesi, gecikme; sonuçlar `benchmark/results/` altında JSON olarak saklanır.
-- `benchmark/judge.py` — özet kalitesi için LLM-as-judge.
-- `benchmark/dialogue_test.py` — diyalog/otonomi robustluk testi (bağlam-değişimi, prompt-injection, halüsinasyon probu).
-- `benchmark/variance.py`, `benchmark/compare.py` — varyans ve iterasyonlar arası karşılaştırma.
-- `benchmark/stats_utils.py` — **raporlama hijyeni**: Wilson %95 güven aralığı, örneklem
-  büyüklüğüne göre ondalık disiplini, pseudo-replikasyon uyarısı (`python benchmark/test_stats_utils.py`).
+Sabit üç model ve özel API ile tamamlanan gerçek test koşusu:
 
-**Raporlama kuralımız:** küçük örneklemde nokta-değer tek başına verilmez. Her oran
-`k/n` **+ Wilson %95 güven aralığı** ile sunulur (`benchmark/stats_utils.py`); n ≤ 48 ise
-ondalıklı yüzde yazılmaz. Kanonik değerlerin tamamı ve ölçüm sınırlarımız →
-[**`docs/olcum_durustlugu.md`**](docs/olcum_durustlugu.md).
+| Kol | 4-sınıf strict accuracy | Unsafe precision | Unsafe recall | Normal FPR | Kapsama |
+|---|---:|---:|---:|---:|---:|
+| Doğrudan `vlm` | 781/1250 = **%62,5** | %41,6 | %92,0 | %32,4 | %96,9 |
+| Tam üç-modelli sistem | 1044/1250 = **%83,5** | **%70,6** | %61,4 | **%6,4** | **%99,8** |
 
-**Güncel sonuçlar (varsayılan: Qwen3-VL-8B-FP8 + öz-doğrulama + grounding):**
+Üç-modelli sistem direct kolun 312 hatasını düzeltti, 49 doğrusunu bozdu;
+accuracy farkı `+21,0` puan ve eşleşik McNemar `p=5,67e-48` oldu. Ön-kayıtlı
+kapı accuracy, precision, FPR ve kapsamda geçti; **recall direct kola göre düştüğü
+için genel gerilemesizlik kapısı kaldı**. Bu sonuç saklanır, gizlenmez.
 
-| Metrik | Sonuç (`k/n`) | Wilson %95 GA |
-|---|---|---|
-| Anomali recall — senaryo seti ¹ | **18/18** (en kötü kayıtlı koşu 17/18) | [%82, %100] · (17/18 → [%74, %99]) |
-| Anomali recall — UCF `eval_big` (grenli 320×240) | **44/48** (diğer 2 koşu 42/48) | [%80, %97] · (42/48 → [%75, %94]) |
-| Gerçek düşme (GMDCSA) / overhead düşme (URFD) | 8/9 · 6/6 | [%56, %98] · [%61, %100] |
-| Normal yanlış-pozitif — adversaryel `eval_stress` | **0/9** (gözlenen FP yok) | **[%0, %30]** |
-| Normal yanlış-pozitif — 1080p endüstriyel ² | **0/8** (gözlenen FP yok) | **[%0, %32]** |
-| Özet kalitesi (bağımsız Gemma hakem) | **4.62 ± 0.53** | 30 klip × 3 eksen |
-| Aksiyon kalitesi (bağımsız Gemma hakem) | **4.74 ± 0.44** | 18 klip × 4 eksen |
-| Diyalog robustluğu (bağımsız Gemma hakem) | **5.00** (std 0 — tavan-doygun) | 7 tek-tur + 4 çok-tur |
-| Eşzamanlı throughput (×4) | **+13.5%** (3.7 → 4.2 video/dk) | kayıtlı log ile |
+Tam rapor:
+[`docs/benchmark_inspecsafe_v1_6affe2e2f1d92cd8_2026-08-28.md`](docs/benchmark_inspecsafe_v1_6affe2e2f1d92cd8_2026-08-28.md)
 
-> ¹ **Senaryo seti o ölçümden sonra değişti:** düşme klipleri (8 adet donmuş-PNG) gerçek videolarla
-> değiştirildi ve set 25 anomali + 12 normal oldu. Tablodaki 18/18, **eski kompozisyonun** kayıtlı
-> sonucudur; yeni sette ölçüm henüz koşulmadı.
->
-> ² Bu, **sınıf başına 1 klip** olan eski endüstriyel havuzun (8 klip, hepsi "Normal") sonucudur.
-> Havuz o zamandan beri 40 klibe çıkarıldı ve buradan **20 anomali + 20 normal**lik hedef-domain
-> seti `data/eval_defense` üretildi — **bu sette henüz ölçüm koşulmadı.**
+### 2. InspecSafe-V1 hiyerarşik calibration — 734 örnek
 
-> **Dürüst 3-seviyeli recall (grenli UCF, 51 bağımsız klip):**
-> TESPİT (olay var mı) **49/51 [%87–%99]** · AKSİYON (doğru müdahale sınıfı) **36/51 [%57–%81]** ·
-> TANIMA (birebir alt-etiket) **22/51 [%31–%57]**. Grenli 320×240'ta ince tip-tanıma bilgi-teorik
-> tavandır (model-boyu değil; `docs/iyilestirmeler.md` §15–§16). Bu rakamlar önce 81 ölçüm üzerinden
-> %96/%73/%46 olarak raporlanmıştı; `eval ⊂ eval_big` örtüşmesi nedeniyle 27 klip iki kez sayılmıştı
-> ve mükerrer-arınmış hâlleriyle yeniden verilmiştir.
->
-> **"%0 yanlış-pozitif" demiyoruz.** 0/9 gözlem, gerçek FP oranının %30'a kadar olabilmesiyle uyumludur.
-> Ayrıca *operasyonel*-FP (dispatch kapısıyla engellenen, "Düşük" seviyeli zararsız notlar) daha yüksektir:
-> senaryo normalinde 4/12 [%14–%61], `eval_big` normalinde 6/16 [%18–%61].
+Resmî testten sonra geliştirilen yüksek-performans profili
+`hybrid / rescue=0.70 / veto=0.21` olarak kilitlendi:
 
-## Ölçüm Sınırlarımız
-Bu bölüm projenin zayıf yanlarını **bilerek** yayınlar: yetersizliği biz ölçtük ve yazdık.
-Tam gerekçeler ve sayılar → [`docs/olcum_durustlugu.md`](docs/olcum_durustlugu.md) §6.
+| Metrik | Sonuç |
+|---|---:|
+| 4-sınıf empirical accuracy | 554/734 = **%75,5** |
+| Unsafe recall | 288/367 = **%78,5** |
+| Normal FPR | 11/367 = **%3,0** |
+| Test-öncüllü unsafe precision | **%86,8** |
+| Test-öncüllü unsafe F1 | **%82,4** |
+| Kapsama | 734/734 = **%100** |
 
-- **Küçük örneklem, varyans-baskın.** En büyük setimiz 48 anomali + 16 normal. Tek bir klip
-  sonucu %2–17 oynatır → sıralama/şampiyonluk iddiası bu boyutta yapılamaz.
-- **Recall tanımımız gevşek.** Manşet recall "**≥1 herhangi bir olay üretildi**" demektir; tipin
-  doğru olması gerekmez. Katı ölçümde aynı sistem TANIMA **22/51 (%43)**'e düşer.
-- **Yayınlanan kalite skorları dayanaklılık değil iç tutarlılık ölçüyor.** O koşuda hakeme
-  yalnızca metin (sistemin kendi olay listesi + kendi özeti) verilmişti; hakem videoyu görmedi.
-  Bu tasarımda **kendinden emin bir halüsinasyon tam puan alabilir.** `judge_independent.py`
-  artık ground-truth'a karşı olgusal dayanaklılık ve opsiyonel kare-kanıtı da üretiyor,
-  **ama ölçüm henüz yeniden koşulmadı** — düzeltme araçta, rakamlarda değil.
-- **Gece / IR / termal görüntüde sıfır kapsam.** Tüm setlerimiz gündüz görünür-ışıktır;
-  savunma dağıtımının birincil kaynağı hakkında hiçbir ölçümümüz yok.
-- **Hedef domainde ayrım ŞANS DÜZEYİNDE (ölçüldü, 2026-08-16).** `data/eval_defense`
-  (n=200, 1080p gerçek tesis) üzerinde **varsayılan yapılandırmayla MCC 0,069 · κ 0,060**.
-  Tesise özgü kurallar enjekte edilince recall %28 → %47 (p=0,0094) ve F2 0,31 → 0,48
-  çıkıyor — **ama MCC 0,071'de sabit kalıyor**: kazanç bir *eşik düşürme* etkisidir,
-  ayırt etme yeteneği kazanılmamıştır (yanlış alarm da %22 → %40 çıkıyor).
-  Dört tehlike sınıfının **hiçbirinde**, güvenli eşinden ayrım kanıtlanamadı
-  (Fisher p = 0,42 / 0,42 / 1,00 / 0,096).
-  → [`docs/isg_taksonomi_hizalamasi_2026-08-16.md`](docs/isg_taksonomi_hizalamasi_2026-08-16.md)
-- **Açık pano kapağını model HİÇ göremiyor.** Zorunlu seçim (`guided_choice`) ile
-  sorulduğunda 20 klibin 20'sinde "KAPALI" dedi — 10'u gerçekte açıkken. Bu bir ifade
-  değil **algı** sınırıdır; sorgu/prompt ile çözülemez. Aynı gerekçe KKD'nin neden
-  ayrı bir dedektöre verildiğini açıklar.
-- **Ölçüm aletinde kusur bulundu ve onarıldı.** Olumsuzlama kapısı `gözlemlenmedi`
-  biçimini kaçırıyordu; modelin *"hiçbir tehlike … gözlemlenmedi"* cümlesi **doğru
-  adlandırma** sayılıyordu. Etkisi tek yönlü değil: kusur **tabanı şişirerek gerçek bir
-  müdahalenin etkisini gizliyordu** (+5 puan p=0,51 → +14 puan p=0,0043). Eski kural
-  silinmedi, yan yana raporlanıyor.
-- **Forklift devrilmesi için gerçek açık veri yok.** Şartname örneğinin açık lisanslı gerçek
-  devrilme videosu bulunamadı. En yakın gerçek kanıtlar: `eval_defense`'teki 5 forklift aşırı-yük
-  klibi (1080p, devrilme öncesi riskli durum) ve UCF `RoadAccidents` klipleri.
-- **Çözünürlük–etiket confound'u.** `eval_big`'de anomalilerin %100'ü 320×240, normallerin
-  %50'si 1080p; `eval_scenario`'da anomalilerin hiçbiri 1080p değil, normallerin %67'si öyle.
-  Kararın ne kadarının olaydan, ne kadarının görüntü kalitesinden geldiğini ayrıştıramıyoruz.
+Bu profil calibration kapısını geçmiştir ancak durumu
+`calibration_locked_pending_development_and_holdout` olarak kayıtlıdır. Yani
+**nihai saha veya bağımsız holdout skoru değildir**. Calibration üzerindeki
+gözlenen precision `288/(288+11) = %96,3` olsa da sınıf öncülü test dağılımına
+uyarlandığında raporlanan değer `%86,8`'dir.
 
-> Her iyileştirme baseline'a karşı ölçülür; güvenlik senaryosunda **yüksek recall + düşük
-> dar-yanlış-pozitif** önceliklendirilir, operasyonel-FP dürüstçe raporlanır. Ablasyonlar
-> (Qwen2.5-VL-7B precision-yedek dâhil) `docs/iyilestirmeler.md`'de.
+Kaynaklar:
 
-## Proje Yapısı
-```
-dilajan/          ana paket: config, video, schema, prompts, llm_client,
-                  mock_functions, chat_agent, agent/ (LangGraph grafiği)
-  detector.py     YOLO uzman dedektörleri: poz-tabanlı düşme doğrulaması,
-                  geofence, araç/kalabalık ve **KKD (baret) doğrulayıcısı**
-  veri_lisans.py  VERİ LİSANS KAPISI — hangi set NE İÇİN kullanılabilir;
-                  yasaklı veri eğitime girerse **istisna fırlatır** (fail-closed)
-serve_vllm.py     vLLM sunucu başlatıcı
-run_analysis.py   CLI (video -> JSON)
-app.py            Gradio arayüzü (timeline + risk rozeti + canlı ilerleme + sohbet)
-benchmark/        eval_clips, judge, dialogue_test, variance, compare, stats_utils + results/
-  isg_rescore.py  İSG ince taneli skorlama (GPU'suz, arşive geriye dönük)
-  isg_ab.py       A/B — **ön-kayıtlı eşikleri mekanik uygular** (§7.4)
-  merge_arms.py   kol kol koşumu birleştirir (termal önlem)
-  isafety_mcq.py  iSafetyBench çoktan seçmeli genelleme ölçümü
-scripts/          test videosu üreteci, veri seti indiriciler, yardımcı betikler
-  get_ppe.py · ppe_coco2yolo.py · train_ppe.py     KKD dedektörü boru hattı
-  get_isafety_bench.py · build_isafety_manifest.py  bağımsız değerlendirme seti
-  hazirlik_kontrol.py   **proje bütünlük denetimi** (K1/K2, lisans kapısı, veri, testler)
-  doctor.py       takım üyesinin MAKİNESİNİ teşhis eder (GPU/torch/sunucu)
-docs/             mimari, ölçüm dürüstlüğü, veri kaynakları, performans raporu,
-                  şartname uyumu, demo senaryosu, sunum iskeleti/pptx, GitHub rehberi
-requirements-lock.txt   tam sürüm kilidi (pip freeze)
+- [birincil makine-okunur kayıt](benchmark/results/inspecsafe_hier_primary_receipt_1561cd7592a2e498.json)
+- [katı gerilemesizlik kilidi](benchmark/results/inspecsafe_hier_lock_1561cd7592a2e498.json)
+- [insan-okunur calibration raporu](docs/rapor_inspecsafe_hier_calibration_999a6975370227ee_2026-08-28.md)
+
+### 3. Dengeli genel İSG video non-regression — 200 örnek
+
+Güncel aday kolun dengeli 100 unsafe + 100 normal arşivindeki sonucu:
+
+| Metrik | Güncel aday | Önceki referans |
+|---|---:|---:|
+| Precision | 70/75 = **%93,3** | 77/83 = %92,8 |
+| Recall | 70/100 = **%70,0** | 77/100 = %77,0 |
+| Operasyonel FP | 5/100 = **%5,0** | 6/100 = %6,0 |
+| Dispatch FP | 3/100 = **%3,0** | 5/100 = %5,0 |
+
+Bu aday precision ve iki FP ölçüsünü iyileştirdi; recall `%77`den `%70`e düştüğü
+için katı non-regression sonucu **FAIL** oldu. Dolayısıyla güncel sürümün
+“halüsinasyon kontrolü iyileşti” yönünde kanıtı vardır, fakat “precision ve recall
+birlikte gerilemedi” iddiası yoktur.
+
+- **Operasyonel FP:** güvenli videoda herhangi bir olay üretilmesi veya fonksiyon
+  çağrısı kaydı oluşmasıdır.
+- **Dispatch FP:** güvenli videoda operasyonel fonksiyonun gerçekten tetiklenmesidir.
+- **Precision ile aynı şey değildir:** precision, üretilen pozitiflerin ne kadarının
+  doğru olduğunu; FP oranları güvenli örneklerin ne kadarının yanlış ateşlediğini ölçer.
+
+Makine-okunur kayıt:
+[`benchmark/results/nonreg_v15_vs_v13n_20260828.json`](benchmark/results/nonreg_v15_vs_v13n_20260828.json)
+
+### Benchmarkı yeniden çalıştırma
+
+Veri ve manifest yerindeyse önce yalnız doğrulama yapın:
+
+```bash
+python benchmark/inspecsafe_v1.py --validate-only
+python benchmark/inspecsafe_v1_hierarchical.py --phase calibration --validate-only
 ```
 
-> **Ağırlıklar depoda değildir** (`.gitignore`: `*.pt`). `yolo11n.pt` /
-> `yolo11n-pose.pt` ilk kullanımda inerken, KKD ağırlığı `yolo11n-ppe.pt`
-> bizim ürettiğimizdir ve sabit tohumla yeniden üretilir:
-> `python scripts/get_ppe.py && python scripts/ppe_coco2yolo.py && python scripts/train_ppe.py`
+Gerçek API koşusu maliyetli ve uzun sürelidir:
 
-## Karşılaşılan Zorluklar ve Çözümler
-- **Blackwell (sm_120) uyumu:** vLLM 0.23 CUDA 13'e derli; torch'u `cu130`'a hizalayarak
-  `libcudart.so.13` uyumsuzluğu çözüldü.
-- **Karışık CTK sürümleri (nvcc 13.2 vs cccl 13.3):** flashinfer JIT derlemesini engelleyen
-  sürüm kontrolü `NVCC_APPEND_FLAGS=-DCCCL_DISABLE_CTK_COMPATIBILITY_CHECK` ile aşıldı.
-- **Performans:** `enforce_eager` kaldırılıp CUDA graphs açılarak decode hızı ~68× arttı
-  (0.5 → ~37 token/s).
-- **Tool-calling güvenilirliği:** Yerel 7B modelde native `tool_choice` kararsız davrandığı
-  için operasyonel fonksiyon seçimi **yapılandırılmış-JSON dispatch**'e taşındı (güvenilir,
-  çoklu, model-tabanlı dinamik seçim).
-- **Düşük çözünürlüklü gerçek görüntüde az-tespit:** Katı JSON olay-promptu, grainy CCTV'de
-  modeli aşırı temkinli yapıp olayları kaçırıyordu (serbest tarif ise aynı kareleri doğru
-  yorumluyordu). Çözüm: **iki aşamalı algı** — önce serbest Türkçe tarif, sonra tariften olay
-  çıkarımı. Bu, gerçek UCF-Crime kliplerinde tespit oranını belirgin artırdı.
-- **Risk kalibrasyonu:** Model gerçek tehlikeyi tarif edip riski düşük puanlıyordu. Severity
-  kalibrasyonu (tehdit kelimeleri) + risk tabanı guardrail'i ile anomalilerde risk yükseldi
-  (QWK 0.733); normal kliplerde dar-yanlış-pozitif gözlenmedi (0/9 [%0–%30], 0/8 [%0–%32]),
-  operasyonel-FP daha yüksek (4/12, 6/16) ve dürüstçe raporlanır.
-- **Performans:** vLLM eşzamanlı istekleri batch'ler; **prefix-caching** ile eşzamanlı (×4)
-  throughput **+13.5%** (3.7 → 4.2 video/dk), tek-akış ort **0.86 s/video-sn** (n=6 klip,
-  0.44–3.75 aralığı). Kayıt: `benchmark/results/bench_perf_{baseline,prefixcache}_20260625.log`.
-  *(Serving-flag turunun ek kazancı — "4.6 video/dk / +24%" — kayıtlı log olmadığı için geri çekildi.)*
-- **Diyalog robustluğu:** Bağlam-değişimi/prompt-injection denemelerine karşı few-shot reddetme
-  örnekleriyle ajan göreve bağlı kalacak biçimde sertleştirildi (bağımsız hakem 5.00/5;
-  n = 7 tek-tur + 4 çok-tur senaryo, hakem std = 0 → **tavan-doygunluğu**, ayrım gücü sınırlı).
-- **Daha büyük model denemesi (32B-AWQ):** Qwen2.5-VL-32B-Instruct-AWQ indirilip servis edilmeye
-  çalışıldı. AWQ kernelleri Blackwell'de **çalıştı** (ağırlıklar yüklendi — uyumsuzluk yok), ancak
-  ~20.5 GB ağırlık + KV cache 24 GB laptop GPU'ya sığmadı (*"No available memory for cache blocks"*).
-  Sonuç: 32B pratikte ~32 GB+ (masaüstü GPU) ister.
-- **Orta-boy model denemesi (InternVL3.5-14B-AWQ):** İndirilip servis edildi (24 GB'a sığar).
-  AWQ Blackwell'de çalıştı; ancak InternVL'in **ağır çok-parçalı (tiling) görsel tokenizasyonu**
-  12 kareyi ~40K token'a çıkarıp context'i taşırdı → 6 kareye düşürmek zorunda kaldık. Tam 32-klip
-  kıyasında **7B daha iyi çıktı:** recall 23/24 vs 14/24, normal yanlış-pozitif 0/8 vs 1/8, gecikme
-  ~1.3 vs ~3.05 s/video-sn; ayrıca InternVL'in Türkçesinde yabancı-kelime sızıntısı.
-  *(n=32 — yön belirgin, ama tek klip farkı büyük; kesin bir üstünlük payı iddia edilmiyor.)*
-  **Veriye dayalı karar: Qwen2.5-VL-7B** uzun süre en iyi dengeydi.
-- **SOTA yükseltme (Qwen3-VL-8B-FP8):** A/B testinde 7B'yi **kategori adlandırma** (senaryo %83→%100,
-  UCF suçları %0→%100) ve **Türkçe akıcılıkta** açıkça geçti; 24 GB'a FP8 ile KV başlığıyla sığar.
-  Bedeli belirsiz normallerde daha yüksek yanlış-pozitif → **öz-doğrulama** (deduce-then-verify) ile
-  dengelendi (hem FP kontrol hem agentic öz-kontrol). *Türkçe dil ajanı* yarışmasında bu belirleyici.
-  **Güncel varsayılan: Qwen3-VL-8B-FP8 + öz-doğrulama + mekânsal grounding** (7B precision-yedek/ablation).
+```bash
+python benchmark/inspecsafe_v1.py --workers 4
+python benchmark/inspecsafe_v1_hierarchical.py --phase development --workers 4
+```
 
-## Dokümanlar & Teslimatlar
-- **Takım kurulum & çalışma rehberi (GPU'suz üyeler için)** → [`docs/takim_kurulum.md`](docs/takim_kurulum.md)
-- Mimari → [`docs/architecture.md`](docs/architecture.md)
-- **Ölçüm dürüstlüğü: kanonik değerler + ölçüm sınırlarımız** → [`docs/olcum_durustlugu.md`](docs/olcum_durustlugu.md)
-- Veri envanteri, lisanslar, bilinen veri kusurları → [`docs/veri_kaynaklari.md`](docs/veri_kaynaklari.md)
-- Şartname uyum matrisi → [`docs/sartname_uyum.md`](docs/sartname_uyum.md)
-- Kapsamlı performans raporu → [`docs/performans_raporu.md`](docs/performans_raporu.md)
-- İyileştirme & deney günlüğü (literatür-temelli) → [`docs/iyilestirmeler.md`](docs/iyilestirmeler.md)
-- Demo videosu senaryosu → [`docs/demo_script.md`](docs/demo_script.md)
-- Sunum iskeleti / başlangıç deck → [`docs/sunum_iskeleti.md`](docs/sunum_iskeleti.md), `docs/sunum.pptx`
-- GitHub & açık kaynak rehberi → [`docs/github_yukleme.md`](docs/github_yukleme.md)
-- Veri seti → [`data/README.md`](data/README.md)
+Eski ve aday iki arşivi model çağırmadan karşılaştırmak için:
+
+```bash
+python benchmark/isg_nonregression_gate.py eski.json aday.json \
+  --report-json benchmark/results/nonreg_kayit.json
+```
+
+Benchmark koşucuları özel API ve sabit model sözleşmesini fail-closed doğrular;
+yerel veya farklı modelle koşuyu kabul etmez. Etiket, dosya adı ve anotasyon model
+mesajına verilmez.
+
+## Test ve doğrulama
+
+Tek komutla proje bütünlüğü, lisans kapısı ve bağımsız test betikleri:
+
+```bash
+python scripts/hazirlik_kontrol.py
+```
+
+Hızlı ve odaklı denetimler:
+
+```bash
+python tests/test_model_routing.py
+python tests/test_isg_claim_guard.py
+python tests/test_video_upload_isolation.py
+python tests/test_sablon_kalip.py
+```
+
+28 Ağustos 2026 sürüm kontrolünde:
+
+- `78/78` pytest testi geçti;
+- `47/47` tarihsel bağımsız denetim betiği geçti;
+- Python kaynakları bytecode derlemesinden geçti;
+- sürüm JSON'ları ayrıştırıldı;
+- commit kapsamına gerçek API anahtarı girmedi.
+
+`tests/` altında pytest testleri ile doğrudan çalıştırılan tarihsel betikler birlikte
+bulunur. Bazı tarihsel dosyalar modül sonunda `sys.exit` kullandığı için bütün dizini
+tek seferde `pytest tests/` olarak toplamak doğru değildir; kanonik giriş
+`scripts/hazirlik_kontrol.py` dosyasıdır.
+
+## Veri, lisans ve gizlilik
+
+Ham videolar Git'e alınmaz; `data/` yok sayılır. Kaynaklar, lisanslar, manifestler
+ve indirme bağlantıları şurada belgelenir:
+
+- [veri kaynakları ve kullanım sınırları](docs/veri_kaynaklari.md)
+- [doğrudan indirme bağlantıları](docs/veri_indirme_linkleri.md)
+- [InspecSafe-V1 test manifesti](benchmark/results/inspecsafe_v1_manifest_13721d4b691312a2.json)
+- [InspecSafe-V1 train manifesti](benchmark/results/inspecsafe_train_manifest_1561cd7592a2e498.json)
+
+Değerlendirme-only veri eğitimde kullanılmaz. `dilajan/veri_lisans.py` yasaklı
+bir veri kökü eğitime girerse işlemi fail-closed durdurur. Gerçek tesis görüntüleri
+çalışan yüzleri, kıyafetleri ve kurum işaretlerini içerebilir; kaynak lisansının
+yeniden dağıtıma izin vermesi KVKK/gizlilik yükümlülüğünü ortadan kaldırmaz.
+
+Manifest SHA-256 değerleri veri sürümünü, runner/prompt hash'leri ise ölçüm
+protokolünü sabitler. Farklı manifestle çıkan skor aynı koşunun devamı sayılmaz.
+
+## Bilinen sınırlar
+
+- Sistem bir İSG uzmanının, saha prosedürünün veya sertifikalı yangın algılama
+  sisteminin yerine geçmez.
+- “Tüm İSG senaryolarında maksimum performans” henüz kanıtlanmış değildir. Veri
+  alanı, kamera açısı, gece/termal görüntü ve nadir olaylar arasında dağılım farkı
+  vardır.
+- Güncel genel video adayında recall `%70`tir; gerçek olay kaçırma riski sürer.
+- Hiyerarşik `%78,5` recall calibration sonucudur; development ve holdout onayı
+  beklemektedir.
+- InspecSafe Level III calibration desteği yalnız altı örnektir ve recall `0/6`dır;
+  ince risk seviyesi sınıflandırması hâlâ darboğazdır.
+- Görünür duman/plüm tek başına yangın değildir. Aşırı sert veto gerçek yangını
+  kaçırabileceği için başarısız deneysel veto üretime alınmamıştır.
+- Özel API erişilemezse öğrenilmiş analiz tamamlanamaz. Sistem yerel modele sessizce
+  düşmez; eksik sonucu hata olarak gösterir.
+- Yerel YOLO/RT-DETR/pose/KKD modelleri güncel özel-API profilinde çalışmaz.
+  Ağırlık indirilmez; KKD ve düşme doğrulama yolları atlandığında neden karar
+  izine yazılır.
+- Gerçek operasyon entegrasyonları mock'tur; saha sistemine bağlanmadan önce kimlik
+  doğrulama, yetkilendirme, insan onayı ve geri alma tasarımı gerekir.
+
+## Sorun giderme
+
+| Belirti | Kontrol / çözüm |
+|---|---|
+| “Özel API erişilemiyor” | `.env` anahtarını, sabit base URL'yi, ağı ve takım anahtarının geçerliliğini kontrol edin; health-check komutunu çalıştırın |
+| Analiz bitmiyor veya uzun sürüyor | `DILAJAN_API_TIMEOUT=1800` değerini koruyun; aynı videoyu art arda tekrar kuyruğa eklemeyin; servis durumunu kontrol edin |
+| Kuyruk `1/1` görünüyor | Bir analiz etkin demektir; istek-kapsamlı tesis ayarları birbirine sızmasın diye kritik bölüm seri çalışabilir |
+| Video tarayıcıda oynatılmıyor | `ffmpeg` kurulumunu doğrulayın; arayüz desteklenmeyen codec'i H.264/yuv420p biçimine dönüştürür |
+| İkinci videoda eski sonuç görünüyor | Güncel sürümde yükleme önce tüm video durumunu sıfırlar; tarayıcıyı yenileyip tekrar yükleyin ve `tests/test_video_upload_isolation.py` testini çalıştırın |
+| KKD/YOLO seçeneği sonuç üretmiyor | Özel-API sürümünde yerel öğrenilmiş modeller bilerek yasaktır; KKD/düşme için karar izindeki açıklamayı okuyun |
+| “Olay yok” ile “analiz başarısız” karışıyor | Arayüzün üst hata bandını ve `decision_trace` alanını kontrol edin; API hatalı sonuç tamamlanmış sayılmaz |
+| Yanlış duman/yangın iddiası | Zaman damgası ve atomik kanıt izini inceleyin; yalnız plüm gözlemi sevk üretmemelidir |
+| API anahtarı yanlışlıkla paylaşıldı | Anahtarı derhâl iptal/rotate edin; Git geçmişinden silmek tek başına yeterli değildir |
+
+## Proje yapısı
+
+```text
+app.py                         Gradio arayüzü ve video-kapsamlı durum izolasyonu
+run_analysis.py                Video -> yapılandırılmış JSON komut satırı girişi
+requirements-api.txt           Model indirmeyen özel-API çalışma bağımlılıkları
+dilajan/
+  agent/graph.py               Yedi düğümlü LangGraph karar akışı
+  config.py                    Özel API, sabit model ve güvenlik varsayılanları
+  llm_client.py                OpenAI-uyumlu özel API istemcisi ve video oturumu
+  isg_kanit.py                 Atomik İSG iddia/kanıt ayrıştırması
+  duman_kanit.py               Duman, plüm ve yangın kanıt yardımcıları
+  dusme_kanit_v2.py            Düşme/yaralı kişi fiziksel-zamansal kanıtı
+  kkd_beyan.py                 KKD için tesis beyanı kapısı
+  isg_kural.py                 Deterministik slot ve tesis kural motoru
+  schema.py                    AnalysisResult/Event/Action veri sözleşmesi
+benchmark/
+  inspecsafe_v1.py             Resmî test koşucusu
+  inspecsafe_v1_hierarchical.py Calibration/development/holdout karar yolu
+  isg_nonregression_gate.py    Eşleşik precision/recall/FP gerileme kapısı
+  results/                     Manifest, kilit ve makine-okunur sonuç kayıtları
+scripts/
+  hazirlik_kontrol.py          Kanonik bütünlük ve test girişi
+  download_inspecsafe_train.ps1 InspecSafe train indirme/doğrulama aracı
+tests/                         Pytest + tarihsel bağımsız regresyon denetimleri
+docs/                          Mimari, veri, ön-kayıt ve deney raporları
+```
+
+## Belge önceliği
+
+Depoda çok sayıda ön-kayıt ve tarihsel deney raporu vardır. Bunlar denetim izi
+olarak korunur; güncel üretim ayarı oldukları anlamına gelmez. Çelişki halinde şu
+sıra kullanılmalıdır:
+
+1. bu `README` ve [güncel main sürüm kaydı](docs/main_release_2026-08-28.md);
+2. makine-okunur manifest/kilit/receipt JSON'ları;
+3. güncel kaynak kodu ve testler;
+4. tarihsel `on_kayit_*` ve `rapor_*` deney belgeleri.
+
+İSG VLM mimarileri için araştırma özeti:
+[`docs/arastirma_isg_vlm_mimarileri_2026-08-27.md`](docs/arastirma_isg_vlm_mimarileri_2026-08-27.md)
 
 ## Lisans
-Apache License 2.0 — bkz. [`LICENSE`](LICENSE).
+
+Kaynak kod [Apache License 2.0](LICENSE) ile lisanslanır. Veri setleri ve isteğe
+bağlı üçüncü taraf bileşenler kendi lisanslarına tabidir; Apache-2.0 proje lisansı
+bu varlıkların lisansını değiştirmez.

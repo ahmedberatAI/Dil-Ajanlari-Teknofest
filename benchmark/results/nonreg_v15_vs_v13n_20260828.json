@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "status": "FAIL",
+  "baseline": "/mnt/c/Users/omen/Desktop/DilAjanlariTeknofest/benchmark/results/eval_20260828_012132.json",
+  "candidate": "/mnt/c/Users/omen/Desktop/DilAjanlariTeknofest/benchmark/results/eval_20260828_034712.json",
+  "run_manifest_sha256": {
+    "baseline": "fbd455b20848b776971f43bb18d1b47e6a64c5aca9fb90bd37ac58a58e025dad",
+    "candidate": "d593feec3cc212db87d5a8661e19c6e3c967e8c78e5dc2c571b5892fda963e62",
+    "note": "kosum künyeleri A/B değişkenini taşıdığı için eşitlik kapısı değildir"
+  },
+  "data_manifest": {
+    "baseline_sha256": "2d0cbebd75909474809d34ed79a96315a938ab58db86846ff7bcaa423b5b7d64",
+    "candidate_sha256": "2d0cbebd75909474809d34ed79a96315a938ab58db86846ff7bcaa423b5b7d64",
+    "explicit_fields": [
+      "dedup",
+      "eval_dir"
+    ]
+  },
+  "coverage": {
+    "baseline": 200,
+    "candidate": 200,
+    "same_sample_ids": true,
+    "missing_candidate": [],
+    "extra_candidate": [],
+    "non_smoke_evaluable": 200
+  },
+  "excluded": {
+    "smoke": 0
+  },
+  "errors": {
+    "baseline": 0,
+    "candidate": 0,
+    "not_higher": "PASS"
+  },
+  "general": {
+    "baseline": {
+      "tp": 77,
+      "fp": 6,
+      "fn": 23,
+      "tn": 94,
+      "precision": {
+        "k": 77,
+        "n": 83,
+        "value": 0.92771084,
+        "wilson95": [
+          0.851132,
+          0.96645
+        ]
+      },
+      "recall": {
+        "k": 77,
+        "n": 100,
+        "value": 0.77,
+        "wilson95": [
+          0.678456,
+          0.841567
+        ]
+      }
+    },
+    "candidate": {
+      "tp": 70,
+      "fp": 5,
+      "fn": 30,
+      "tn": 95,
+      "precision": {
+        "k": 70,
+        "n": 75,
+        "value": 0.93333333,
+        "wilson95": [
+          0.853249,
+          0.97119
+        ]
+      },
+      "recall": {
+        "k": 70,
+        "n": 100,
+        "value": 0.7,
+        "wilson95": [
+          0.604151,
+          0.781051
+        ]
+      }
+    },
+    "checks": {
+      "precision_not_lower": "PASS",
+      "recall_not_lower": "FAIL",
+      "fp_not_higher": "PASS"
+    }
+  },
+  "classes": {},
+  "false_positives": {
+    "operational": {
+      "definition": "güvenli örnekte n_events>0 veya triggered dolu",
+      "baseline": {
+        "k": 6,
+        "n": 100,
+        "value": 0.06,
+        "wilson95": [
+          0.027786,
+          0.124768
+        ]
+      },
+      "candidate": {
+        "k": 5,
+        "n": 100,
+        "value": 0.05,
+        "wilson95": [
+          0.021544,
+          0.11175
+        ]
+      },
+      "not_higher": "PASS"
+    },
+    "dispatch": {
+      "definition": "güvenli örnekte triggered dolu",
+      "baseline": {
+        "k": 5,
+        "n": 100,
+        "value": 0.05,
+        "wilson95": [
+          0.021544,
+          0.11175
+        ]
+      },
+      "candidate": {
+        "k": 3,
+        "n": 100,
+        "value": 0.03,
+        "wilson95": [
+          0.010255,
+          0.084519
+        ]
+      },
+      "not_higher": "PASS"
+    }
+  },
+  "failures": [
+    "genel: recall azaldı"
+  ],
+  "insufficient_reasons": []
+}

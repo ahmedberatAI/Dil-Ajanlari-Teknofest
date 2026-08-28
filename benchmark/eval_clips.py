@@ -84,6 +84,34 @@ def _warn_if_leaky(eval_dir: str) -> Optional[str]:
     return msg
 RESULTS_DIR = os.path.join(ROOT, "benchmark", "results")
 
+_PRIVATE_API_BASE = "https://evren-llmapi.ssyz.org.tr/v1"
+_FIXED_MODEL_CONTRACT = {
+    "algi": "vlm", "olay": "llm-large",
+    "yapi": "llm-fast", "ozet": "llm-fast",
+}
+
+
+def _ozel_api_model_sozlesmesini_dogrula() -> dict:
+    """Benchmarkte yerel/farkli model kosumunu fail-closed reddet.
+
+    Bu proje icin deney degiskeni model degildir. Yalniz kanit secimi,
+    zaman/kirpim ve deterministik karar kapilari degisebilir.
+    """
+    from dilajan.config import settings as _s
+    actual = {gorev: _s.gorev_modeli(gorev)
+              for gorev in _FIXED_MODEL_CONTRACT}
+    if (not _s.uzak_api_mi
+            or _s.base_url.rstrip("/") != _PRIVATE_API_BASE.rstrip("/")):
+        raise RuntimeError(
+            "Benchmark yalnız sabit özel API üzerinde çalışabilir; yerel veya farklı "
+            f"endpoint reddedildi: {_s.base_url!r}"
+        )
+    fark = {k: {"actual": actual[k], "expected": v}
+            for k, v in _FIXED_MODEL_CONTRACT.items() if actual[k] != v}
+    if fark:
+        raise RuntimeError(f"Sabit model sözleşmesi bozuldu: {fark}")
+    return {"base_url": _s.base_url, **actual}
+
 
 def _kosum_kunyesi() -> dict:
     """D36 — kosumun MODEL ve SERVISLEME kunyesi (salt okuma, metrik degistirmez).
@@ -100,7 +128,26 @@ def _kosum_kunyesi() -> dict:
         from dilajan.config import settings as _s
     except Exception as e:  # ayar okunamazsa olcumu DURDURMA (fail-open, K3)
         return {"hata": f"{type(e).__name__}: {e}"}
+    try:
+        from dilajan import gozlem as _gz, isg_kural as _kr
+        _slot_max_side = {
+            ad: _gz.max_side_coz(_gz.SLOT_KATALOG[ad])
+            for ad in _kr.gerekli_slotlar(_s)
+            if ad in _gz.SLOT_KATALOG
+        }
+    except Exception as e:
+        # Kimlik alanı çözülemezse boş sözlük yalan söylemesin; hata arşivde
+        # görünür kalsın ve farklı spek sessizce aynı ara kayda karışmasın.
+        _slot_max_side = {"__hata__": f"{type(e).__name__}: {e}"}
     return {
+        # Davranis yalniz ayarlardan degil prompt/kapi kodundan da etkilenir.
+        # Bu revizyon unutulursa prompt degisikligi eski ara-kaydi sessizce
+        # devralabilir. Her algi/politika davranis degisikliginde ilerletilir.
+        "pipeline_revision": "2026-08-28-isg-evidence-v15-smoke-steam-optical",
+        # PROJE SOZLESMESI: modeller sabittir. Deney alani model degil;
+        # kanit secimi, kirpim/zaman penceresi ve deterministik kapilardir.
+        "learned_inference": "special_api_only",
+        "fixed_model_contract": dict(_FIXED_MODEL_CONTRACT),
         "model": _s.model_name,
         "quantization": _s.quantization or "(otomatik/yok)",
         "dtype": _s.dtype,
@@ -137,6 +184,8 @@ def _kosum_kunyesi() -> dict:
         # raporlanan sayilar aslinda ACIK kolun sayilari olur.
         # Ayni hata bu dosyada daha once `isg_lens` ve `panel_roi` icin yasandi.
         "isg_slotlari": _s.isg_slotlari,
+        "isg_slot_max_side": _slot_max_side,
+        "narrative_event_policy": _s.narrative_event_policy,
         # KODLAMA NORMALIZASYONU kunyeye GIRMELI: normalize ve normalize-olmayan
         # kollar ayni ara kayit dosyasini paylasirsa, ikinci kosum birincinin
         # satirlarini devralir ve iki farkli spek TEK OLCUMDE karisir.
@@ -165,6 +214,18 @@ def _kosum_kunyesi() -> dict:
         # Serbest-metin ISG halusinasyon savunmalari: ara-kayit kimliginde
         # bulunmazlarsa acik/kapali kosular birbirinin satirlarini devralir.
         "claim_guard": _s.claim_guard,
+        "atomic_claim_guard": _s.atomic_claim_guard,
+        "atomic_claim_decomposition": _s.atomic_claim_decomposition,
+        "atomic_extended_families": _s.atomic_extended_families,
+        "closed_family_fallback": _s.closed_family_fallback,
+        "structured_fire_dust_veto": _s.structured_fire_dust_veto,
+        "thermal_fallback": _s.thermal_fallback,
+        "physical_expert_fallback": _s.physical_expert_fallback,
+        "industrial_incident_fallback": _s.industrial_incident_fallback,
+        "narrow_industrial_retry": _s.narrow_industrial_retry,
+        "continuous_fall_fallback": _s.continuous_fall_fallback,
+        "yerel_ogrenilmis_izni": _s.yerel_ogrenilmis_izni,
+        "model_indirme_izni": _s.model_indirme_izni,
         "summary_evidence_guard": _s.summary_evidence_guard,
         "risk_event_ceiling": _s.risk_event_ceiling,
         "forklift_yuk": _s.forklift_yuk,
@@ -358,7 +419,13 @@ def evaluate_clip(path: str, category: str) -> dict:
         "summary": res.summary,
         "events": [
             {"time": e.time, "event": e.event, "severity": e.severity.value,
-             "category": e.category.value, "region": e.region}
+             "category": e.category.value, "region": e.region,
+             # Gözlem düzleminin deterministik olaylarını serbest anlatıdan
+             # ayırabilmek için kaynak kuralı arşive taşı. Alanlar normal/open
+             # olaylarda None'dır; eski skor alanlarının anlamını değiştirmez.
+             "isg_kod": getattr(e, "isg_kod", None),
+             "isg_slot": getattr(e, "isg_slot", None),
+             "isg_deger": getattr(e, "isg_deger", None)}
             for e in res.events
         ],
         "risk_rationale": res.risk.rationale,
@@ -378,6 +445,12 @@ def evaluate_clip(path: str, category: str) -> dict:
         # karsilastirma ETKILENMEZ (yalnizca EK alan).
         "guven_trace": [t for t in (res.decision_trace or [])
                         if "gözlem güveni" in t],
+        # ISG KANIT IZLERI — ozellikle iki slot celistiginde alarmi bastiran
+        # `INSUFFICIENT` kapisi arşivde denetlenebilsin. Metrigi degistirmez.
+        "isg_trace": [t for t in (res.decision_trace or [])
+                      if ("gözlem düzlemi" in t
+                          or "forklift-carpisma kaniti" in t
+                          or "ISG slotlari" in t)],
         "actions": [
             {"action": a.action, "priority": a.priority.value, "rationale": a.rationale}
             for a in res.actions
@@ -386,6 +459,9 @@ def evaluate_clip(path: str, category: str) -> dict:
 
 
 def main() -> None:
+    # KRITIK PROJE SINIRI: herhangi bir klip okunmadan/API cagrisi yapilmadan
+    # endpoint ve alias sozlesmesini dogrula. Sessiz model degisikligi yoktur.
+    _ozel_api_model_sozlesmesini_dogrula()
     # istege bagli kategori filtresi: EVAL_CATS="Normal" veya "RoadAccidents,Explosion"
     only = {c.strip() for c in os.environ.get("EVAL_CATS", "").split(",") if c.strip()}
     clips = []

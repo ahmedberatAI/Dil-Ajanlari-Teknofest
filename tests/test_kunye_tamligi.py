@@ -86,7 +86,18 @@ for kr in K.KURALLAR:
 # katalogdan turemeyen ama davranisi degistiren bayraklar
 ALANLAR |= {"isg_slotlari", "slot_guven", "kodlama_normalize", "kodlama_fps",
             "kodlama_bit", "forklift_yuk", "model_olay", "claim_guard",
-            "summary_evidence_guard", "risk_event_ceiling"}
+            "atomic_claim_guard", "yerel_ogrenilmis_izni", "model_indirme_izni",
+            "atomic_claim_decomposition",
+            "atomic_extended_families",
+            "closed_family_fallback",
+            "structured_fire_dust_veto",
+            "thermal_fallback",
+            "physical_expert_fallback",
+            "industrial_incident_fallback",
+            "narrow_industrial_retry",
+            "continuous_fall_fallback",
+            "summary_evidence_guard", "risk_event_ceiling",
+            "narrative_event_policy"}
 
 # Bazi alanlar SAYISAL/BOOL — deneme degeri tipe gore secilir
 DENEME = {
@@ -96,7 +107,20 @@ DENEME = {
     "isg_slotlari": "catal_kasa_sayisi", "forklift_yuk": "1",
     "panel_luma_esik": "9",
     "model_olay": "vlm", "claim_guard": "0", "summary_evidence_guard": "0",
+    "atomic_claim_guard": "0", "yerel_ogrenilmis_izni": "1",
+    "atomic_claim_decomposition": "1",
+    "atomic_extended_families": "1",
+    "closed_family_fallback": "1",
+    "structured_fire_dust_veto": "1",
+    "thermal_fallback": "1",
+    "physical_expert_fallback": "1",
+    "industrial_incident_fallback": "1",
+    "narrow_industrial_retry": "1",
+    "continuous_fall_fallback": "1",
+    "model_indirme_izni": "1",
     "risk_event_ceiling": "0", "yelek_yetki_kurali": "1",
+    # .env sevk degeri `isg_grounded`; kimlik farkini kanitlamak icin zit kol.
+    "narrative_event_policy": "all",
     "yelek_on_kosul": "0", "panel_koyuluk_kurali": "1",
     "forklift_kasa_kurali": "1",
 }

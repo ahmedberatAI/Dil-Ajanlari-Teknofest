@@ -1,0 +1,51 @@
+{
+  "schema_version": 3,
+  "created_at": "2026-08-27T15:30:00+03:00",
+  "revised_at": "2026-08-27T16:42:00+03:00",
+  "label_revision": 3,
+  "post_model_output_revision": true,
+  "source_manifest": "data/dev_nvidia_warehouse/manifest.json",
+  "annotation_basis": "Revizyon 2: model ciktisi goruldukten sonra 1920x1080 kaynak videodan 1 fps tam-cozunurluk zamansal temas sayfalari yeniden incelendi. Etiket, senaryo adina/insanlarin kacisina degil yalniz kameradaki dogrudan fiziksel kanita dayanir. Bu nedenle bu dosya gelistirme icindir; bagimsiz final kanit degildir.",
+  "positive_definition": {
+    "fire": "Dogrudan gorunur alev, duman veya yanma",
+    "forklift_collision": "Arac ile ayri hedefin gorunur sinirlarinin temas etmesi veya hedefte konum/hareket degisimi; salt yaklasma, perspektif ortusmesi ya da hedefin arac arkasinda kaybolmasi pozitif degildir",
+    "nearmiss": "Hareketli forklift ile kisi arasinda tehlikeli yaklasma/temas veya kisinin ani kacinma hareketi"
+  },
+  "scenario_code": {
+    "fire": "Warehouse_Visible_Fire",
+    "forklift_collision": "Forklift_Shelf_Collision",
+    "nearmiss": "Forklift_Human_NearMiss"
+  },
+  "visible_cameras_by_run": {
+    "001b05ebcbc9f4ca0755_run_1_seed_1308650293": [
+      "ceiling_01"
+    ],
+    "002ad0d8fa9252052de6_run_4_seed_2134546766": [
+      "ceiling_01"
+    ],
+    "00476edc6c6f70997b2b_run_14_seed_741994306": [
+      "cam_00", "cam_01", "cam_05"
+    ],
+    "00493485dca5576cbf18_run_12_seed_557653691": [],
+    "0137e00c677a4118e887_run_2_seed_1276653305": [
+      "ceiling_00", "ceiling_01", "ceiling_02", "ceiling_03", "ceiling_04",
+      "eye_00", "eye_01", "eye_02", "eye_03", "eye_04"
+    ],
+    "014f5a0f9461dfae29d5_run_13_seed_587824276": [
+      "ceiling_00", "ceiling_01", "ceiling_02", "ceiling_03", "ceiling_04",
+      "eye_00", "eye_01", "eye_02", "eye_03", "eye_04"
+    ],
+    "01033139e6f4295559bb_run_10_seed_475738285": [],
+    "011b9c17a89798dddcf7_run_6_seed_901782411": []
+  },
+  "normal_scenarios": ["box_pickup"],
+  "notes": [
+    "REVIZYON GEREKCESI: ilk kaynak-cozunurluk incelemesi kamera gorunurlugunu senaryo-duzeyi Fire etiketinden sizdirarak 8/10 gorusu yanlis pozitif etiketledi. Yeniden incelemede dogrudan hareketli siyah/gri duman yalniz iki ceiling_01 videosunda acikca goruldu.",
+    "ceiling_00/02/03/04 goruslerinde insanlarin kacis davranisi goruluyor; fakat alev, duman veya yanan nesne dogrudan gorulmuyor. Kacis, yangin slotu icin pozitif kanit degildir.",
+    "Bu revizyon model ciktisi goruldukten sonra yapildigi icin gelistirme puani iyimser etkilenebilir. Final denetimde ayni kural model kosumundan once dondurulacaktir.",
+    "REVIZYON 3: yogun 4 fps temas sayfalariyla cam_02/03/04 yeniden incelendi. Bu acilarda arac hedefe yaklasiyor veya hedef arac arkasinda ortuluyor; ancak gorunur sinirlarin temas ettigi ya da hedefin hareket ettigi dogrudan secilemiyor. Bu nedenle kamera-disi senaryo olayini tahmin ettirmemek icin pozitif paydadan cikarildilar.",
+    "Revizyon 3 de model ciktisi sonrasidir ve yalniz gelistirme/tani icindir; bagimsiz basari iddiasi degildir.",
+    "Ikinci forklift_collision run'inda forklift gorulse de fiziksel temas/hasar gorulmedigi icin pozitif sayilmadi.",
+    "Normal box_pickup goruntulerindeki egilme ve kutu alma rutin calismadir; dusme veya yaralanma degildir."
+  ]
+}

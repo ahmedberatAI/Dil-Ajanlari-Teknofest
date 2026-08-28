@@ -25,6 +25,8 @@ python scripts/get_urfd_overhead.py     # tepeden dusme        -> data/falls_sur
 python scripts/get_vehicle_accidents.py # arac kazasi          -> data/e2_vehicle
 python scripts/get_ppe.py               # KKD (baret/yelek)    -> data/ppe
 python scripts/get_isafety_bench.py     # iSafetyBench         -> data/isafety_bench
+python scripts/get_synthsite_tier1.py   # askidaki yuk (uzlasili) -> data/external/synthsite
+python scripts/prepare_deep_smoke_balanced.py  # Project RISE 28+28 duman -> data/eval_deep_smoke_balanced_v1
 python scripts/make_test_video.py       # sentetik test klibi  -> data/test_clip.mp4
 ```
 
@@ -45,6 +47,8 @@ python scripts/make_test_video.py       # sentetik test klibi  -> data/test_clip
 | `yelek_yolo/` | **hi-vis yelek** (gsnvb türevi) | [LibreYOLO/construction-safety-gsnvb](https://huggingface.co/datasets/LibreYOLO/construction-safety-gsnvb) | **CC BY 4.0** | ✅ | ✅ |
 | `ppe_yolo/` | KKD YOLO eğitim derlemesi | yukarıdaki iki CC BY 4.0 setten türetildi | CC BY 4.0 | ✅ | ✅ |
 | `isafety_bench/` | **iSafetyBench** (1.100 klip) | [raiyaanabdullah/isafety-bench](https://huggingface.co/datasets/raiyaanabdullah/isafety-bench) · [github.com/iSafetyBench/data](https://github.com/iSafetyBench/data) · makale [arXiv:2508.00399](https://arxiv.org/abs/2508.00399) | **CC BY-NC-SA 4.0** | ❌ **YASAK** | ❌ |
+| `external/synthsite/` | **SynthSite Tier-1** (150 klip; askıdaki yük) | [govtech/SynthSite](https://huggingface.co/datasets/govtech/SynthSite) · sabit revizyon `2904ec01...` | GovTech Singapore OSS Licence | — | lisans koşullarıyla |
+| `eval_deep_smoke_balanced_v1/` | **Project RISE / Deep Smoke Machine** (aynı kamera+görüş+gün; 28 duman + 28 dumansız) | [CMU CREATE Lab resmî repo](https://github.com/CMU-CREATE-Lab/deep-smoke-machine) · [makale](https://arxiv.org/abs/2005.06111) · sabit revizyon `e796bf3...` | **CC0** (veri) | ✅ | ✅ |
 | (aday, alınmadı) | Mendeley PPE `8vf7z6v5sb` | [data.mendeley.com/datasets/8vf7z6v5sb](https://data.mendeley.com/datasets/8vf7z6v5sb) | — | — | — |
 
 ### Üretilenler — indirmeye gerek yok

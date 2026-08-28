@@ -7,6 +7,7 @@ Kucuk model (yolo11n ~6MB) 7B vLLM ile ayni GPU'ya rahat sigar.
 from __future__ import annotations
 
 import io
+import os
 from collections import Counter
 from typing import List, Optional, Sequence, Tuple
 
@@ -37,8 +38,14 @@ def _cihaz() -> str:
 def _get_model():
     global _model
     if _model is None:
+        from dilajan.config import settings
+        if settings.yerel_ogrenilmis_yasak:
+            raise RuntimeError("özel API profilinde yerel öğrenilmiş model yasak")
+        yol = os.path.join(os.path.dirname(os.path.dirname(__file__)), "yolo11n.pt")
+        if not os.path.isfile(yol):
+            raise FileNotFoundError("yolo11n.pt yerelde yok; çalışma-zamanında model indirilmez")
         from ultralytics import YOLO
-        _model = YOLO("yolo11n.pt")  # ilk kullanimda ~6MB indirilir
+        _model = YOLO(yol)
     return _model
 
 
@@ -91,8 +98,15 @@ _pose_model = None
 def _get_pose_model():
     global _pose_model
     if _pose_model is None:
+        from dilajan.config import settings
+        if settings.yerel_ogrenilmis_yasak:
+            raise RuntimeError("özel API profilinde yerel öğrenilmiş model yasak")
+        yol = os.path.join(os.path.dirname(os.path.dirname(__file__)), "yolo11n-pose.pt")
+        if not os.path.isfile(yol):
+            raise FileNotFoundError(
+                "yolo11n-pose.pt yerelde yok; çalışma-zamanında model indirilmez")
         from ultralytics import YOLO
-        _pose_model = YOLO("yolo11n-pose.pt")  # ilk kullanimda ~6MB
+        _pose_model = YOLO(yol)
     return _pose_model
 
 
@@ -359,6 +373,9 @@ def _get_kkd_model(kit: str = "baret"):
     """Kit modelini yukler. Agirlik yoksa None (FAIL-OPEN — o kit devre disi)."""
     if kit in _kkd_modeller:
         return _kkd_modeller[kit]
+    from dilajan.config import settings
+    if settings.yerel_ogrenilmis_yasak:
+        return None
     import os as _os
     k = _kit(kit)
     kok = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))

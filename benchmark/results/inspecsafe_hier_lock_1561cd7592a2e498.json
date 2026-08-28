@@ -1,0 +1,44 @@
+{
+  "calibration_result_sha256": "f4503858424bb72a9eb432828f654138344fbf43c18a4a409c124d31f2404086",
+  "calibration_run_key": "999a6975370227ee",
+  "contract": {
+    "attempts_max": 5,
+    "base_url": "https://evren-llmapi.ssyz.org.tr/v1",
+    "local_learned_inference_forbidden": true,
+    "model_download_allowed": false,
+    "models": {
+      "algi": "vlm",
+      "olay": "llm-large",
+      "ozet": "llm-fast",
+      "yapi": "llm-fast"
+    },
+    "temperature": 0.0
+  },
+  "created_at": "2026-08-28T07:16:19.581048+00:00",
+  "dataset_revision": "f3cb7d3e7827c1afc1c5bfd0524257984bba46ab",
+  "decision_spec": {
+    "architecture": "hybrid",
+    "rescue_threshold": 0.76,
+    "veto_threshold": 0.21
+  },
+  "manifest_sha256": "1561cd7592a2e49881e502fed75c9def303172e4d6f05998512cd3bcef843fba",
+  "official_code_revision": "d2f66e0ada2edc4dc65c25213d37b00a4039910f",
+  "private_api": "https://evren-llmapi.ssyz.org.tr/v1",
+  "prompt_hashes": {
+    "binary_suffix": "bbdf1b014e3261b26155077904742b9d92eadd30644b449dac35dc5eee1b6328",
+    "binary_system": "0b30c6ab726e604d8b6025ff6b74e0b0ab8efb0b944d12ac430009712d12e548",
+    "classify_suffix": "bcfdb7ebb56053c4f28632f0c89b0deb75885cf497e03199d58f45493dc85ed9",
+    "classify_system": "97d2427bad7923707be3eaa54818371318f1b639d68fc197fc22a1be7782c868",
+    "format_prompt": "058db2c9ef52ca48db30c0af056e2e9a6cae51f8078fdbc000fcf9728efd83f9",
+    "format_system": "c0db9be27da7c4189049040ae1734d3efded82992d94018dd3995766857e71f6",
+    "neutral_prompt": "049a9f2aa33bdda7a85401b5e7c260053c07794003bfd08ed01bfb5a82d9f19a",
+    "neutral_system": "769d4f8d23906567d43f7d40e066bf91acc5a3ff5fc673bda4eb0079b8f843aa",
+    "official": "f13a8837108f41e590d2bfddcc41ed55f9f880cea79d621b2cfd993e8ddceb9d",
+    "severity_suffix": "71018a5e26a6a85e6dc722dba26c9b49dcff7cd0465b5af9762c4dc0a1418e72",
+    "severity_system": "c8592eed9414c21238974900f824fc90d864aa4741fdf6657a82a3c81b5056dd"
+  },
+  "revision": "inspecsafe-v1-hierarchical-train-v2",
+  "runner_sha256": "751c9ea8bf0eb22e331b5d4c528e1621dd9d2cab73a0a6ff419833846e1e301b",
+  "selection_objective": "prior_f1, weighted_accuracy, lower_severity_call_rate, simpler_architecture",
+  "split_salt": "inspecsafe-v1-hier-v1"
+}

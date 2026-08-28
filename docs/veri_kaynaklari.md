@@ -71,6 +71,7 @@ cut -c1-32 /tmp/m.txt | sort | uniq -d | wc -l   # mukerrer md5 grubu
 | **Simuletic CCTV** | Tepeden-CCTV yerde-yatan kişi — **sentetik, tek kare** | CC BY 4.0 | https://huggingface.co/datasets/Simuletic/CCTV_Incident_Dataset_Fall_Lying_Down_Detection | `scripts/get_lying.py` |
 | **UCF-Crime** | Gözetim anomali (dayanıklılık stresi) | ⚠️ **CC DEĞİL** — akademik/araştırma kullanımı; klipler **üçüncü-taraf HF aynasından** çekiliyor | https://www.crcv.ucf.edu/projects/real-world/ | `scripts/get_ucf_clip.py`, `get_ucf_many.py`, `get_normal_clips.py` |
 | **NVIDIA PhysicalAI Warehouse** | 1080p sentetik depo (denendi, **kullanılmadı**) | OpenMDW 1.1 | https://huggingface.co/datasets/nvidia/PhysicalAI-WorldModel-Synthetic-Warehouse-Operations-Scenes | (deney; manuel) |
+| **Project RISE / Deep Smoke Machine** | Gerçek sanayi tesisi sabit kamera; güçlü araştırmacı etiketli duman/dumansız video | **CC0** (veri), BSD-3-Clause (kod) | https://github.com/CMU-CREATE-Lab/deep-smoke-machine · https://arxiv.org/abs/2005.06111 | `scripts/prepare_deep_smoke_balanced.py` (sabit 28+28 alt küme) |
 
 ### Lisans uyumu — açık beyan
 - **Kod:** Apache-2.0 (`LICENSE`). **Model:** Qwen3-VL-8B-Instruct(-FP8) — Apache-2.0.

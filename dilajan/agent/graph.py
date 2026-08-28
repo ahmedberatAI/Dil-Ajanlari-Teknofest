@@ -227,13 +227,41 @@ _CLAIM_FAMILY_PATTERNS = (
     ("yangın/duman", re.compile(
         r"yangın|yangin|duman|alev|patlam|kıvılcım|kivilcim|smoke|fire|flame|explosion")),
     ("düşme/yaralı kişi", re.compile(
-        r"düş|dus|yığıl|yigil|çök|cok|yaralı|yarali|hareketsiz|baygın|baygin|"
-        r"bilinçsiz|bilincsiz|kanama|yerde yat|yere uzan|fallen|injured|unconscious|collapsed")),
+        # `düş` ciplak alt-dizgesi `(Düşük)` onem etiketini DUSME iddiasi
+        # saniyordu. Turetimsel `düşük`/`düşün...` haric, fiil kokunu koru.
+        r"\bdüş(?!ük|ün)|\bdus(?!uk|un)|yığıl|yigil|çök|cok|yaralı|yarali|"
+        r"hareketsiz|baygın|baygin|bilinçsiz|bilincsiz|kanama|yerde yat|"
+        r"yere uzan|fallen|injured|unconscious|collapsed")),
+    ("olağandışı kişi hareketi", re.compile(
+        # Normal kutu-alma auditinde goruntude kisi yokken model `panikle
+        # kosma`, `yerde surunme`, `denge kaybi` uydurdu. Bunlar yangin/kaza
+        # ailesine girmedigi icin eski muhafizi tamamen atliyordu.
+        r"panik|koş|kos|kaçış|kacis|hızla kaç|hizla kac|sürün|surun|emekle|"
+        r"yatarak|yerde hareket|denge kayb|takıl|takil|zorlukla ayağa|"
+        r"zorlukla ayaga|ani savrul")),
     ("şiddet/silah", re.compile(
         r"kavga|dövüş|dovus|darp|saldır|saldir|şiddet|siddet|silah|bıçak|bicak|"
         r"ateş et|ates et|fight|assault|weapon|gun|knife")),
+    ("askıda yük/düşme bölgesi", re.compile(
+        r"askıda yük|askida yuk|asılı yük|asili yuk|yük altında|yuk altinda|"
+        r"düşme bölgesi|dusme bolgesi|salınım bölgesi|salinim bolgesi|"
+        r"suspended load|fall zone|overhead load")),
+    ("kontrolsüz yük/çökme", re.compile(
+        r"(?:yük|yuk|istif|raf|platform|levha|boru|direk|iskelet|ağaç|agac|"
+        r"yapı|yapi).{0,60}(?:düş|dus|devril|çök|cok|kop|kay|savrul)|"
+        r"(?:düşen|dusen|devrilen|çöken|coken|kayan).{0,35}"
+        r"(?:yük|yuk|istif|raf|platform|levha|boru|direk|iskelet|ağaç|agac|yapı|yapi)|"
+        r"falling load|load fall|platform failure|structural collapse|"
+        r"shelves? toppl|heavy object slipping|tree falling")),
+    ("makineye sıkışma/ezilme", re.compile(
+        r"sıkış|sikis|ezil|makineye takıl|makineye takil|giysi.{0,25}takıl|"
+        r"giysi.{0,25}takil|konveyör.{0,25}takıl|konveyor.{0,25}takil|"
+        r"trapped|caught in|crush|pinned between|pulled into")),
     ("çarpışma/devrilme", re.compile(
-        r"çarpış|carpis|çarpma|carpma|devril|kaza|collision|crash|overturn|rollover")),
+        # `çarpışma/çarpma` yanında modelin sık ürettiği çekimli `çarparak`,
+        # `çarptı`, `devirdi` biçimlerini de yakala. Bunlar kaçınca İSG-odaklı
+        # politika gerçek fiziksel çarpışmayı "ailesiz" diye siliyordu.
+        r"çarp|carp|devril|devirdi|devirme|kaza|collision|crash|overturn|rollover")),
     ("yetkisiz giriş/müdahale", re.compile(
         r"yetkisiz|izinsiz|zorla gir|kısıtlı bölge|kisitli bolge|yasak bölge|yasak bolge|"
         r"unauthorized|intruder|trespass")),
@@ -242,11 +270,571 @@ _CLAIM_FAMILY_PATTERNS = (
         r"kişisel koruyucu|kisisel koruyucu|hardhat|helmet|safety vest|ppe")),
 )
 
+_EXTENDED_CLAIM_FAMILIES = {
+    "kontrolsüz yük/çökme", "makineye sıkışma/ezilme",
+}
+_EXPLICIT_COLLISION_RE = re.compile(
+    r"çarp|carp|collision|crash|araç.{0,20}devril|arac.{0,20}devril|"
+    r"vehicle.{0,20}(?:overturn|rollover)|rollover"
+)
+
+_KKD_ITEM_PATTERNS = {
+    "baret": re.compile(r"\bbaret\w*|\bhardhat\b|\bhelmet\b|baş koruma|bas koruma"),
+    "yelek": re.compile(r"\b(?:reflektif\s+)?yelek\w*|\bsafety vest\b"),
+}
+_KKD_DESTEKLENMEYEN_ITEM_RE = re.compile(
+    r"eldiven|gözlük|gozluk|maske|kulaklık|kulaklik|ayakkabı|ayakkabi|"
+    r"emniyet kemeri|harness|yüz siperi|yuz siperi|solunum koru")
+_KKD_ZORUNLULUK_RE = re.compile(
+    r"zorunlu|mecburi|gerekli|takılmalı|takilmali|kullanılmalı|kullanilmali|"
+    r"ihlal|eksik|baretsiz|yeleksiz|without")
+_KKD_OLUMSUZ_KURAL_RE = re.compile(
+    r"zorunlu\s+değil|zorunlu\s+degil|gerekli\s+değil|gerekli\s+degil|"
+    r"aranmaz|serbest|isteğe bağlı|istege bagli")
+
+
+def _kkd_beyanli_kitler() -> Tuple[set, List[str]]:
+    """Operatörün açıkça zorunlu kıldığı baret/yelek kitlerini döndür."""
+    kitler: set = set()
+    kaynaklar: List[str] = []
+    for kaynak, ham in (("facility_rules", settings.facility_rules),
+                        ("facility_policy", settings.facility_policy)):
+        for satir in re.split(r"[\n;]+", _tr_lower(ham or "")):
+            satir = satir.strip()
+            if not satir or _KKD_OLUMSUZ_KURAL_RE.search(satir):
+                continue
+            if not _KKD_ZORUNLULUK_RE.search(satir):
+                continue
+            for kit, rx in _KKD_ITEM_PATTERNS.items():
+                if rx.search(satir):
+                    kitler.add(kit)
+                    kaynaklar.append(f"{kaynak}:{kit}")
+    if settings.ppe_detection:
+        istenen = {_tr_lower(x.strip()) for x in (settings.ppe_kits or "").split(",")
+                   if x.strip()}
+        for kit in _KKD_ITEM_PATTERNS:
+            if kit in istenen:
+                kitler.add(kit)
+                kaynaklar.append(f"ppe_detection:{kit}")
+    return kitler, kaynaklar
+
+
+def _kkd_iddia_kapisi(event_text: str) -> Tuple[bool, str]:
+    """KKD anlatısını yalnız beyanlı ve mevcut spekle ölçülebilir kalemlerde aç."""
+    t = _tr_lower(event_text or "")
+    beyanli, kaynaklar = _kkd_beyanli_kitler()
+    if _KKD_DESTEKLENMEYEN_ITEM_RE.search(t):
+        return False, "KKD_DESTEKLENMEYEN_KALEM"
+    iddia = {kit for kit, rx in _KKD_ITEM_PATTERNS.items() if rx.search(t)}
+    if not beyanli:
+        return False, "KKD_BEYANI_YOK"
+    if iddia and not iddia.issubset(beyanli):
+        return False, (
+            "KKD_KALEMI_BEYANLI_DEGIL[id=" + ",".join(sorted(iddia))
+            + ";beyan=" + ",".join(sorted(beyanli)) + "]")
+    return True, (
+        "KKD_BEYANI_VAR[id=" + (",".join(sorted(iddia)) or "genel")
+        + ";kaynak=" + ",".join(sorted(set(kaynaklar))) + "]")
+
 
 def _claim_families(text: str) -> List[str]:
     """Metindeki somut, gorsel kanit gerektiren iddia ailelerini dondurur."""
     t = _tr_lower(text or "")
-    return [ad for ad, rx in _CLAIM_FAMILY_PATTERNS if rx.search(t)]
+    families = [ad for ad, rx in _CLAIM_FAMILY_PATTERNS if rx.search(t)]
+    if not getattr(settings, "atomic_extended_families", False):
+        return [x for x in families if x not in _EXTENDED_CLAIM_FAMILIES]
+    # Yük/raf/yapı düşmesi kendi zamansal ailesidir. Metinde açık bir ayrı
+    # hedefe çarpma yoksa eski geniş `kaza|devril` kalıbı ikinci, gereksiz bir
+    # çarpışma atomu ekleyip doğru yük olayını veto etmesin.
+    if ("kontrolsüz yük/çökme" in families
+            and "çarpışma/devrilme" in families
+            and not _EXPLICIT_COLLISION_RE.search(t)):
+        families.remove("çarpışma/devrilme")
+    return families
+
+
+_ATOMIK_AILE_SABLONLARI = {
+    "yangın/duman": (
+        "Görünür yangın/duman kanıtı: gerçek alev veya zamanla yükselen ve yayılan "
+        "duman açıkça doğrulandı", Severity.KRITIK, EventCategory.GUVENLIK),
+    "termal aşırı ısınma": (
+        "Termal aşırı ısınma kanıtı: makine veya metal yüzeyin kızgın kırmızı-turuncu "
+        "kor ışımasına geçtiği açıkça doğrulandı", Severity.KRITIK,
+        EventCategory.GUVENLIK),
+    "destekten sarkan kişi": (
+        "Yüksekten düşme tehlikesi: kişi ayak desteğini kaybedip yüksek bir kenar veya "
+        "borudan elleri/kollarıyla asılı kaldı", Severity.KRITIK,
+        EventCategory.KAZA),
+    "kontrolünü kaybeden araç": (
+        "Araç kontrol kaybı: araç veya iş makinesi kontrolsüz savruldu, devrildi, "
+        "çarptı ya da yol kenarından düştü", Severity.KRITIK,
+        EventCategory.KAZA),
+    "dengesini kaybeden ağır yük": (
+        "Ağır yük tehlikesi: yük düştü/kaydı veya taşıyıcı sistemi belirgin biçimde "
+        "dengesizleştirdi", Severity.KRITIK, EventCategory.KAZA),
+    "karşılıklı fiziksel kavga": (
+        "Fiziksel şiddet: kişiler arasında tekrarlanan sert vurma, tekmeleme, itme "
+        "veya boğuşma açıkça doğrulandı", Severity.KRITIK,
+        EventCategory.GUVENLIK),
+    "aktif makine yakalama/sıkışma": (
+        "Makine sıkışması: kişinin bedeni, uzvu veya giysisi hareketli/kapanan "
+        "makineyle gerçek fiziksel bağ kurarak çekildi, sıkıştı veya ezildi",
+        Severity.KRITIK, EventCategory.KAZA),
+    "ani endüstriyel enerji/ekipman olayı": (
+        "Ani endüstriyel olay: görünür ekipman/enerji kaynağında kontrolsüz ağır "
+        "hareket, kırılma veya enerji-malzeme salımı açıkça doğrulandı",
+        Severity.KRITIK, EventCategory.GUVENLIK),
+    "kişi destek kaybı/düşme": (
+        "Düşme tehlikesi: kişi ayağının veya merdivenin desteğini kaybedip düştü "
+        "ya da düşmemek için asılı kaldı", Severity.KRITIK, EventCategory.KAZA),
+    "düşme/yaralı kişi": (
+        "Kişi düşmesi/yaralanma kanıtı: gerçek kişinin zemine düşme geçişi veya "
+        "yerde yatarak kalması açıkça doğrulandı", Severity.KRITIK, EventCategory.KAZA),
+    "şiddet/silah": (
+        "Fiziksel şiddet/silah kanıtı: kişiye yönelik açık saldırı veya görünür "
+        "silah doğrulandı", Severity.KRITIK, EventCategory.GUVENLIK),
+    "çarpışma/devrilme": (
+        "Çarpışma kanıtı: hareketli varlık ayrı hedefe temas etti ve hedefte "
+        "doğrudan durum değişimi oluşturdu", Severity.KRITIK, EventCategory.KAZA),
+    "yetkisiz giriş/müdahale": (
+        "Görünür sınır ihlali: kişi fiziksel bariyer, kapalı geçiş veya açıkça "
+        "işaretlenmiş kısıtlı alan sınırını aştı", Severity.YUKSEK,
+        EventCategory.YETKISIZ_ERISIM),
+    "KKD eksikliği": (
+        "KKD eksikliği: yeterince görünür çalışanda gerekli koruyucu donanımın "
+        "eksik olduğu açıkça doğrulandı", Severity.YUKSEK, EventCategory.GUVENLIK),
+    "askıda yük/düşme bölgesi": (
+        "Askıda yük düşme bölgesi ihlali: çalışan havadaki yükün düşme veya "
+        "salınım alanında en az bir saniye kaldı", Severity.KRITIK,
+        EventCategory.GUVENLIK),
+    "kontrolsüz yük/çökme": (
+        "Kontrolsüz yük/yapı hareketi: yük, istif, platform veya yapı destekli "
+        "konumunu kaybederek düştü, devrildi ya da çöktü", Severity.KRITIK,
+        EventCategory.KAZA),
+    "makineye sıkışma/ezilme": (
+        "Makineye sıkışma/ezilme: kişinin bedeni, uzvu veya giysisi hareketli "
+        "ekipmana sıkıştı, çekildi ya da iki yüzey arasında ezildi", Severity.KRITIK,
+        EventCategory.KAZA),
+}
+
+
+def _atomik_aile_olayi(ev: Event, aile: str) -> Event:
+    """Karma model nesri yerine yalnız destekli fiziksel atomu render et."""
+    metin, severity, category = _ATOMIK_AILE_SABLONLARI[aile]
+    return ev.model_copy(update={"event": metin, "severity": severity,
+                                 "category": category})
+
+
+# v12i allowlist: yalnız olay-sız fallback'te geliştirme kümesinde bağımsız
+# atomik kapıyla yeni FP üretmeden doğrulanan aileler. `makineye sıkışma/ezilme`
+# ana taksonomiden kaldırılmadı; yalnız bu fallback'in aday uzayına alınmadı.
+_KAPALI_AILE_SECENEKLERI = (
+    "YANGIN_DUMAN", "KISI_DUSME", "SIDDET_SILAH", "ARAC_KAZA", "YUK_COKME",
+    "ASKIDA_YUK", "SINIR_IHLALI", "KKD_EKSIK", "OLAY_YOK", "GORUNMUYOR",
+)
+_KAPALI_AILE_ESLEME = {
+    "YANGIN_DUMAN": "yangın/duman",
+    "KISI_DUSME": "düşme/yaralı kişi",
+    "SIDDET_SILAH": "şiddet/silah",
+    "ARAC_KAZA": "çarpışma/devrilme",
+    "YUK_COKME": "kontrolsüz yük/çökme",
+    "ASKIDA_YUK": "askıda yük/düşme bölgesi",
+    "SINIR_IHLALI": "yetkisiz giriş/müdahale",
+    "KKD_EKSIK": "KKD eksikliği",
+}
+_KAPALI_AILE_TARAMA_PROMPT = (
+    "Bu kısa videoyu kronolojik incele. Yalnız doğrudan görülen en belirgin yüksek "
+    "öncelikli İSG olay AİLESİNİ seç. Rutin çalışma/yürüme/taşıma olay değildir. "
+    "Yangın için gerçek alev/yayılan duman; kişi düşmesi için zemine geçiş/yerde yatma; "
+    "araç kazası için temas veya kontrol kaybı/devrilme; yük çökmesi için yük/raf/yapının "
+    "destekli konumunu kaybetmesi; askıda yük için kişinin düşme-salınım bölgesinde "
+    "kalması; sınır ihlali için görünür bariyer/kısıtlı sınır geçişi; KKD için yeterince "
+    "görünür kişide açık eksiklik gerekir. Hiçbiri açık değilse OLAY_YOK, görüntü "
+    "yetersizse GORUNMUYOR seç. Yalnız izin verilen etiketi yaz."
+)
+
+
+def _kapali_aile_fallback(vlm: VLMClient, seg) -> Tuple[List[Event], str]:
+    """Olay-sız segmentte kapalı aday üret, bağımsız atomik kanıtla fail-closed doğrula."""
+    try:
+        from dilajan.isg_kanit import ATOMIK_SISTEM, dogrula
+        secim = vlm.gorev("olay").analyze_frames(
+            seg.frames, _KAPALI_AILE_TARAMA_PROMPT,
+            temperature=0.0, max_tokens=20, system=ATOMIK_SISTEM,
+            guided_choice=_KAPALI_AILE_SECENEKLERI).strip().upper()
+        aile = _KAPALI_AILE_ESLEME.get(secim)
+        if not aile:
+            return [], f"kapalı-aile fallback: {secim or 'BOS'} -> aday yok"
+        if secim == "KKD_EKSIK":
+            beyanli, _kaynaklar = _kkd_beyanli_kitler()
+            if not beyanli:
+                return [], (
+                    "kapalı-aile fallback: KKD_EKSIK -> KKD_BEYANI_YOK -> aday yok")
+        sonuc = dogrula(vlm, seg.frames, aile)
+        if not sonuc.supported:
+            return [], f"kapalı-aile fallback: {secim} -> {sonuc.iz_satiri()}"
+        temel = Event(time=seg.start_str, event=aile, severity=Severity.ORTA,
+                      category=EventCategory.ANOMALI)
+        return [_atomik_aile_olayi(temel, aile)], (
+            f"kapalı-aile fallback: {secim} -> {sonuc.iz_satiri()} -> olay üretildi")
+    except Exception as ex:
+        return [], f"kapalı-aile fallback: hata/fail-closed {type(ex).__name__}: {ex}"
+
+
+def _termal_fallback(vlm: VLMClient, seg, *,
+                     fire_dust_veto: bool = False) -> Tuple[List[Event], str, bool]:
+    """Termal adayı doğrula; açık toz/buhar çelişkisinde terminal abstain et."""
+    try:
+        from dilajan.isg_kanit import dogrula
+        sonuc = dogrula(vlm, seg.frames, "termal aşırı ısınma")
+        if not sonuc.supported:
+            return [], f"termal fallback: {sonuc.iz_satiri()}", False
+        if fire_dust_veto:
+            return [], (
+                "termal fallback: TERMINAL_ABSTAIN[yangın_zamansal="
+                f"BUHAR_TOZ_PARLAMA; termal={sonuc.iz_satiri()}] -> "
+                "çelişkili fiziksel yorum, olay üretilmedi"), True
+        temel = Event(time=seg.start_str, event="termal aşırı ısınma",
+                      severity=Severity.ORTA, category=EventCategory.ANOMALI)
+        return [_atomik_aile_olayi(temel, "termal aşırı ısınma")], (
+            f"termal fallback: {sonuc.iz_satiri()} -> olay üretildi"), False
+    except Exception as ex:
+        return [], (
+            f"termal fallback: hata/fail-closed {type(ex).__name__}: {ex}"), False
+
+
+_FIZIKSEL_UZMAN_SECENEKLERI = (
+    "SARKAN_KISI", "ARAC_KONTROL_KAYBI", "YUK_DENGE_KAYBI", "KAVGA",
+    "OLAY_YOK", "GORUNMUYOR",
+)
+_FIZIKSEL_UZMAN_ESLEME = {
+    "SARKAN_KISI": "destekten sarkan kişi",
+    "ARAC_KONTROL_KAYBI": "kontrolünü kaybeden araç",
+    "YUK_DENGE_KAYBI": "dengesini kaybeden ağır yük",
+    "KAVGA": "karşılıklı fiziksel kavga",
+}
+_FIZIKSEL_UZMAN_PROMPT = (
+    "Bu kısa videoyu kronolojik incele ve yalnız doğrudan görülen en belirgin fiziksel "
+    "olay etiketini seç. SARKAN_KISI: kişi ayak desteğini kaybedip yüksek kenar/borudan "
+    "elleriyle asılı kalır. ARAC_KONTROL_KAYBI: araç/iş makinesi savrulur, devrilir, "
+    "kenardan düşer, çarpar veya içerideki kişiyi fırlatacak şiddette yön/duruş kaybeder. "
+    "YUK_DENGE_KAYBI: ağır yük düşer/kayar ya da vinç/taşıyıcı yük nedeniyle açıkça "
+    "dengesizleşir. KAVGA: iki kişi tekrarlanan sert vurma/tekme/itme/boğuşma yapar. "
+    "Rutin sürüş, manevra, taşıma, tırmanma, çalışma, kalabalık hareketi ve yalnız niyet "
+    "tahmini olay değildir. Hiçbiri açık değilse OLAY_YOK; görüntü yetersizse GORUNMUYOR. "
+    "Açıklamasız yalnız izin verilen etiketi yaz."
+)
+
+
+def _fiziksel_uzman_fallback(vlm: VLMClient, seg) -> Tuple[List[Event], str]:
+    """Tek kapalı fiziksel scout seçimini bağımsız atomik kapıyla doğrula."""
+    try:
+        from dilajan.isg_kanit import ATOMIK_SISTEM, dogrula
+        secim = vlm.gorev("olay").analyze_frames(
+            seg.frames, _FIZIKSEL_UZMAN_PROMPT, temperature=0.0, max_tokens=24,
+            system=ATOMIK_SISTEM, guided_choice=_FIZIKSEL_UZMAN_SECENEKLERI,
+        ).strip().upper()
+        aile = _FIZIKSEL_UZMAN_ESLEME.get(secim)
+        if not aile:
+            return [], f"fiziksel uzman fallback: {secim or 'BOS'} -> aday yok"
+        sonuc = dogrula(vlm, seg.frames, aile)
+        if not sonuc.supported:
+            return [], f"fiziksel uzman fallback: {secim} -> {sonuc.iz_satiri()}"
+        temel = Event(time=seg.start_str, event=aile, severity=Severity.ORTA,
+                      category=EventCategory.ANOMALI)
+        return [_atomik_aile_olayi(temel, aile)], (
+            f"fiziksel uzman fallback: {secim} -> {sonuc.iz_satiri()} -> olay üretildi")
+    except Exception as ex:
+        return [], f"fiziksel uzman fallback: hata/fail-closed {type(ex).__name__}: {ex}"
+
+
+_ENDUSTRIYEL_SECENEKLER = (
+    "MAKINE_YAKALAMA", "DUSEN_AGIR_YUK", "KISI_DESTEK_KAYBI", "ALEV_DUMAN_GAZ",
+    "ARAC_KONTROL_KAYBI", "MAKINE_ARIZASI", "OLAY_YOK", "GORUNMUYOR",
+)
+_ENDUSTRIYEL_ALLOWLIST = {
+    "MAKINE_YAKALAMA": "aktif makine yakalama/sıkışma",
+    "MAKINE_ARIZASI": "ani endüstriyel enerji/ekipman olayı",
+    "KISI_DESTEK_KAYBI": "kişi destek kaybı/düşme",
+}
+_ENDUSTRIYEL_SCOUT_PROMPT = (
+    "Bu kısa videoyu kronolojik incele; yalnız doğrudan görülen en belirgin fiziksel "
+    "endüstriyel olayı seç. MAKINE_YAKALAMA: beden/uzuv/giysi hareketli makine, konveyör, "
+    "pres veya kapanan yüzeye çekilir/sıkışır. DUSEN_AGIR_YUK: ağır yük/platform/pres "
+    "kontrolsüz düşer, kayar veya insanların üstüne iner. KISI_DESTEK_KAYBI: kişi kayar, "
+    "düşer ya da ayak desteğini kaybedip asılı kalır. ALEV_DUMAN_GAZ: gerçek alev, "
+    "yayılan yoğun duman veya basınçlı gaz salımı vardır. ARAC_KONTROL_KAYBI: araç/iş "
+    "makinesi savrulur, devrilir, çarpar veya kontrolsüz döner. MAKINE_ARIZASI: makine "
+    "aniden şiddetle sallanır, cam/parça kırılır, kopar veya fırlar. Rutin çalışma, "
+    "kontrollü indirme, normal titreşim/buhar/egzoz ve yalnız niyet tahmini olay değildir. "
+    "Hiçbiri açık değilse OLAY_YOK; görüntü yetersizse GORUNMUYOR. Yalnız etiketi yaz."
+)
+
+
+def _endustriyel_olay_fallback(vlm: VLMClient, seg) -> Tuple[List[Event], str]:
+    """v13c: tek scout'un yalnız saflaştırılmış üç dalını atomik doğrula."""
+    try:
+        from dilajan.isg_kanit import ATOMIK_SISTEM, dogrula
+        secim = vlm.gorev("olay").analyze_frames(
+            seg.frames, _ENDUSTRIYEL_SCOUT_PROMPT, temperature=0.0, max_tokens=24,
+            system=ATOMIK_SISTEM, guided_choice=_ENDUSTRIYEL_SECENEKLER,
+        ).strip().upper()
+        aile = _ENDUSTRIYEL_ALLOWLIST.get(secim)
+        if not aile:
+            return [], f"endüstriyel fallback: {secim or 'BOS'} -> allowlist adayı yok"
+        sonuc = dogrula(vlm, seg.frames, aile)
+        if not sonuc.supported:
+            return [], f"endüstriyel fallback: {secim} -> {sonuc.iz_satiri()}"
+        temel = Event(time=seg.start_str, event=aile, severity=Severity.ORTA,
+                      category=EventCategory.ANOMALI)
+        return [_atomik_aile_olayi(temel, aile)], (
+            f"endüstriyel fallback: {secim} -> {sonuc.iz_satiri()} -> olay üretildi")
+    except Exception as ex:
+        return [], f"endüstriyel fallback: hata/fail-closed {type(ex).__name__}: {ex}"
+
+
+_DAR_ENDUSTRIYEL_SECENEKLER = (
+    "MAKINE_YAKALAMA", "KISI_DESTEK_KAYBI", "ENDUSTRIYEL_ENERJI_OLAYI",
+    "OLAY_YOK", "GORUNMUYOR",
+)
+_DAR_ENDUSTRIYEL_ALLOWLIST = {
+    "MAKINE_YAKALAMA": "aktif makine yakalama/sıkışma",
+    "KISI_DESTEK_KAYBI": "kişi destek kaybı/düşme",
+}
+_DAR_ENDUSTRIYEL_PROMPT = (
+    "Bu kısa videoyu baştan sona kronolojik incele. Yalnız doğrudan görülen tek "
+    "en belirgin fiziksel olayı seç. MAKINE_YAKALAMA: gerçek kişinin bedeni, uzvu "
+    "veya giysisi çalışan/hareketli makineye fiziksel olarak yakalanır, çekilir, "
+    "sıkışır ya da ezilir. KISI_DESTEK_KAYBI: gerçek kişi dik veya destekli "
+    "konumunu kaybedip kontrolsüz düşer, zemine çarpar ya da düşmemek için asılı "
+    "kalır. ENDUSTRIYEL_ENERJI_OLAYI: görünür makine, pres, ağır yük sistemi, "
+    "basınçlı hat/silindir veya araç bakım ekipmanında ani kontrolsüz ağır hareket, "
+    "kırılma, parça kopması, alev-duman ya da basınçlı enerji/malzeme salımı olur. "
+    "Rutin çalışma, kontrollü taşıma/indirme, makine yanında çalışma, normal "
+    "titreşim, buhar, egzoz, toz, ışık/kamera değişimi ve yalnız insanların "
+    "hareketlenmesi olay değildir. Hiçbiri açık değilse OLAY_YOK; görüntü kanıt "
+    "için yetersizse GORUNMUYOR. Açıklamasız yalnız izin verilen etiketi yaz."
+)
+
+
+def _dar_kisi_makine_fallback(vlm: VLMClient, seg) -> Tuple[List[Event], str]:
+    """v13f: yalnız iki saf fiziksel dalın ikinci scout ile kurtarılması."""
+    try:
+        from dilajan.isg_kanit import ATOMIK_SISTEM, dogrula
+        secim = vlm.gorev("olay").analyze_frames(
+            seg.frames, _DAR_ENDUSTRIYEL_PROMPT, temperature=0.0, max_tokens=24,
+            system=ATOMIK_SISTEM, guided_choice=_DAR_ENDUSTRIYEL_SECENEKLER,
+        ).strip().upper()
+        aile = _DAR_ENDUSTRIYEL_ALLOWLIST.get(secim)
+        if not aile:
+            return [], f"dar kişi/makine fallback: {secim or 'BOS'} -> allowlist adayı yok"
+        sonuc = dogrula(vlm, seg.frames, aile)
+        if not sonuc.supported:
+            return [], f"dar kişi/makine fallback: {secim} -> {sonuc.iz_satiri()}"
+        temel = Event(time=seg.start_str, event=aile, severity=Severity.ORTA,
+                      category=EventCategory.ANOMALI)
+        return [_atomik_aile_olayi(temel, aile)], (
+            f"dar kişi/makine fallback: {secim} -> {sonuc.iz_satiri()} -> olay üretildi")
+    except Exception as ex:
+        return [], f"dar kişi/makine fallback: hata/fail-closed {type(ex).__name__}: {ex}"
+
+
+_KESINTISIZ_DUSME_SECENEKLERI = ("A", "B", "C", "D")
+_KESINTISIZ_DUSME_SORULARI = (
+    (
+        "person", "algi",
+        "Videoda olay boyunca izlenebilen gerçek bir kişi, bedeni ve destek/zemin "
+        "ilişkisi seçilebilir biçimde görünüyor mu? A: Gerçek kişi ve bedeni yeterli "
+        "açıklıkta görünür. B: Yalnız nesne, gölge, araç veya çok küçük/örtülü şekil. "
+        "C: Kişi yok. D: Görüntü yetersiz. Açıklamasız yalnız A, B, C veya D yaz."
+    ),
+    (
+        "transition", "olay",
+        "Videoyu kronolojik izle. Aynı gerçek kişi destekli/dik konumdan istemsiz "
+        "ve kontrolsüz biçimde aşağı hareket edip dengesini veya ayak desteğini "
+        "kaybediyor mu? A: Kontrolsüz destek kaybı/düşey düşüş açık. B: Rutin eğilme, "
+        "çömelme, yük kaldırma, planlı iniş, normal koşma/yürüme veya sahne kesimi. "
+        "C: Böyle geçiş yok. D: Görüntü yetersiz. Açıklamasız yalnız A, B, C veya D yaz."
+    ),
+    (
+        "outcome", "olay",
+        "Videoyu kronolojik izle. Aynı kişinin kontrolsüz geçişi fiziksel bir sonuçla "
+        "tamamlanıyor mu: bedeni zemine/sert yüzeye temas ediyor, kişi destekten asılı "
+        "kalıyor veya düşme temasından sonra yeniden toparlanıyor mu? A: Aynı kişide "
+        "düşme teması/asilma ve sonucu açık. B: Yalnız yürüme/koşma, rutin taşıma veya "
+        "nesne düşürme; kişi düşmüyor. C: Farklı kişi/sahne ya da sonuç yok. "
+        "D: Görüntü yetersiz. Açıklamasız yalnız A, B, C veya D yaz."
+    ),
+    (
+        "continuous_chain", "olay",
+        "Videonun tamamını kronolojik izle ve yalnız tek kesintisiz görsel zinciri "
+        "değerlendir. A yalnız şu dört koşul birlikte açıksa seçilir: aynı gerçek kişi "
+        "başlangıçta destekli/dik ve bedeni görünürdür; kişi istemsiz destek kaybıyla "
+        "aşağı geçer; aynı kişinin bedeni daha aşağıda zemine/sert yüzeye temas eder "
+        "veya kaybettiği destekten asılı kalır; bunlar sahne kesilmeden izlenir. "
+        "A: Bu kesintisiz kişi-düşme/asilma zinciri açık. B: Başlangıçtan beri oturan, "
+        "yerde veya örtülü kişi; rutin eğilme/çömelme; platformda yük taşıma; yalnız "
+        "nesne hareketi; ya da önceden başlamış kalabalık müdahale var. C: Farklı "
+        "kişi/sahne, kesinti veya tamamlanmış zincir yok. D: Görüntü bu ayrım için "
+        "yetersiz. Açıklamasız yalnız A, B, C veya D yaz."
+    ),
+)
+
+
+def _kesintisiz_dusme_fallback(vlm: VLMClient, seg) -> Tuple[List[Event], str]:
+    """v13m: kaynak videoda dört zorunlu atomla tamamlanmış kişi düşüşü ara."""
+    kaynak = getattr(seg, "kaynak_yol", "") or ""
+    if not kaynak:
+        return [], "kesintisiz düşme fallback: kaynak video yok -> fail-closed"
+    try:
+        from dilajan.isg_kanit import ATOMIK_SISTEM
+        oturum = vlm.video_oturumu(kaynak, system=ATOMIK_SISTEM)
+        if not oturum.hazir:
+            return [], (
+                "kesintisiz düşme fallback: oturum kurulamadı -> fail-closed "
+                f"[{oturum.hata or 'bilinmeyen hata'}]")
+        cevaplar = {}
+        asil_istemci = oturum.istemci
+        try:
+            for ad, rol, soru in _KESINTISIZ_DUSME_SORULARI:
+                oturum.istemci = vlm.gorev(rol)
+                cevap = oturum.sor(
+                    soru, guided_choice=_KESINTISIZ_DUSME_SECENEKLERI,
+                    temperature=0.0, max_tokens=8, hatirla=False)
+                if cevap is None:
+                    return [], (
+                        f"kesintisiz düşme fallback: {ad} ölçülemedi -> fail-closed "
+                        f"[{oturum.hata or 'cevap yok'}]")
+                cevaplar[ad] = cevap.strip().upper()
+        finally:
+            oturum.istemci = asil_istemci
+        iz = ", ".join(f"{ad}={cevaplar.get(ad, 'BOS')}"
+                       for ad, _, _ in _KESINTISIZ_DUSME_SORULARI)
+        if not all(cevaplar.get(ad) == "A"
+                   for ad, _, _ in _KESINTISIZ_DUSME_SORULARI):
+            return [], f"kesintisiz düşme fallback: REFUTED/INSUFFICIENT [{iz}]"
+        temel = Event(time=seg.start_str, event="kişi destek kaybı/düşme",
+                      severity=Severity.ORTA, category=EventCategory.ANOMALI)
+        return [_atomik_aile_olayi(temel, "kişi destek kaybı/düşme")], (
+            f"kesintisiz düşme fallback: SUPPORTED [{iz}] -> olay üretildi")
+    except Exception as ex:
+        return [], (
+            "kesintisiz düşme fallback: hata/fail-closed "
+            f"{type(ex).__name__}: {ex}")
+
+
+def _yapisal_yangin_toz_vetosu(vlm: VLMClient, frames,
+                               events: List[Event]) -> Tuple[
+                                   List[Event], Optional[str], bool]:
+    """Eski yangin kodu icin tutarli atomik kapi (geriye uyumluluk).
+
+    ``REFUTED`` veya ``INSUFFICIENT`` bir alarmi desteklemez. Eski asimetrik
+    uygulama yalniz ``BUHAR_TOZ_PARLAMA`` etiketinde siliyor; ``BELIRTI_YOK`` ve
+    ``SABIT_GOLGE_NESNE`` gibi acik curutmelere ragmen Kritik olayi koruyordu.
+    Yeni endustriyel plum yolu asagidaki ``_yapisal_duman_hakemligi``dir.
+    """
+    hedef = [e for e in events
+             if getattr(e, "isg_kod", None) == "Warehouse_Visible_Fire"]
+    if not hedef:
+        return events, None, False
+    try:
+        from dilajan.isg_kanit import dogrula
+        sonuc = dogrula(vlm, frames, "yangın/duman")
+        hukum = getattr(getattr(sonuc, "hukum", None), "value", "")
+        if sonuc.hatalar or hukum != "SUPPORTED":
+            kept = [e for e in events
+                    if getattr(e, "isg_kod", None) != "Warehouse_Visible_Fire"]
+            return kept, ("yapılandırılmış eski yangın kanıt kapısı: "
+                          f"{sonuc.iz_satiri()} -> {len(hedef)} olay silindi"), True
+        return events, ("yapılandırılmış eski yangın desteklendi: "
+                        f"{sonuc.iz_satiri()}"), False
+    except Exception as ex:
+        kept = [e for e in events
+                if getattr(e, "isg_kod", None) != "Warehouse_Visible_Fire"]
+        return kept, ("yapılandırılmış eski yangın kanıt kapısı hata verdi; "
+                      f"fail-closed {len(hedef)} olay silindi: "
+                      f"{type(ex).__name__}: {ex}"), True
+
+
+_DUMAN_YAPISAL_KODLARI = {
+    "Warehouse_Visible_Fire",       # eski arsiv/geriye uyumluluk
+    "Industrial_Visible_Plume",
+    "Industrial_Smoke_Emission",
+    "Industrial_Acute_Fire",
+}
+
+
+def _duman_olayi_mi(event: Event) -> bool:
+    if getattr(event, "isg_kod", None) in _DUMAN_YAPISAL_KODLARI:
+        return True
+    return "yangın/duman" in _claim_families(event.event)
+
+
+def _yapisal_duman_hakemligi(vlm: VLMClient, video,
+                             events: List[Event], slot_degeri: object,
+                             zaman: str = "00:00",
+                             bitis: Optional[str] = None) -> Tuple[
+                                 List[Event], str, bool]:
+    """Tum serbest/yapisal duman iddialarini tek cok-kanalli karara bagla.
+
+    Slot ``YOK`` olsa da iki bagimsiz uzman kaynak-plumu destekleyebilir; fakat
+    duman olayi ancak optik ve zamansal madde uzmanlari da birlikte desteklerse
+    uretilir. Boylece buhar/plum varligi duman alarmi olmaz. Duman gozlemi ve akut
+    yangin ayri olay tipidir.
+    """
+    from dilajan import duman_kanit as _dk
+
+    sonuc = _dk.dogrula_video(vlm, video, slot_degeri)
+    ilgili = [event for event in events if _duman_olayi_mi(event)]
+    kept = [event for event in events if not _duman_olayi_mi(event)]
+    if not sonuc.gozlem_var:
+        return kept, (
+            f"yapılandırılmış duman hakemliği: {sonuc.iz_satiri()} -> "
+            f"{len(ilgili)} duman/yangın iddiası silindi; olay üretilmedi"
+        ), sonuc.refuted
+
+    time_value = min((event.time for event in ilgili), default=zaman)
+    end_values = [event.end_time for event in ilgili if event.end_time]
+    end_time = max(end_values) if end_values else bitis
+    if sonuc.akut:
+        event = Event(
+            time=time_value,
+            end_time=end_time,
+            event=("Akut yangın belirtisi doğrulandı: görünür açık alev veya kısa "
+                   "sürede hızla büyüyen yoğun/koyu duman; acil durum prosedürü "
+                   "uygulanmalı"),
+            severity=Severity.KRITIK,
+            category=EventCategory.GUVENLIK,
+        ).model_copy(update={
+            "isg_kod": "Industrial_Acute_Fire",
+            "isg_slot": "depo_gorunur_yangin",
+            "isg_deger": "VAR",
+            "dispatch_eligible": True,
+            "smoke_observation_src": False,
+        })
+    else:
+        event = Event(
+            time=time_value,
+            end_time=end_time,
+            event=("Görünür endüstriyel duman emisyonu doğrulandı: kaynak-bağlı "
+                   "plüme ek olarak kalıcı optik aerosol ve zamansal duman "
+                   "davranışı iki bağımsız ölçümle desteklendi; akut yangın "
+                   "belirtisi doğrulanmadı"),
+            severity=Severity.ORTA,
+            category=EventCategory.ANOMALI,
+        ).model_copy(update={
+            "isg_kod": "Industrial_Smoke_Emission",
+            "isg_slot": "depo_gorunur_yangin",
+            "isg_deger": "VAR",
+            "dispatch_eligible": False,
+            "smoke_observation_src": True,
+        })
+    kept.append(event)
+    return kept, (
+        f"yapılandırılmış duman hakemliği: {sonuc.iz_satiri()} -> "
+        f"{len(ilgili)} eski iddia tek {getattr(event, 'isg_kod', '')} "
+        "olayına bağlandı"
+    ), False
 
 
 def _calibrate_severity(text: str, model_sev: Severity) -> Severity:
@@ -443,6 +1031,9 @@ _CLAIM_VERIFY_PROMPT = (
     "bulanıklık, ışık parlaması ya da makine parçası yeterli değildir.\n"
     "- düşme/yaralı: zeminde düşmüş/yığılmış gerçek bir KİŞİ açıkça görünmeli; oturan/çalışan kişi, "
     "kutu, alet, tekerlekli platform veya başka bir nesne kişi değildir.\n"
+    "- olağandışı kişi hareketi: gerçek bir KİŞİ ve iddia edilen koşma, panik, sürünme, takılma veya "
+    "denge kaybı kareler boyunca açıkça görünmeli; raf/kutu/araç, kamera hareketi veya kısa örtülme "
+    "kişi ve eylem kanıtı değildir. Rutin yürüme, uzanıp kutu alma ve yük taşıma yeterli değildir.\n"
     "- şiddet/silah: görünür silah ya da açık saldırı/fiziksel şiddet olmalı; rutin temas, çalışma, "
     "el hareketi veya yan yana durma yeterli değildir.\n"
     "- çarpışma/devrilme: iki varlığın açık teması veya aracın/yükün gerçekten devrilmesi görünmeli; "
@@ -485,14 +1076,64 @@ def _guard_narrative_claims(vlm: VLMClient, seg,
     burada yalniz model nesri denetlenir. Desteklenmeyen iddia severity
     dusurulerek ekranda birakilmaz; olay listesinden tamamen cikarilir.
     """
-    if not settings.claim_guard or not events:
+    if not events:
         return events, None
-    verifier = vlm.gorev("algi")
+    politika = (getattr(settings, "narrative_event_policy", "all") or "all").strip().lower()
+    # Mock yalnız arayüz/demonstrasyon içindir; gerçek görsel kanıt üretemediği
+    # için atomik adli kapıyı çalıştırmak tüm örnek olayları yapay olarak siler.
+    atomik = bool(settings.claim_guard and getattr(settings, "atomic_claim_guard", False)
+                  and not settings.mock_mode)
+    verifier = None if atomik else vlm.gorev("algi")
     kept: List[Event] = []
     rejected: List[str] = []
     for ev in events:
         families = _claim_families(ev.event)
-        if not families or _verify_claim(verifier, seg.frames, ev.event, families):
+        # İSG-odaklı dağıtımda açık-uçlu VLM'nin alarm taksonomisini genişletmesine
+        # izin verme. Ailesiz görsel değişimler ("kırmızı nesne belirdi") ve tek
+        # başına muğlak koşma/denge anlatıları fiziksel bir olay sınıfına dayanmaz.
+        # Deterministik slot/dedektör olayları bu fonksiyondan SONRA eklendiği için
+        # bu kapı onları yanlışlıkla kesemez.
+        if politika == "isg_grounded" and (
+                not families or set(families) == {"olağandışı kişi hareketi"}):
+            rejected.append(f"{ev.time} politika:{','.join(families) or 'ailesiz'}")
+            continue
+        if "KKD eksikliği" in families:
+            kkd_izinli, kkd_iz = _kkd_iddia_kapisi(ev.event)
+            if not kkd_izinli:
+                rejected.append(f"{ev.time} politika:{kkd_iz}")
+                continue
+        if not settings.claim_guard or not families:
+            kept.append(ev)
+            continue
+        if atomik:
+            # Tek, birleşik bir "bu olay gerçek mi?" sorusu sahne önselini
+            # kanıt sanıyordu. Varlık/olgu (`vlm`) ile ilişki/zaman
+            # (`llm-large`) artık kapalı uzaylarda, ayrı oturumlarda ölçülür;
+            # deterministik AND yalnız iki rol de açık destek verirse geçer.
+            from dilajan.isg_kanit import dogrula
+            # `olağandışı kişi hareketi` tek başına alarm değildir ve bağımsız
+            # fiziksel speki yoktur. Gerçek çarpışma yanında "ani kaçınma" gibi
+            # yardımcı ifade geçerse desteklenen ana aileyi yanlışlıkla veto etmesin.
+            kanit_aileleri = [a for a in families if a != "olağandışı kişi hareketi"]
+            sonuclar = [dogrula(vlm, seg.frames, aile) for aile in kanit_aileleri]
+            if sonuclar and all(x.supported for x in sonuclar):
+                kept.append(ev)
+            elif (getattr(settings, "atomic_claim_decomposition", False)
+                  and any(x.supported for x in sonuclar)):
+                # Karma bir cümlede destekli düşme + reddedilmiş çarpışma gibi
+                # sonuçlar olabilir. Eski all-or-nothing kuralı kanıtlı atomu da
+                # siliyordu. Model nesrini korumak reddedilen iddiayı sızdırır;
+                # bu yüzden yalnız destekli aileleri sabit şablonla yeniden kur.
+                for sonuc in sonuclar:
+                    if sonuc.supported:
+                        kept.append(_atomik_aile_olayi(ev, sonuc.aile))
+                rejected.append(
+                    f"{ev.time} atomik-kısmi:" +
+                    " | ".join(x.iz_satiri() for x in sonuclar))
+            else:
+                rejected.append(
+                    f"{ev.time} atomik:" + " | ".join(x.iz_satiri() for x in sonuclar))
+        elif _verify_claim(verifier, seg.frames, ev.event, families):
             kept.append(ev)
         else:
             rejected.append(f"{ev.time} {','.join(families)}")
@@ -914,7 +1555,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         if settings.facility_rules:
             instr += (f"\n\nBu tesisin güvenlik kuralları: {settings.facility_rules}. "
                       "Bu kurallara açıkça aykırı durumları da sapma/olay olarak raporla.")
-        if settings.use_detector:
+        if settings.use_detector and not settings.yerel_ogrenilmis_yasak:
             from dilajan import detector
             evidence = detector.detect_segment(seg.frames)
             if evidence:
@@ -953,6 +1594,10 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         )
         out: List[Event] = _events_from_extraction(extract_json(ext), seg)
         notes: List[str] = []
+        # Segment-yerel; paralel segmentler arasında paylaşılmaz. Yapılandırılmış
+        # yangın kanalı açıkça toz/buhar seçerse sonraki termal uzman bu bilgiyi
+        # çapraz-aile çelişki kapısında kullanır.
+        yangin_toz_veto = False
         # Oz-dogrulama: yuksek-severity olaylari odakli sorguyla teyit et (FP azaltir, recall korur).
         if settings.verify_events and out:
             # Somut iddia aileleri asagidaki severity-bagimsiz ve fail-closed
@@ -975,7 +1620,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         # NEUROSIMBOLIK semantik-olabilirlik: KİŞİ-merkezli yuksek-sev olay (yarali/dusmus/saldiri vb.) iddia
         # ediliyor ama YOLO segmentte nesne bulup KİŞİ bulamadiysa -> fiziksel olarak suheli -> Orta'ya cek.
         # FAIL-OPEN: YOLO abstain (None) veya kisi-var (True) ise DOKUNMA -> grenli'de gercek kisi-olayi recall'i korunur.
-        if settings.semantic_plausibility and out and any(
+        if settings.semantic_plausibility and not settings.yerel_ogrenilmis_yasak and out and any(
                 _SEV_ORD[e.severity] >= _SEV_ORD[Severity.YUKSEK] and _PERSON_RE.search(e.event) for e in out):
             try:
                 from dilajan import detector
@@ -990,7 +1635,13 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         # VLM "kisi yere dusmus/hareketsiz" der ama YOLO-poz kisinin EMIN bicimde DIK (comelmis/egilmis)
         # oldugunu gosterirse severity'yi dispatch-esiginin ALTINA (Orta) cek -> sahte "dusmus kisi Kritik+cagri"
         # kesilir. FAIL-OPEN: poz guvenilmez/kisi yoksa (ABSTAIN) VLM korunur -> gercek dusme recall'i bozulmaz.
-        if settings.verify_pose_falls and out and any(_is_person_fall_event(e.event) for e in out):
+        _dusme_iddiasi = out and any(_is_person_fall_event(e.event) for e in out)
+        if settings.verify_pose_falls and settings.yerel_ogrenilmis_yasak and _dusme_iddiasi:
+            notes.append(
+                f"perceive: segment {seg.index} yerel poz modeli CALISTIRILMADI "
+                "(özel API profili); atomik uzak-API düşme kanıtı kullanıldı")
+        if (settings.verify_pose_falls and not settings.yerel_ogrenilmis_yasak
+                and _dusme_iddiasi):
             try:
                 from dilajan import detector
                 verdict, vnote = detector.verify_fallen(seg.frames)
@@ -1028,7 +1679,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         # SAVUNMA geofence: yasak/kisitli bolgelerde KISI -> "Yasak Bölge İhlali" (deterministik YOLO).
         # Opt-in (restricted_zones bos=kapali -> mevcut davranis degismez); VLM zone-reasoning guvenilmez
         # oldugu icin uzman dedektorle yapilir (perimetre/tesis guvenligi cekirdegi).
-        if settings.restricted_zones:
+        if settings.restricted_zones and not settings.yerel_ogrenilmis_yasak:
             try:
                 from dilajan import detector
                 zones = settings.restricted_zones.split(",")
@@ -1112,6 +1763,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                     _sure = max(0.0, float(_secs(seg.end_str)) - _bas) or None
 
                     def _video_uret(roi, kapsam="segment", fps=None,
+                                    max_side=1280,
                                     _y=_yol, _k=kar, _b=_bas, _s=_sure):
                         """ROI basina TEK video uretir (ayni ROI'li slotlar paylasir).
 
@@ -1134,13 +1786,26 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                                 # ON KOSUL sorusu TUM klibe sorulur: pencere
                                 # daraltilinca kisi goruntunun bir bolumunde
                                 # kaliyor ve kapi yanlis kapaniyordu.
-                                return _sv(_y, roi_str=roi, **_nk)
-                            return _sv(_y, roi_str=roi, bas_sn=_b, sure_sn=_s, **_nk)
+                                return _sv(_y, max_side=max_side, roi_str=roi, **_nk)
+                            return _sv(_y, max_side=max_side, roi_str=roi,
+                                       bas_sn=_b, sure_sn=_s, **_nk)
                         return _mp4(_k)
 
                     kayit = _gz.slotlari_doldur_bolgeli(
                         vlm, slotlar, _video_uret, settings,
                         system=_gz.GOZLEM_SISTEM, frames=seg.frames)
+                    # CARPISMA UC-DURUMLU KANIT KAPISI. Ilk olcum temas onerip
+                    # bagimsiz dogrudan-etkilesim olcumu desteklemiyorsa bunu
+                    # "olay yok" diye gizleme: kanit YETERSIZDIR. Kural motoru
+                    # zaten olay uretmez; iz operator/benchmark icin nedeni tasir.
+                    _carp = kayit.al("depo_forklift_raf_carpisma")
+                    _carp_dogr = kayit.al("depo_forklift_carpisma_dogrulama")
+                    if _carp == "VAR" and _carp_dogr != "VAR":
+                        _ham_dogr = kayit.ham.get(
+                            "depo_forklift_carpisma_dogrulama", "OLCULEMEDI")
+                        notes.append(
+                            "perceive: forklift-carpisma kaniti INSUFFICIENT "
+                            f"[oneri=VAR, dogrulama={_ham_dogr}] -> olay URETILMEDI")
                     if getattr(kayit, "atlanan", None):
                         notes.append(
                             f"perceive: segment {seg.index} görüş muhafızı -> "
@@ -1151,9 +1816,42 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                             "KAYNAK VİDEO YOK -> kareler 768px'te yeniden "
                             "kodlandı; ROI kırpması ve zaman penceresi "
                             "UYGULANMADI (ölçüldü: bu kip DEJENERE)")
-                    yeni = _kr.olaylari_uret(kayit, settings,
-                                             zaman=(kar[0][0] if kar else "00:00"))
+                    yeni = _kr.olaylari_uret(kayit, settings, zaman=seg.start_str)
+                    # Slot hükmü bir tek kareye değil bu segmentin zaman
+                    # penceresine dayanır. Başlangıç damgasını kesin olay anı
+                    # gibi sunmak yerine denetlenebilir kaba aralığı taşı.
+                    _bitis = seg.end_str if seg.end_str != seg.start_str else None
+                    yeni = [e.model_copy(update={"time": seg.start_str,
+                                                  "end_time": _bitis}) for e in yeni]
                     out.extend(yeni)
+                    # DUMAN v2: aday slotu, ikinci goruntu olcumu ve zamansal
+                    # kaynak hakemi 2/3 oyla TEK karara baglanir. Hakem tum
+                    # serbest duman/yangin iddialarinin da tek otoritesidir;
+                    # boylece slot curutulurken anlatidaki ayni halusinasyon
+                    # arkadan Kritik+sevk olarak sizamaz. Kaynak FPS korunur.
+                    if (settings.structured_fire_dust_veto
+                            and "depo_gorunur_yangin" in kayit.ham):
+                        try:
+                            _duman_video = _video_uret(
+                                "", kapsam="segment", fps=0.0, max_side=1920)
+                            out, _yangin_notu, _veto_uygulandi = _yapisal_duman_hakemligi(
+                                vlm, _duman_video, out,
+                                kayit.al("depo_gorunur_yangin"),
+                                zaman=seg.start_str, bitis=_bitis)
+                            yangin_toz_veto = yangin_toz_veto or _veto_uygulandi
+                            notes.append(
+                                f"perceive: segment {seg.index} {_yangin_notu}")
+                        except Exception as _duman_ex:
+                            # Alarm yetkisi icin 2/3 kanit zorunludur. Hakem
+                            # calismadiysa duman iddialari fail-closed temizlenir;
+                            # ilgisiz olaylar aynen korunur.
+                            _once = len(out)
+                            out = [e for e in out if not _duman_olayi_mi(e)]
+                            notes.append(
+                                f"perceive: segment {seg.index} yapılandırılmış "
+                                "duman hakemliği hata/fail-closed "
+                                f"[{type(_duman_ex).__name__}: {_duman_ex}] -> "
+                                f"{_once - len(out)} duman iddiası silindi")
                     notes.append(
                         f"perceive: segment {seg.index} gözlem düzlemi "
                         f"[slot={list(kayit.degerler.items())}, "
@@ -1217,7 +1915,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                     f"-> deterministik olay eklendi")
         # Hizli-kazanim: YETKISIZ/YANLIS-KONUMLU ARAC (deterministik YOLO; araclar iri -> grenli-guvenli).
         # vehicle_zones set ise: yasak bolgedeki arac -> ihlal; bos ise: durak (dwell) arac bilgi amacli.
-        if settings.detect_vehicles:
+        if settings.detect_vehicles and not settings.yerel_ogrenilmis_yasak:
             try:
                 from dilajan import detector
                 vzones = settings.vehicle_zones.split(",") if settings.vehicle_zones else []
@@ -1235,7 +1933,7 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                         time=vh["time"], event=f"Durağan araç tespit edildi ({vh['label']})",
                         severity=Severity.ORTA, category=EventCategory.ANOMALI))
         # Hizli-kazanim: KALABALIK/TOPLANMA + ANI DAGILMA (panik). Sartname ornegi: "personel toplanmasi".
-        if settings.detect_crowd:
+        if settings.detect_crowd and not settings.yerel_ogrenilmis_yasak:
             try:
                 from dilajan import detector
                 cs = detector.crowd_stats(seg.frames, min_persons=settings.crowd_min_persons)
@@ -1260,7 +1958,11 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
         #
         # K2: `ppe_detection` False iken bu blok TEK SATIR bile calistirmaz (erken-donus),
         # olay uretilmez, ize yazilmaz -> mevcut olcumler BIREBIR yeniden uretilir.
-        if settings.ppe_detection:
+        if settings.ppe_detection and settings.yerel_ogrenilmis_yasak:
+            notes.append(
+                f"perceive: segment {seg.index} yerel KKD modeli CALISTIRILMADI "
+                "(özel API profili); KKD yalnız atomik uzak-API kanıtıyla doğrulanır")
+        elif settings.ppe_detection:
             from dilajan import detector
             kitler = [k.strip() for k in (settings.ppe_kits or "").split(",") if k.strip()]
             for kit in kitler:
@@ -1317,6 +2019,53 @@ def _analyze_one_segment(vlm: VLMClient, seg) -> Tuple[List[Event], Optional[str
                     f"güven {ppe['conf']}, kurallı {ppe['n_baretli']}] "
                     f"-> deterministik olay eklendi"
                     + ("" if settings.ppe_dispatch else " (SEVK yolu KAPALI)"))
+        # v12i: serbest anlatı, yapılandırılmış slotlar ve deterministik kuralların
+        # TAMAMI olay-sız kaldıysa tek bir kapalı aile adayı üret. Aday bağımsız
+        # atomik kapıyı geçmeden olay değildir. Böylece mevcut olayların yanında
+        # ikinci kez tarama/çoğaltma yapılmaz ve FP yüzeyi dar kalır.
+        if settings.closed_family_fallback and not out:
+            ek, not_ = _kapali_aile_fallback(vlm, seg)
+            out.extend(ek)
+            notes.append(f"perceive: segment {seg.index} {not_}")
+        # v12n: genel yangın kapısını gevşetmeden, yalnız hâlâ olay-sız kalan
+        # segmentte kızgın yüzey + zamansal kızarma geçişi AND kapısını dene.
+        if settings.thermal_fallback and not out:
+            ek, not_, termal_terminal = _termal_fallback(
+                vlm, seg, fire_dust_veto=yangin_toz_veto)
+            out.extend(ek)
+            notes.append(f"perceive: segment {seg.index} {not_}")
+            if termal_terminal:
+                notes.append(
+                    f"perceive: segment {seg.index} termal/yangın yorum çatışması "
+                    "-> TERMINAL_ABSTAIN; fiziksel/endüstriyel/dar fallback "
+                    "çalıştırılmadı")
+                return out, ("\n".join(notes) if notes else None)
+        # v12p: yalnız önceki tüm kanallar olay-sızsa tek fiziksel scout çalışır;
+        # v12q'da başarısız olan doğrudan çoklu uzman taraması burada YOKTUR.
+        if settings.physical_expert_fallback and not out:
+            ek, not_ = _fiziksel_uzman_fallback(vlm, seg)
+            out.extend(ek)
+            notes.append(f"perceive: segment {seg.index} {not_}")
+        # v13c: önceki tüm kanallar olay-sızsa yalnız saflaştırılmış üç
+        # endüstriyel scout dalı bağımsız atomik kapıdan geçebilir.
+        if settings.industrial_incident_fallback and not out:
+            ek, not_ = _endustriyel_olay_fallback(vlm, seg)
+            out.extend(ek)
+            notes.append(f"perceive: segment {seg.index} {not_}")
+        # v13f: geniş scout da olay üretemediyse yalnız kişi-makine sıkışması
+        # ve kişi destek kaybı dalları için ikinci, dar bir seçim yapılır.
+        # Geniş enerji dalı v13e'de FP ürettiği için burada alarm yetkisi yoktur.
+        if settings.narrow_industrial_retry and not out:
+            ek, not_ = _dar_kisi_makine_fallback(vlm, seg)
+            out.extend(ek)
+            notes.append(f"perceive: segment {seg.index} {not_}")
+        # v13m: bütün önceki kanallar olay-sızsa kaynak videoda tamamlanmış kişi
+        # düşüşünü dört zorunlu atomla ara. Tam klip tek kez taranır; sonraki
+        # segmentlerde aynı kaynak video yeniden çağrılmaz.
+        if settings.continuous_fall_fallback and not out and seg.index == 0:
+            ek, not_ = _kesintisiz_dusme_fallback(vlm, seg)
+            out.extend(ek)
+            notes.append(f"perceive: segment {seg.index} {not_}")
         return out, ("\n".join(notes) if notes else None)
     except Exception as ex:  # hata toleransi: segment atlanir
         return [], f"perceive: segment {seg.index} hatasi: {ex}"
@@ -1335,7 +2084,7 @@ def _dedup_words(text: str) -> set:
 
 
 def _isg_tekille(events: List[Event]) -> List[Event]:
-    """AYNI ISG kodunu tasiyan olaylardan yalnizca ILKINI tutar.
+    """AYNI ISG kodundaki yalnız ZAMANSAL OLARAK BITISIK olayları birleştirir.
 
     NEDEN: gözlem düzlemi HER SEGMENT icin slot doldurur; 3 segmentlik bir
     klipte ayni pano/forklift ihlali 3 kez raporlaniyordu. Ayni ihlali
@@ -1344,22 +2093,87 @@ def _isg_tekille(events: List[Event]) -> List[Event]:
     metni ZATEN BIREBIR AYNIDIR (sablon render'i) ama araya anlati duzlemi
     olaylari girebilir.
 
-    En ERKEN zaman damgasi korunur (olaylar zaten zamana gore sirali).
+    En ERKEN zaman damgasi ve bitiş aralığı korunur. Uzun bir aradan sonra
+    yeniden oluşan aynı sınıf bağımsız olaydır; global olarak yutulmaz.
     ISG kodu TASIMAYAN olaylara DOKUNULMAZ -> `isg_slotlari` kapaliyken bu
     fonksiyon listeyi BIREBIR ayni dondurur (K2).
     """
-    gorulen = set()
+    pencere = max(1, int(getattr(settings, "segment_seconds", 10)))
+    son_indeks: dict[str, int] = {}
     out: List[Event] = []
     for e in events:
         kod = getattr(e, "isg_kod", None)
         if kod is None:
             out.append(e)
             continue
-        if kod in gorulen:
-            continue
-        gorulen.add(kod)
+        onceki_i = son_indeks.get(kod)
+        if onceki_i is not None:
+            onceki = out[onceki_i]
+            bosluk = _secs(e.time) - _secs(onceki.end_time or onceki.time)
+            if bosluk <= pencere:
+                bitis = max(onceki.end_time or onceki.time, e.end_time or e.time)
+                if bitis != onceki.time:
+                    out[onceki_i] = onceki.model_copy(update={"end_time": bitis})
+                continue
         out.append(e)
+        son_indeks[kod] = len(out) - 1
     return out
+
+
+_NEAR_DUP_QUALIFIER = re.compile(
+    r"risk|ramak|yakın|yakin|kaçın|kacin|kaçış|kacis|teğet|teget"
+)
+
+
+def _isg_anlati_golgele(events: List[Event], etkin: bool = True):
+    """Yapilandirilmis ISG olayi ayni iddiayi tasiyorsa serbest kopyayi sil.
+
+    Yalniz ayni fiziksel ailede ve en fazla 5 saniye uzaktaki KODSIZ olay
+    golgelenir. Farkli tehlike aileleri korunur. Near-miss, gercek bir
+    carpisma olayini yutmasin diye carpisma ailesi ancak risk/ramak-kala
+    niteleyicisi tasiyorsa esdeger sayilir.
+    """
+    if not etkin:
+        return list(events), []
+    yapisal = [e for e in events if (getattr(e, "isg_kod", None)
+                                      or getattr(e, "ppe_src", False))]
+    if not yapisal:
+        return list(events), []
+    kept: List[Event] = []
+    removed: List[str] = []
+    for e in events:
+        if getattr(e, "isg_kod", None) or getattr(e, "ppe_src", False):
+            kept.append(e)
+            continue
+        fam = set(_claim_families(e.event))
+        if not fam:
+            kept.append(e)
+            continue
+        t = _tr_lower(e.event)
+        golge = False
+        for s in yapisal:
+            if abs(_secs(e.time) - _secs(s.time)) > 5:
+                continue
+            kod = getattr(s, "isg_kod", "")
+            if kod in _DUMAN_YAPISAL_KODLARI and "yangın/duman" in fam:
+                golge = True
+            elif kod == "Forklift_Shelf_Collision" and "çarpışma/devrilme" in fam:
+                golge = True
+            elif kod == "Forklift_Human_NearMiss" and (
+                    "olağandışı kişi hareketi" in fam
+                    or ("çarpışma/devrilme" in fam and _NEAR_DUP_QUALIFIER.search(t))):
+                golge = True
+            elif kod == "Worker_Under_Suspended_Load" and "askıda yük/düşme bölgesi" in fam:
+                golge = True
+            elif getattr(s, "ppe_src", False) and "KKD eksikliği" in fam:
+                golge = True
+            if golge:
+                break
+        if golge:
+            removed.append(e.event)
+        else:
+            kept.append(e)
+    return kept, removed
 
 
 def _dedupe_events(events: List[Event]) -> List[Event]:
@@ -1395,6 +2209,12 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
             # Ayni koda sahip iki ISG olayi birbiriyle birlesebilir (kod korunur);
             # farkli kodlar birlesirse biri sessizce yutulur, o da yasak.
             if getattr(k, "isg_kod", None) != getattr(e, "isg_kod", None):
+                kept.append(e)
+                continue
+            # Aynı metin/sınıf uzun bir aradan sonra yeniden oluşmuş olabilir.
+            # Yalnız bitişik segmentler sürekli tek olay sayılır.
+            bosluk = _secs(e.time) - _secs(k.end_time or k.time)
+            if bosluk > max(1, int(getattr(settings, "segment_seconds", 10))):
                 kept.append(e)
                 continue
             if k.category == e.category:
@@ -1441,8 +2261,18 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
                                 "isg_slot": (getattr(k, "isg_slot", None)
                                              or getattr(e, "isg_slot", None)),
                                 "isg_deger": (getattr(k, "isg_deger", None)
-                                              if getattr(k, "isg_deger", None) is not None
-                                              else getattr(e, "isg_deger", None))})
+                                               if getattr(k, "isg_deger", None) is not None
+                                               else getattr(e, "isg_deger", None))})
+                        # Duman/plum gozlemi akut yangin DEGILDIR. Bu iki sema-disi
+                        # isaret dedupe'da duserse reexamine/persistence/dispatch
+                        # onu sessizce Yuksek/Kritik yapabilir. Ayni ISG kodu
+                        # kapisi geregi iki olay da ayni kaynaktandir.
+                        if (getattr(k, "smoke_observation_src", False)
+                                or getattr(e, "smoke_observation_src", False)):
+                            birlesik = birlesik.model_copy(update={
+                                "smoke_observation_src": True,
+                                "dispatch_eligible": False,
+                            })
                         kept[-1] = birlesik
                         continue
         kept.append(e)
@@ -1454,6 +2284,9 @@ def _dedupe_events(events: List[Event]) -> List[Event]:
         for e in kept:
             if (e.end_time and e.end_time != e.time
                     and e.category in _DANGER_CATS and e.severity == Severity.ORTA):
+                if getattr(e, "smoke_observation_src", False):
+                    esc.append(e)
+                    continue
                 # model_copy: TUM alanlar + sema-disi ALARM MUHAFIZI (`evidence_prev`)
                 # korunur; `Event(...)` yeniden-kurmasi onlari sessizce dusururdu.
                 e = e.model_copy(update={"severity": Severity.YUKSEK})
@@ -1537,6 +2370,12 @@ def perceive(state: AgentState) -> dict:
             events.sort(key=lambda e: e.time)
             n_raw = len(events)
             events = _isg_tekille(_dedupe_events(events))
+            events, _golgelenen = _isg_anlati_golgele(
+                events, etkin=(settings.narrative_event_policy == "isg_grounded"))
+            if _golgelenen:
+                trace.append(
+                    "perceive: yapilandirilmis ISG kaniti ayni ailede "
+                    f"{len(_golgelenen)} serbest anlati kopyasini golgeledi")
             trace.append(f"perceive: {len(events)} olay ({n_raw} ham, {len(segments)} segment, {workers} paralel)")
     except Exception as ex:
         trace.append(f"perceive: dugum hatasi (toleransli devam, {len(events)} olay korundu): {ex}")
@@ -1558,7 +2397,8 @@ def route_after_perceive(state: AgentState) -> str:
     if not settings.adaptive_reexamine or state.get("reexamined"):
         return "reason"
     events = state.get("events", [])
-    if any(_SEV_ORD.get(e.severity, 0) == _SEV_ORD[Severity.ORTA] for e in events):
+    if any(_SEV_ORD.get(e.severity, 0) == _SEV_ORD[Severity.ORTA]
+           and not getattr(e, "smoke_observation_src", False) for e in events):
         return "reexamine"
     return "reason"
 
@@ -1588,6 +2428,12 @@ def reexamine(state: PolicyAgentState) -> dict:
         n_up = n_down = 0
         new_events: List[Event] = []
         for ev in events:
+            if getattr(ev, "smoke_observation_src", False):
+                # Plum zaten kaynak-video uzerinde 2/3 uzman oyuyla olculdu.
+                # Genel "CIDDI/RUTIN" sorusu yeni fiziksel bilgi eklemez ve
+                # Orta gozlemi Yuksek dispatch sinyaline sizdirabilir.
+                new_events.append(ev)
+                continue
             if _SEV_ORD.get(ev.severity, 0) != _SEV_ORD[Severity.ORTA]:
                 new_events.append(ev)
                 continue
@@ -2164,7 +3010,13 @@ def act(state: PolicyAgentState) -> dict:
     # Dispatch kapisi: operasyonel fonksiyonlar (saglik/guvenlik/acil-durdurma) YALNIZCA gercek
     # yuksek-risk sinyalinde tetiklenir. Normaldeki "Orta" severity halusinasyonlari bos yere
     # ekip cagirmasin -> operasyonel yanlis-pozitif (alarm yorgunlugu) kesilir. (Juri konsensusu)
-    max_ev = max((_SEV_ORD.get(e.severity, 0) for e in events), default=0)
+    # Kaynak-gozlem ayrimi: `dispatch_eligible=False` olaylar (ornegin yalniz
+    # endustriyel duman/plum gozlemi) operatora/risk raporuna GORUNUR, fakat
+    # ayri akut kanit olmadan operasyonel sevk hesabina giremez.
+    dispatchable_events = [
+        e for e in events if getattr(e, "dispatch_eligible", True) is not False
+    ]
+    max_ev = max((_SEV_ORD.get(e.severity, 0) for e in dispatchable_events), default=0)
     risk_ord = _SEV_ORD.get(risk.level, 0) if risk else 0
     # Dispatch sinyali: normalde grounded olay-severity VEYA risk. AMA risk_recall_bias acikken risk
     # recall-yanli sisirilmis olabilir -> dispatch'i YALNIZ grounded olay-severity'ye bagla (biased-risk
@@ -2208,6 +3060,19 @@ def act(state: PolicyAgentState) -> dict:
             trace.append(f"act: KKD olayi SEVK sinyalinden HARIC tutuldu "
                          f"(ppe_dispatch={settings.ppe_dispatch}); operatore FLAG olarak gorunur")
         max_intrinsic = ppe_haric
+    non_dispatch_only = False
+    if len(dispatchable_events) != len(events):
+        dispatchable_intrinsic = policy.intrinsic_max_ord(dispatchable_events)
+        non_dispatch_only = (
+            dispatchable_intrinsic < _SEV_ORD[Severity.YUKSEK]
+            and (max_intrinsic >= _SEV_ORD[Severity.YUKSEK]
+                 or risk_ord >= _SEV_ORD[Severity.YUKSEK])
+        )
+        if dispatchable_intrinsic < max_intrinsic or non_dispatch_only:
+            trace.append(
+                "act: akut olmayan gözlem olayı SEVK sinyalinden hariç tutuldu "
+                "(dispatch_eligible=False); operatöre gözlem olarak görünür")
+        max_intrinsic = min(max_intrinsic, dispatchable_intrinsic)
     policy_only = bool(state.get("risk_from_policy_only", False)) or bool(
         getattr(risk, "policy_only", False))
     # KANIT-ADLANDIRMA MASKESI (risk_recall_bias ile AYNI desen, ayni gerekce):
@@ -2222,7 +3087,8 @@ def act(state: PolicyAgentState) -> dict:
         (max_intrinsic >= _SEV_ORD[Severity.YUKSEK])
         or (esc_sevk and max_ev >= _SEV_ORD[Severity.YUKSEK])
         or (risk_ord >= _SEV_ORD[Severity.YUKSEK] and not settings.risk_recall_bias
-            and not policy_only and not kanit_adli and not ppe_only)
+            and not policy_only and not kanit_adli and not ppe_only
+            and not non_dispatch_only)
     )
     if ppe_only and risk_ord >= _SEV_ORD[Severity.YUKSEK]:
         trace.append("act: risk terimi MASKELENDI (yuksek risk YALNIZ KKD olayindan geliyor; "
@@ -2231,6 +3097,10 @@ def act(state: PolicyAgentState) -> dict:
             and max_intrinsic < _SEV_ORD[Severity.YUKSEK] and not esc_sevk):
         trace.append("act: risk terimi MASKELENDI (en az bir olay adi kanit sorulariyla yeniden "
                      "yazildi; risk operatore FLAG olarak gorunur ama SEVK acmaz)")
+    if non_dispatch_only and risk_ord >= _SEV_ORD[Severity.YUKSEK]:
+        trace.append(
+            "act: risk terimi MASKELENDI (yüksek risk akut olmayan, sevke kapalı "
+            "gözlemden geliyor; ayrı akut kanıt yok)")
     if not events or not dispatch_signal:
         if recs:
             trace.append(f"act: politika yukseltmesi var ({len(recs)}) ancak SEVK yolu kapali "
