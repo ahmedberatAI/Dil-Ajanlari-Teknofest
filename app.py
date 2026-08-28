@@ -264,6 +264,41 @@ def _ensure_playable(path):
     return path  # fail-open
 
 
+def _reset_for_new_video():
+    """Yeni yuklemede onceki videoya ait tum UI/oturum durumunu temizle.
+
+    Tesis kurallari kamera/tesis yapilandirmasidir ve bilerek korunur. Buna
+    karsilik analiz sorgusu, sonuclar, sohbet, rapor/kanit ve State alanlari
+    video-kapsamlidir; ikinci videoya tasinmalari yanlis analiz veya eski
+    kanittan rapor uretilmesine yol acabilir.
+    """
+    memory.reset_decisions()
+    return (
+        "<div class='empty'>Yeni video hazır — <b>ANALİZİ BAŞLAT</b>'a basın.</div>",
+        gr.update(value="", visible=False),  # query_out
+        "",                                  # summary_out
+        "<div class='empty'>—</div>",        # risk_out
+        ("<div class='card-title'>🔬 İSG ÖLÇÜMLERİ</div>"
+         "<div class='empty'>Analiz sonrası ölçülen slot değerleri "
+         "ve kural eşikleri burada görünecek.</div>"),
+        "<div class='empty'>—</div>",        # timeline_out
+        [],                                  # events_out
+        "—",                                 # actions_out
+        "—",                                 # funcs_out
+        "—",                                 # trace_out
+        "",                                  # json_out
+        "",                                  # context_state
+        None,                                # result_state
+        "",                                  # path_state
+        [],                                  # chatbot
+        "",                                  # chat_in
+        "",                                  # report_out
+        None,                                # evidence_out
+        "",                                  # brief_out (eski gorunen brifing)
+        "",                                  # query_in (video-kapsamli sorgu)
+    )
+
+
 def query_panel_html(query: str, answer: str) -> str:
     """Operatör sorgusu + ajanın doğrudan yanıtı (sorgu boşken hiç gösterilmez).
 
@@ -489,7 +524,9 @@ def analyze(video_path, facility_rules="", restricted_zones="",
     funcs_md = "\n".join(f"- `{f}`" for f in result.triggered_functions) or "— (operasyonel çağrı yapılmadı)"
     trace_md = "\n".join(f"- {t}" for t in result.decision_trace) or "—"
     raw = json.dumps(result.model_dump(), ensure_ascii=False, indent=2)
-    ctx = chat_agent.build_context(result)  # mevcut analiz henüz episodik bellekte değil -> "geçmiş" olarak görünmez
+    # Tek-video operator sohbeti yalnızca BU analizin kanitlarini gorur. Kalici
+    # episodik gecmis, ayri vardiya brifingi ozelliginde kullanilmaya devam eder.
+    ctx = chat_agent.build_context(result, include_history=False)
     memory.append_episode(result, source=os.path.basename(str(video_path)))
     # Sorgu yaniti bloku: YALNIZ sorgu girildiyse gorunur; aksi halde panel tamamen gizlenir
     # (sorgusuz akista arayuz birebir eskisi gibi kalir).
@@ -973,8 +1010,19 @@ def build_ui() -> gr.Blocks:
         except TypeError:  # eski/degisik imza -> js'siz yukle
             demo.load(_server_status, None, server_badge)
 
-        # Upload'ta tarayici-oynatilabilir H.264'e cevir (onizleme + analiz ayni dosyayi kullanir)
-        video_in.upload(_ensure_playable, inputs=[video_in], outputs=[video_in])
+        # Yeni dosya secilir secilmez onceki videonun butun video-kapsamli
+        # UI/State/sohbet ciktilarini temizle. Ardindan tarayici-oynatilabilir
+        # H.264'e cevir; zincir sirasi eski sonuclarin transcode boyunca ekranda
+        # kalmasini ve ikinci videodan eski rapor/kanit uretilmesini engeller.
+        upload_event = video_in.upload(
+            _reset_for_new_video,
+            inputs=None,
+            outputs=[status_out, query_out, summary_out, risk_out, isg_out, timeline_out,
+                     events_out, actions_out, funcs_out, trace_out, json_out, context_state,
+                     result_state, path_state, chatbot, chat_in, report_out, evidence_out,
+                     brief_out, query_in],
+        )
+        upload_event.then(_ensure_playable, inputs=[video_in], outputs=[video_in])
 
         # !! DIKKAT: outputs listesi (14) = analyze()'in yield ettigi demet = 1 (status) +
         #    _blank() uzunlugu (13). Uclu tutarlilik build_ui() testinde assert edilir.
